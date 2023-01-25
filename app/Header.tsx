@@ -2,34 +2,36 @@
 import { Fragment } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import clsx from 'clsx'
 import { Popover, Transition } from '@headlessui/react'
 import {
-  ArrowTopRightOnSquareIcon,
+  ArrowPathIcon,
   Bars3Icon,
-  ChartBarIcon,
-  CheckCircleIcon,
-  CursorArrowRaysIcon,
-  PhoneIcon,
-  PlayIcon,
+  DocumentChartBarIcon,
   ShieldCheckIcon,
   Squares2X2Icon,
   XMarkIcon,
+  BookOpenIcon,
+  BellAlertIcon,
+  InformationCircleIcon,
+  BuildingOfficeIcon,
+  NewspaperIcon,
+  BriefcaseIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import clsx from 'clsx'
 
 const solutions = [
   {
-    name: 'Analytics',
-    description: 'Get a better understanding of where your traffic is coming from.',
+    name: 'HomeFit Guide',
+    description: 'Smart ways to make a home comfortable, safe and a great fit for older adults.',
     href: '#',
-    icon: ChartBarIcon,
+    icon: BookOpenIcon,
   },
   {
-    name: 'Engagement',
+    name: 'Safety Devices',
     description: 'Speak directly to your customers in a more meaningful way.',
     href: '#',
-    icon: CursorArrowRaysIcon,
+    icon: BellAlertIcon,
   },
   {
     name: 'Security',
@@ -43,22 +45,18 @@ const solutions = [
     href: '#',
     icon: Squares2X2Icon,
   },
-]
-const callsToAction = [
-  { name: 'Watch Demo', href: '#', icon: PlayIcon },
-  { name: 'View All Products', href: '#', icon: CheckCircleIcon },
-  { name: 'Contact Sales', href: '#', icon: PhoneIcon },
-]
-const cityLinks = [
   {
-    name: "What's New Maricopa",
-    href: 'https://maricopa-az.maps.arcgis.com/apps/MapSeries/index.html?appid=f9f29a96be60434f9b3f05332b865ded',
+    name: 'Automations',
+    description: 'Build strategic funnels that will drive your customers to convert',
+    href: '#',
+    icon: ArrowPathIcon,
   },
   {
-    name: 'Board and Committee Meetings',
-    href: 'https://maricopa.legistar.com/Calendar.aspx',
+    name: 'Reports',
+    description: 'Get detailed reports that will help you make more informed decisions ',
+    href: '#',
+    icon: DocumentChartBarIcon,
   },
-  { name: 'InMaricopa', href: 'https://www.inmaricopa.com/' },
 ]
 const resources = [
   {
@@ -71,6 +69,14 @@ const resources = [
   { name: 'National Institutes of Health', href: 'https://www.nih.gov/' },
   { name: 'CDC', href: 'https://www.cdc.gov/' },
 ]
+const company = [
+  { name: 'About', href: '#', icon: InformationCircleIcon },
+  { name: 'Customers', href: '#', icon: BuildingOfficeIcon },
+  { name: 'Press', href: '#', icon: NewspaperIcon },
+  { name: 'Careers', href: '#', icon: BriefcaseIcon },
+  { name: 'Privacy', href: '#', icon: ShieldCheckIcon },
+]
+
 const blogPosts = [
   {
     id: 1,
@@ -91,8 +97,7 @@ const blogPosts = [
       'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2300&q=80',
   },
 ]
-
-const Header = () => {
+export default function Header() {
   return (
     <Popover className="relative bg-white">
       <div className="pointer-events-none absolute inset-0 z-30 shadow" aria-hidden="true" />
@@ -104,9 +109,9 @@ const Header = () => {
               <Image
                 className="h-8 w-auto sm:h-10"
                 src="/images/City-of-Maricopa-Logo_Color.png"
-                alt=""
                 width={230}
                 height={32}
+                alt="City of Maricopa"
               />
             </a>
           </div>
@@ -118,18 +123,6 @@ const Header = () => {
           </div>
           <div className="hidden md:flex md:flex-1 md:items-center md:justify-between">
             <Popover.Group as="nav" className="flex space-x-10">
-              <Link
-                href="/articles"
-                className="text-base font-medium text-gray-500 hover:text-gray-900"
-              >
-                Articles
-              </Link>
-              <Link
-                href="/az-travel"
-                className="text-base font-medium text-gray-500 hover:text-gray-900"
-              >
-                Arizona Travel
-              </Link>
               <Popover>
                 {({ open }) => (
                   <>
@@ -139,7 +132,7 @@ const Header = () => {
                         'group inline-flex items-center rounded-md bg-white text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
                       )}
                     >
-                      <span>Aging in Place</span>
+                      <span>Solutions</span>
                       <ChevronDownIcon
                         className={clsx(
                           open ? 'text-gray-600' : 'text-gray-400',
@@ -188,29 +181,17 @@ const Header = () => {
                             </a>
                           ))}
                         </div>
-                        <div className="bg-gray-50">
-                          <div className="mx-auto max-w-7xl space-y-6 px-4 py-5 sm:flex sm:space-y-0 sm:space-x-10 sm:px-6 lg:px-8">
-                            {callsToAction.map((item) => (
-                              <div key={item.name} className="flow-root">
-                                <a
-                                  href={item.href}
-                                  className="-m-3 flex items-center rounded-md p-3 text-base font-medium text-gray-900 hover:bg-gray-100"
-                                >
-                                  <item.icon
-                                    className="h-6 w-6 flex-shrink-0 text-gray-400"
-                                    aria-hidden="true"
-                                  />
-                                  <span className="ml-3">{item.name}</span>
-                                </a>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
                       </Popover.Panel>
                     </Transition>
                   </>
                 )}
               </Popover>
+              <a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900">
+                Pricing
+              </a>
+              <a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900">
+                Docs
+              </a>
               <Popover>
                 {({ open }) => (
                   <>
@@ -247,22 +228,15 @@ const Header = () => {
                         <div className="relative mx-auto grid max-w-7xl grid-cols-1 lg:grid-cols-2">
                           <nav className="grid gap-y-10 bg-white px-4 py-8 sm:grid-cols-2 sm:gap-x-8 sm:py-12 sm:px-6 lg:px-8 xl:pr-12">
                             <div>
-                              <h3 className="text-base font-medium text-gray-500">
-                                City of Maricopa
-                              </h3>
+                              <h3 className="text-base font-medium text-gray-500">Company</h3>
                               <ul role="list" className="mt-5 space-y-6">
-                                {cityLinks.map((item) => (
+                                {company.map((item) => (
                                   <li key={item.name} className="flow-root">
                                     <a
-                                      target="_blank"
                                       href={item.href}
                                       className="-m-3 flex items-center rounded-md p-3 text-base font-medium text-gray-900 hover:bg-gray-50"
-                                      rel="noreferrer"
                                     >
-                                      <span className="flex items-center">
-                                        {item.name}
-                                        <ArrowTopRightOnSquareIcon className="ml-1.5 h-5 w-5 text-slate-400" />
-                                      </span>
+                                      <span>{item.name}</span>
                                     </a>
                                   </li>
                                 ))}
@@ -274,15 +248,10 @@ const Header = () => {
                                 {resources.map((item) => (
                                   <li key={item.name} className="flow-root">
                                     <a
-                                      target="_blank"
-                                      rel="noreferrer"
                                       href={item.href}
                                       className="-m-3 flex items-center rounded-md p-3 text-base font-medium text-gray-900 hover:bg-gray-50"
                                     >
-                                      <span className="flex items-center">
-                                        {item.name}
-                                        <ArrowTopRightOnSquareIcon className="ml-1.5 h-5 w-5 text-slate-400" />
-                                      </span>
+                                      <span>{item.name}</span>
                                     </a>
                                   </li>
                                 ))}
@@ -291,9 +260,7 @@ const Header = () => {
                           </nav>
                           <div className="bg-gray-50 px-4 py-8 sm:py-12 sm:px-6 lg:px-8 xl:pl-12">
                             <div>
-                              <h3 className="text-base font-medium text-gray-500">
-                                Joan&apos;s Corner
-                              </h3>
+                              <h3 className="text-base font-medium text-gray-500">From the blog</h3>
                               <ul role="list" className="mt-6 space-y-6">
                                 {blogPosts.map((post) => (
                                   <li key={post.id} className="flow-root">
@@ -302,12 +269,10 @@ const Header = () => {
                                       className="-m-3 flex rounded-lg p-3 hover:bg-gray-100"
                                     >
                                       <div className="hidden flex-shrink-0 sm:block">
-                                        <Image
+                                        <img
                                           className="h-20 w-32 rounded-md object-cover"
                                           src={post.imageUrl}
                                           alt=""
-                                          width={128}
-                                          height={80}
                                         />
                                       </div>
                                       <div className="w-0 flex-1 sm:ml-8">
@@ -367,12 +332,10 @@ const Header = () => {
             <div className="px-5 pt-5 pb-6 sm:pb-8">
               <div className="flex items-center justify-between">
                 <div>
-                  <Image
+                  <img
                     className="h-8 w-auto"
-                    src="/images/City-of-Maricopa-Logo_Color.png"
+                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                     alt="Your Company"
-                    width={230}
-                    height={32}
                   />
                 </div>
                 <div className="-mr-2">
@@ -467,5 +430,3 @@ const Header = () => {
     </Popover>
   )
 }
-
-export default Header
