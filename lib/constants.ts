@@ -11,16 +11,20 @@ export const tags = [
 
 export const categories = [
   {
-    name: 'Finance',
-    href: '/category/finance',
+    name: 'Health & Wellness',
+    href: '/category/health-wellness',
   },
   {
     name: 'Retirement',
     href: '/category/retirement',
   },
   {
-    name: 'Health & Medical',
-    href: '/category/health-medical',
+    name: 'Transportation',
+    href: '/category/transportation',
+  },
+  {
+    name: 'Aging in Place',
+    href: '/category/aging-in-place',
   },
 ]
 
@@ -117,6 +121,64 @@ export const navigation = {
             },
           ],
         },
+        {
+          id: 'in-maricopa',
+          name: 'InMaricopa',
+          items: [
+            {
+              name: 'News',
+              href: 'https://www.inmaricopa.com',
+              external: true,
+            },
+            {
+              name: 'Senior Section',
+              href: 'https://www.inmaricopa.com/seniors/',
+              external: true,
+            },
+          ],
+        },
+        {
+          id: 'aarp',
+          name: 'AARP',
+          items: [
+            {
+              name: 'AARP Arizona',
+              href: 'https://states.aarp.org/arizona/',
+              external: true,
+            },
+            {
+              name: 'National AARP',
+              href: 'https://www.aarp.org',
+              external: true,
+            },
+          ],
+        },
+        {
+          id: 'other-resources',
+          name: 'Other Resources',
+          items: [
+            {
+              name: 'Pinal-Gila Council for Senior Citizens',
+              href: 'https://www.pgcsc.org/',
+              external: true,
+            },
+            {
+              name: 'NCOA',
+              href: 'https://www.ncoa.org/',
+              external: true,
+            },
+            {
+              name: 'NIH',
+              href: 'https://www.nih.gov/',
+              external: true,
+            },
+            {
+              name: 'CDC',
+              href: 'https://www.cdc.gov/',
+              external: true,
+            },
+          ],
+        },
       ],
     },
   ],
@@ -130,4 +192,141 @@ export const navigation = {
       href: '/az-travel',
     },
   ],
+}
+
+export const navMenu = {
+  'aging-in-place': {
+    id: 'aging-in-place',
+    name: 'Aging in Place',
+    sections: [
+      {
+        id: 'HomeFit Guide',
+        name: 'HomeFit Guide',
+        items: [
+          {
+            name: 'How to order a hard copy',
+            href: '#',
+          },
+          {
+            name: 'Online Guide',
+            href: '#',
+          },
+          {
+            name: 'Home assessment articles/guides',
+            href: '#',
+          },
+        ],
+      },
+      {
+        id: 'Safety devices',
+        name: 'Safety devices',
+        items: [
+          {
+            name: 'Alert devices',
+            href: '#',
+          },
+          {
+            name: 'Smoke Detectors',
+            href: '#',
+          },
+          {
+            name: 'Carbon Monoxide Detectors',
+            href: '#',
+          },
+          {
+            name: 'Cameras',
+            href: '#',
+          },
+          {
+            name: 'Home security',
+            href: '#',
+          },
+          {
+            name: 'Smart doorbells',
+            href: '#',
+          },
+        ],
+      },
+    ],
+  },
+  more: {
+    id: 'more',
+    name: 'More',
+    sections: [
+      {
+        id: 'city-of-maricopa',
+        name: 'City of Maricopa',
+        items: [
+          {
+            name: "What's New Maricopa",
+            href: 'https://maricopa-az.maps.arcgis.com/apps/MapSeries/index.html?appid=f9f29a96be60434f9b3f05332b865ded',
+            external: true,
+          },
+          {
+            name: 'City Meeting Calendar',
+            href: 'https://maricopa.legistar.com/Calendar.aspx',
+            external: true,
+          },
+        ],
+      },
+      {
+        id: 'in-maricopa',
+        name: 'InMaricopa',
+        items: [
+          {
+            name: 'News',
+            href: 'https://www.inmaricopa.com',
+            external: true,
+          },
+          {
+            name: 'Senior Section',
+            href: 'https://www.inmaricopa.com/seniors/',
+            external: true,
+          },
+        ],
+      },
+      {
+        id: 'aarp',
+        name: 'AARP',
+        items: [
+          {
+            name: 'AARP Arizona',
+            href: 'https://states.aarp.org/arizona/',
+            external: true,
+          },
+          {
+            name: 'National AARP',
+            href: 'https://www.aarp.org',
+            external: true,
+          },
+        ],
+      },
+      {
+        id: 'other-resources',
+        name: 'Other Resources',
+        items: [
+          {
+            name: 'Pinal-Gila Council for Senior Citizens',
+            href: 'https://www.pgcsc.org/',
+            external: true,
+          },
+          {
+            name: 'NCOA',
+            href: 'https://www.ncoa.org/',
+            external: true,
+          },
+          {
+            name: 'NIH',
+            href: 'https://www.nih.gov/',
+            external: true,
+          },
+          {
+            name: 'CDC',
+            href: 'https://www.cdc.gov/',
+            external: true,
+          },
+        ],
+      },
+    ],
+  },
 }

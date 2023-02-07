@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronRightIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
@@ -27,13 +28,12 @@ const RightSidebar = () => (
       </div>
     </div>
     <div className="rounded-md bg-white p-8">
-      <h3 className="mb-8 text-xl font-bold lg:text-2xl">Categories</h3>
+      <h2 className="mb-8 text-xl font-bold lg:text-2xl">Categories</h2>
       <ul className="space-y-4">
         {categories.map(({ name, href }) => (
           <li key={name} className="block">
             <Link
               href={href}
-              prefetch={false}
               className="flex justify-between rounded bg-neutral-200 py-4 px-5 transition-all duration-150 hover:bg-red-400 hover:text-white"
             >
               <span>{name}</span>
@@ -44,19 +44,74 @@ const RightSidebar = () => (
       </ul>
     </div>
     <div className="rounded-md bg-white p-8">
-      <h3 className="mb-8 text-lg font-bold lg:text-2xl">Popular Tags</h3>
+      <h2 className="mb-8 text-lg font-bold lg:text-2xl">Popular Tags</h2>
       <ul className="flex flex-wrap">
         {tags.map(({ name, href }) => (
           <li className="mr-2 pb-2" key={name}>
             <Link
+              title={name}
               href={href}
-              prefetch={false}
               className="rounded bg-neutral-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
             >
               {name}
             </Link>
           </li>
         ))}
+      </ul>
+    </div>
+    <div className="rounded-md bg-white p-8">
+      <h2 className="mb-8 text-lg font-bold lg:text-2xl">Joan&apos;s Corner</h2>
+      <ul className="divide-y divide-red-400">
+        <li className="py-10 first:pt-0 last:pb-0">
+          <Link
+            className="flex space-x-4"
+            href="#"
+            title="Read more about Geriatric Massage: The Best Therapy For Elderly"
+          >
+            <div className="flex-none">
+              <Image
+                alt=""
+                className="h-20 w-20 rounded object-cover"
+                height={80}
+                src="https://bestwpware.com/html/tf/edumim/assets/images/all-img/rc-1.png"
+                width={80}
+              />
+            </div>
+            <div className="flex-1">
+              <h3
+                className="mb-1 font-semibold text-neutral-900 line-clamp-2"
+                title="Geriatric Massage: The Best Therapy For Elderly"
+              >
+                Geriatric Massage: The Best Therapy For Elderly
+              </h3>
+            </div>
+          </Link>
+        </li>
+        <li className="py-10 first:pt-0 last:pb-0">
+          <Link
+            className="flex space-x-4"
+            href="#"
+            title="Read more about Geriatric Massage: The Best Therapy For Elderly"
+          >
+            <div className="flex-none">
+              <Image
+                alt=""
+                className="h-20 w-20 rounded object-cover"
+                height={80}
+                src="https://bestwpware.com/html/tf/edumim/assets/images/all-img/rc-1.png"
+                width={80}
+              />
+            </div>
+            <div className="flex-1">
+              <h3
+                className="mb-1 font-semibold text-neutral-900 line-clamp-2"
+                title="Geriatric Massage: The Best Therapy For Elderly"
+              >
+                Geriatric Massage: The Best Therapy For Elderly
+              </h3>
+            </div>
+          </Link>
+        </li>
       </ul>
     </div>
   </div>
