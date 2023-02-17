@@ -9,10 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.10",
+    "@headlessui/react": "^1.7.11",
     "@heroicons/react": "^2.0.15",
     "@next/font": "^13.1.6",
-    "@types/react-dom": "18.0.10",
     "clsx": "^1.2.1",
     "next": "^13.1.6",
     "react": "18.2.0",
@@ -26,14 +25,15 @@
     "@tailwindcss/typography": "^0.5.9",
     "@types/node": "^18.13.0",
     "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
     "autoprefixer": "^10.4.13",
     "eslint": "^8.34.0",
     "eslint-config-next": "^13.1.6",
     "eslint-config-prettier": "^8.6.0",
     "postcss": "^8.4.21",
     "prettier": "^2.8.4",
-    "prettier-plugin-tailwindcss": "^0.2.2",
-    "tailwindcss": "^3.2.6",
+    "prettier-plugin-tailwindcss": "^0.2.3",
+    "tailwindcss": "^3.2.7",
     "typescript": "^4.9.5"
   }
 }
