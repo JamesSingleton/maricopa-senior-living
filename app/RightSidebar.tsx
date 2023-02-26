@@ -4,8 +4,7 @@ import { ChevronRightIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid
 
 import { categories } from '@/lib/constants'
 
-const RightSidebar = ({ tags }) => {
-  tags.map((tag) => console.log(tag.node))
+const RightSidebar = ({ tags }: { tags: any }) => {
   return (
     <div className="space-y-7">
       <div className="relative flex items-center rounded-md bg-white py-1 pl-3 shadow">
@@ -48,17 +47,18 @@ const RightSidebar = ({ tags }) => {
       <div className="rounded-md bg-white p-8">
         <h2 className="mb-8 text-lg font-bold lg:text-2xl">Popular Tags</h2>
         <ul className="flex flex-wrap">
-          {tags.map((tag) => (
-            <li className="mr-2 pb-2" key={tag.node.name}>
-              <Link
-                title={tag.node.name}
-                href={`/tag/${tag.node.slug}`}
-                className="rounded bg-neutral-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
-              >
-                {tag.node.name}
-              </Link>
-            </li>
-          ))}
+          {tags &&
+            tags.map((tag: any) => (
+              <li className="mr-2 pb-2" key={tag.node.name}>
+                <Link
+                  title={tag.node.name}
+                  href={`/tag/${tag.node.slug}`}
+                  className="rounded bg-neutral-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
+                >
+                  {tag.node.name}
+                </Link>
+              </li>
+            ))}
         </ul>
       </div>
       <div className="rounded-md bg-white p-8">

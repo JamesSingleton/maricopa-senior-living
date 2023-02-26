@@ -12,7 +12,7 @@ const pages = [
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const tags = await getTags()
-  const { edges } = tags
+
   return (
     <html lang="en" className="h-full bg-neutral-100 text-neutral-900">
       <body className="h-full text-lg font-medium">
@@ -22,7 +22,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <div className="grid grid-cols-12 gap-8">
               <div className="col-span-12 lg:col-span-8">{children}</div>
               <div className="col-span-12 lg:col-span-4">
-                <RightSidebar tags={edges} />
+                <RightSidebar tags={tags?.edges} />
               </div>
             </div>
           </div>
