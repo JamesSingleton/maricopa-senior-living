@@ -61,7 +61,12 @@ const nextConfig = {
     },
   },
   images: {
-    domains: ['images.unsplash.com', 'tailwindui.com', 'ncmaz.chisnghiax.com', 'bestwpware.com'],
+    domains: [
+      'images.unsplash.com',
+      'bestwpware.com',
+      'maricopaseniorliving.org',
+      'secure.gravatar.com',
+    ],
   },
   headers() {
     return [

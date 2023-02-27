@@ -3,8 +3,11 @@ import Link from 'next/link'
 import { ChevronRightIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
 import { categories } from '@/lib/constants'
+import { getTags } from '@/lib/api'
 
-const RightSidebar = ({ tags }: { tags: any }) => {
+const RightSidebar = async () => {
+  const tags = await getTags()
+
   return (
     <div className="space-y-7">
       <div className="relative flex items-center rounded-md bg-white py-1 pl-3 shadow">
@@ -48,7 +51,7 @@ const RightSidebar = ({ tags }: { tags: any }) => {
         <h2 className="mb-8 text-lg font-bold lg:text-2xl">Popular Tags</h2>
         <ul className="flex flex-wrap">
           {tags &&
-            tags.map((tag: any) => (
+            tags.edges.map((tag: any) => (
               <li className="mr-2 pb-2" key={tag.node.name}>
                 <Link
                   title={tag.node.name}

@@ -1,23 +1,33 @@
-import { Inter } from '@next/font/google'
+import type { Metadata } from 'next'
 
 import BlogCard from '@/components/BlogCard'
-import { posts } from '@/lib/constants'
 import { getAllPostsForHome } from '@/lib/api'
 
-const inter = Inter({ subsets: ['latin'] })
+export const metadata: Metadata = {
+  title: 'Maricopa Senior Living - Aging Well Your Way!',
+  description: 'Your go to source for senior living in Maricopa, AZ',
+  openGraph: {
+    title: 'Maricopa Senior Living - Aging Well Your Way!',
+    description: 'Your go to source for senior living in Maricopa, AZ',
+    locale: 'en_US',
+    url: 'https://www.maricopaseniorliving.org',
+    siteName: 'Maricopa Senior Living',
+    type: 'website',
+  },
+}
 
 export default async function Home() {
   const preview = false
   const allPosts = await getAllPostsForHome(preview)
   const { edges } = allPosts
-  const heroPost = edges[0]?.node
-  const morePosts = edges.slice(1)
 
   return (
     <div className="space-y-8">
-      {posts.map((post) => (
-        <BlogCard key={post.title} post={post} />
-      ))}
+      {edges.map((edge: any) => {
+        if (edge.node.title !== '') {
+          return <BlogCard key={edge.node.title} post={edge.node} />
+        }
+      })}
     </div>
   )
 }

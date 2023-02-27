@@ -14,6 +14,7 @@ async function fetchAPI(query = '', { variables }: Record<string, any> = {}) {
   })
 
   const json = await res.json()
+
   if (json.errors) {
     console.error(json.errors)
     throw new Error('Failed to fetch API')
@@ -61,7 +62,24 @@ export async function getAllPostsForHome(preview: boolean) {
                   url
                 }
               }
-            }
+            },
+            categories {
+              edges {
+                node {
+                  name
+                  slug
+                }
+              }
+            },
+            tags {
+              edges {
+                node {
+                  id,
+                  name,
+                  slug
+                }
+              }
+            },
           }
         }
       }
@@ -81,7 +99,7 @@ export async function getAllPostsForHome(preview: boolean) {
 export async function getPostAndMorePosts(
   slug: string,
   preview: boolean,
-  previewData: { post: any }
+  previewData?: { post: any }
 ) {
   const postPreview = preview && previewData?.post
   // The slug may be the id of an unpublished post
