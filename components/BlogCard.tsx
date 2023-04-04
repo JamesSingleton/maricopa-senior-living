@@ -56,16 +56,33 @@ const BlogCard = ({ post }: Post) => {
           />
         </Link>
       </div>
-      <div className="flex flex-1 flex-col justify-between bg-white p-9">
+      <div className="flex flex-1 flex-col justify-between bg-white p-4 sm:p-9">
         <div className="flex-1">
-          <span className="text-sm font-medium text-indigo-600">
-            {categories.edges[0]?.node.name !== 'Uncategorized'
-              ? categories.edges[0]?.node.name
-              : null}
-            {tags.edges[0]?.node.name !== 'Uncategorized' ? tags.edges[0]?.node.name : null}
-          </span>
+          <div className="space-y-4 font-medium sm:space-x-4">
+            {/* only return categories that do not equal Uncategorized */}
+            {categories.edges
+              .filter((category) => category.node.name !== 'Uncategorized')
+              .map((category) => (
+                <Link
+                  key={category.node.slug}
+                  href={`/category/${category.node.slug}`}
+                  className="rounded bg-neutral-200 py-0.5 px-3 transition-all duration-150 hover:bg-red-400 hover:text-white"
+                >
+                  {category.node.name}
+                </Link>
+              ))}
+            {tags.edges.map((tag) => (
+              <Link
+                key={tag.node.slug}
+                href={`/tag/${tag.node.slug}`}
+                className="rounded bg-neutral-200 py-0.5 px-3 transition-all duration-150 hover:bg-red-400 hover:text-white"
+              >
+                {tag.node.name}
+              </Link>
+            ))}
+          </div>
           <>
-            <h2 className="text-xl font-semibold text-neutral-900">{post.title}</h2>
+            <h2 className="mt-4 text-xl font-semibold text-neutral-900">{post.title}</h2>
             <div
               className="mt-3 text-base text-neutral-500"
               dangerouslySetInnerHTML={{ __html: post.excerpt }}

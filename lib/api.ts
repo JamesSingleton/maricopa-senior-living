@@ -227,6 +227,63 @@ export async function getTags() {
   return data?.tags
 }
 
+export async function getTag(slug: string) {
+  const data = await fetchAPI(`
+    {
+      tag(id: "${slug}", idType: SLUG) {
+        id
+        name
+        slug
+        description
+        posts {
+          edges {
+            node {
+              title
+              excerpt
+              slug
+              date
+              featuredImage {
+                node {
+                  sourceUrl
+                }
+              }
+              author {
+                node {
+                  name
+                  firstName
+                  lastName
+                  avatar {
+                    url
+                  }
+                }
+              },
+              categories {
+                edges {
+                  node {
+                    name
+                    slug
+                  }
+                }
+              },
+              tags {
+                edges {
+                  node {
+                    id,
+                    name,
+                    slug
+                  }
+                }
+              },
+            }
+          }
+        }
+      }
+    }
+  `)
+
+  return data?.tag
+}
+
 export async function getCategories() {
   const data = await fetchAPI(`
   {
@@ -290,7 +347,42 @@ export async function getCategory(slug: string) {
       posts {
         edges {
           node {
-            id
+            title
+            excerpt
+            slug
+            date
+            featuredImage {
+              node {
+                sourceUrl
+              }
+            }
+            author {
+              node {
+                name
+                firstName
+                lastName
+                avatar {
+                  url
+                }
+              }
+            },
+            categories {
+              edges {
+                node {
+                  name
+                  slug
+                }
+              }
+            },
+            tags {
+              edges {
+                node {
+                  id,
+                  name,
+                  slug
+                }
+              }
+            },
           }
         }
       }
