@@ -211,7 +211,7 @@ export async function getPostAndMorePosts(
 export async function getTags() {
   const data = await fetchAPI(`
     {
-      tags {
+      tags(first: 10000) {
         edges {
           node {
             id
@@ -223,5 +223,106 @@ export async function getTags() {
       }
     }
   `)
+
+  return data?.tags
+}
+
+export async function getCategories() {
+  const data = await fetchAPI(`
+  {
+    categories(first: 10000) {
+      edges {
+        node {
+          id,
+          name,
+          slug,
+          description,
+          posts {
+            edges {
+              node {
+                id
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  `)
+
+  return data?.categories
+}
+
+export async function getPopularCategories() {
+  const data = await fetchAPI(`
+  {
+    categories(where: {orderby: COUNT, order: DESC}) {
+      edges {
+        node {
+          id
+          name
+          slug
+          description
+          posts {
+            edges {
+              node {
+                id
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  `)
+
+  return data?.categories
+}
+
+export async function getCategory(slug: string) {
+  const data = await fetchAPI(`
+  {
+    category(id: "${slug}", idType: SLUG) {
+      id,
+      name,
+      slug,
+      description,
+      posts {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+    }
+  }
+  `)
+
+  return data?.category
+}
+
+export async function getPopularTags() {
+  const data = await fetchAPI(`
+  {
+    tags(where: {orderby: COUNT, order: DESC}) {
+      edges {
+        node {
+          id
+          name
+          slug
+          description
+          posts {
+            edges {
+              node {
+                id
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  `)
+
   return data?.tags
 }

@@ -8,6 +8,20 @@ import RightSidebar from './RightSidebar'
 
 const inter = Inter({ subsets: ['latin'] })
 
+export const metadata = {
+  title: {
+    template: '%s | Maricopa Senior Living',
+    default: 'Maricopa Senior Living - Aging Well Your Way!',
+  },
+  openGraph: {
+    type: 'website',
+    title: {
+      template: '%s | Maricopa Senior Living',
+      default: 'Maricopa Senior Living - Aging Well Your Way!',
+    },
+  },
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`h-full bg-neutral-100 text-neutral-900 ${inter.className}`}>

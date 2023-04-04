@@ -2,11 +2,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronRightIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
-import { categories } from '@/lib/constants'
-import { getTags } from '@/lib/api'
+// import { categories } from '@/lib/constants'
+import { getPopularTags, getPopularCategories } from '@/lib/api'
 
 const RightSidebar = async () => {
-  const tags = await getTags()
+  const tags = await getPopularTags()
+  const categories = await getPopularCategories()
 
   return (
     <div className="space-y-7">
@@ -32,19 +33,21 @@ const RightSidebar = async () => {
         </div>
       </div>
       <div className="rounded-md bg-white p-8">
-        <h2 className="mb-8 text-xl font-bold lg:text-2xl">Categories</h2>
+        <h2 className="mb-8 text-xl font-bold lg:text-2xl">Popular Categories</h2>
         <ul className="space-y-4">
-          {categories.map(({ name, href }) => (
-            <li key={name} className="block">
-              <Link
-                href={href}
-                className="flex justify-between rounded bg-neutral-200 py-4 px-5 transition-all duration-150 hover:bg-red-400 hover:text-white"
-              >
-                <span>{name}</span>
-                <ChevronRightIcon className="h-6 w-6" />
-              </Link>
-            </li>
-          ))}
+          {categories.edges.map(
+            ({ node: { name, slug } }: { node: { name: string; slug: string } }) => (
+              <li key={name} className="block">
+                <Link
+                  href={`/category/${slug}`}
+                  className="flex justify-between rounded bg-neutral-200 py-4 px-5 transition-all duration-150 hover:bg-red-400 hover:text-white"
+                >
+                  <span>{name}</span>
+                  <ChevronRightIcon className="h-6 w-6" />
+                </Link>
+              </li>
+            )
+          )}
         </ul>
       </div>
       <div className="rounded-md bg-white p-8">
@@ -84,7 +87,7 @@ const RightSidebar = async () => {
               </div>
               <div className="flex-1">
                 <h3
-                  className="mb-1 font-semibold text-neutral-900 line-clamp-2"
+                  className="line-clamp-2 mb-1 font-semibold text-neutral-900"
                   title="Geriatric Massage: The Best Therapy For Elderly"
                 >
                   Geriatric Massage: The Best Therapy For Elderly
@@ -109,7 +112,7 @@ const RightSidebar = async () => {
               </div>
               <div className="flex-1">
                 <h3
-                  className="mb-1 font-semibold text-neutral-900 line-clamp-2"
+                  className="line-clamp-2 mb-1 font-semibold text-neutral-900"
                   title="Geriatric Massage: The Best Therapy For Elderly"
                 >
                   Geriatric Massage: The Best Therapy For Elderly

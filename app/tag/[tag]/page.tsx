@@ -1,3 +1,5 @@
+import type { Metadata } from 'next'
+
 export default function TagsPage() {
   return (
     <div className="py-8">
