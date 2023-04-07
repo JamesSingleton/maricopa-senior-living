@@ -418,3 +418,54 @@ export async function getPopularTags() {
 
   return data?.tags
 }
+
+export async function search(query: string) {
+  const data = await fetchAPI(`
+  {
+    posts(where: {search: "${query}"}) {
+      edges {
+        node {
+          title
+          excerpt
+          slug
+          date
+          featuredImage {
+            node {
+              sourceUrl
+            }
+          }
+          author {
+            node {
+              name
+              firstName
+              lastName
+              avatar {
+                url
+              }
+            }
+          },
+          categories {
+            edges {
+              node {
+                name
+                slug
+              }
+            }
+          },
+          tags {
+            edges {
+              node {
+                id,
+                name,
+                slug
+              }
+            }
+          },
+        }
+      }
+    }
+  }
+  `)
+
+  return data?.posts
+}

@@ -1,3 +1,5 @@
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -10,7 +12,12 @@ module.exports = {
       center: true,
       padding: '1rem',
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        default: ['var(--font-inter)', ...defaultTheme.fontFamily.sans],
+        mono: ['Consolas', ...defaultTheme.fontFamily.mono],
+      },
+    },
   },
   plugins: [
     require('@tailwindcss/forms'),

@@ -1,9 +1,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { ChevronRightIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { ChevronRightIcon } from '@heroicons/react/20/solid'
 
-// import { categories } from '@/lib/constants'
 import { getPopularTags, getPopularCategories } from '@/lib/api'
+import SearchBar from '@/components/SearchBar'
 
 const RightSidebar = async () => {
   const tags = await getPopularTags()
@@ -11,27 +11,7 @@ const RightSidebar = async () => {
 
   return (
     <div className="space-y-7">
-      <div className="relative flex items-center rounded-md bg-white py-1 pl-3 shadow">
-        <div className="flex flex-1 items-center justify-center px-2 py-4">
-          <div className="w-full max-w-lg lg:max-w-xs">
-            <label htmlFor="search" className="sr-only">
-              Search
-            </label>
-            <div className="relative">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-              </div>
-              <input
-                id="search"
-                name="search"
-                className="block w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-3 leading-5 placeholder-gray-500 focus:border-indigo-500 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-                placeholder="Search"
-                type="search"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+      <SearchBar />
       <div className="rounded-md bg-white p-8">
         <h2 className="mb-8 text-xl font-bold lg:text-2xl">Popular Categories</h2>
         <ul className="space-y-4">
@@ -40,7 +20,7 @@ const RightSidebar = async () => {
               <li key={name} className="block">
                 <Link
                   href={`/category/${slug}`}
-                  className="flex justify-between rounded bg-neutral-200 py-4 px-5 transition-all duration-150 hover:bg-red-400 hover:text-white"
+                  className="flex justify-between rounded bg-neutral-200 px-5 py-4 transition-all duration-150 hover:bg-red-400 hover:text-white"
                 >
                   <span>{name}</span>
                   <ChevronRightIcon className="h-6 w-6" />
@@ -87,7 +67,7 @@ const RightSidebar = async () => {
               </div>
               <div className="flex-1">
                 <h3
-                  className="line-clamp-2 mb-1 font-semibold text-neutral-900"
+                  className="mb-1 line-clamp-2 font-semibold text-neutral-900"
                   title="Geriatric Massage: The Best Therapy For Elderly"
                 >
                   Geriatric Massage: The Best Therapy For Elderly
@@ -112,7 +92,7 @@ const RightSidebar = async () => {
               </div>
               <div className="flex-1">
                 <h3
-                  className="line-clamp-2 mb-1 font-semibold text-neutral-900"
+                  className="mb-1 line-clamp-2 font-semibold text-neutral-900"
                   title="Geriatric Massage: The Best Therapy For Elderly"
                 >
                   Geriatric Massage: The Best Therapy For Elderly

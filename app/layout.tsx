@@ -6,7 +6,10 @@ import Header from './Header'
 import Footer from './Footer'
 import RightSidebar from './RightSidebar'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({
+  variable: '--font-inter',
+  subsets: ['latin'],
+})
 
 export const metadata = {
   title: {
