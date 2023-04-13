@@ -4,7 +4,6 @@ import BlogCard from '@/components/BlogCard'
 export default async function Page({ params, searchParams }: any) {
   const { q } = searchParams
   const results = await search(q)
-  console.log(results)
   return (
     <>
       <h1 className="inline-block align-middle text-4xl font-semibold capitalize sm:text-5xl md:text-6xl">

@@ -84,13 +84,7 @@ export async function getAllPostsForHome(preview: boolean) {
         }
       }
     }
-  `,
-    {
-      variables: {
-        onlyEnabled: !preview,
-        preview,
-      },
-    }
+  `
   )
 
   return data?.posts

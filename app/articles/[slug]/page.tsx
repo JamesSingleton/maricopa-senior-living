@@ -12,15 +12,17 @@ export default async function ArticlePage({ params: { slug } }: { params: { slug
   })
   return (
     <article className="rounded-md bg-white shadow">
-      <Image
-        src={post.featuredImage.node.sourceUrl}
-        alt=""
-        width={992}
-        height={420}
-        className="mb-10 rounded-t-md object-cover"
-      />
+      {post.featuredImage && (
+        <Image
+          src={post.featuredImage.node.sourceUrl}
+          alt=""
+          width={992}
+          height={420}
+          className="mb-10 rounded-t-md object-cover"
+        />
+      )}
       <div className="px-10 pb-10">
-        <div className="mt-6 mb-6 flex flex-wrap space-x-5 xl:space-x-10">
+        <div className="mb-6 mt-6 flex flex-wrap space-x-5 xl:space-x-10">
           <span className="flex items-center space-x-2">
             <Image
               src={post.author.node.avatar.url}
