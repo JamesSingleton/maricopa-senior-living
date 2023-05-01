@@ -2,8 +2,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 
-import { getPopularTags, getPopularCategories } from '@/lib/api'
+import { getPopularTags } from '@/lib/api'
 import SearchBar from '@/components/SearchBar'
+import { getPopularCategories } from '@/lib/sanity.client'
 
 const RightSidebar = async () => {
   const tags = await getPopularTags()
@@ -15,19 +16,17 @@ const RightSidebar = async () => {
       <div className="rounded-md bg-white p-8 shadow-lg">
         <h2 className="mb-8 text-xl font-bold lg:text-2xl">Popular Categories</h2>
         <ul className="space-y-4">
-          {categories.edges.map(
-            ({ node: { name, slug } }: { node: { name: string; slug: string } }) => (
-              <li key={name} className="block">
-                <Link
-                  href={`/category/${slug}`}
-                  className="flex justify-between rounded bg-neutral-200 px-5 py-4 transition-all duration-150 hover:bg-red-400 hover:text-white"
-                >
-                  <span className="text-lg font-medium">{name}</span>
-                  <ChevronRightIcon className="h-6 w-6" />
-                </Link>
-              </li>
-            )
-          )}
+          {categories.map((category: any) => (
+            <li key={category._id} className="block">
+              <Link
+                href={`/category/${category.slug}`}
+                className="flex justify-between rounded bg-neutral-200 px-5 py-4 transition-all duration-150 hover:bg-red-400 hover:text-white"
+              >
+                <span className="text-lg font-medium">{category.title}</span>
+                <ChevronRightIcon className="h-6 w-6" />
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
       <div className="rounded-md bg-white p-8 shadow-lg">

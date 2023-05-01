@@ -1,8 +1,5 @@
-import BlogCard from '@/components/BlogCard'
 import ArticleCard from '@/components/ArticleCard'
-import { getAllPostsForHome } from '@/lib/api'
 import { getPosts } from '@/lib/sanity.client'
-import { urlForImage } from '@/lib/sanity.image'
 import { baseUrl } from '@/lib/constants'
 
 import type { Metadata } from 'next'
@@ -25,10 +22,6 @@ export const metadata: Metadata = {
 }
 
 export default async function Home() {
-  const preview = false
-  const allPosts = await getAllPostsForHome(preview)
-  const { edges } = allPosts
-
   const posts = await getPosts()
 
   return (
@@ -36,11 +29,6 @@ export default async function Home() {
       {posts.map((post: Post) => (
         <ArticleCard post={post} key={post._id} />
       ))}
-      {edges.map((edge: any) => {
-        if (edge.node.title !== '') {
-          return <BlogCard key={edge.node.title} post={edge.node} />
-        }
-      })}
     </div>
   )
 }

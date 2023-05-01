@@ -68,3 +68,9 @@ export const categoryBySlug = groq`*[_type == "category" && slug.current == $slu
     }
   },
 }[0]`
+
+export const popularCategories = groq`*[_type == "category"]{
+  _id,
+  title,
+  "slug": slug.current,
+}[0...10]`
