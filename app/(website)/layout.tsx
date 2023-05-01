@@ -1,17 +1,14 @@
-import './globals.css'
+import 'tailwindcss/tailwind.css'
 
-import { Inter } from 'next/font/google'
+import { Inter, Roboto_Mono } from 'next/font/google'
 
-import Header from './Header'
-import Footer from './Footer'
-import RightSidebar from './RightSidebar'
-
-const inter = Inter({
-  variable: '--font-inter',
-  subsets: ['latin'],
-})
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
+import RightSidebar from '@/components/RightSidebar'
+import { baseUrl } from '@/lib/constants'
 
 export const metadata = {
+  metadataBase: new URL(baseUrl),
   title: {
     template: '%s | Maricopa Senior Living',
     default: 'Maricopa Senior Living - Aging Well Your Way!',
@@ -25,14 +22,22 @@ export const metadata = {
   },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+const inter = Inter({
+  variable: '--font-inter',
+  display: 'swap',
+  subsets: ['latin'],
+})
+
+const roboto_mono = Roboto_Mono({
+  variable: '--font-roboto-mono',
+  display: 'swap',
+  subsets: ['latin'],
+})
+
+export default function IndexLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`h-full bg-neutral-100 text-neutral-900 ${inter.className}`}>
-      <head>
-        <meta content="width=device-width, initial-scale=1" name="viewport" />
-        <link rel="icon" href="/favicon.ico" />
-      </head>
-      <body className="h-full text-lg font-medium">
+    <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
+      <body className="bg-zinc-50 text-zinc-900 antialiased">
         <Header />
         <main className="py-16 md:py-20 lg:py-28 xl:py-32">
           <div className="container">

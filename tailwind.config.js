@@ -14,8 +14,8 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        default: ['var(--font-inter)', ...defaultTheme.fontFamily.sans],
-        mono: ['Consolas', ...defaultTheme.fontFamily.mono],
+        sans: ['var(--font-inter)'],
+        mono: ['var(--font-roboto-mono)'],
       },
     },
   },

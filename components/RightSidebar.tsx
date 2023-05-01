@@ -12,7 +12,7 @@ const RightSidebar = async () => {
   return (
     <div className="space-y-7">
       <SearchBar />
-      <div className="rounded-md bg-white p-8">
+      <div className="rounded-md bg-white p-8 shadow-lg">
         <h2 className="mb-8 text-xl font-bold lg:text-2xl">Popular Categories</h2>
         <ul className="space-y-4">
           {categories.edges.map(
@@ -22,7 +22,7 @@ const RightSidebar = async () => {
                   href={`/category/${slug}`}
                   className="flex justify-between rounded bg-neutral-200 px-5 py-4 transition-all duration-150 hover:bg-red-400 hover:text-white"
                 >
-                  <span>{name}</span>
+                  <span className="text-lg font-medium">{name}</span>
                   <ChevronRightIcon className="h-6 w-6" />
                 </Link>
               </li>
@@ -30,7 +30,7 @@ const RightSidebar = async () => {
           )}
         </ul>
       </div>
-      <div className="rounded-md bg-white p-8">
+      <div className="rounded-md bg-white p-8 shadow-lg">
         <h2 className="mb-8 text-lg font-bold lg:text-2xl">Popular Tags</h2>
         <ul className="flex flex-wrap">
           {tags &&
@@ -39,7 +39,7 @@ const RightSidebar = async () => {
                 <Link
                   title={tag.node.name}
                   href={`/tag/${tag.node.slug}`}
-                  className="rounded bg-neutral-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
+                  className="space-x-4 rounded bg-neutral-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
                 >
                   {tag.node.name}
                 </Link>
@@ -47,7 +47,7 @@ const RightSidebar = async () => {
             ))}
         </ul>
       </div>
-      <div className="rounded-md bg-white p-8">
+      <div className="rounded-md bg-white p-8 shadow-lg">
         <h2 className="mb-8 text-lg font-bold lg:text-2xl">Joan&apos;s Corner</h2>
         <ul className="divide-y divide-red-400">
           <li className="py-10 first:pt-0 last:pb-0">

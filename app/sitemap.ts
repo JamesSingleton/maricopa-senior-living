@@ -1,8 +1,12 @@
-export default function sitemap() {
-  const routes = ['', '/az-travel'].map((route) => ({
-    url: `https://maricopaseniorliving.org${route}`,
-    lastModified: new Date().toISOString().split('T')[0],
+import { MetadataRoute } from 'next'
+
+import { baseUrl } from '@/lib/constants'
+
+export default async function sitemap(): Promise<Promise<Promise<MetadataRoute.Sitemap>>> {
+  const routesMap = ['', '/articles'].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date().toISOString(),
   }))
 
-  return [...routes]
+  return [...routesMap]
 }

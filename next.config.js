@@ -66,6 +66,7 @@ const nextConfig = {
       'bestwpware.com',
       'maricopaseniorliving.org',
       'secure.gravatar.com',
+      'cdn.sanity.io',
     ],
   },
   headers() {
