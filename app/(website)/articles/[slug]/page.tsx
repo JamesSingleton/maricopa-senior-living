@@ -1,14 +1,15 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { CalendarIcon } from '@heroicons/react/24/outline'
-import { format, parseISO } from 'date-fns'
 
 import { getPostBySlug } from '@/lib/sanity.client'
 import { urlForImage } from '@/lib/sanity.image'
 import { CustomPortableText } from '@/components/CustomPortableText'
+import Date from '@/components/Date'
 
 export default async function ArticlePage({ params: { slug } }: { params: { slug: string } }) {
   const post = await getPostBySlug(slug)
-  console.log(post)
+
   return (
     <article className="rounded-md bg-white shadow">
       {/* {post.mainImage.asset ? (
@@ -33,17 +34,28 @@ export default async function ArticlePage({ params: { slug } }: { params: { slug
             <span>{post.author.name}</span>
           </span>
           <span className="flex items-center space-x-2">
-            <CalendarIcon className="h-5 w-5 text-neutral-500" />
-            <span className="sr-only">Published on</span>{' '}
-            <time dateTime={post.publishedAt}>
-              {format(parseISO(post.publishedAt), 'LLL d, yyyy')}
-            </time>
+            <CalendarIcon className="h-5 w-5 text-zinc-500" />
+            <span className="sr-only">Published on</span> <Date dateString={post.publishedAt} />
           </span>
         </div>
         <h1 className="lg:text-4xl">{post.title}</h1>
-        <div className="prose mt-6 xl:prose-xl">
+        <div className="prose prose-lg prose-indigo">
           <CustomPortableText value={post.body} />
         </div>
+        {post.tags && (
+          <div className="mt-8 md:mt-14">
+            <h2 className="pb-4 text-xl font-semibold">Tags</h2>
+            {post.tags.map((tag) => (
+              <Link
+                href={`/tag/${tag.slug}`}
+                key={tag._id}
+                className="space-x-4 rounded bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
+              >
+                {tag.title}
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </article>
   )

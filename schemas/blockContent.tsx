@@ -1,16 +1,38 @@
-import { defineType, defineArrayMember } from 'sanity'
+import { defineType, defineArrayMember, defineField } from 'sanity'
 import { DocumentPdfIcon, ImageIcon } from '@sanity/icons'
+import { ReactElement, JSXElementConstructor, ReactFragment, ReactPortal } from 'react'
 
-/**
- * This is the schema definition for the rich text fields used for
- * for this blog studio. When you import it in schemas.js it can be
- * reused in other parts of the studio with:
- *  {
- *    name: 'someName',
- *    title: 'Some title',
- *    type: 'blockContent'
- *  }
- */
+interface DecartorProps {
+  children:
+    | string
+    | number
+    | boolean
+    | ReactElement<any, string | JSXElementConstructor<any>>
+    | ReactFragment
+    | ReactPortal
+    | null
+    | undefined
+}
+
+const HighlightIcon = () => <span style={{ fontWeight: 'bold' }}>H</span>
+const HighlightDecorator = (props: DecartorProps) => (
+  <span style={{ backgroundColor: 'yellow' }}>{props.children}</span>
+)
+
+const SuperscriptIcon = () => (
+  <span style={{ fontSize: '0.8em' }}>
+    x<sup>2</sup>
+  </span>
+)
+const SuperscriptDecorator = (props: DecartorProps) => <sup>{props.children}</sup>
+
+const SubscriptIcon = () => (
+  <span style={{ fontSize: '0.8em' }}>
+    x<sub>2</sub>
+  </span>
+)
+const SubscriptDecorator = (props: DecartorProps) => <sub>{props.children}</sub>
+
 export default defineType({
   title: 'Block Content',
   name: 'blockContent',
@@ -41,6 +63,27 @@ export default defineType({
         decorators: [
           { title: 'Strong', value: 'strong' },
           { title: 'Emphasis', value: 'em' },
+          { title: 'Underline', value: 'underline' },
+          { title: 'Strike', value: 'strike-through' },
+          { title: 'Code', value: 'code' },
+          {
+            title: 'Highlight',
+            value: 'highlight',
+            icon: HighlightIcon,
+            component: HighlightDecorator,
+          },
+          {
+            title: 'Sub',
+            value: 'sub',
+            icon: SubscriptIcon,
+            component: SubscriptDecorator,
+          },
+          {
+            title: 'Super',
+            value: 'sup',
+            icon: SuperscriptIcon,
+            component: SuperscriptDecorator,
+          },
         ],
         // Annotations can be any object structure – e.g. a link or a footnote.
         annotations: [
@@ -53,6 +96,10 @@ export default defineType({
                 title: 'URL',
                 name: 'href',
                 type: 'url',
+                validation: (rule) =>
+                  rule.uri({
+                    scheme: ['http', 'https', 'mailto', 'tel'],
+                  }),
               },
             ],
           },
@@ -66,6 +113,15 @@ export default defineType({
       type: 'image',
       options: { hotspot: true },
       icon: ImageIcon,
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+          description: 'Alternative text for screen readers.',
+          validation: (rule) => rule.required(),
+        }),
+      ],
     }),
     defineArrayMember({
       type: 'file',

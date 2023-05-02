@@ -1,9 +1,25 @@
+import Image from 'next/image'
 import {
   PortableText,
   PortableTextComponents,
   PortableTextMarkComponentProps,
 } from '@portabletext/react'
 import { PortableTextBlock } from 'sanity'
+import { getImageDimensions } from '@sanity/asset-utils'
+
+import { urlForImage } from '@/lib/sanity.image'
+
+const ImageComponent = ({ value }: { value: any }) => {
+  const { width, height } = getImageDimensions(value)
+  return (
+    <Image
+      src={urlForImage(value).fit('min').auto('format').url()}
+      alt={value.alt || ' '}
+      width={width}
+      height={height}
+    />
+  )
+}
 
 export function CustomPortableText({
   paragraphClasses,
@@ -26,6 +42,18 @@ export function CustomPortableText({
           </a>
         )
       },
+      highlight: ({ children }) => {
+        return <mark>{children}</mark>
+      },
+      sup: ({ children }) => {
+        return <sup>{children}</sup>
+      },
+      sub: ({ children }) => {
+        return <sub>{children}</sub>
+      },
+    },
+    types: {
+      image: ImageComponent,
     },
   }
 

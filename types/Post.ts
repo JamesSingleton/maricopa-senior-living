@@ -13,11 +13,13 @@ export type Post = {
   }
   mainImage?: string
   categories: {
+    _id: string
     title: string
     slug: string
     description?: string
   }[]
   tags: {
+    _id: string
     title: string
     slug: string
     description?: string

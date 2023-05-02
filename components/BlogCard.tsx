@@ -62,11 +62,11 @@ const BlogCard = ({ post }: Post) => {
         <div className="flex-1">
           <>
             <Link href={`/articles/${post.slug}`}>
-              <h2 className="mt-4 text-xl font-semibold text-neutral-900">{post.title}</h2>
+              <h2 className="mt-4 text-xl font-semibold text-zinc-900">{post.title}</h2>
             </Link>
 
             <div
-              className="mt-3 text-base text-neutral-500"
+              className="mt-3 text-base text-zinc-500"
               dangerouslySetInnerHTML={{ __html: post.excerpt }}
             />
           </>
@@ -83,8 +83,8 @@ const BlogCard = ({ post }: Post) => {
             />
           </div>
           <div className="ml-3">
-            <p className="text-sm font-medium text-gray-900">{post.author.node.name}</p>
-            <div className="flex space-x-1 text-sm text-gray-500">
+            <p className="text-sm font-medium text-zinc-900">{post.author.node.name}</p>
+            <div className="flex space-x-1 text-sm text-zinc-500">
               <time dateTime={post.date} suppressHydrationWarning>
                 {format(parseISO(post.date), 'LLL d, yyyy')}
               </time>

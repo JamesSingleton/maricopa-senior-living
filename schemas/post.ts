@@ -9,6 +9,7 @@ export default defineType({
       name: 'title',
       title: 'Title',
       type: 'string',
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'slug',
@@ -16,14 +17,24 @@ export default defineType({
       type: 'slug',
       options: {
         source: 'title',
+        slugify: (input) =>
+          input
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w\-]+/g, '')
+            .replace(/\-\-+/g, '-'),
         maxLength: 96,
+        isUnique: (value, context) => context.defaultIsUnique(value, context),
       },
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'author',
       title: 'Author',
       type: 'reference',
       to: { type: 'author' },
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'mainImage',
@@ -32,12 +43,22 @@ export default defineType({
       options: {
         hotspot: true,
       },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+          description: 'Alternative text for screen readers.',
+          validation: (rule) => rule.required(),
+        }),
+      ],
     }),
     defineField({
       name: 'categories',
       title: 'Categories',
       type: 'array',
       of: [{ type: 'reference', to: { type: 'category' } }],
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'tags',
@@ -49,11 +70,13 @@ export default defineType({
       name: 'publishedAt',
       title: 'Published at',
       type: 'datetime',
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'body',
       title: 'Body',
       type: 'blockContent',
+      validation: (rule) => rule.required(),
     }),
   ],
 

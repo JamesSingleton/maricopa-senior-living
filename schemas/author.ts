@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity'
 
 export default defineType({
   name: 'author',
@@ -9,6 +9,7 @@ export default defineType({
       name: 'name',
       title: 'Name',
       type: 'string',
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'slug',
@@ -16,8 +17,17 @@ export default defineType({
       type: 'slug',
       options: {
         source: 'name',
+        slugify: (input) =>
+          input
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w\-]+/g, '')
+            .replace(/\-\-+/g, '-'),
         maxLength: 96,
+        isUnique: (value, context) => context.defaultIsUnique(value, context),
       },
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'image',
@@ -26,6 +36,7 @@ export default defineType({
       options: {
         hotspot: true,
       },
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'bio',
@@ -35,7 +46,7 @@ export default defineType({
         {
           title: 'Block',
           type: 'block',
-          styles: [{title: 'Normal', value: 'normal'}],
+          styles: [{ title: 'Normal', value: 'normal' }],
           lists: [],
         },
       ],

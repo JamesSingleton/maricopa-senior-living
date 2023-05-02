@@ -2,36 +2,6 @@ export const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
   ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
   : 'http://localhost:3000'
 
-export const tags = [
-  { name: 'AARP', href: '/tag/aarp' },
-  { name: 'Air Travel', href: '/tag/air-travel' },
-  { name: 'Guide', href: '/tag/guide' },
-  { name: 'Hobbies', href: '/tag/hobbies' },
-  { name: 'Medicare', href: '/tag/medicare' },
-  { name: 'Medicine', href: '/tag/medicine' },
-  { name: 'Reviews', href: '/tag/reviews' },
-  { name: 'Social Security', href: '/tag/social-security' },
-]
-
-export const categories = [
-  {
-    name: 'Health & Wellness',
-    href: '/category/health-and-wellness',
-  },
-  {
-    name: 'Retirement',
-    href: '/category/retirement',
-  },
-  {
-    name: 'Transportation',
-    href: '/category/transportation',
-  },
-  {
-    name: 'Aging in Place',
-    href: '/category/aging-in-place',
-  },
-]
-
 export const navigation = {
   categories: [
     {
@@ -136,24 +106,7 @@ export const navigation = {
     },
     {
       name: 'AZ Travel',
-      href: '/az-travel',
+      href: '/category/arizona-travel',
     },
   ],
 }
-
-export const posts = [
-  {
-    title: 'When to Take Social Security? at 62? 65? (Our Best Tips)',
-    href: '/articles/when-to-take-social-security-at-62-65-our-best-tips',
-    image: 'https://bestwpware.com/html/tf/edumim/assets/images/all-img/b-thub-1.png',
-    category: { name: 'Retirement', href: '/category/retirement' },
-    snippet:
-      'Most retirees are in a hurry to collect social security benefits at 62. Here’s why you could be better off waiting to take social security.   It’s arguably the most important question retirees face. No, not “What time does the senior breakfast special start at Denny’s?” I’m talking about Social Security. Should you begin collecting…',
-    datetime: '2020-03-16',
-    date: 'Mar 16, 2020',
-    author: {
-      name: 'Ron Smith',
-      image: '/images/Ron-Smith.jpeg',
-    },
-  },
-]

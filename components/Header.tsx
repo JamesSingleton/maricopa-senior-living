@@ -23,7 +23,7 @@ const NavLink = (item: { name: string; href: string; external?: boolean | undefi
         href={item.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center text-neutral-500 hover:text-neutral-800"
+        className="flex items-center text-zinc-500 hover:text-zinc-800"
       >
         <span>{item.name}</span>
         <ArrowTopRightOnSquareIcon className="ml-3 h-5 w-5" />
@@ -32,7 +32,7 @@ const NavLink = (item: { name: string; href: string; external?: boolean | undefi
   }
 
   return (
-    <Link href={item.href} className="text-neutral-500 hover:text-neutral-800">
+    <Link href={item.href} className="text-zinc-500 hover:text-zinc-800">
       {item.name}
     </Link>
   )
@@ -75,7 +75,7 @@ export default function Header() {
                 <div className="flex px-4 pb-2 pt-5">
                   <button
                     type="button"
-                    className="-m-2 inline-flex items-center justify-center rounded-md p-2 text-neutral-400"
+                    className="-m-2 inline-flex items-center justify-center rounded-md p-2 text-zinc-400"
                     onClick={() => setOpen(false)}
                   >
                     <span className="sr-only">Close menu</span>
@@ -85,7 +85,7 @@ export default function Header() {
 
                 {/* Links */}
                 <Tab.Group as="div" className="mt-2">
-                  <div className="border-b border-gray-200">
+                  <div className="border-b border-zinc-200">
                     <Tab.List className="-mb-px flex space-x-8 px-4">
                       {navigation.categories.map((category) => (
                         <Tab
@@ -94,7 +94,7 @@ export default function Header() {
                             clsx(
                               selected
                                 ? 'border-indigo-600 text-indigo-600'
-                                : 'border-transparent text-neutral-900',
+                                : 'border-transparent text-zinc-900',
                               'flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium'
                             )
                           }
@@ -109,10 +109,7 @@ export default function Header() {
                       <div className="grid grid-cols-1 items-start gap-x-6 gap-y-10">
                         <div className="grid grid-cols-1 gap-x-6 gap-y-10">
                           <div>
-                            <p
-                              id="mobile-featured-heading"
-                              className="font-medium text-neutral-900"
-                            >
+                            <p id="mobile-featured-heading" className="font-medium text-zinc-900">
                               HomeFit Guide
                             </p>
                             <ul
@@ -128,10 +125,7 @@ export default function Header() {
                             </ul>
                           </div>
                           <div>
-                            <p
-                              id="mobile-categories-heading"
-                              className="font-medium text-neutral-900"
-                            >
+                            <p id="mobile-categories-heading" className="font-medium text-zinc-900">
                               Safety Devices
                             </p>
                             <ul
@@ -155,7 +149,7 @@ export default function Header() {
                           <div>
                             <p
                               id="mobile-city-of-maricopa-heading"
-                              className="font-medium text-neutral-900"
+                              className="font-medium text-zinc-900"
                             >
                               City of Maricopa
                             </p>
@@ -172,10 +166,7 @@ export default function Header() {
                             </ul>
                           </div>
                           <div>
-                            <p
-                              id="mobile-categories-heading"
-                              className="font-medium text-neutral-900"
-                            >
+                            <p id="mobile-categories-heading" className="font-medium text-zinc-900">
                               InMaricopa
                             </p>
                             <ul
@@ -193,10 +184,7 @@ export default function Header() {
                         </div>
                         <div className="grid grid-cols-1 gap-x-6 gap-y-10">
                           <div>
-                            <p
-                              id="mobile-collection-heading"
-                              className="font-medium text-neutral-900"
-                            >
+                            <p id="mobile-collection-heading" className="font-medium text-zinc-900">
                               AARP
                             </p>
                             <ul
@@ -213,7 +201,7 @@ export default function Header() {
                           </div>
 
                           <div>
-                            <p id="mobile-brand-heading" className="font-medium text-neutral-900">
+                            <p id="mobile-brand-heading" className="font-medium text-zinc-900">
                               Other Resources
                             </p>
                             <ul
@@ -234,10 +222,10 @@ export default function Header() {
                   </Tab.Panels>
                 </Tab.Group>
 
-                <div className="space-y-6 border-t border-gray-200 px-4 py-6">
+                <div className="space-y-6 border-t border-zinc-200 px-4 py-6">
                   {navigation.pages.map((page) => (
                     <div key={page.name} className="flow-root">
-                      <a href={page.href} className="-m-2 block p-2 font-medium text-neutral-900">
+                      <a href={page.href} className="-m-2 block p-2 font-medium text-zinc-900">
                         {page.name}
                       </a>
                     </div>
@@ -253,7 +241,7 @@ export default function Header() {
         <nav aria-label="Top Navigation">
           <div className="bg-white">
             <div className="container">
-              <div className="border-b border-gray-200">
+              <div className="border-b border-zinc-200">
                 <div className="flex h-16 items-center justify-between">
                   {/* Logo (lg+) */}
                   <div className="hidden lg:flex lg:items-center">
@@ -271,7 +259,7 @@ export default function Header() {
                           <Link
                             key={page.name}
                             href={page.href}
-                            className="flex items-center text-base font-medium text-neutral-700 hover:text-neutral-800"
+                            className="flex items-center text-base font-medium text-zinc-700 hover:text-zinc-800"
                           >
                             {page.name}
                           </Link>
@@ -284,15 +272,15 @@ export default function Header() {
                                   className={clsx(
                                     open
                                       ? 'border-indigo-600 text-indigo-600'
-                                      : 'border-transparent text-neutral-700 hover:text-neutral-800',
+                                      : 'border-transparent text-zinc-700 hover:text-zinc-800',
                                     'relative z-10 -mb-px flex items-center border-b-2 pt-px text-base font-medium transition-colors duration-200 ease-out'
                                   )}
                                 >
                                   <span>{firstDropdown.name}</span>
                                   <ChevronDownIcon
                                     className={clsx(
-                                      open ? 'text-neutral-600' : 'text-neutral-400',
-                                      'ml-2 h-5 w-5 group-hover:text-neutral-500'
+                                      open ? 'text-zinc-600' : 'text-zinc-400',
+                                      'ml-2 h-5 w-5 group-hover:text-zinc-500'
                                     )}
                                     aria-hidden="true"
                                   />
@@ -308,7 +296,7 @@ export default function Header() {
                                 leaveFrom="opacity-100"
                                 leaveTo="opacity-0"
                               >
-                                <Popover.Panel className="absolute inset-x-0 top-full z-10 text-neutral-500 sm:text-base">
+                                <Popover.Panel className="absolute inset-x-0 top-full z-10 text-zinc-500 sm:text-base">
                                   {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
                                   <div
                                     className="absolute inset-0 top-1/2 bg-white shadow"
@@ -322,7 +310,7 @@ export default function Header() {
                                           <div>
                                             <p
                                               id="desktop-featured-heading"
-                                              className="font-medium text-neutral-900"
+                                              className="font-medium text-zinc-900"
                                             >
                                               HomeFit Guide
                                             </p>
@@ -341,7 +329,7 @@ export default function Header() {
                                           <div>
                                             <p
                                               id="desktop-categories-heading"
-                                              className="font-medium text-neutral-900"
+                                              className="font-medium text-zinc-900"
                                             >
                                               Safety Devices
                                             </p>
@@ -374,15 +362,15 @@ export default function Header() {
                                   className={clsx(
                                     open
                                       ? 'border-indigo-600 text-indigo-600'
-                                      : 'border-transparent text-neutral-700 hover:text-neutral-800',
+                                      : 'border-transparent text-zinc-700 hover:text-zinc-800',
                                     'relative z-10 -mb-px flex items-center border-b-2 pt-px text-base font-medium transition-colors duration-200 ease-out'
                                   )}
                                 >
                                   <span>{secondDropdown.name}</span>
                                   <ChevronDownIcon
                                     className={clsx(
-                                      open ? 'text-neutral-600' : 'text-neutral-400',
-                                      'ml-2 h-5 w-5 group-hover:text-neutral-500'
+                                      open ? 'text-zinc-600' : 'text-zinc-400',
+                                      'ml-2 h-5 w-5 group-hover:text-zinc-500'
                                     )}
                                     aria-hidden="true"
                                   />
@@ -398,7 +386,7 @@ export default function Header() {
                                 leaveFrom="opacity-100"
                                 leaveTo="opacity-0"
                               >
-                                <Popover.Panel className="absolute inset-x-0 top-full z-10 text-neutral-500 sm:text-base">
+                                <Popover.Panel className="absolute inset-x-0 top-full z-10 text-zinc-500 sm:text-base">
                                   {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
                                   <div
                                     className="absolute inset-0 top-1/2 bg-white shadow"
@@ -412,7 +400,7 @@ export default function Header() {
                                           <div>
                                             <p
                                               id="desktop-featured-heading"
-                                              className="font-medium text-neutral-900"
+                                              className="font-medium text-zinc-900"
                                             >
                                               Maricopa
                                             </p>
@@ -431,7 +419,7 @@ export default function Header() {
                                           <div>
                                             <p
                                               id="desktop-categories-heading"
-                                              className="font-medium text-neutral-900"
+                                              className="font-medium text-zinc-900"
                                             >
                                               InMaricopa
                                             </p>
@@ -452,7 +440,7 @@ export default function Header() {
                                           <div>
                                             <p
                                               id="desktop-collection-heading"
-                                              className="font-medium text-neutral-900"
+                                              className="font-medium text-zinc-900"
                                             >
                                               AARP
                                             </p>
@@ -472,7 +460,7 @@ export default function Header() {
                                           <div>
                                             <p
                                               id="desktop-brand-heading"
-                                              className="font-medium text-neutral-900"
+                                              className="font-medium text-zinc-900"
                                             >
                                               Other Resources
                                             </p>
@@ -505,7 +493,7 @@ export default function Header() {
                   <div className="flex flex-1 items-center lg:hidden">
                     <button
                       type="button"
-                      className="-ml-2 rounded-md bg-white p-2 text-neutral-400"
+                      className="-ml-2 rounded-md bg-white p-2 text-zinc-400"
                       onClick={() => setOpen(true)}
                     >
                       <span className="sr-only">Open menu</span>
@@ -523,7 +511,7 @@ export default function Header() {
                     <div className="flex items-center lg:ml-8">
                       <div className="flex space-x-8">
                         <div className="flex">
-                          <a href="#" className="-m-2 p-2 text-neutral-400 hover:text-neutral-500">
+                          <a href="#" className="-m-2 p-2 text-zinc-400 hover:text-zinc-500">
                             <span className="sr-only">Search</span>
                             <MagnifyingGlassIcon className="h-6 w-6" aria-hidden="true" />
                           </a>

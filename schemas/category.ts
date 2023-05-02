@@ -9,6 +9,7 @@ export default defineType({
       name: 'title',
       title: 'Title',
       type: 'string',
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'slug',
@@ -26,19 +27,16 @@ export default defineType({
         maxLength: 96,
         isUnique: (value, context) => context.defaultIsUnique(value, context),
       },
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'description',
       title: 'Description',
       type: 'array',
+      description:
+        "This will get displayed under the title on the category page as well as the page's description (what shows up on Google Search Results).",
       of: [{ type: 'block' }],
-    }),
-    // field that will be an array of search results
-    defineField({
-      name: 'content',
-      title: 'Content',
-      type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'service' }, { type: 'post' }] }],
+      validation: (rule) => rule.required(),
     }),
   ],
 })

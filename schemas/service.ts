@@ -13,6 +13,21 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'categories',
+      title: 'Categories',
+      description: 'What categories does this belong to?',
+      type: 'array',
+      of: [{ type: 'reference', to: { type: 'category' } }],
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'tags',
+      title: 'Tags',
+      description: 'What tags apply to this?',
+      type: 'array',
+      of: [{ type: 'reference', to: { type: 'tag' } }],
+    }),
+    defineField({
       type: 'text',
       name: 'description',
       title: 'Description',
@@ -48,6 +63,12 @@ export default defineType({
       name: 'notes',
       title: 'Notes',
       description: 'Any notes you want to add?',
+    }),
+    defineField({
+      name: 'attachments',
+      title: 'Attachments',
+      type: 'array',
+      of: [{ type: 'file' }],
     }),
   ],
 })

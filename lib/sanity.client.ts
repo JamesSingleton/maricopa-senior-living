@@ -7,8 +7,14 @@ import {
   categoryBySlug,
   postBySlug,
   popularCategories,
+  search,
+  joansCorner,
+  popularTags,
+  allTags,
+  tagBySlug,
 } from '@/lib/sanity.queries'
 import type { Post } from '@/types/Post'
+import type { GroupItem, TitleAndSlug, PopularItems } from '@/types/common'
 
 const sanityClient = (token?: string) => {
   return createClient({ projectId, dataset, apiVersion, token, useCdn })
@@ -18,11 +24,11 @@ export async function getPosts(): Promise<Post[]> {
   return await sanityClient().fetch(allPosts)
 }
 
-export async function getCategories(): Promise<any> {
+export async function getCategories(): Promise<TitleAndSlug[]> {
   return await sanityClient().fetch(allCategories)
 }
 
-export async function getCategoryBySlug(slug: string): Promise<any> {
+export async function getCategoryBySlug(slug: string): Promise<GroupItem> {
   return await sanityClient().fetch(categoryBySlug, { slug })
 }
 
@@ -30,16 +36,26 @@ export async function getPostBySlug(slug: string): Promise<Post> {
   return await sanityClient().fetch(postBySlug, { slug })
 }
 
-export async function getPopularCategories(): Promise<any> {
+export async function getPopularCategories(): Promise<PopularItems[]> {
   return await sanityClient().fetch(popularCategories)
 }
 
-export async function getPopularTags(): Promise<any> {
-  return await sanityClient().fetch(`
-    *[_type == "tag"]{
-      title,
-      "slug": slug.current,
-      "count": count(*[_type == "post" && references(^._id)])
-    } | order(count desc) [0..3]
-  `)
+export async function getTags(): Promise<TitleAndSlug[]> {
+  return await sanityClient().fetch(allTags)
+}
+
+export async function getTagBySlug(slug: string): Promise<GroupItem> {
+  return await sanityClient().fetch(tagBySlug, { slug })
+}
+
+export async function getPopularTags(): Promise<PopularItems[]> {
+  return await sanityClient().fetch(popularTags)
+}
+
+export async function getSearchResults(query: string): Promise<any> {
+  return await sanityClient().fetch(search, { query })
+}
+
+export async function getJoansCorner(): Promise<any> {
+  return await sanityClient().fetch(joansCorner)
 }
