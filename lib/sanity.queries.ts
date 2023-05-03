@@ -102,12 +102,13 @@ export const popularTags = groq`*[_type == "tag"]{
 } | order(count desc, title asc) [0..10]`
 
 export const search = groq`*[
-  (_type == "post" && (title match $query || body match $query)) ||
-  (_type == "category" && (title match $query || description match $query)) ||
-  (_type == "tag" && title match $query) ||
-  (_type == "service" && (title match $query || description match $query))
+  (_type == "post" && (title match "*" + $query + "*" || pt::text(body) match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*")) ||
+  (_type == "service" && (title match "*" + $query + "*" || description match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*"))
 ]{
-  ...
+  ...,
+  _type == "post" => {
+    ${postFields}
+  },
 }`
 
 export const joansCorner = groq`*[_type == "post" && references(*[_type == "category" && title == "Joan's Corner"]._id)]{
