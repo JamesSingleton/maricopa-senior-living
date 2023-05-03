@@ -32,7 +32,6 @@ export default defineType({
       name: 'description',
       title: 'Description',
       description: 'A short little description of the result',
-      validation: (rule) => rule.required(),
     }),
     defineField({
       type: 'text',
@@ -68,7 +67,20 @@ export default defineType({
       name: 'attachments',
       title: 'Attachments',
       type: 'array',
-      of: [{ type: 'file' }],
+      of: [
+        {
+          type: 'file',
+          fields: [
+            defineField({
+              name: 'name',
+              title: 'Name',
+              type: 'string',
+              description: 'Name of the file (this will be displayed on the website)',
+              validation: (rule) => rule.required(),
+            }),
+          ],
+        },
+      ],
     }),
   ],
 })

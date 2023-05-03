@@ -52,7 +52,10 @@ const RightSidebar = async () => {
         <h2 className="mb-8 text-lg font-bold lg:text-2xl">Joan&apos;s Corner</h2>
         <div className="space-y-16">
           {joansCorner.map((post: any) => (
-            <article key={post.id} className="flex max-w-xl flex-col items-start justify-between">
+            <article
+              key={`${post.id}_right_sidebar`}
+              className="flex max-w-xl flex-col items-start justify-between"
+            >
               <Link href={`/articles/${post.slug}`}>
                 <div className="flex items-center gap-x-4 text-xs">
                   <Date dateString={post.publishedAt} className="text-zinc-500" />

@@ -126,6 +126,16 @@ export default defineType({
     defineArrayMember({
       type: 'file',
       icon: DocumentPdfIcon,
+      name: 'attachment',
+      fields: [
+        defineField({
+          name: 'description',
+          title: 'Description',
+          type: 'string',
+          description: 'Description of the document. Will be displayed in the post.',
+          validation: (rule) => rule.required(),
+        }),
+      ],
     }),
   ],
 })

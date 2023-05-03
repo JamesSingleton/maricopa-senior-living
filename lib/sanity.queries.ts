@@ -15,6 +15,7 @@ const authorFields = `
 
 const postFields = `
   _id,
+  _updatedAt,
   title,
   "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
   "slug": slug.current,
@@ -40,7 +41,13 @@ const postFields = `
     "slug": slug.current,
   },
   publishedAt,
-  body,
+  "body": body[]{
+    ...,
+    _type == 'file' => {
+      ...,
+      "documentUrl": asset->url
+    }
+  }
 `
 
 export const allPosts = groq`*[_type == "post"]{
@@ -66,6 +73,12 @@ export const categoryBySlug = groq`*[_type == "category" && slug.current == $slu
   },
   "services": *[_type == "service" && references(^._id)]{
     ...,
+    attachments[]{
+      ...,
+      "documentUrl": asset->url,
+      "documentSize": asset->size,
+      "documentOriginalFilename": asset->originalFilename,
+    }
   },
 }[0]`
 

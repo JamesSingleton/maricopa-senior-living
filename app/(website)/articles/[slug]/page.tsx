@@ -7,11 +7,38 @@ import { urlForImage } from '@/lib/sanity.image'
 import { CustomPortableText } from '@/components/CustomPortableText'
 import Date from '@/components/Date'
 
+import type { Metadata } from 'next'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string }
+}): Promise<Metadata> {
+  const post = await getPostBySlug(params.slug)
+
+  if (!post) {
+    return {}
+  }
+
+  return {
+    title: `${post.title}`,
+    description: `${post.excerpt}`,
+    openGraph: {
+      title: `${post.title}`,
+      description: `${post.excerpt}`,
+      type: 'article',
+      tags: post.tags.map((tag) => tag.title),
+      publishedTime: post.publishedAt,
+      modifiedTime: post._updatedAt,
+    },
+  }
+}
+
 export default async function ArticlePage({ params: { slug } }: { params: { slug: string } }) {
   const post = await getPostBySlug(slug)
 
   return (
-    <article className="rounded-md bg-white shadow">
+    <article className="prose prose-lg prose-indigo rounded-md bg-white shadow">
       {/* {post.mainImage.asset ? (
         <Image
           src={urlForImage(post.mainImage).url()}
@@ -22,7 +49,7 @@ export default async function ArticlePage({ params: { slug } }: { params: { slug
         />
       ) : null} */}
       <div className="px-10 py-10">
-        <div className="mb-6 mt-6 flex flex-wrap space-x-5 xl:space-x-10">
+        <div className="flex flex-wrap space-x-5 xl:space-x-10">
           <span className="flex items-center space-x-2">
             <Image
               src={urlForImage(post.author.image).url()}
@@ -39,11 +66,11 @@ export default async function ArticlePage({ params: { slug } }: { params: { slug
           </span>
         </div>
         <h1 className="lg:text-4xl">{post.title}</h1>
-        <div className="prose prose-lg prose-indigo">
+        <>
           <CustomPortableText value={post.body} />
-        </div>
+        </>
         {post.tags && (
-          <div className="mt-8 md:mt-14">
+          <div className="not-prose mt-8 md:mt-14">
             <h2 className="pb-4 text-xl font-semibold">Tags</h2>
             {post.tags.map((tag) => (
               <Link

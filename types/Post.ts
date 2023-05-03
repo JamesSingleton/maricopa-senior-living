@@ -2,7 +2,7 @@ import { PortableTextBlock } from 'sanity'
 
 export type Post = {
   _id: string
-  createdAt: string
+  _updatedAt: string
   title: string
   excerpt: string
   slug: string

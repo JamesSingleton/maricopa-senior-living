@@ -1,10 +1,24 @@
 import { PaperClipIcon } from '@heroicons/react/20/solid'
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
+
+function convertBytes(bytes: number): string {
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+  if (bytes === 0) {
+    return '0 Bytes'
+  }
+  const i = Math.floor(Math.log(bytes) / Math.log(1024))
+  return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i]
+}
 
 const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => (
   <div className="overflow-hidden bg-white shadow sm:rounded-lg">
     <div className="px-4 py-6 sm:px-6">
       <h2 className="text-2xl font-semibold leading-7 text-zinc-900">{directoryItem.title}</h2>
-      <p className="mt-1 max-w-2xl text-sm leading-6 text-zinc-500">{directoryItem.description}</p>
+      {directoryItem.description && (
+        <p className="mt-1 max-w-2xl text-sm leading-6 text-zinc-500">
+          {directoryItem.description}
+        </p>
+      )}
     </div>
     <div className="border-t border-zinc-100">
       <dl className="divide-y divide-zinc-100">
@@ -23,10 +37,14 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => (
               <a
                 href={directoryItem.website}
                 target="_blank"
-                className="text-indigo-600 hover:text-indigo-500"
+                className="flex items-center text-indigo-600 hover:text-indigo-500"
                 rel="noreferrer noopener"
               >
-                {directoryItem.website}
+                <span>{directoryItem.website}</span>
+                <ArrowTopRightOnSquareIcon
+                  className="h-4 w-4 pl-1"
+                  aria-label="(opens in a new tab)"
+                />
               </a>
             </dd>
           </div>
@@ -68,42 +86,35 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => (
                 role="list"
                 className="divide-y divide-zinc-100 rounded-md border border-zinc-200"
               >
-                <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                  <div className="flex w-0 flex-1 items-center">
-                    <PaperClipIcon
-                      className="h-5 w-5 flex-shrink-0 text-zinc-400"
-                      aria-hidden="true"
-                    />
-                    <div className="ml-4 flex min-w-0 flex-1 gap-2">
-                      <span className="truncate font-medium">resume_back_end_developer.pdf</span>
-                      <span className="flex-shrink-0 text-zinc-400">2.4mb</span>
+                {directoryItem.attachments.map((attachment: any) => (
+                  <li
+                    key={attachment._key}
+                    className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6"
+                  >
+                    <div className="flex w-0 flex-1 items-center">
+                      <PaperClipIcon
+                        className="h-5 w-5 flex-shrink-0 text-zinc-400"
+                        aria-hidden="true"
+                      />
+                      <div className="ml-4 flex min-w-0 flex-1 gap-2">
+                        <span className="truncate font-medium">
+                          {attachment.documentOriginalFilename}
+                        </span>
+                        <span className="flex-shrink-0 text-zinc-400">
+                          {convertBytes(attachment.documentSize)}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="ml-4 flex-shrink-0">
-                    <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                      Download
-                    </a>
-                  </div>
-                </li>
-                <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                  <div className="flex w-0 flex-1 items-center">
-                    <PaperClipIcon
-                      className="h-5 w-5 flex-shrink-0 text-zinc-400"
-                      aria-hidden="true"
-                    />
-                    <div className="ml-4 flex min-w-0 flex-1 gap-2">
-                      <span className="truncate font-medium">
-                        coverletter_back_end_developer.pdf
-                      </span>
-                      <span className="flex-shrink-0 text-zinc-400">4.5mb</span>
+                    <div className="ml-4 flex-shrink-0">
+                      <a
+                        href={`${attachment.documentUrl}?dl=${attachment.name}`}
+                        className="font-medium text-indigo-600 hover:text-indigo-500"
+                      >
+                        Download
+                      </a>
                     </div>
-                  </div>
-                  <div className="ml-4 flex-shrink-0">
-                    <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                      Download
-                    </a>
-                  </div>
-                </li>
+                  </li>
+                ))}
               </ul>
             </dd>
           </div>
