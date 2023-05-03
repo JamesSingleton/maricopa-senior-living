@@ -5,9 +5,10 @@ import {
   PortableTextMarkComponentProps,
 } from '@portabletext/react'
 import { PortableTextBlock } from 'sanity'
-import { getImageDimensions } from '@sanity/asset-utils'
+import { getImageDimensions, buildFileUrl } from '@sanity/asset-utils'
 
 import { urlForImage } from '@/lib/sanity.image'
+import { dataset, projectId } from '@/lib/sanity.api'
 
 const ImageComponent = ({ value }: { value: any }) => {
   const { width, height } = getImageDimensions(value)

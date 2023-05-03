@@ -1,5 +1,7 @@
+import { dataset, projectId } from '@/lib/sanity.api'
 import { PaperClipIcon } from '@heroicons/react/20/solid'
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
+import { buildFileUrl } from '@sanity/asset-utils'
 
 function convertBytes(bytes: number): string {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
@@ -97,9 +99,7 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => (
                         aria-hidden="true"
                       />
                       <div className="ml-4 flex min-w-0 flex-1 gap-2">
-                        <span className="truncate font-medium">
-                          {attachment.documentOriginalFilename}
-                        </span>
+                        <span className="truncate font-medium">{attachment.name}</span>
                         <span className="flex-shrink-0 text-zinc-400">
                           {convertBytes(attachment.documentSize)}
                         </span>
@@ -107,7 +107,9 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => (
                     </div>
                     <div className="ml-4 flex-shrink-0">
                       <a
-                        href={`${attachment.documentUrl}?dl=${attachment.name}`}
+                        href={`${buildFileUrl(attachment, { dataset, projectId })}?dl=${
+                          attachment.name
+                        }`}
                         className="font-medium text-indigo-600 hover:text-indigo-500"
                       >
                         Download
