@@ -70,17 +70,20 @@ export default async function ArticlePage({ params: { slug } }: { params: { slug
         </h1>
         <CustomPortableText value={post.body} />
         {post.tags && (
-          <div className="not-prose mt-8 md:mt-14">
-            <h2 className="pb-4 text-xl font-semibold">Tags</h2>
-            {post.tags.map((tag) => (
-              <Link
-                href={`/tag/${tag.slug}`}
-                key={tag._id}
-                className="space-x-4 rounded bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
-              >
-                {tag.title}
-              </Link>
-            ))}
+          <div className="mt-8 md:mt-14">
+            <h2 className="text-xl font-semibold">Tags</h2>
+            <ul className="not-prose list-none space-x-4 pl-0" role="list">
+              {post.tags.map((tag) => (
+                <li key={tag._id}>
+                  <Link
+                    href={`/tag/${tag.slug}`}
+                    className="rounded bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
+                  >
+                    {tag.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
       </div>
