@@ -73,6 +73,13 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      type: 'boolean',
+      name: 'isArchived',
+      title: 'Archive Post?',
+      description: 'Archived posts will not be shown in the front-end',
+      initialValue: false,
+    }),
+    defineField({
       name: 'body',
       title: 'Body',
       type: 'blockContent',
