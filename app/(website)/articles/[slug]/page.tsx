@@ -38,7 +38,7 @@ export default async function ArticlePage({ params: { slug } }: { params: { slug
   const post = await getPostBySlug(slug)
 
   return (
-    <article className="prose prose-lg prose-indigo rounded-md bg-white shadow">
+    <article className="prose prose-lg prose-indigo rounded-md bg-white shadow lg:max-w-none">
       {/* {post.mainImage.asset ? (
         <Image
           src={urlForImage(post.mainImage).url()}
@@ -48,7 +48,7 @@ export default async function ArticlePage({ params: { slug } }: { params: { slug
           className="mb-10 rounded-t-md object-cover"
         />
       ) : null} */}
-      <div className="px-10 py-10">
+      <div className="px-4 py-4 sm:px-10 sm:py-10">
         <div className="flex flex-wrap space-x-5 xl:space-x-10">
           <span className="flex items-center space-x-2">
             <Image
@@ -65,10 +65,10 @@ export default async function ArticlePage({ params: { slug } }: { params: { slug
             <span className="sr-only">Published on</span> <Date dateString={post.publishedAt} />
           </span>
         </div>
-        <h1 className="lg:text-4xl">{post.title}</h1>
-        <>
-          <CustomPortableText value={post.body} />
-        </>
+        <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          {post.title}
+        </h1>
+        <CustomPortableText value={post.body} />
         {post.tags && (
           <div className="not-prose mt-8 md:mt-14">
             <h2 className="pb-4 text-xl font-semibold">Tags</h2>
