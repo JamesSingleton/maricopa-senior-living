@@ -132,3 +132,20 @@ export const joansCorner = groq`*[_type == "post" && references(*[_type == "cate
   publishedAt,
   "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
 }`
+
+export const menu = groq`*[_type == "menu"][0]{
+  "headerPrimary": headerPrimary[]{
+    _key,
+    "link": link{
+      url,
+      text,
+      reference->{
+        _id,
+        _type,
+        title,
+        "slug": slug.current
+      }
+    },
+    children
+  }
+}`

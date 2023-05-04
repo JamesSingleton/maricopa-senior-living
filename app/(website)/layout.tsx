@@ -6,6 +6,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import RightSidebar from '@/components/RightSidebar'
 import { baseUrl } from '@/lib/constants'
+import { getMenu } from '@/lib/sanity.client'
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
@@ -24,21 +25,21 @@ export const metadata = {
 
 const inter = Inter({
   variable: '--font-inter',
-  display: 'swap',
   subsets: ['latin'],
 })
 
 const roboto_mono = Roboto_Mono({
   variable: '--font-roboto-mono',
-  display: 'swap',
   subsets: ['latin'],
 })
 
-export default function IndexLayout({ children }: { children: React.ReactNode }) {
+export default async function IndexLayout({ children }: { children: React.ReactNode }) {
+  const menu = await getMenu()
+
   return (
     <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
       <body className="bg-zinc-50 text-zinc-900 antialiased">
-        <Header />
+        <Header menu={menu} />
         <main className="py-16 md:py-20 lg:py-28 xl:py-32">
           <div className="container">
             <div className="grid grid-cols-12 gap-8">

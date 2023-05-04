@@ -55,7 +55,7 @@ export function CustomPortableText({
     },
     types: {
       image: ImageComponent,
-      file: ({ value }: { value: any }) => {
+      attachment: ({ value }: { value: any }) => {
         const { documentUrl, description } = value
         return (
           <a href={documentUrl} target="_blank" rel="noopener noreferrer">
