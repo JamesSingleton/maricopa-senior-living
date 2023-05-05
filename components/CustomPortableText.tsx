@@ -5,10 +5,9 @@ import {
   PortableTextMarkComponentProps,
 } from '@portabletext/react'
 import { PortableTextBlock } from 'sanity'
-import { getImageDimensions, buildFileUrl } from '@sanity/asset-utils'
+import { getImageDimensions } from '@sanity/asset-utils'
 
 import { urlForImage } from '@/lib/sanity.image'
-import { dataset, projectId } from '@/lib/sanity.api'
 
 const ImageComponent = ({ value }: { value: any }) => {
   const { width, height } = getImageDimensions(value)
@@ -55,14 +54,11 @@ export function CustomPortableText({
     },
     types: {
       image: ImageComponent,
-      attachment: ({ value }: { value: any }) => {
-        const { documentUrl, description } = value
-        return (
-          <a href={documentUrl} target="_blank" rel="noopener noreferrer">
-            {description}
-          </a>
-        )
-      },
+      attachment: ({ value }: { value: any }) => (
+        <a href={value.asset.url} target="_blank" rel="noopener noreferrer">
+          {value.description}
+        </a>
+      ),
     },
   }
 

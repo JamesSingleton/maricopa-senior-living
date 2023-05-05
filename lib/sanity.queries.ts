@@ -43,11 +43,11 @@ const postFields = `
   publishedAt,
   "body": body[]{
     ...,
-    _type == 'file' => {
+    _type == "attachment" => {
       ...,
-      "documentUrl": asset->url
+      asset->
     }
-  }
+  },
 `
 
 export const allPosts = groq`*[_type == "post"]{
