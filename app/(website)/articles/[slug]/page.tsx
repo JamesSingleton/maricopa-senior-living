@@ -72,7 +72,7 @@ export default async function ArticlePage({ params: { slug } }: { params: { slug
         {post.tags && (
           <div className="mt-8 md:mt-14">
             <h2 className="text-xl font-semibold">Tags</h2>
-            <ul className="not-prose list-none space-x-4 pl-0" role="list">
+            <ul className="not-prose flex list-none items-center space-x-4 pl-0" role="list">
               {post.tags.map((tag) => (
                 <li key={tag._id}>
                   <Link

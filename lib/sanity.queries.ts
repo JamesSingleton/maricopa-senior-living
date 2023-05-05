@@ -122,7 +122,7 @@ export const search = groq`*[
   },
 }`
 
-export const joansCorner = groq`*[_type == "post" && references(*[_type == "category" && title == "Joan's Corner"]._id)]{
+export const joansCorner = groq`*[_type == "post" && references(*[_type == "category" && title == "Joan's Corner"]._id)][0]{
   _id,
   title,
   "slug": slug.current,

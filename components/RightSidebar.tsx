@@ -51,38 +51,36 @@ const RightSidebar = async () => {
       <div className="rounded-md bg-white p-8 shadow-lg">
         <h2 className="mb-8 text-lg font-bold lg:text-2xl">Joan&apos;s Corner</h2>
         <div className="space-y-16">
-          {joansCorner.map((post: any) => (
-            <article
-              key={`${post.id}_right_sidebar`}
-              className="flex max-w-xl flex-col items-start justify-between"
-            >
-              <Link href={`/articles/${post.slug}`}>
-                <div className="flex items-center gap-x-4 text-xs">
-                  <Date dateString={post.publishedAt} className="text-zinc-500" />
+          <article
+            key={`${joansCorner._id}_right_sidebar`}
+            className="flex max-w-xl flex-col items-start justify-between"
+          >
+            <Link href={`/articles/${joansCorner.slug}`}>
+              <div className="flex items-center gap-x-4 text-xs">
+                <Date dateString={joansCorner.publishedAt} className="text-zinc-500" />
+              </div>
+              <div className="group relative">
+                <h3 className="mt-3 text-lg font-semibold leading-6 text-zinc-900 group-hover:text-zinc-600">
+                  {joansCorner.title}
+                </h3>
+                <p className="mt-5 line-clamp-3 text-sm leading-6 text-zinc-600">
+                  {joansCorner.excerpt}
+                </p>
+              </div>
+              <div className="relative mt-8 flex items-center gap-x-4">
+                <Image
+                  src={urlForImage(joansCorner.author.image).url()}
+                  alt={`${joansCorner.author.name} avatar`}
+                  className="h-10 w-10 rounded-full bg-zinc-50"
+                  width={40}
+                  height={40}
+                />
+                <div className="text-sm leading-6">
+                  <p className="font-semibold text-zinc-900">{joansCorner.author.name}</p>
                 </div>
-                <div className="group relative">
-                  <h3 className="mt-3 text-lg font-semibold leading-6 text-zinc-900 group-hover:text-zinc-600">
-                    {post.title}
-                  </h3>
-                  <p className="mt-5 line-clamp-3 text-sm leading-6 text-zinc-600">
-                    {post.excerpt}
-                  </p>
-                </div>
-                <div className="relative mt-8 flex items-center gap-x-4">
-                  <Image
-                    src={urlForImage(post.author.image).url()}
-                    alt={`${post.author.name} avatar`}
-                    className="h-10 w-10 rounded-full bg-zinc-50"
-                    width={40}
-                    height={40}
-                  />
-                  <div className="text-sm leading-6">
-                    <p className="font-semibold text-zinc-900">{post.author.name}</p>
-                  </div>
-                </div>
-              </Link>
-            </article>
-          ))}
+              </div>
+            </Link>
+          </article>
         </div>
       </div>
     </div>
