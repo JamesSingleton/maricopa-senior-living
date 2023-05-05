@@ -12,14 +12,14 @@ const Dropdown = ({ options }: { options: any }) => {
     <Listbox value={selected} onChange={setSelected}>
       {({ open }) => (
         <>
-          <Listbox.Label className="block text-sm font-medium text-gray-700">
+          <Listbox.Label className="block text-sm font-medium text-zinc-700">
             Assigned to
           </Listbox.Label>
           <div className="relative mt-1">
-            <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
+            <Listbox.Button className="relative w-full cursor-default rounded-md border border-zinc-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
               <span className="block truncate">{selected.name}</span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                <ChevronUpDownIcon className="h-5 w-5 text-zinc-400" aria-hidden="true" />
               </span>
             </Listbox.Button>
 
@@ -36,7 +36,7 @@ const Dropdown = ({ options }: { options: any }) => {
                     key={option.id}
                     className={({ active }) =>
                       clsx(
-                        active ? 'bg-indigo-600 text-white' : 'text-gray-900',
+                        active ? 'bg-indigo-600 text-white' : 'text-zinc-900',
                         'relative cursor-default select-none py-2 pl-3 pr-9'
                       )
                     }

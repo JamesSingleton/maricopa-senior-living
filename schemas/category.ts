@@ -1,0 +1,42 @@
+import { defineField, defineType, defineArrayMember } from 'sanity'
+
+export default defineType({
+  name: 'category',
+  title: 'Category',
+  type: 'document',
+  fields: [
+    defineField({
+      name: 'title',
+      title: 'Title',
+      type: 'string',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+        slugify: (input) =>
+          input
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w\-]+/g, '')
+            .replace(/\-\-+/g, '-'),
+        maxLength: 96,
+        isUnique: (value, context) => context.defaultIsUnique(value, context),
+      },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'array',
+      description:
+        "This will get displayed under the title on the category page as well as the page's description (what shows up on Google Search Results).",
+      of: [{ type: 'block' }],
+      validation: (rule) => rule.required(),
+    }),
+  ],
+})
