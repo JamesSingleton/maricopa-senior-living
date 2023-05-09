@@ -50,11 +50,11 @@ const postFields = `
   },
 `
 
-export const allPosts = groq`*[_type == "post"]{
+export const allPosts = groq`*[_type == "post" && isArchived != true] | order(publishedAt desc){
   ${postFields}
 }`
 
-export const postBySlug = groq`*[_type == "post" && slug.current == $slug]{
+export const postBySlug = groq`*[_type == "post" && slug.current == $slug && isArchived != true]{
   ${postFields}
 }[0]`
 
@@ -68,7 +68,7 @@ export const categoryBySlug = groq`*[_type == "category" && slug.current == $slu
   "slug": slug.current,
   description,
   "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",
-  "posts": *[_type == "post" && references(^._id)]{
+  "posts": *[_type == "post" && references(^._id) && isArchived != true]{
     ${postFields}
   },
   "services": *[_type == "service" && references(^._id)]{
@@ -84,7 +84,7 @@ export const popularCategories = groq`*[_type == "category"]{
   _id,
   title,
   "slug": slug.current,
-  "count": count(*[_type == "post" && references(^._id)]) + count(*[_type == "service" && references(^._id)])
+  "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])
 } | order(count desc, title asc) [0..10]`
 
 export const allTags = groq`*[_type == "tag"]{
@@ -97,7 +97,7 @@ export const tagBySlug = groq`*[_type == "tag" && slug.current == $slug]{
   "slug": slug.current,
   description,
   "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",
-  "posts": *[_type == "post" && references(^._id)]{
+  "posts": *[_type == "post" && references(^._id) && isArchived != true]{
     ${postFields}
   },
   "services": *[_type == "service" && references(^._id)]{
@@ -109,20 +109,20 @@ export const popularTags = groq`*[_type == "tag"]{
   _id,
   title,
   "slug": slug.current,
-  "count": count(*[_type == "post" && references(^._id)]) + count(*[_type == "service" && references(^._id)])
+  "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])
 } | order(count desc, title asc) [0..10]`
 
 export const search = groq`*[
-  (_type == "post" && (title match "*" + $query + "*" || pt::text(body) match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*")) ||
+  (_type == "post" && isArchived != true && (title match "*" + $query + "*" || pt::text(body) match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*")) ||
   (_type == "service" && (title match "*" + $query + "*" || description match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*"))
-]{
+] | order(_type asc, _createdAt desc){
   ...,
   _type == "post" => {
     ${postFields}
   },
 }`
 
-export const joansCorner = groq`*[_type == "post" && references(*[_type == "category" && title == "Joan's Corner"]._id)][0]{
+export const joansCorner = groq`*[_type == "post" && isArchived != true && references(*[_type == "category" && title == "Joan's Corner"]._id)][0]{
   _id,
   title,
   "slug": slug.current,
