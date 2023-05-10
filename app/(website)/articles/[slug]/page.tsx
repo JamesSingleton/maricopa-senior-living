@@ -9,6 +9,8 @@ import Date from '@/components/Date'
 
 import type { Metadata } from 'next'
 
+export const revalidate = 300 // revlidate this page every 5 minutes
+
 export async function generateMetadata({
   params,
 }: {

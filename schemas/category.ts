@@ -32,10 +32,10 @@ export default defineType({
     defineField({
       name: 'description',
       title: 'Description',
-      type: 'array',
+      type: 'blockContent',
       description:
         "This will get displayed under the title on the category page as well as the page's description (what shows up on Google Search Results).",
-      of: [{ type: 'block' }],
+
       validation: (rule) => rule.required(),
     }),
   ],
