@@ -7,6 +7,7 @@ import Footer from '@/components/Footer'
 import RightSidebar from '@/components/RightSidebar'
 import { baseUrl } from '@/lib/constants'
 import { getMenu } from '@/lib/sanity.client'
+import ScrollToTop from '@/components/ScrollToTop'
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
@@ -52,6 +53,7 @@ export default async function IndexLayout({ children }: { children: React.ReactN
           </div>
         </main>
         <Footer />
+        <ScrollToTop />
       </body>
     </html>
   )
