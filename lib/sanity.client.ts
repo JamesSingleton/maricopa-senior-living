@@ -17,7 +17,7 @@ import {
 import type { Post } from '@/types/Post'
 import type { GroupItem, TitleAndSlug, PopularItems } from '@/types/common'
 
-const sanityClient = (token?: string) => {
+export const sanityClient = (token?: string) => {
   return createClient({ projectId, dataset, apiVersion, token, useCdn })
 }
 
