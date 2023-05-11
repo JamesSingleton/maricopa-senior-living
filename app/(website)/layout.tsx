@@ -41,14 +41,12 @@ export default async function IndexLayout({ children }: { children: React.ReactN
     <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
       <body className="bg-zinc-50 text-zinc-900 antialiased">
         <Header menu={menu} />
-        <main className="py-16 md:py-20 lg:py-28 xl:py-32">
-          <div className="container">
-            <div className="grid grid-cols-12 gap-8">
-              <div className="col-span-12 lg:col-span-8">{children}</div>
-              <div className="col-span-12 lg:col-span-4">
-                {/* @ts-expect-error Server Component */}
-                <RightSidebar />
-              </div>
+        <main className="py-8 md:py-10 lg:py-14 xl:py-16">
+          <div className="container grid grid-cols-12 gap-8">
+            <div className="col-span-12 lg:col-span-8">{children}</div>
+            <div className="col-span-12 space-y-8 lg:col-span-4">
+              {/* @ts-expect-error Server Component */}
+              <RightSidebar />
             </div>
           </div>
         </main>

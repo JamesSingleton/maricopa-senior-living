@@ -13,7 +13,7 @@ const RightSidebar = async () => {
   const joansCorner = await getJoansCorner()
 
   return (
-    <div className="space-y-7">
+    <>
       <SearchBar />
       <div className="rounded-md bg-white p-8 shadow-lg">
         <h2 className="mb-8 text-xl font-bold lg:text-2xl">Popular Categories</h2>
@@ -83,7 +83,7 @@ const RightSidebar = async () => {
           </article>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

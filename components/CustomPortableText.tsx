@@ -56,7 +56,6 @@ export function CustomPortableText({
     types: {
       image: ImageComponent,
       attachment: ({ value }: { value: any }) => {
-        console.log(value)
         return (
           <p className="flex flex-col items-center justify-between md:flex-row">
             {value.asset.extension === 'pdf' ? (
