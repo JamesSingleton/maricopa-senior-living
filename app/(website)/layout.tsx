@@ -50,7 +50,7 @@ export default async function IndexLayout({ children }: { children: React.ReactN
             </div>
           </div>
         </main>
-        <Footer />
+        <Footer menu={menu.footer} />
         <ScrollToTop />
       </body>
     </html>

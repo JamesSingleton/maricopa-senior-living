@@ -9,7 +9,7 @@ export default defineType({
       name: `reference`,
       type: `reference`,
       description: `If this link has a reference and a URL, the reference will be used`,
-      to: [{ type: 'category' }, { type: 'tag' }],
+      to: [{ type: 'category' }, { type: 'tag' }, { type: 'page' }],
       // Read-only if a URL is used
       readOnly: ({ value, parent }) => !value && Boolean(parent?.url),
     },

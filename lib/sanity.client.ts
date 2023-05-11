@@ -13,6 +13,7 @@ import {
   allTags,
   tagBySlug,
   menu,
+  pageBySlug,
 } from '@/lib/sanity.queries'
 import type { Post } from '@/types/Post'
 import type { GroupItem, TitleAndSlug, PopularItems } from '@/types/common'
@@ -63,4 +64,8 @@ export async function getJoansCorner(): Promise<any> {
 
 export async function getMenu(): Promise<any> {
   return await sanityClient().fetch(menu)
+}
+
+export async function getPageBySlug(slug: string): Promise<any> {
+  return await sanityClient().fetch(pageBySlug, { slug })
 }

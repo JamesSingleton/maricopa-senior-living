@@ -152,5 +152,23 @@ export const menu = groq`*[_type == "menu"][0]{
       }
     },
     children
-  }
+  },
+  "footer": footer[]{
+    _key,
+    url,
+    text,
+    reference->{
+      _id,
+      _type,
+      title,
+      "slug": slug.current
+    }
+  },
+}`
+
+export const pageBySlug = groq`*[_type == "page" && slug.current == $slug][0]{
+  title,
+  "slug": slug.current,
+  "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",
+  body,
 }`
