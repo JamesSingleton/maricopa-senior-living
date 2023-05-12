@@ -3,7 +3,12 @@ import Link from 'next/link'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 
 import SearchBar from '@/components/SearchBar'
-import { getPopularCategories, getJoansCorner, getPopularTags } from '@/lib/sanity.client'
+import {
+  getPopularCategories,
+  getJoansCorner,
+  getPopularTags,
+  getSeniorCenterNewsletters,
+} from '@/lib/sanity.client'
 import { urlForImage } from '@/lib/sanity.image'
 import Date from '@/components/Date'
 
@@ -11,12 +16,13 @@ const RightSidebar = async () => {
   const tags = await getPopularTags()
   const categories = await getPopularCategories()
   const joansCorner = await getJoansCorner()
+  const seniorCenterNewsLetters = await getSeniorCenterNewsletters()
 
   return (
     <>
       <SearchBar />
       <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-xl font-bold lg:text-2xl">Popular Categories</h2>
+        <h2 className="mb-8 text-xl font-bold lg:text-2xl">Top Categories</h2>
         <ul className="space-y-4">
           {categories.map((category: any) => (
             <li key={category._id} className="block">
@@ -32,7 +38,7 @@ const RightSidebar = async () => {
         </ul>
       </div>
       <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-lg font-bold lg:text-2xl">Popular Tags</h2>
+        <h2 className="mb-8 text-lg font-bold lg:text-2xl">Top Tags</h2>
         <ul className="flex flex-wrap">
           {tags &&
             tags.map((tag: any) => (
@@ -81,6 +87,33 @@ const RightSidebar = async () => {
               </div>
             </Link>
           </article>
+        </div>
+      </div>
+      <div className="rounded-md bg-white p-8 shadow-lg">
+        <h2 className="mb-8 text-lg font-bold lg:text-2xl">
+          Maricopa Community / Senior Center Newsletter
+        </h2>
+        <div className="divide-y divide-zinc-200">
+          {seniorCenterNewsLetters.map((newsletter: any) => (
+            <article
+              key={newsletter._id}
+              className="flex max-w-xl flex-col items-start justify-between py-5"
+            >
+              <Link href={`/articles/${newsletter.slug}`}>
+                <div className="flex items-center gap-x-4 text-xs">
+                  <Date dateString={newsletter.publishedAt} className="text-zinc-500" />
+                </div>
+                <div className="group relative">
+                  <h3 className="mt-3 text-lg font-semibold leading-6 text-zinc-900 group-hover:text-zinc-600">
+                    {newsletter.title}
+                  </h3>
+                  <p className="mt-5 line-clamp-3 text-sm leading-6 text-zinc-600">
+                    {newsletter.excerpt}
+                  </p>
+                </div>
+              </Link>
+            </article>
+          ))}
         </div>
       </div>
     </>

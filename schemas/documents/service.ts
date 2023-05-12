@@ -58,6 +58,18 @@ export default defineType({
       description: 'Is there a physical address? If so, add it here.',
     }),
     defineField({
+      type: 'array',
+      name: 'businessHours',
+      title: 'Business Hours',
+      description:
+        'What are the business hours? If they are closed on a specific day, do not add the day.',
+      of: [
+        {
+          type: 'dayAndTime',
+        },
+      ],
+    }),
+    defineField({
       type: 'text',
       name: 'notes',
       title: 'Notes',

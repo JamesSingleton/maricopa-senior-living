@@ -138,6 +138,16 @@ export const joansCorner = groq`*[_type == "post" && isArchived != true && refer
   "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
 }`
 
+export const seniorCenterNewsletters = groq`
+  *[(_type == "post" && isArchived != true && references(*[_type == "category" && title == "City of Maricopa Community / Senior Center"]._id))][0..1] | order(publishedAt desc){
+    _id,
+    title,
+    "slug": slug.current,
+    publishedAt,
+    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
+  }
+`
+
 export const menu = groq`*[_type == "menu"][0]{
   "headerPrimary": headerPrimary[]{
     _key,

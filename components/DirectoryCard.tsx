@@ -2,6 +2,7 @@ import { dataset, projectId } from '@/lib/sanity.api'
 import { PaperClipIcon } from '@heroicons/react/20/solid'
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
 import { buildFileUrl } from '@sanity/asset-utils'
+import BusinessHours from './BusinessHours'
 
 function convertBytes(bytes: number): string {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
@@ -69,6 +70,14 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => (
             <dt className="text-sm font-medium text-zinc-900">Location</dt>
             <dd className="mt-1 text-sm leading-6 text-zinc-700 sm:col-span-2 sm:mt-0">
               {directoryItem.address}
+            </dd>
+          </div>
+        )}
+        {directoryItem.businessHours && (
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-zinc-900">Hours</dt>
+            <dd className="mt-1 text-sm leading-6 text-zinc-700 sm:col-span-2 sm:mt-0">
+              <BusinessHours hours={directoryItem.businessHours} />
             </dd>
           </div>
         )}

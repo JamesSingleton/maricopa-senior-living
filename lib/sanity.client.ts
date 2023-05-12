@@ -14,6 +14,7 @@ import {
   tagBySlug,
   menu,
   pageBySlug,
+  seniorCenterNewsletters,
 } from '@/lib/sanity.queries'
 import type { Post } from '@/types/Post'
 import type { GroupItem, TitleAndSlug, PopularItems } from '@/types/common'
@@ -60,6 +61,10 @@ export async function getSearchResults(query: string): Promise<any> {
 
 export async function getJoansCorner(): Promise<any> {
   return await sanityClient().fetch(joansCorner)
+}
+
+export async function getSeniorCenterNewsletters(): Promise<any> {
+  return await sanityClient().fetch(seniorCenterNewsletters)
 }
 
 export async function getMenu(): Promise<any> {
