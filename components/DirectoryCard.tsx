@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import { dataset, projectId } from '@/lib/sanity.api'
 import { PaperClipIcon } from '@heroicons/react/20/solid'
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
@@ -124,6 +126,25 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => (
                         Download
                       </a>
                     </div>
+                  </li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+        )}
+        {directoryItem.tags && (
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium leading-6 text-zinc-900">Tags</dt>
+            <dd className="mt-2 text-sm text-zinc-900 sm:col-span-2 sm:mt-0">
+              <ul className="flex flex-wrap gap-2">
+                {directoryItem.tags.map((tag: any) => (
+                  <li key={tag._key}>
+                    <Link
+                      className="space-x-4 rounded bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
+                      href={`/tag/${tag.slug}`}
+                    >
+                      {tag.title}
+                    </Link>
                   </li>
                 ))}
               </ul>

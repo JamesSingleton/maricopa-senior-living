@@ -76,6 +76,11 @@ export const categoryBySlug = groq`*[_type == "category" && slug.current == $slu
     attachments[]{
       ...,
       "documentSize": asset->size,
+    },
+    tags[]->{
+      _id,
+      title,
+      "slug": slug.current,
     }
   },
 }[0]`
