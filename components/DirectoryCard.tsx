@@ -138,7 +138,7 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => (
             <dd className="mt-2 text-sm text-zinc-900 sm:col-span-2 sm:mt-0">
               <ul className="flex flex-wrap gap-2">
                 {directoryItem.tags.map((tag: any) => (
-                  <li key={tag._key}>
+                  <li key={`${tag._id}_${directoryItem.title}`}>
                     <Link
                       className="space-x-4 rounded bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
                       href={`/tag/${tag.slug}`}
