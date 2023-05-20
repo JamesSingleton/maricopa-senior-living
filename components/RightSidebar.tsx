@@ -91,7 +91,7 @@ const RightSidebar = async () => {
       </div>
       <div className="rounded-md bg-white p-8 shadow-lg">
         <h2 className="mb-8 text-lg font-bold lg:text-2xl">
-          Maricopa Community / Senior Center Newsletter
+          Community/Senior Center Calendar and Newsletters
         </h2>
         <div className="divide-y divide-zinc-200">
           {seniorCenterNewsLetters.map((newsletter: any) => (
