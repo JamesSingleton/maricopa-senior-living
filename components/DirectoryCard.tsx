@@ -89,7 +89,7 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => (
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-zinc-900">Notes</dt>
             <dd className="mt-1 text-sm leading-6 text-zinc-700 sm:col-span-2 sm:mt-0">
-              {directoryItem.notes}
+              <CustomPortableText value={directoryItem.notes} />
             </dd>
           </div>
         )}

@@ -70,7 +70,7 @@ export default defineType({
       ],
     }),
     defineField({
-      type: 'text',
+      type: 'blockContent',
       name: 'notes',
       title: 'Notes',
       description: 'Any notes you want to add?',
