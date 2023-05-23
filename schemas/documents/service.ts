@@ -34,7 +34,7 @@ export default defineType({
       description: 'A short little description of the result',
     }),
     defineField({
-      type: 'text',
+      type: 'blockContent',
       name: 'audience',
       title: 'Audience/Eligibility',
       description: 'What is the audience or who is eligible for this?',
