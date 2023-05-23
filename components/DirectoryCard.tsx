@@ -5,6 +5,7 @@ import { PaperClipIcon } from '@heroicons/react/20/solid'
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
 import { buildFileUrl } from '@sanity/asset-utils'
 import BusinessHours from './BusinessHours'
+import { CustomPortableText } from './CustomPortableText'
 
 function convertBytes(bytes: number): string {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
@@ -20,9 +21,10 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => (
     <div className="px-4 py-6 sm:px-6">
       <h2 className="text-2xl font-semibold leading-7 text-zinc-900">{directoryItem.title}</h2>
       {directoryItem.description && (
-        <p className="mt-1 max-w-2xl text-sm leading-6 text-zinc-500">
-          {directoryItem.description}
-        </p>
+        <CustomPortableText
+          paragraphClasses="mt-1 max-w-2xl text-sm leading-6 text-zinc-500"
+          value={directoryItem.description}
+        />
       )}
     </div>
     <div className="border-t border-zinc-100">
@@ -137,8 +139,8 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => (
             <dt className="text-sm font-medium leading-6 text-zinc-900">Tags</dt>
             <dd className="mt-2 text-sm text-zinc-900 sm:col-span-2 sm:mt-0">
               <ul className="flex flex-wrap gap-2">
-                {directoryItem.tags.map((tag: any) => (
-                  <li key={`${tag._id}_${directoryItem.title}`}>
+                {directoryItem.tags.map((tag: any, index: number) => (
+                  <li key={`${tag._id}_${directoryItem.title}_${index}`}>
                     <Link
                       className="space-x-4 rounded bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
                       href={`/tag/${tag.slug}`}

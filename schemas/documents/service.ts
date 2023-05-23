@@ -28,7 +28,7 @@ export default defineType({
       of: [{ type: 'reference', to: { type: 'tag' } }],
     }),
     defineField({
-      type: 'text',
+      type: 'blockContent',
       name: 'description',
       title: 'Description',
       description: 'A short little description of the result',
