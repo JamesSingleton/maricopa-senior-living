@@ -9,7 +9,7 @@ import { baseUrl } from '@/lib/constants'
 import { getMenu } from '@/lib/sanity.client'
 import ScrollToTop from '@/components/ScrollToTop'
 
-export const revalidate = 300 // revlidate this page every 5 minutes
+// export const revalidate = 300
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
