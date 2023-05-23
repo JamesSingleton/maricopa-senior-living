@@ -18,7 +18,7 @@ function convertBytes(bytes: number): string {
 
 const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => (
   <div className="overflow-hidden bg-white shadow sm:rounded-lg">
-    <div className="px-4 py-6 sm:px-6">
+    <div className="prose px-4 py-6 sm:px-6">
       <h2 className="text-2xl font-semibold leading-7 text-zinc-900">{directoryItem.title}</h2>
       {directoryItem.description && (
         <CustomPortableText
@@ -88,7 +88,7 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => (
         {directoryItem.notes && (
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-zinc-900">Notes</dt>
-            <dd className="mt-1 text-sm leading-6 text-zinc-700 sm:col-span-2 sm:mt-0">
+            <dd className="prose mt-1 text-sm leading-6 text-zinc-700 sm:col-span-2 sm:mt-0">
               <CustomPortableText value={directoryItem.notes} />
             </dd>
           </div>
