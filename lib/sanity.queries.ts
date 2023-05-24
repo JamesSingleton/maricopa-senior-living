@@ -85,12 +85,14 @@ export const categoryBySlug = groq`*[_type == "category" && slug.current == $slu
   },
 }[0]`
 
-export const popularCategories = groq`*[_type == "category"]{
+const COUNT_FOR_CATEGORIES = `count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])`
+
+export const popularCategories = groq`*[_type == "category" && ${COUNT_FOR_CATEGORIES} > 0]{
   _id,
   title,
   "slug": slug.current,
-  "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])
-} | order(count desc, title asc) [0..10]`
+  "count": ${COUNT_FOR_CATEGORIES}
+} | order(title asc, count desc) [0..10]`
 
 export const allTags = groq`*[_type == "tag"]{
   title,
@@ -115,7 +117,7 @@ export const popularTags = groq`*[_type == "tag"]{
   title,
   "slug": slug.current,
   "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])
-} | order(count desc, title asc) [0..10]`
+} | order(title asc, count desc) [0..10]`
 
 export const search = groq`
 *[(_type == "post" && isArchived != true && (title match "*" + $query + "*" || pt::text(body) match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*")) ||
