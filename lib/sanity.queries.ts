@@ -85,13 +85,13 @@ export const categoryBySlug = groq`*[_type == "category" && slug.current == $slu
   },
 }[0]`
 
-const COUNT_FOR_CATEGORIES = `count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])`
+const COUNT_FOR_SIDEBAR = `count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])`
 
-export const popularCategories = groq`*[_type == "category" && ${COUNT_FOR_CATEGORIES} > 0]{
+export const popularCategories = groq`*[_type == "category" && ${COUNT_FOR_SIDEBAR} > 0]{
   _id,
   title,
   "slug": slug.current,
-  "count": ${COUNT_FOR_CATEGORIES}
+  "count": ${COUNT_FOR_SIDEBAR}
 } | order(title asc, count desc) [0..10]`
 
 export const allTags = groq`*[_type == "tag"]{
@@ -112,11 +112,11 @@ export const tagBySlug = groq`*[_type == "tag" && slug.current == $slug]{
   },
 }[0]`
 
-export const popularTags = groq`*[_type == "tag"]{
+export const popularTags = groq`*[_type == "tag" && ${COUNT_FOR_SIDEBAR} > 0]{
   _id,
   title,
   "slug": slug.current,
-  "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])
+  "count": ${COUNT_FOR_SIDEBAR}
 } | order(title asc, count desc) [0..10]`
 
 export const search = groq`

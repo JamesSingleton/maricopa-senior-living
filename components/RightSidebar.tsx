@@ -22,7 +22,7 @@ const RightSidebar = async () => {
     <>
       <SearchBar />
       <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-xl font-bold lg:text-2xl">Top Categories</h2>
+        <h2 className="mb-8 text-xl font-bold lg:text-2xl">Categories</h2>
         <ul className="space-y-4">
           {categories.map((category: any) => (
             <li key={category._id} className="block">
@@ -38,7 +38,7 @@ const RightSidebar = async () => {
         </ul>
       </div>
       <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-lg font-bold lg:text-2xl">Top Tags</h2>
+        <h2 className="mb-8 text-lg font-bold lg:text-2xl">Tags</h2>
         <ul className="flex flex-wrap">
           {tags &&
             tags.map((tag: any) => (
