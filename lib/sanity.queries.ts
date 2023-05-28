@@ -73,10 +73,6 @@ export const categoryBySlug = groq`*[_type == "category" && slug.current == $slu
   },
   "services": *[_type == "service" && references(^._id)]{
     ...,
-    attachments[]{
-      ...,
-      "documentSize": asset->size,
-    },
     tags[]->{
       _id,
       title,
@@ -109,10 +105,6 @@ export const tagBySlug = groq`*[_type == "tag" && slug.current == $slug]{
   },
   "services": *[_type == "service" && references(^._id)]{
     ...,
-    attachments[]{
-      ...,
-      "documentSize": asset->size,
-    },
     tags[]->{
       _id,
       title,
@@ -139,6 +131,14 @@ export const search = groq`
   _score,
   _type == "post" => {
     ${postFields}
+  },
+  _type == "service" => {
+    ...,
+    tags[]->{
+      _id,
+      title,
+      "slug": slug.current,
+    }
   },
 }
 `
