@@ -109,6 +109,15 @@ export const tagBySlug = groq`*[_type == "tag" && slug.current == $slug]{
   },
   "services": *[_type == "service" && references(^._id)]{
     ...,
+    attachments[]{
+      ...,
+      "documentSize": asset->size,
+    },
+    tags[]->{
+      _id,
+      title,
+      "slug": slug.current,
+    }
   },
 }[0]`
 
