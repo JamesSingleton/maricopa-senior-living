@@ -121,11 +121,9 @@ export const popularTags = groq`*[_type == "tag" && ${COUNT_FOR_SIDEBAR} > 0]{
 } | order(title asc, count desc) [0..10]`
 
 export const search = groq`
-*[(_type == "post" && isArchived != true && (title match "*" + $query + "*" || pt::text(body) match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*")) ||
-(_type == "service" && (title match "*" + $query + "*" || pt::text(description) match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*"))] | score(
-  boost(title match "*" + $query + "*", 4),
-  boost(pt::text(description)  match "*" + $query + "*", 2),
-  boost(pt::text(body) match "*" + $query + "*", 1),
+*[(_type == "post" && isArchived != true && (title match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*")) ||
+(_type == "service" && (title match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*"))] | score(
+  boost(title match "*" + $query + "*", 4)
 )| order(_score desc){
   ...,
   _score,
