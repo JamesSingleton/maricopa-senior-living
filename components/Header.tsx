@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, XMarkIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import clsx from 'clsx'
 
@@ -72,9 +72,13 @@ const Header = ({ menu }: { menu: any }) => {
                           rel="noopener noreferrer"
                           key={child._key}
                           href={child.link.url}
-                          className="block rounded-lg px-3 py-2 text-base font-semibold leading-6 text-zinc-900 hover:bg-zinc-50"
+                          className="flex items-center rounded-lg px-3 py-2 text-base font-semibold leading-6 text-zinc-900 hover:bg-zinc-100"
                         >
-                          {child.link.text}
+                          <span>{child.link.text}</span>
+                          <ArrowTopRightOnSquareIcon
+                            className="h-4 w-4 pl-1"
+                            aria-label="(opens in a new tab)"
+                          />
                         </a>
                       ))}
                     </Popover.Panel>
@@ -147,9 +151,13 @@ const Header = ({ menu }: { menu: any }) => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 as="a"
-                                className="block rounded-lg py-2 pl-6 pr-3 text-base font-semibold leading-7 text-zinc-900 hover:bg-zinc-50"
+                                className="flex items-center rounded-lg py-2 pl-6 pr-3 text-base font-semibold leading-7 text-zinc-900 hover:bg-zinc-100"
                               >
-                                {child.link.text}
+                                <span>{child.link.text}</span>
+                                <ArrowTopRightOnSquareIcon
+                                  className="h-4 w-4 pl-1"
+                                  aria-label="(opens in a new tab)"
+                                />
                               </Disclosure.Button>
                             ))}
                           </Disclosure.Panel>
