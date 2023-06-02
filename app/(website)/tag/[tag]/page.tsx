@@ -10,8 +10,8 @@ import { CustomPortableText } from '@/components/CustomPortableText'
 export async function generateStaticParams() {
   const tags = await getTags()
 
-  return tags.map((edge: any) => ({
-    tag: edge.slug,
+  return tags.map((tag: any) => ({
+    tag: tag.slug,
   }))
 }
 
