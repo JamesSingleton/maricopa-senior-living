@@ -38,5 +38,12 @@ export default defineType({
 
       validation: (rule) => rule.required(),
     }),
+    defineField({
+      name: 'highlight',
+      title: 'Highlight',
+      type: 'boolean',
+      description: 'If checked, this category will be highlighted on the right sidebar.',
+      initialValue: false,
+    }),
   ],
 })

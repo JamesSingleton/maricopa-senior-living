@@ -39,5 +39,12 @@ export default defineType({
         "This will get displayed under the title on the tag page as well as the page's description (what shows up on Google Search Results).",
       validation: (rule) => rule.required(),
     }),
+    defineField({
+      name: 'highlight',
+      title: 'Highlight',
+      type: 'boolean',
+      description: 'If checked, this category will be highlighted on the right sidebar.',
+      initialValue: false,
+    }),
   ],
 })

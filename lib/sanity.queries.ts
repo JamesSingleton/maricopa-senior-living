@@ -83,7 +83,7 @@ export const categoryBySlug = groq`*[_type == "category" && slug.current == $slu
 
 const COUNT_FOR_SIDEBAR = `count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])`
 
-export const popularCategories = groq`*[_type == "category" && ${COUNT_FOR_SIDEBAR} > 0]{
+export const popularCategories = groq`*[_type == "category" && ${COUNT_FOR_SIDEBAR} > 0 && highlight == true]{
   _id,
   title,
   "slug": slug.current,
@@ -113,7 +113,7 @@ export const tagBySlug = groq`*[_type == "tag" && slug.current == $slug]{
   },
 }[0]`
 
-export const popularTags = groq`*[_type == "tag" && ${COUNT_FOR_SIDEBAR} > 0]{
+export const popularTags = groq`*[_type == "tag" && ${COUNT_FOR_SIDEBAR} > 0 && highlight == true]{
   _id,
   title,
   "slug": slug.current,
