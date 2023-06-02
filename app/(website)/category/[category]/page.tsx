@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, ResolvingMetadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 
@@ -6,13 +6,18 @@ import { getCategoryBySlug } from '@/lib/sanity.client'
 import { CustomPortableText } from '@/components/CustomPortableText'
 import ArticleCard from '@/components/ArticleCard'
 import DirectoryCard from '@/components/DirectoryCard'
+import { baseUrl } from '@/lib/constants'
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { category: string }
-}): Promise<Metadata> {
+export async function generateMetadata(
+  {
+    params,
+  }: {
+    params: { category: string }
+  },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
   const category = await getCategoryBySlug(params.category)
+  const previousOpenGraph = (await parent)?.openGraph
 
   if (!category) {
     return {}
@@ -22,8 +27,10 @@ export async function generateMetadata({
     title: `${category.title}`,
     description: `${category.excerpt}`,
     openGraph: {
+      ...previousOpenGraph,
       title: `${category.title}`,
       description: `${category.excerpt}`,
+      url: `${baseUrl}/category/${category.slug}`,
     },
   }
 }

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, ResolvingMetadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 
@@ -6,6 +6,7 @@ import DirectoryCard from '@/components/DirectoryCard'
 import ArticleCard from '@/components/ArticleCard'
 import { getTags, getTagBySlug } from '@/lib/sanity.client'
 import { CustomPortableText } from '@/components/CustomPortableText'
+import { baseUrl } from '@/lib/constants'
 
 export async function generateStaticParams() {
   const tags = await getTags()
@@ -15,8 +16,12 @@ export async function generateStaticParams() {
   }))
 }
 
-export async function generateMetadata({ params }: { params: { tag: string } }): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: { params: { tag: string } },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
   const tag = await getTagBySlug(params.tag)
+  const previousOpenGraph = (await parent)?.openGraph
 
   if (!tag) return {}
 
@@ -24,8 +29,10 @@ export async function generateMetadata({ params }: { params: { tag: string } }):
     title: `${tag.title}`,
     description: `${tag.excerpt}`,
     openGraph: {
+      ...previousOpenGraph,
       title: `${tag.title}`,
       description: `${tag.excerpt}`,
+      url: `${baseUrl}/tag/${tag.slug}`,
     },
   }
 }

@@ -9,8 +9,6 @@ import { Bars3Icon, XMarkIcon, ArrowTopRightOnSquareIcon } from '@heroicons/reac
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import clsx from 'clsx'
 
-import Logo from '../app/City-of-Maricopa-Logo_Color.png'
-
 const Header = ({ menu }: { menu: any }) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -28,9 +26,8 @@ const Header = ({ menu }: { menu: any }) => {
         aria-label="Global"
       >
         <div className="flex items-center gap-x-12">
-          <Link href="/" className="-m-1.5 p-1.5">
-            <span className="sr-only">Maricopa Senior Living</span>
-            <Image className="h-8 w-auto" src={Logo} alt="Maricopa Senior Living" />
+          <Link href="/" className="text-xl font-bold">
+            Maricopa Senior Living
           </Link>
           <Popover.Group className="hidden lg:flex lg:gap-x-12">
             {headerPrimary.map((item: any) => {
@@ -103,9 +100,8 @@ const Header = ({ menu }: { menu: any }) => {
         <div className="fixed inset-0 z-10" />
         <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-zinc-900/10">
           <div className="flex items-center justify-between">
-            <Link href="/" className="-m-1.5 p-1.5">
-              <span className="sr-only">Maricopa Senior Living</span>
-              <Image className="h-8 w-auto" src={Logo} alt="Maricopa Senior Living" />
+            <Link href="/" className="text-xl font-bold">
+              Maricopa Senior Living
             </Link>
             <button
               type="button"

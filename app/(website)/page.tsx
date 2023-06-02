@@ -1,30 +1,44 @@
-import { CheckCircleIcon, InformationCircleIcon } from '@heroicons/react/20/solid'
+import Image from 'next/image'
 
 import { baseUrl } from '@/lib/constants'
+import ImageSrc from '../website_header.jpg'
 
-import type { Metadata } from 'next'
+import type { Metadata, ResolvingMetadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Maricopa Senior Living - Aging Well Your Way!',
-  description: 'Your go to source for senior living in Maricopa, AZ',
-  openGraph: {
+type Props = {
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const previousOpenGraph = (await parent)?.openGraph
+  return {
     title: 'Maricopa Senior Living - Aging Well Your Way!',
     description: 'Your go to source for senior living in Maricopa, AZ',
-    locale: 'en_US',
-    url: baseUrl,
-    siteName: 'Maricopa Senior Living',
-    type: 'website',
-  },
-  alternates: {
-    canonical: '/',
-  },
+    openGraph: {
+      ...previousOpenGraph,
+      title: 'Maricopa Senior Living - Aging Well Your Way!',
+      description: 'Your go to source for senior living in Maricopa, AZ',
+      locale: 'en_US',
+      url: baseUrl,
+      siteName: 'Maricopa Senior Living',
+      type: 'website',
+    },
+    alternates: {
+      canonical: '/',
+    },
+  }
 }
 
 export default async function Home() {
   return (
-    <div className="rounded-md bg-white px-8 py-16 shadow-lg lg:px-4">
+    <div className="rounded-md bg-white px-8 py-8 shadow-lg lg:px-4 lg:py-4">
+      <Image alt="Maricopa Senior Living" src={ImageSrc} />
       <div className="mx-auto max-w-3xl text-base leading-7 text-zinc-700">
-        <h1 className="text-base font-semibold leading-7 text-indigo-600">
+        <h1 className="pt-4 text-base font-semibold leading-7 text-indigo-600">
           About Maricopa Senior Living
         </h1>
         <p className="mt-2 text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">
