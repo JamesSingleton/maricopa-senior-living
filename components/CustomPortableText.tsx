@@ -57,7 +57,7 @@ export function CustomPortableText({
       image: ImageComponent,
       attachment: ({ value }: { value: any }) => {
         return (
-          <p className="flex flex-col items-center justify-between md:flex-row">
+          <p className="flex flex-col items-center justify-between space-y-4 md:flex-row">
             {value.asset.extension === 'pdf' ? (
               <a href={value.asset.url} target="_blank" rel="noopener noreferrer">
                 {value.description}

@@ -205,5 +205,11 @@ export const pageBySlug = groq`*[_type == "page" && slug.current == $slug][0]{
   title,
   "slug": slug.current,
   "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",
-  body,
+  "body": body[]{
+    ...,
+    _type == "attachment" => {
+      ...,
+      asset->
+    }
+  },
 }`
