@@ -1,12 +1,14 @@
 // https://nextjs.org/docs/advanced-features/security-headers
 const ContentSecurityPolicy = `
-    default-src 'self' vercel.live;
+    default-src 'self' vercel.live https://cdn.userway.org/;
     script-src 'self' 'unsafe-eval' 'unsafe-inline';
     style-src 'self' 'unsafe-inline';
     img-src * blob: data:;
     media-src 'none';
     connect-src *;
-    font-src 'self';
+    font-src 'self' https://cdn.userway.org/;
+    script-src-elem 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.userway.org/;
+    style-src-elem 'self' 'unsafe-inline' https://cdn.userway.org/;
 `
 
 const securityHeaders = [

@@ -1,5 +1,6 @@
 import 'tailwindcss/tailwind.css'
 
+import Script from 'next/script'
 import { Inter, Roboto_Mono } from 'next/font/google'
 
 import Header from '@/components/Header'
@@ -40,20 +41,23 @@ export default async function IndexLayout({ children }: { children: React.ReactN
   const menu = await getMenu()
 
   return (
-    <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
-      <body className="bg-zinc-50 text-zinc-900 antialiased">
-        <Header menu={menu} />
-        <main className="py-8 md:py-10 lg:py-14 xl:py-16">
-          <div className="container grid grid-cols-12 gap-8">
-            <div className="col-span-12 lg:col-span-8">{children}</div>
-            <div className="col-span-12 space-y-8 lg:col-span-4">
-              <RightSidebar />
+    <>
+      <Script src="https://cdn.userway.org/widget.js" data-account="qeA6uoRyx5" data-position="8" />
+      <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
+        <body className="bg-zinc-50 text-zinc-900 antialiased">
+          <Header menu={menu} />
+          <main className="py-8 md:py-10 lg:py-14 xl:py-16">
+            <div className="container grid grid-cols-12 gap-8">
+              <div className="col-span-12 lg:col-span-8">{children}</div>
+              <div className="col-span-12 space-y-8 lg:col-span-4">
+                <RightSidebar />
+              </div>
             </div>
-          </div>
-        </main>
-        <Footer menu={menu.footer} />
-        <ScrollToTop />
-      </body>
-    </html>
+          </main>
+          <Footer menu={menu.footer} />
+          <ScrollToTop />
+        </body>
+      </html>
+    </>
   )
 }
