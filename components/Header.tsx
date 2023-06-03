@@ -65,21 +65,24 @@ const Header = ({ menu }: { menu: any }) => {
                     leaveTo="opacity-0 translate-y-1"
                   >
                     <Popover.Panel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-sm rounded-xl bg-white p-2 shadow-lg ring-1 ring-zinc-900/5">
-                      {item.children.map((child: any) => (
-                        <a
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          key={child._key}
-                          href={child.link.url}
-                          className="flex items-center rounded-lg px-3 py-2 text-base font-semibold leading-6 text-zinc-900 hover:bg-zinc-100"
-                        >
-                          <span>{child.link.text}</span>
-                          <ArrowTopRightOnSquareIcon
-                            className="h-4 w-4 pl-1"
-                            aria-label="(opens in a new tab)"
-                          />
-                        </a>
-                      ))}
+                      {({ close }) => {
+                        return item.children.map((child: any) => (
+                          <a
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            key={child._key}
+                            href={child.link.url}
+                            onClick={() => close()}
+                            className="flex items-center rounded-lg px-3 py-2 text-base font-semibold leading-6 text-zinc-900 hover:bg-zinc-100"
+                          >
+                            <span>{child.link.text}</span>
+                            <ArrowTopRightOnSquareIcon
+                              className="h-5 w-5 pl-1"
+                              aria-label="(opens in a new tab)"
+                            />
+                          </a>
+                        ))
+                      }}
                     </Popover.Panel>
                   </Transition>
                 </Popover>

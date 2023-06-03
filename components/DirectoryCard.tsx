@@ -50,7 +50,7 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
                 >
                   <span>{directoryItem.website}</span>
                   <ArrowTopRightOnSquareIcon
-                    className="h-4 w-4 pl-1"
+                    className="h-5 w-5 pl-1"
                     aria-label="(opens in a new tab)"
                   />
                 </a>
