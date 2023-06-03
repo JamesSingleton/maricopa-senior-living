@@ -1,7 +1,7 @@
 import Image from 'next/image'
 
 import { baseUrl } from '@/lib/constants'
-import ImageSrc from '../website_header.jpg'
+import ImageSrc from './website_header.jpg'
 
 import type { Metadata, ResolvingMetadata } from 'next'
 

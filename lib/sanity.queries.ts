@@ -88,7 +88,7 @@ export const popularCategories = groq`*[_type == "category" && ${COUNT_FOR_SIDEB
   title,
   "slug": slug.current,
   "count": ${COUNT_FOR_SIDEBAR}
-} | order(title asc, count desc) [0..10]`
+} | order(title asc, count desc)`
 
 export const allTags = groq`*[_type == "tag"]{
   title,
@@ -118,7 +118,7 @@ export const popularTags = groq`*[_type == "tag" && ${COUNT_FOR_SIDEBAR} > 0 && 
   title,
   "slug": slug.current,
   "count": ${COUNT_FOR_SIDEBAR}
-} | order(title asc, count desc) [0..10]`
+} | order(title asc, count desc)`
 
 export const search = groq`
 *[(_type == "post" && isArchived != true && (title match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*")) ||
