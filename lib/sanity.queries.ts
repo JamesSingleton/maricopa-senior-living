@@ -152,6 +152,17 @@ export const joansCorner = groq`*[_type == "post" && isArchived != true && refer
   "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
 }`
 
+export const ronsRamblings = groq`*[_type == "post" && isArchived != true && references(*[_type == "category" && title == "Ron's Ramblings"]._id)][0]{
+  _id,
+  title,
+  "slug": slug.current,
+  "author": author->{
+    ${authorFields}
+  },
+  publishedAt,
+  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
+}`
+
 export const seniorCenterNewsletters = groq`
   *[(_type == "post" && isArchived != true && references(*[_type == "category" && title == "City of Maricopa Community / Senior Center"]._id))][0..1] | order(publishedAt desc){
     _id,
