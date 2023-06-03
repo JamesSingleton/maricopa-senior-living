@@ -42,7 +42,7 @@ export default async function IndexLayout({ children }: { children: React.ReactN
 
   return (
     <>
-      <Script src="https://cdn.userway.org/widget.js" data-account="qeA6uoRyx5" data-position="8" />
+      <Script src="https://cdn.userway.org/widget.js" data-account="qeA6uoRyx5" data-position="2" />
       <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
         <body className="bg-zinc-50 text-zinc-900 antialiased">
           <Header menu={menu} />
