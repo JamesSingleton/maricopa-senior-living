@@ -35,7 +35,9 @@ const Header = ({ menu }: { menu: any }) => {
                 return (
                   <Link
                     key={item._key}
-                    href={`/${item.link.reference._type}/${item.link.reference.slug}`}
+                    href={`${
+                      item.link.reference._type === 'page' ? '' : `/${item.link.reference._type}`
+                    }/${item.link.reference.slug}`}
                     className="text-base font-semibold leading-6 text-zinc-900"
                   >
                     {item.link.reference.title}
@@ -120,7 +122,11 @@ const Header = ({ menu }: { menu: any }) => {
                     return (
                       <Link
                         key={item._key}
-                        href={`/${item.link.reference._type}/${item.link.reference.slug}`}
+                        href={`${
+                          item.link.reference._type === 'page'
+                            ? ''
+                            : `/${item.link.reference._type}`
+                        }/${item.link.reference.slug}`}
                         className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-zinc-900 hover:bg-zinc-50"
                       >
                         {item.link.reference.title}
