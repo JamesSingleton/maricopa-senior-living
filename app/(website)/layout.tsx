@@ -1,5 +1,6 @@
 import 'tailwindcss/tailwind.css'
 
+import { Suspense } from 'react'
 import Script from 'next/script'
 import { Inter, Roboto_Mono } from 'next/font/google'
 
@@ -45,7 +46,14 @@ export default async function IndexLayout({ children }: { children: React.ReactN
       <Script src="https://cdn.userway.org/widget.js" data-account="qeA6uoRyx5" data-position="2" />
       <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
         <body className="bg-zinc-50 text-zinc-900 antialiased">
+          <Suspense fallback={
+            <div className="fixed inset-0 z-50 flex items-center justify-center">
+              <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-zinc-900" />
+            </div>
+            
+          }>
           <Header menu={menu} />
+          </Suspense>
           <main className="py-8 md:py-10 lg:py-14 xl:py-16">
             <div className="container grid grid-cols-12 gap-8">
               <div className="col-span-12 lg:col-span-8">{children}</div>
