@@ -2,11 +2,19 @@ import type { Metadata, ResolvingMetadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 
-import { getCategoryBySlug } from '@/lib/sanity.client'
+import { getCategoryBySlug, getCategories } from '@/lib/sanity.client'
 import { CustomPortableText } from '@/components/CustomPortableText'
 import ArticleCard from '@/components/ArticleCard'
 import DirectoryCard from '@/components/DirectoryCard'
 import { baseUrl } from '@/lib/constants'
+
+export async function generateStaticParams() {
+  const categories = await getCategories()
+
+  return categories.map((category) => ({
+    category: category.slug,
+  }))
+}
 
 export async function generateMetadata(
   {
