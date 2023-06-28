@@ -16,6 +16,7 @@ import {
   pageBySlug,
   seniorCenterNewsletters,
   ronsRamblings,
+  allPostSlugs,
 } from '@/lib/sanity.queries'
 import type { Post } from '@/types/Post'
 import type { GroupItem, TitleAndSlug, PopularItems } from '@/types/common'
@@ -38,6 +39,11 @@ export async function getCategoryBySlug(slug: string): Promise<GroupItem> {
 
 export async function getPostBySlug(slug: string): Promise<Post> {
   return await sanityClient().fetch(postBySlug, { slug })
+}
+
+// get all post slugs
+export async function getAllPostSlugs(): Promise<TitleAndSlug[]> {
+  return await sanityClient().fetch(allPostSlugs)
 }
 
 export async function getPopularCategories(): Promise<PopularItems[]> {

@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { CalendarIcon } from '@heroicons/react/24/outline'
 
-import { getPostBySlug } from '@/lib/sanity.client'
+import { getPostBySlug, getAllPostSlugs } from '@/lib/sanity.client'
 import { urlForImage } from '@/lib/sanity.image'
 import { CustomPortableText } from '@/components/CustomPortableText'
 import Date from '@/components/Date'
@@ -10,7 +10,13 @@ import BackButton from '@/components/BackButton'
 
 import type { Metadata } from 'next'
 
-// export const revalidate = 300
+export async function generateStaticParams() {
+  const slugs = await getAllPostSlugs()
+
+  return slugs.map((slug) => ({
+    slug,
+  }))
+}
 
 export async function generateMetadata({
   params,

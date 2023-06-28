@@ -54,6 +54,10 @@ export const allPosts = groq`*[_type == "post" && isArchived != true] | order(pu
   ${postFields}
 }`
 
+export const allPostSlugs = groq`
+*[_type == "post" && defined(slug.current) && isArchived != true][].slug.current
+`
+
 export const postBySlug = groq`*[_type == "post" && slug.current == $slug && isArchived != true]{
   ${postFields}
 }[0]`
