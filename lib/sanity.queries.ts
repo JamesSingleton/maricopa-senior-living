@@ -94,7 +94,7 @@ export const popularCategories = groq`*[_type == "category" && ${COUNT_FOR_SIDEB
   "count": ${COUNT_FOR_SIDEBAR}
 } | order(title asc, count desc)`
 
-export const allTags = groq`*[_type == "tag"]{
+export const allTags = groq`*[_type == "tag" && defined(slug.current)]{
   title,
   "slug": slug.current,
 }`
