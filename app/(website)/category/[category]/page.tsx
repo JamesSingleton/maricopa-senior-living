@@ -8,13 +8,13 @@ import ArticleCard from '@/components/ArticleCard'
 import DirectoryCard from '@/components/DirectoryCard'
 import { baseUrl } from '@/lib/constants'
 
-export async function generateStaticParams() {
-  const categories = await getCategories()
+// export async function generateStaticParams() {
+//   const categories = await getCategories()
 
-  return categories.map((category) => ({
-    category: category.slug,
-  }))
-}
+//   return categories.map((category) => ({
+//     category: category.slug,
+//   }))
+// }
 
 export async function generateMetadata(
   {
