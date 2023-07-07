@@ -8,13 +8,13 @@ import { getTags, getTagBySlug } from '@/lib/sanity.client'
 import { CustomPortableText } from '@/components/CustomPortableText'
 import { baseUrl } from '@/lib/constants'
 
-export async function generateStaticParams() {
-  const tags = await getTags()
+// export async function generateStaticParams() {
+//   const tags = await getTags()
 
-  return tags.map((tag) => ({
-    tag: tag.slug,
-  }))
-}
+//   return tags.map((tag) => ({
+//     tag: tag.slug,
+//   }))
+// }
 
 export async function generateMetadata(
   { params }: { params: { tag: string } },

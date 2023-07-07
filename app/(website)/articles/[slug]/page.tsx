@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { CalendarIcon } from '@heroicons/react/24/outline'
 
 import { getPostBySlug, getAllPostSlugs } from '@/lib/sanity.client'
@@ -10,13 +11,13 @@ import BackButton from '@/components/BackButton'
 
 import type { Metadata } from 'next'
 
-export async function generateStaticParams() {
-  const slugs = await getAllPostSlugs()
+// export async function generateStaticParams() {
+//   const slugs = await getAllPostSlugs()
 
-  return slugs.map((slug) => ({
-    slug,
-  }))
-}
+//   return slugs.map((slug) => ({
+//     slug,
+//   }))
+// }
 
 export async function generateMetadata({
   params,
@@ -45,6 +46,10 @@ export async function generateMetadata({
 
 export default async function ArticlePage({ params: { slug } }: { params: { slug: string } }) {
   const post = await getPostBySlug(slug)
+
+  if (!post) {
+    notFound()
+  }
 
   return (
     <>
