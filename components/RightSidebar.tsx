@@ -120,7 +120,7 @@ const RightSidebar = async () => {
         </div>
       </div>
       <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-lg font-bold lg:text-2xl">Ron&apos;s Ramblings</h2>
+        <h2 className="mb-8 text-lg font-bold lg:text-2xl">What&apos;s New!</h2>
         <div className="space-y-16">
           <article
             key={`${ronsRamblings._id}_right_sidebar`}

@@ -38,7 +38,7 @@ export default async function Home() {
     <div className="rounded-md bg-white px-8 py-8 shadow-lg lg:px-4 lg:py-4">
       <figure>
         <Image alt="Maricopa Senior Living" src={ImageSrc} />
-        <figcaption className="mt-4 text-center text-sm italic text-zinc-500">
+        <figcaption className="mt-4 text-left text-sm italic text-zinc-500">
           The wild horses, roaming free on Gila River Indian Community (GRIC) tribal lands, are a
           favorite of Maricopa residents, young and old. They remind us that the spirit of freedom
           is ageless, and that we can each have the lifestyle we aspire to with a little help, good
@@ -135,7 +135,7 @@ export default async function Home() {
                 calendar and newsletter can be viewed or downloaded.
               </li>
               <li>
-                <b>Ron&apos;s Ramblings</b> - a current article or information being highlighted.
+                <b>What&apos;s New!</b> - a current article or information being highlighted.
               </li>
             </ul>
           </li>
