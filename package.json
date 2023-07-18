@@ -19,7 +19,7 @@
     "@sanity/vision": "^3.14.2",
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
-    "next": "^13.4.10",
+    "next": "^13.4.9",
     "next-sanity": "^5.1.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
