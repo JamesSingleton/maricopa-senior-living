@@ -38,7 +38,7 @@ export default function Footer({ menu }: { menu: FooterProps[] }) {
           ))}
         </nav>
         <p className="mt-10 text-center text-xs leading-5 text-zinc-500">
-          &copy; {new Date().getFullYear()} Maricopa Senior Living, Inc. All rights reserved.
+          &copy; {new Date().getFullYear()} Maricopa Senior Living. All rights reserved.
         </p>
       </div>
     </footer>

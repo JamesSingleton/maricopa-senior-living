@@ -156,7 +156,7 @@ const RightSidebar = async () => {
       </div>
       <div className="rounded-md bg-white p-8 shadow-lg">
         <h2 className="mb-8 text-lg font-bold lg:text-2xl">Please Share Your Feedback</h2>
-        <div className="text-center">
+        <div className="text-center space-y-4">
           <a
             href="mailto:ron@maricopaseniorliving.org"
             className="inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -164,6 +164,14 @@ const RightSidebar = async () => {
             <EnvelopeIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
             Email Us!
           </a>
+          <p>This site is owned and managed by Ron Smith</p>
+        </div>
+      </div>
+      <div className="rounded-md bg-white p-8 shadow-lg">
+        <h2 className="mb-8 text-lg font-bold lg:text-2xl">Sponsors</h2>
+        <div className="space-y-4">
+          <h3 className="text-base xl:text-xl font-semibold">InMaricopa</h3>
+          <h3 className="text-base xl:text-xl font-semibold">Maricopa Community Advocates</h3>
         </div>
       </div>
     </>
