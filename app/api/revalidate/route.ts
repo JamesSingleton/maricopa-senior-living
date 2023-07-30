@@ -1,36 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
-import { parseBody } from 'next-sanity/webhook'
-
-import type { NextApiRequest, NextApiResponse } from 'next'
+import { headers } from 'next/headers'
+import { SIGNATURE_HEADER_NAME, isValidSignature } from '@sanity/webhook'
 
 const secret = `${process.env.SANITY_WEBHOOK_SECRET}`
 
-export async function POST(request: NextApiRequest, response: NextApiResponse) {
-  try {
-    const { isValidSignature, body } = await parseBody(request, secret)
+export async function POST(request: NextRequest) {
+  const res = await request.json()
 
-    if (!isValidSignature) {
-      NextResponse.json({
-        success: false,
-        message: 'Invalid signature',
-      }, {
-        status: 401,
-      })
+  const headersList = headers()
 
-      return
-    }
+  const signature = `${headersList.get(SIGNATURE_HEADER_NAME)}`
+  const isValid = isValidSignature(JSON.stringify(res), signature, secret)
 
-    console.log(`===== Received webhook =====`)
-    console.log(JSON.stringify(body, null, 2))
+  console.log(`===== Is the webhook request valid? ${isValid}`)
 
-    if (body._type === 'service') {
-      revalidatePath('/')
-    }
-
-    return NextResponse.json({ revalidated: true, now: Date.now() })
-  } catch (error) {
-    console.error(error)
-    return NextResponse.error()
+  if (!isValid) {
+    NextResponse.json({ success: false, message: 'Invalid signature' }, { status: 401 })
+    return
   }
+
+  console.log('===== Webhook request body', JSON.stringify(res, null, 2))
+
+  if (res._type === 'service') {
+    console.log('===== Service type updated')
+    revalidatePath('/')
+  }
+
+  return NextResponse.json({ revalidated: true, now: Date.now() })
 }
