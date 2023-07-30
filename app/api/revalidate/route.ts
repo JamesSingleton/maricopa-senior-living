@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     return
   }
 
-  console.log(`===== Webhook request ${JSON.stringify}`)
+  console.log(`===== Webhook request ${JSON.stringify(res)}`)
 
   const { type, slug } = res
 
