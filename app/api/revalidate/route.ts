@@ -6,6 +6,7 @@ import { SIGNATURE_HEADER_NAME, isValidSignature } from '@sanity/webhook'
 const secret = `${process.env.SANITY_WEBHOOK_SECRET}`
 
 export async function POST(request: NextRequest) {
+  console.log(`===== Webhook request ${request}`)
   const res = await request.json()
 
   const headersList = headers()
@@ -19,8 +20,6 @@ export async function POST(request: NextRequest) {
     NextResponse.json({ success: false, message: 'Invalid signature' }, { status: 401 })
     return
   }
-
-  console.log(`===== Webhook request ${JSON.stringify(res)}`)
 
   const { type, slug } = res
 
