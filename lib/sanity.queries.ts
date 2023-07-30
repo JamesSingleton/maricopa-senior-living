@@ -156,7 +156,7 @@ export const joansCorner = groq`*[_type == "post" && isArchived != true && refer
   "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
 }`
 
-export const ronsRamblings = groq`*[_type == "post" && isArchived != true && references(*[_type == "category" && (title == "Ron's Ramblings" || title == "What's New")]._id)][0]{
+export const ronsRamblings = groq`*[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What's New!"]._id)][0]{
   _id,
   title,
   "slug": slug.current,
