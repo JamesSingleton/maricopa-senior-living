@@ -87,13 +87,6 @@ export const categoryBySlug = groq`*[_type == "category" && slug.current == $slu
 
 const COUNT_FOR_SIDEBAR = `count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])`
 
-export const popularCategories = groq`*[_type == "category" && ${COUNT_FOR_SIDEBAR} > 0 && highlight == true]{
-  _id,
-  title,
-  "slug": slug.current,
-  "count": ${COUNT_FOR_SIDEBAR}
-} | order(title asc, count desc)`
-
 export const allTags = groq`*[_type == "tag" && defined(slug.current)]{
   title,
   "slug": slug.current,
@@ -117,13 +110,6 @@ export const tagBySlug = groq`*[_type == "tag" && slug.current == $slug]{
   },
 }[0]`
 
-export const popularTags = groq`*[_type == "tag" && ${COUNT_FOR_SIDEBAR} > 0 && highlight == true]{
-  _id,
-  title,
-  "slug": slug.current,
-  "count": ${COUNT_FOR_SIDEBAR}
-} | order(title asc, count desc)`
-
 export const search = groq`
 *[(_type == "post" && isArchived != true && (title match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*")) ||
 (_type == "service" && (title match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*"))] | score(
@@ -143,38 +129,6 @@ export const search = groq`
     }
   },
 }
-`
-
-export const joansCorner = groq`*[_type == "post" && isArchived != true && references(*[_type == "category" && title == "Joan's Corner"]._id)][0]{
-  _id,
-  title,
-  "slug": slug.current,
-  "author": author->{
-    ${authorFields}
-  },
-  publishedAt,
-  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
-}`
-
-export const ronsRamblings = groq`*[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What's New!"]._id)][0]{
-  _id,
-  title,
-  "slug": slug.current,
-  "author": author->{
-    ${authorFields}
-  },
-  publishedAt,
-  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
-}`
-
-export const seniorCenterNewsletters = groq`
-  *[(_type == "post" && isArchived != true && references(*[_type == "category" && title == "City of Maricopa Community / Senior Center"]._id))][0..1] | order(publishedAt desc){
-    _id,
-    title,
-    "slug": slug.current,
-    publishedAt,
-    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
-  }
 `
 
 export const menu = groq`*[_type == "menu"][0]{
@@ -216,4 +170,46 @@ export const pageBySlug = groq`*[_type == "page" && slug.current == $slug][0]{
       asset->
     }
   },
+}`
+
+export const rightSidebarQuery = groq`{
+  "highlightedCategories": *[_type == "category" && ${COUNT_FOR_SIDEBAR} > 0 && highlight == true]{
+    _id,
+    title,
+    "slug": slug.current,
+    "count": ${COUNT_FOR_SIDEBAR}
+  } | order(title asc, count desc),
+  "highlightedTags": *[_type == "tag" && ${COUNT_FOR_SIDEBAR} > 0 && highlight == true]{
+    _id,
+    title,
+    "slug": slug.current,
+    "count": ${COUNT_FOR_SIDEBAR}
+  } | order(title asc, count desc),
+  "joansCorner": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "Joan's Corner"]._id)][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    "author": author->{
+      ${authorFields}
+    },
+    publishedAt,
+    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
+  },
+  "whatsNew": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What's New!"]._id)][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    "author": author->{
+      ${authorFields}
+    },
+    publishedAt,
+    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
+  },
+  "seniorCenterNewsletters": *[(_type == "post" && isArchived != true && references(*[_type == "category" && title == "City of Maricopa Community / Senior Center"]._id))][0..1] | order(publishedAt desc){
+    _id,
+    title,
+    "slug": slug.current,
+    publishedAt,
+    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
+  }
 }`

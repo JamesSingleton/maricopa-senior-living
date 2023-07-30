@@ -20,12 +20,7 @@ export async function POST(request: NextRequest) {
     return
   }
 
-  console.log('===== Webhook request body', JSON.stringify(res, null, 2))
-
-  if (res._type === 'service') {
-    console.log('===== Service type updated')
-    revalidatePath('/')
-  }
+  revalidatePath('/')
 
   return NextResponse.json({ revalidated: true, now: Date.now() })
 }

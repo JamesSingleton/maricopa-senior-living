@@ -31,3 +31,27 @@ export type GroupItem = TitleAndSlug & {
 export type PopularItems = TitleAndSlug & {
   count: number
 }
+
+export type RightSidebar = {
+  highlightedCategories: {
+    _id: string
+    title: string
+    slug: string
+    count: number
+  }[]
+  highlightedTags: {
+    _id: string
+    title: string
+    slug: string
+    count: number
+  }[]
+  joansCorner: Post
+  whatsNew: Post
+  seniorCenterNewsletters: {
+    _id: string
+    title: string
+    slug: string
+    publishedAt: string
+    excerpt: string
+  }[]
+}

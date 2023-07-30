@@ -5,21 +5,13 @@ import { EnvelopeIcon } from '@heroicons/react/24/outline'
 
 import SearchBar from '@/components/SearchBar'
 import {
-  getPopularCategories,
-  getJoansCorner,
-  getRonsRamblings,
-  getPopularTags,
-  getSeniorCenterNewsletters,
+  getRightSidebar
 } from '@/lib/sanity.client'
 import { urlForImage } from '@/lib/sanity.image'
 import Date from '@/components/Date'
 
 const RightSidebar = async () => {
-  const tags = await getPopularTags()
-  const categories = await getPopularCategories()
-  const joansCorner = await getJoansCorner()
-  const ronsRamblings = await getRonsRamblings()
-  const seniorCenterNewsLetters = await getSeniorCenterNewsletters()
+  const { highlightedCategories, highlightedTags, joansCorner, whatsNew, seniorCenterNewsletters} = await getRightSidebar()
 
   return (
     <>
@@ -27,7 +19,7 @@ const RightSidebar = async () => {
       <div className="rounded-md bg-white p-8 shadow-lg">
         <h2 className="mb-8 text-xl font-bold lg:text-2xl">Categories</h2>
         <ul className="space-y-4">
-          {categories.map((category: any) => (
+          {highlightedCategories.map((category: any) => (
             <li key={category._id} className="block">
               <Link
                 href={`/category/${category.slug}`}
@@ -43,8 +35,8 @@ const RightSidebar = async () => {
       <div className="rounded-md bg-white p-8 shadow-lg">
         <h2 className="mb-8 text-lg font-bold lg:text-2xl">Tags</h2>
         <ul className="flex flex-wrap">
-          {tags &&
-            tags.map((tag: any) => (
+          {highlightedTags &&
+            highlightedTags.map((tag: any) => (
               <li className="mr-2 pb-2" key={tag._id}>
                 <Link
                   title={tag.title}
@@ -97,7 +89,7 @@ const RightSidebar = async () => {
           Community/Senior Center Calendar and Newsletters
         </h2>
         <div className="divide-y divide-zinc-200">
-          {seniorCenterNewsLetters.map((newsletter: any) => (
+          {seniorCenterNewsletters.map((newsletter: any) => (
             <article
               key={newsletter._id}
               className="flex max-w-xl flex-col items-start justify-between py-5"
@@ -123,31 +115,31 @@ const RightSidebar = async () => {
         <h2 className="mb-8 text-lg font-bold lg:text-2xl">What&apos;s New!</h2>
         <div className="space-y-16">
           <article
-            key={`${ronsRamblings._id}_right_sidebar`}
+            key={`${whatsNew._id}_right_sidebar`}
             className="flex max-w-xl flex-col items-start justify-between"
           >
-            <Link href={`/articles/${ronsRamblings.slug}`}>
+            <Link href={`/articles/${whatsNew.slug}`}>
               <div className="flex items-center gap-x-4 text-xs">
-                <Date dateString={ronsRamblings.publishedAt} className="text-zinc-500" />
+                <Date dateString={whatsNew.publishedAt} className="text-zinc-500" />
               </div>
               <div className="group relative">
                 <h3 className="mt-3 text-lg font-semibold leading-6 text-zinc-900 group-hover:text-zinc-600">
-                  {ronsRamblings.title}
+                  {whatsNew.title}
                 </h3>
                 <p className="mt-5 line-clamp-3 text-sm leading-6 text-zinc-600">
-                  {ronsRamblings.excerpt}
+                  {whatsNew.excerpt}
                 </p>
               </div>
               <div className="relative mt-8 flex items-center gap-x-4">
                 <Image
-                  src={urlForImage(ronsRamblings.author.image).url()}
-                  alt={`${ronsRamblings.author.name} avatar`}
+                  src={urlForImage(whatsNew.author.image).url()}
+                  alt={`${whatsNew.author.name} avatar`}
                   className="h-10 w-10 rounded-full bg-zinc-50"
                   width={40}
                   height={40}
                 />
                 <div className="text-sm leading-6">
-                  <p className="font-semibold text-zinc-900">{ronsRamblings.author.name}</p>
+                  <p className="font-semibold text-zinc-900">{whatsNew.author.name}</p>
                 </div>
               </div>
             </Link>

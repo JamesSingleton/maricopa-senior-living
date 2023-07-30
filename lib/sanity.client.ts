@@ -6,20 +6,16 @@ import {
   allCategories,
   categoryBySlug,
   postBySlug,
-  popularCategories,
   search,
-  joansCorner,
-  popularTags,
   allTags,
   tagBySlug,
   menu,
   pageBySlug,
-  seniorCenterNewsletters,
-  ronsRamblings,
   allPostSlugs,
+  rightSidebarQuery,
 } from '@/lib/sanity.queries'
 import type { Post } from '@/types/Post'
-import type { GroupItem, TitleAndSlug, PopularItems } from '@/types/common'
+import type { GroupItem, TitleAndSlug, PopularItems, RightSidebar } from '@/types/common'
 
 export const sanityClient = (token?: string) => {
   return createClient({ projectId, dataset, apiVersion, token, useCdn })
@@ -41,13 +37,8 @@ export async function getPostBySlug(slug: string): Promise<Post> {
   return await sanityClient().fetch(postBySlug, { slug })
 }
 
-// get all post slugs
 export async function getAllPostSlugs(): Promise<TitleAndSlug[]> {
   return await sanityClient().fetch(allPostSlugs)
-}
-
-export async function getPopularCategories(): Promise<PopularItems[]> {
-  return await sanityClient().fetch(popularCategories)
 }
 
 export async function getTags(): Promise<TitleAndSlug[]> {
@@ -58,24 +49,8 @@ export async function getTagBySlug(slug: string): Promise<GroupItem> {
   return await sanityClient().fetch(tagBySlug, { slug })
 }
 
-export async function getPopularTags(): Promise<PopularItems[]> {
-  return await sanityClient().fetch(popularTags)
-}
-
 export async function getSearchResults(query: string): Promise<any> {
   return await sanityClient().fetch(search, { query })
-}
-
-export async function getJoansCorner(): Promise<any> {
-  return await sanityClient().fetch(joansCorner)
-}
-
-export async function getRonsRamblings(): Promise<any> {
-  return await sanityClient().fetch(ronsRamblings)
-}
-
-export async function getSeniorCenterNewsletters(): Promise<any> {
-  return await sanityClient().fetch(seniorCenterNewsletters)
 }
 
 export async function getMenu(): Promise<any> {
@@ -84,4 +59,8 @@ export async function getMenu(): Promise<any> {
 
 export async function getPageBySlug(slug: string): Promise<any> {
   return await sanityClient().fetch(pageBySlug, { slug })
+}
+
+export async function getRightSidebar(): Promise<RightSidebar> {
+  return await sanityClient().fetch(rightSidebarQuery)
 }
