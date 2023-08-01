@@ -24,7 +24,7 @@ export default function Footer({ menu }: { menu: FooterProps[] }) {
             <div key={item._key} className="pb-6">
               {item.reference ? (
                 <Link
-                  href={item.reference.slug}
+                  href={`/${item.reference.slug}`}
                   className="text-base leading-6 text-zinc-600 hover:text-zinc-900"
                 >
                   {item.reference.title}
