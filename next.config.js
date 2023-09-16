@@ -6,7 +6,7 @@ const ContentSecurityPolicy = `
     img-src * blob: data:;
     media-src 'none';
     connect-src *;
-    font-src 'self' https://cdn.userway.org/;
+    font-src 'self' https://cdn.userway.org/ https://fonts.gstatic.com/ https://fonts.googleapis.com/;
     script-src-elem 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.userway.org/;
     style-src-elem 'self' 'unsafe-inline' https://cdn.userway.org/;
 `
