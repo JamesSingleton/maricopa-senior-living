@@ -1,7 +1,7 @@
 // https://nextjs.org/docs/advanced-features/security-headers
 const ContentSecurityPolicy = `
     default-src 'self' vercel.live https://cdn.userway.org/;
-    script-src 'self' 'unsafe-eval' 'unsafe-inline';
+    script-src 'self' 'unsafe-eval' 'unsafe-inline' plausible.io;
     style-src 'self' 'unsafe-inline';
     img-src * blob: data:;
     media-src 'none';
