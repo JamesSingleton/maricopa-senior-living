@@ -163,7 +163,6 @@ const RightSidebar = async () => {
         <h2 className="mb-8 text-lg font-bold lg:text-2xl">Sponsors</h2>
         <div className="space-y-4">
           <h3 className="text-base xl:text-xl font-semibold">InMaricopa</h3>
-          <h3 className="text-base xl:text-xl font-semibold">Maricopa Community Advocates</h3>
         </div>
       </div>
     </>
