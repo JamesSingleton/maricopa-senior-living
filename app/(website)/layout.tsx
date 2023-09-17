@@ -28,7 +28,7 @@ export default async function IndexLayout({ children }: { children: React.ReactN
   const menu = await getMenu()
 
   return (
-    <>
+    <PlausibleProvider domain="maricopaseniorliving.org" trackFileDownloads trackOutboundLinks>
       <Script src="https://cdn.userway.org/widget.js" data-account="qeA6uoRyx5" data-position="2" />
       <Suspense fallback={
         <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -48,6 +48,6 @@ export default async function IndexLayout({ children }: { children: React.ReactN
       </main>
       <Footer menu={menu.footer} />
       <ScrollToTop />
-    </>
+    </PlausibleProvider>
   )
 }
