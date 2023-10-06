@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 
 import DirectoryCard from '@/components/DirectoryCard'
 import ArticleCard from '@/components/ArticleCard'
-import { getTags, getTagBySlug } from '@/lib/sanity.client'
+import { getTags, getTagBySlug } from '@/lib/sanity.fetch'
 import { CustomPortableText } from '@/components/CustomPortableText'
 import { baseUrl } from '@/lib/constants'
 
@@ -18,7 +18,7 @@ import { baseUrl } from '@/lib/constants'
 
 export async function generateMetadata(
   { params }: { params: { tag: string } },
-  parent: ResolvingMetadata
+  parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const tag = await getTagBySlug(params.tag)
   const previousOpenGraph = (await parent)?.openGraph

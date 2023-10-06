@@ -4,14 +4,13 @@ import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { EnvelopeIcon } from '@heroicons/react/24/outline'
 
 import SearchBar from '@/components/SearchBar'
-import {
-  getRightSidebar
-} from '@/lib/sanity.client'
+import { getRightSidebar } from '@/lib/sanity.fetch'
 import { urlForImage } from '@/lib/sanity.image'
 import Date from '@/components/Date'
 
 const RightSidebar = async () => {
-  const { highlightedCategories, highlightedTags, joansCorner, whatsNew, seniorCenterNewsletters} = await getRightSidebar()
+  const { highlightedCategories, highlightedTags, joansCorner, whatsNew, seniorCenterNewsletters } =
+    await getRightSidebar()
 
   return (
     <>
@@ -148,7 +147,7 @@ const RightSidebar = async () => {
       </div>
       <div className="rounded-md bg-white p-8 shadow-lg">
         <h2 className="mb-8 text-lg font-bold lg:text-2xl">Please Share Your Feedback</h2>
-        <div className="text-center space-y-4">
+        <div className="space-y-4 text-center">
           <a
             href="mailto:ron@maricopaseniorliving.org"
             className="inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -162,7 +161,7 @@ const RightSidebar = async () => {
       <div className="rounded-md bg-white p-8 shadow-lg">
         <h2 className="mb-8 text-lg font-bold lg:text-2xl">Sponsors</h2>
         <div className="space-y-4">
-          <h3 className="text-base xl:text-xl font-semibold">InMaricopa</h3>
+          <h3 className="text-base font-semibold xl:text-xl">InMaricopa</h3>
         </div>
       </div>
     </>

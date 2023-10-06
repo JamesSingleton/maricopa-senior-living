@@ -2,7 +2,7 @@ import type { Metadata, ResolvingMetadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 
-import { getCategoryBySlug, getCategories } from '@/lib/sanity.client'
+import { getCategoryBySlug } from '@/lib/sanity.fetch'
 import { CustomPortableText } from '@/components/CustomPortableText'
 import ArticleCard from '@/components/ArticleCard'
 import DirectoryCard from '@/components/DirectoryCard'
@@ -22,7 +22,7 @@ export async function generateMetadata(
   }: {
     params: { category: string }
   },
-  parent: ResolvingMetadata
+  parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const category = await getCategoryBySlug(params.category)
   const previousOpenGraph = (await parent)?.openGraph
