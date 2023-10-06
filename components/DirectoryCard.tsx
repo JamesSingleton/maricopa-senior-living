@@ -45,14 +45,11 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
                 <a
                   href={directoryItem.website}
                   target="_blank"
-                  className="flex items-center text-indigo-600 hover:text-indigo-500"
+                  className="max-w-lg overflow-hidden break-words text-indigo-600 hover:text-indigo-500"
                   rel="noreferrer noopener"
                 >
-                  <span>{directoryItem.website}</span>
-                  <ArrowTopRightOnSquareIcon
-                    className="h-5 w-5 pl-1"
-                    aria-label="(opens in a new tab)"
-                  />
+                  {directoryItem.website}
+                  <span className="sr-only">(opens in a new tab)</span>
                 </a>
               </dd>
             </div>

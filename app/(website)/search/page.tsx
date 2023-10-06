@@ -1,4 +1,4 @@
-import { getSearchResults } from '@/lib/sanity.client'
+import { getSearchResults } from '@/lib/sanity.fetch'
 import ArticleCard from '@/components/ArticleCard'
 import DirectoryCard from '@/components/DirectoryCard'
 

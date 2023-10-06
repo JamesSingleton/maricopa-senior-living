@@ -62,10 +62,7 @@ export const postBySlug = groq`*[_type == "post" && slug.current == $slug && isA
   ${postFields}
 }[0]`
 
-export const allCategories = groq`*[_type == "category"]{
-  title,
-  "slug": slug.current,
-}`
+export const allCategories = groq`*[_type == "category"][].slug.current`
 
 export const categoryBySlug = groq`*[_type == "category" && slug.current == $slug]{
   title,
@@ -87,10 +84,7 @@ export const categoryBySlug = groq`*[_type == "category" && slug.current == $slu
 
 const COUNT_FOR_SIDEBAR = `count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])`
 
-export const allTags = groq`*[_type == "tag" && defined(slug.current)]{
-  title,
-  "slug": slug.current,
-}`
+export const allTags = groq`*[_type == "tag" && defined(slug.current)][].slug.current`
 
 export const tagBySlug = groq`*[_type == "tag" && slug.current == $slug]{
   title,
@@ -131,7 +125,7 @@ export const search = groq`
 }
 `
 
-export const menu = groq`*[_type == "menu"][0]{
+export const navigationQuery = groq`*[_type == "navigation"][0]{
   "headerPrimary": headerPrimary[]{
     _key,
     "link": link{

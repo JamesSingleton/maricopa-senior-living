@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 
-import { getPageBySlug } from '@/lib/sanity.client'
+import { getPageBySlug } from '@/lib/sanity.fetch'
 import { CustomPortableText } from '@/components/CustomPortableText'
 
 export default async function Page({ params }: { params: { slug: string } }) {

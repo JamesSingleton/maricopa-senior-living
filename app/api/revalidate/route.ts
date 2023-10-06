@@ -1,26 +1,32 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { revalidatePath } from 'next/cache'
-import { headers } from 'next/headers'
-import { SIGNATURE_HEADER_NAME, isValidSignature } from '@sanity/webhook'
+import { revalidateTag } from 'next/cache'
+import { parseBody } from 'next-sanity/webhook'
 
-const secret = `${process.env.SANITY_WEBHOOK_SECRET}`
+import { type NextRequest, NextResponse } from 'next/server'
 
-export async function POST(request: NextRequest) {
-  const res = await request.json()
+export async function POST(req: NextRequest) {
+  try {
+    const { isValidSignature, body } = await parseBody(req, process.env.SANITY_WEBHOOK_SECRET)
 
-  const headersList = headers()
+    if (!isValidSignature) {
+      const message = 'Invalid Signature'
 
-  const signature = `${headersList.get(SIGNATURE_HEADER_NAME)}`
-  const isValid = isValidSignature(JSON.stringify(res), signature, secret)
+      return new Response(JSON.stringify({ message, isValidSignature, body }), { status: 401 })
+    }
 
-  console.log(`===== Is the webhook request valid? ${isValid}`)
+    if (!body?._type) {
+      const message = 'Bad Request, missing type'
+      return new Response(JSON.stringify({ message, body }), { status: 400 })
+    }
 
-  if (!isValid) {
-    NextResponse.json({ success: false, message: 'Invalid signature' }, { status: 401 })
-    return
+    revalidateTag(body._type)
+    if (body.slug) {
+      revalidateTag(`${body._type}:${body.slug}`)
+    }
+
+    return NextResponse.json({ body })
+  } catch (error: any) {
+    console.error(error)
+
+    return new Response(error?.message, { status: 500 })
   }
-
-  revalidatePath('/')
-
-  return NextResponse.json({ revalidated: true, now: Date.now() })
 }
