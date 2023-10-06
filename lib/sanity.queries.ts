@@ -125,7 +125,7 @@ export const search = groq`
 }
 `
 
-export const menu = groq`*[_type == "menu"][0]{
+export const navigationQuery = groq`*[_type == "navigation"][0]{
   "headerPrimary": headerPrimary[]{
     _key,
     "link": link{

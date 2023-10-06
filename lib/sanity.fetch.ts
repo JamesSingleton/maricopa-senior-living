@@ -8,7 +8,7 @@ import {
   allPostSlugs,
   allTags,
   categoryBySlug,
-  menu,
+  navigationQuery,
   pageBySlug,
   postBySlug,
   rightSidebarQuery,
@@ -41,10 +41,10 @@ export async function sanityFetch<QueryResponse>({
   })
 }
 
-export function getMenu() {
+export function getNavigation() {
   return sanityFetch<any>({
-    query: menu,
-    tags: ['menu'],
+    query: navigationQuery,
+    tags: ['navigation'],
   })
 }
 
@@ -104,5 +104,12 @@ export function getSearchResults(query: string) {
     query: search,
     params: { query },
     tags: [`search:${query}`, 'post', 'tag', 'category'],
+  })
+}
+
+export function getHomePage() {
+  return sanityFetch<any>({
+    query: `*[_type == 'home'][0]`,
+    tags: ['home'],
   })
 }

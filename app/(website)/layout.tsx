@@ -6,7 +6,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import RightSidebar from '@/components/RightSidebar'
 import { baseUrl } from '@/lib/constants'
-import { getMenu } from '@/lib/sanity.fetch'
+import { getNavigation } from '@/lib/sanity.fetch'
 import ScrollToTop from '@/components/ScrollToTop'
 
 export const metadata = {
@@ -25,7 +25,7 @@ export const metadata = {
 }
 
 export default async function IndexLayout({ children }: { children: React.ReactNode }) {
-  const menu = await getMenu()
+  const navigation = await getNavigation()
 
   return (
     <PlausibleProvider domain="maricopaseniorliving.org" trackFileDownloads trackOutboundLinks>
@@ -37,7 +37,7 @@ export default async function IndexLayout({ children }: { children: React.ReactN
           </div>
         }
       >
-        <Header menu={menu} />
+        <Header menu={navigation.headerPrimary} />
       </Suspense>
       <main className="py-8 md:py-10 lg:py-14 xl:py-16">
         <div className="container grid grid-cols-12 gap-8">
@@ -47,7 +47,7 @@ export default async function IndexLayout({ children }: { children: React.ReactN
           </div>
         </div>
       </main>
-      <Footer menu={menu.footer} />
+      <Footer menu={navigation.footer} />
       <ScrollToTop />
     </PlausibleProvider>
   )

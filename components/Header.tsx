@@ -13,7 +13,6 @@ const Header = ({ menu }: { menu: any }) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const { headerPrimary } = menu
 
   useEffect(() => {
     setMobileMenuOpen(false)
@@ -30,7 +29,7 @@ const Header = ({ menu }: { menu: any }) => {
             Maricopa Senior Living
           </Link>
           <Popover.Group className="hidden lg:flex lg:gap-x-12">
-            {headerPrimary.map((item: any) => {
+            {menu.map((item: any) => {
               if (item.link.reference) {
                 return (
                   <Link
@@ -120,7 +119,7 @@ const Header = ({ menu }: { menu: any }) => {
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-zinc-500/10">
               <div className="space-y-2 py-6">
-                {headerPrimary.map((item: any) => {
+                {menu.map((item: any) => {
                   if (item.link.reference) {
                     return (
                       <Link

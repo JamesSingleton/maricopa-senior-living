@@ -1,0 +1,43 @@
+import { defineArrayMember, defineField, defineType } from 'sanity'
+import { HomeIcon } from '@sanity/icons'
+
+export default defineType({
+  name: 'home',
+  title: 'Home',
+  type: 'document',
+  icon: HomeIcon,
+  fields: [
+    defineField({
+      name: 'image',
+      title: 'Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt',
+          type: 'string',
+          validation: (rule) => rule.required(),
+        }),
+        defineField({
+          name: 'caption',
+          title: 'Caption',
+          type: 'string',
+        }),
+      ],
+    }),
+    defineField({
+      title: 'Content',
+      name: 'content',
+      type: 'blockContent',
+    }),
+  ],
+  preview: {
+    select: {
+      title: 'title',
+      media: 'image',
+    },
+  },
+})
