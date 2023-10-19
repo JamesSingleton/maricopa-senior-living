@@ -59,7 +59,7 @@ export function getCategoryBySlug(slug: string) {
   return sanityFetch<GroupItem>({
     query: categoryBySlug,
     params: { slug },
-    tags: [`category:${slug}`, 'service'],
+    tags: [`category:${slug}`],
   })
 }
 
@@ -91,7 +91,7 @@ export function getTagBySlug(slug: string) {
   return sanityFetch<GroupItem>({
     query: tagBySlug,
     params: { slug },
-    tags: [`tag:${slug}`, 'service'],
+    tags: [`tag:${slug}`],
   })
 }
 
