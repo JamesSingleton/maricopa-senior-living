@@ -6,6 +6,6 @@ export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: webhookSecret ? false : true,
+  useCdn: false,
   perspective: 'published',
 })
