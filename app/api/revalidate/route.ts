@@ -8,8 +8,8 @@ export async function POST(req: NextRequest) {
     const { isValidSignature, body } = await parseBody<{
       _type: string
       slug?: string | undefined
-      categories?: string[] | undefined
-      tags?: string[] | undefined
+      categories?: { slug: string }[] | undefined
+      tags?: { slug: string }[] | undefined
     }>(req, process.env.SANITY_WEBHOOK_SECRET)
 
     if (!isValidSignature) {
@@ -30,13 +30,13 @@ export async function POST(req: NextRequest) {
 
     if (body.categories && body.categories.length) {
       body.categories.forEach((category) => {
-        revalidateTag(`category:${category}`)
+        revalidateTag(`category:${category.slug}`)
       })
     }
 
     if (body.tags && body.tags.length) {
       body.tags.forEach((tag) => {
-        revalidateTag(`tag:${tag}`)
+        revalidateTag(`tag:${tag.slug}`)
       })
     }
 
