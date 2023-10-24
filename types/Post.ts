@@ -11,7 +11,14 @@ export type Post = {
     image?: string
     slug: string
   }
-  mainImage?: string
+  mainImage?: {
+    asset: {
+      _ref: string
+      _type: string
+    }
+    _type: string
+    alt: string
+  }
   categories: {
     _id: string
     title: string

@@ -1,12 +1,11 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { EnvelopeIcon } from '@heroicons/react/24/outline'
 
 import SearchBar from '@/components/SearchBar'
 import { getRightSidebar } from '@/lib/sanity.fetch'
-import { urlForImage } from '@/lib/sanity.image'
 import Date from '@/components/Date'
+import ImageComponent from './ImageComponent'
 
 const RightSidebar = async () => {
   const { highlightedCategories, highlightedTags, joansCorner, whatsNew, seniorCenterNewsletters } =
@@ -68,8 +67,8 @@ const RightSidebar = async () => {
                 </p>
               </div>
               <div className="relative mt-8 flex items-center gap-x-4">
-                <Image
-                  src={urlForImage(joansCorner.author.image).url()}
+                <ImageComponent
+                  image={joansCorner.author.image}
                   alt={`${joansCorner.author.name} avatar`}
                   className="h-10 w-10 rounded-full bg-zinc-50"
                   width={40}
@@ -130,8 +129,8 @@ const RightSidebar = async () => {
                 </p>
               </div>
               <div className="relative mt-8 flex items-center gap-x-4">
-                <Image
-                  src={urlForImage(whatsNew.author.image).url()}
+                <ImageComponent
+                  image={whatsNew.author.image}
                   alt={`${whatsNew.author.name} avatar`}
                   className="h-10 w-10 rounded-full bg-zinc-50"
                   width={40}

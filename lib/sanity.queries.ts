@@ -22,14 +22,7 @@ const postFields = `
   "author": author->{
     ${authorFields}
   },
-  "mainImage": {
-    "asset": image.asset->{ 
-      _id,
-      _type,
-      metadata,
-      url
-    }
-  },
+  mainImage,
   "categories": categories[]->{
     _id,
     title,

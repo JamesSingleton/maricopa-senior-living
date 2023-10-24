@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { CalendarIcon } from '@heroicons/react/24/outline'
@@ -8,6 +7,7 @@ import { urlForImage } from '@/lib/sanity.image'
 import { CustomPortableText } from '@/components/CustomPortableText'
 import Date from '@/components/Date'
 import BackButton from '@/components/BackButton'
+import ImageComponent from '@/components/ImageComponent'
 
 import type { Metadata } from 'next'
 
@@ -58,8 +58,8 @@ export default async function ArticlePage({ params: { slug } }: { params: { slug
         <div className="px-4 py-4 sm:px-10 sm:py-10">
           <div className="flex flex-wrap space-x-5 xl:space-x-10">
             <span className="flex items-center space-x-2">
-              <Image
-                src={urlForImage(post.author.image).url()}
+              <ImageComponent
+                image={post.author.image}
                 alt={`Avatar of ${post.author.name}`}
                 width={24}
                 height={24}
@@ -75,6 +75,17 @@ export default async function ArticlePage({ params: { slug } }: { params: { slug
           <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             {post.title}
           </h1>
+          {post.mainImage && post.mainImage.asset._ref.length > 0 && (
+            <div className="flex items-center justify-center">
+              <ImageComponent
+                image={post.mainImage}
+                alt={post.mainImage.alt}
+                width={1024}
+                height={768}
+                className="rounded-md"
+              />
+            </div>
+          )}
           <CustomPortableText value={post.body} />
           {post.tags && (
             <div className="mt-8 md:mt-14">

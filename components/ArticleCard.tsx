@@ -1,8 +1,7 @@
 import Link from 'next/link'
-import Image from 'next/image'
-import { format, parseISO } from 'date-fns'
 
-import { urlForImage } from '@/lib/sanity.image'
+import ImageComponent from './ImageComponent'
+import Date from './Date'
 
 import type { Post } from '@/types/Post'
 
@@ -22,9 +21,9 @@ export default function ArticleCard({ post }: { post: Post }) {
         <p className="py-6">{post.excerpt}</p>
         <div className="flex items-center">
           <div className="shrink-0">
-            <Image
+            <ImageComponent
               className="h-10 w-10 rounded-full object-cover"
-              src={urlForImage(post.author.image).url()}
+              image={post.author.image}
               alt={post.author.name}
               width={40}
               height={40}
@@ -33,9 +32,7 @@ export default function ArticleCard({ post }: { post: Post }) {
           <div className="ml-3">
             <p className="text-sm font-medium text-zinc-900">{post.author.name}</p>
             <div className="flex space-x-1 text-sm text-zinc-500">
-              <time dateTime={post.publishedAt} suppressHydrationWarning>
-                {format(parseISO(post.publishedAt), 'LLL d, yyyy')}
-              </time>
+              <Date dateString={post.publishedAt} />
             </div>
           </div>
         </div>
