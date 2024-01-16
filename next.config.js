@@ -42,18 +42,13 @@ const securityHeaders = [
     key: 'Strict-Transport-Security',
     value: 'max-age=31536000; includeSubDomains; preload',
   },
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy
-  {
-    key: 'Permissions-Policy',
-    value: 'camera=(), microphone=(), geolocation=()',
-  },
 ]
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    logging: {
-      level: 'verbose',
+  logging: {
+    fetches: {
+      fullUrl: true,
     },
   },
   modularizeImports: {
@@ -65,12 +60,11 @@ const nextConfig = {
     },
   },
   images: {
-    domains: [
-      'images.unsplash.com',
-      'bestwpware.com',
-      'maricopaseniorliving.org',
-      'secure.gravatar.com',
-      'cdn.sanity.io',
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+      },
     ],
   },
   headers() {
