@@ -12,7 +12,7 @@ import ImageComponent from '@/components/ImageComponent'
 import type { Metadata } from 'next'
 
 export async function generateStaticParams() {
-  const slugs = await getAllPostSlugs()
+  const slugs = (await getAllPostSlugs()) as string[]
 
   return slugs.map((slug) => ({
     slug,

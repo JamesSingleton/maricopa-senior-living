@@ -38,7 +38,7 @@ export async function sanityFetch<QueryResponse>({
       //revalidate: 30, // for simple, time-based revalidation
       tags, // for tag-based revalidation
     },
-  })
+  }) as Promise<QueryResponse>
 }
 
 export function getNavigation() {
