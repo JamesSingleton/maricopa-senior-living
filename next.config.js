@@ -51,9 +51,9 @@ const securityHeaders = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    logging: {
-      level: 'verbose',
+  logging: {
+    fetches: {
+      fullUrl: true,
     },
   },
   modularizeImports: {
