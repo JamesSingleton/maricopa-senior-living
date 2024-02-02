@@ -20,24 +20,21 @@ import { Post } from '@/types/Post'
 
 export const token = process.env.SANITY_API_READ_TOKEN
 
-const DEFAULT_PARAMS = {} as QueryParams
-const DEFAULT_TAGS = [] as string[]
-
 export async function sanityFetch<QueryResponse>({
   query,
-  params = DEFAULT_PARAMS,
-  tags = DEFAULT_TAGS,
+  params = {},
+  tags,
 }: {
   query: string
   params?: QueryParams
-  tags: string[]
-}): Promise<QueryResponse> {
+  tags?: string[]
+}) {
   return client.fetch<QueryResponse>(query, params, {
-    cache: 'force-cache',
     next: {
+      //revalidate: 30, // for simple, time-based revalidation
       tags, // for tag-based revalidation
     },
-  }) as Promise<QueryResponse>
+  })
 }
 
 export function getNavigation() {
@@ -101,6 +98,7 @@ export function getTags() {
 export function getSearchResults(query: string) {
   return sanityFetch<any>({
     query: search,
+    // @ts-ignore
     params: { query },
     tags: ['post', 'tag', 'category', 'service'],
   })
