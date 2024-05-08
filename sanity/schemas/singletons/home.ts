@@ -35,9 +35,10 @@ export default defineType({
     }),
   ],
   preview: {
-    select: {
-      title: 'title',
-      media: 'image',
+    prepare() {
+      return {
+        title: 'Home Page',
+      }
     },
   },
 })

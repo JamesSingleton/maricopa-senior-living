@@ -14,9 +14,6 @@ dependencies:
   '@portabletext/react':
     specifier: ^3.0.18
     version: 3.0.18(react@18.3.1)
-  '@react':
-    specifier: link:@headlessui/@react
-    version: link:@headlessui/@react
   '@sanity/asset-utils':
     specifier: ^1.3.0
     version: 1.3.0

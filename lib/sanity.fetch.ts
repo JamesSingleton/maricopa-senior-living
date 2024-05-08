@@ -2,7 +2,7 @@ import 'server-only'
 
 import { client } from './sanity.client'
 
-import type { QueryParams } from '@sanity/client'
+import type { QueryParams } from 'next-sanity'
 import {
   allCategories,
   allPostSlugs,

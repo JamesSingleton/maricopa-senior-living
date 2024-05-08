@@ -1,5 +1,5 @@
 import { defineConfig } from 'sanity'
-import { deskTool } from 'sanity/desk'
+import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
 import { schemaTypes, SINGLETON_ITEMS } from './sanity/schemas'
 import { projectId, dataset } from './lib/sanity.api'
@@ -11,7 +11,7 @@ export default defineConfig({
   projectId: projectId,
   dataset: dataset,
   plugins: [
-    deskTool({
+    structureTool({
       structure: pageStructure(SINGLETON_ITEMS),
     }),
     visionTool(),
