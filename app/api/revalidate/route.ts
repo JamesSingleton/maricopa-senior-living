@@ -1,4 +1,4 @@
-import { revalidateTag } from 'next/cache'
+import { revalidateTag, revalidatePath } from 'next/cache'
 import { parseBody } from 'next-sanity/webhook'
 
 import { webhookSecret } from '@/lib/sanity.api'
@@ -35,7 +35,8 @@ export async function POST(req: NextRequest) {
 
     if (body.categories && body.categories.length) {
       body.categories.forEach((category) => {
-        revalidateTag(`category:${category.slug}`)
+        // revalidateTag(`category:${category.slug}`)
+        revalidatePath(`/category/${category.slug}`)
       })
     }
 
