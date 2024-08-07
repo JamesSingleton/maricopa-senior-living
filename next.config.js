@@ -51,11 +51,6 @@ const securityHeaders = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  logging: {
-    fetches: {
-      fullUrl: true,
-    },
-  },
   modularizeImports: {
     '@heroicons/react/24/outline': {
       transform: '@heroicons/react/24/outline/{{member}}',
