@@ -16,6 +16,7 @@ const authorFields = `
 const postFields = `
   _id,
   _updatedAt,
+  _type,
   title,
   "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
   "slug": slug.current,
@@ -32,6 +33,12 @@ const postFields = `
     _id,
     title,
     "slug": slug.current,
+  } {
+    ...,
+    "rank": select(
+      count(tags[title == "Local Resources"]) > 0 => 1,
+      2
+    )
   },
   publishedAt,
   "body": body[]{
@@ -62,17 +69,50 @@ export const categoryBySlug = groq`*[_type == "category" && slug.current == $slu
   "slug": slug.current,
   description,
   "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",
-  "posts": *[_type == "post" && references(^._id) && isArchived != true]{
-    ${postFields}
-  },
-  "services": *[_type == "service" && references(^._id)]{
+  "combinedList": [
+    ...(*[_type == "service" && references(^._id)]{
     ...,
     tags[]->{
       _id,
       title,
       "slug": slug.current,
     }
-  },
+  } {
+    ...,
+    "rank": select(
+      count(tags[title == "Local Resources"]) > 0 => 1,
+      2
+    )
+  }),
+  ...(*[_type == "post" && references(^._id) && isArchived != true]{
+    _id,
+    _updatedAt,
+    _type,
+    publishedAt,
+    title,
+    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
+    "slug": slug.current,
+    "author": author->{
+      ${authorFields}
+    },
+    "categories": categories[]->{
+      _id,
+      title,
+      "slug": slug.current,
+    },
+    "tags": tags[]->{
+      _id,
+      title,
+      "slug": slug.current,
+    } {
+      ...,
+      "rank": select(
+        count(tags[title == "Local Resources"]) > 0 => 1,
+        2
+      )
+    },
+  })
+  ] | order(rank),
 }[0]`
 
 const COUNT_FOR_SIDEBAR = `count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])`

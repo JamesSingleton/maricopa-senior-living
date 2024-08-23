@@ -28,6 +28,12 @@ export type GroupItem = TitleAndSlug & {
   services?: Service[]
 }
 
+export type CategoryPage = TitleAndSlug & {
+  description: PortableTextBlock[]
+  excerpt: string
+  combinedList: (Post | Service)[]
+}
+
 export type PopularItems = TitleAndSlug & {
   count: number
 }

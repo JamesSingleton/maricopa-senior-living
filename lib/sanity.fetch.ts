@@ -15,7 +15,7 @@ import {
   search,
   tagBySlug,
 } from './sanity.queries'
-import { GroupItem, RightSidebar } from '@/types/common'
+import { CategoryPage, GroupItem, RightSidebar } from '@/types/common'
 import { Post } from '@/types/Post'
 
 export const token = process.env.SANITY_API_READ_TOKEN
@@ -51,7 +51,7 @@ export function getRightSidebar() {
 }
 
 export function getCategoryBySlug(slug: string) {
-  return sanityFetch<GroupItem>({
+  return sanityFetch<CategoryPage>({
     query: categoryBySlug,
     params: { slug },
     tags: [`category:${slug}`],
