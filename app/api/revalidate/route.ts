@@ -35,8 +35,8 @@ export async function POST(req: NextRequest) {
 
     if (body.categories && body.categories.length) {
       body.categories.forEach((category) => {
-        // revalidateTag(`category:${category.slug}`)
-        revalidatePath(`/category/${category.slug}`)
+        revalidateTag(`category:${category.slug}`)
+        // revalidatePath(`/category/${category.slug}`)
       })
     }
 

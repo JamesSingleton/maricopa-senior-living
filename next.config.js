@@ -60,12 +60,27 @@ const nextConfig = {
     },
   },
   images: {
-    domains: [
-      'images.unsplash.com',
-      'bestwpware.com',
-      'maricopaseniorliving.org',
-      'secure.gravatar.com',
-      'cdn.sanity.io',
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'bestwpware.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'maricopaseniorliving.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'secure.gravatar.com',
+      },
     ],
   },
   headers() {
