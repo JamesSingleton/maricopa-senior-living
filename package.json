@@ -20,7 +20,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "date-fns-tz": "^3.2.0",
-    "next": "^14.2.7",
+    "next": "^14.2.10",
     "next-plausible": "^3.12.4",
     "next-sanity": "^9.8.16",
     "react": "18.3.1",
