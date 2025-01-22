@@ -157,12 +157,6 @@ const RightSidebar = async () => {
           <p>This site is owned and managed by Ron Smith</p>
         </div>
       </div>
-      <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-lg font-bold lg:text-2xl">Sponsors</h2>
-        <div className="space-y-4">
-          <h3 className="text-base font-semibold xl:text-xl">InMaricopa</h3>
-        </div>
-      </div>
     </>
   )
 }
