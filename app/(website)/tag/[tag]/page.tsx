@@ -4,23 +4,16 @@ import { notFound } from 'next/navigation'
 
 import DirectoryCard from '@/components/DirectoryCard'
 import ArticleCard from '@/components/ArticleCard'
-import { getTags, getTagBySlug } from '@/lib/sanity.fetch'
+import { getTagBySlug } from '@/lib/sanity.fetch'
 import { CustomPortableText } from '@/components/CustomPortableText'
 import { baseUrl } from '@/lib/constants'
 
-// export async function generateStaticParams() {
-//   const tags = await getTags()
-
-//   return tags.map((tag) => ({
-//     tag: tag.slug,
-//   }))
-// }
-
 export async function generateMetadata(
-  { params }: { params: { tag: string } },
+  { params }: { params: Promise<{ tag: string }> },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const tag = await getTagBySlug(params.tag)
+  const { tag: tagParam } = await params
+  const tag = await getTagBySlug(tagParam)
   const previousOpenGraph = (await parent)?.openGraph
 
   if (!tag) return {}
@@ -37,8 +30,9 @@ export async function generateMetadata(
   }
 }
 
-export default async function TagsPage({ params }: { params: { tag: string } }) {
-  const tag = await getTagBySlug(params.tag)
+export default async function TagsPage({ params }: { params: Promise<{ tag: string }> }) {
+  const { tag: tagParam } = await params
+  const tag = await getTagBySlug(tagParam)
 
   if (!tag) return notFound()
 

@@ -1,20 +1,10 @@
 import Link from 'next/link'
 import { PaperClipIcon } from '@heroicons/react/20/solid'
-import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
 import { getFileAsset } from '@sanity/asset-utils'
 
 import { dataset, projectId } from '@/lib/sanity.api'
 import BusinessHours from './BusinessHours'
 import { CustomPortableText } from './CustomPortableText'
-
-function convertBytes(bytes: number): string {
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
-  if (bytes === 0) {
-    return '0 Bytes'
-  }
-  const i = Math.floor(Math.log(bytes) / Math.log(1024))
-  return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i]
-}
 
 const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
   return (

@@ -3,8 +3,10 @@ import { notFound } from 'next/navigation'
 import { getPageBySlug } from '@/lib/sanity.fetch'
 import { CustomPortableText } from '@/components/CustomPortableText'
 
-export default async function Page({ params }: { params: { slug: string } }) {
-  const { slug } = params
+type Params = Promise<{ slug: string }>
+
+export default async function Page({ params }: { params: Params }) {
+  const { slug } = await params
   const pageData = await getPageBySlug(slug)
 
   if (!pageData) {

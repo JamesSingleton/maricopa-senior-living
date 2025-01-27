@@ -1,5 +1,4 @@
 import type { Metadata, ResolvingMetadata } from 'next'
-import Image from 'next/image'
 import { notFound } from 'next/navigation'
 
 import { getCategoryBySlug } from '@/lib/sanity.fetch'
@@ -8,23 +7,16 @@ import ArticleCard from '@/components/ArticleCard'
 import DirectoryCard from '@/components/DirectoryCard'
 import { baseUrl } from '@/lib/constants'
 
-// export async function generateStaticParams() {
-//   const categories = await getCategories()
-
-//   return categories.map((category) => ({
-//     category: category.slug,
-//   }))
-// }
-
 export async function generateMetadata(
   {
     params,
   }: {
-    params: { category: string }
+    params: Promise<{ category: string }>
   },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const category = await getCategoryBySlug(params.category)
+  const { category: categoryParam } = await params
+  const category = await getCategoryBySlug(categoryParam)
   const previousOpenGraph = (await parent)?.openGraph
 
   if (!category) {
@@ -43,8 +35,9 @@ export async function generateMetadata(
   }
 }
 
-export default async function CategoryPage({ params }: { params: { category: string } }) {
-  const category = await getCategoryBySlug(params.category)
+export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
+  const { category: categoryParam } = await params
+  const category = await getCategoryBySlug(categoryParam)
 
   if (!category) {
     notFound()

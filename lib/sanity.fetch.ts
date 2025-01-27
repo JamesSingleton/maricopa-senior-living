@@ -97,7 +97,7 @@ export function getTags() {
 export function getSearchResults(query: string) {
   return sanityFetch<any>({
     query: search,
-    // @ts-ignore
+    // @ts-expect-error for some reason it's saying that query is undefined
     params: { query },
     tags: ['post', 'tag', 'category', 'service'],
   })

@@ -1,6 +1,6 @@
 import { defineType, defineArrayMember, defineField } from 'sanity'
 import { DocumentPdfIcon, ImageIcon } from '@sanity/icons'
-import { ReactElement, JSXElementConstructor, ReactFragment, ReactPortal } from 'react'
+import { ReactElement, JSXElementConstructor, ReactPortal } from 'react'
 
 interface DecartorProps {
   children:
@@ -8,7 +8,6 @@ interface DecartorProps {
     | number
     | boolean
     | ReactElement<any, string | JSXElementConstructor<any>>
-    | ReactFragment
     | ReactPortal
     | null
     | undefined

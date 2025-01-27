@@ -2,8 +2,8 @@ import { getSearchResults } from '@/lib/sanity.fetch'
 import ArticleCard from '@/components/ArticleCard'
 import DirectoryCard from '@/components/DirectoryCard'
 
-export default async function Page({ params, searchParams }: any) {
-  const { q } = searchParams
+export default async function Page({ searchParams }: { searchParams: Promise<{ q: string }> }) {
+  const { q } = await searchParams
   const results = await getSearchResults(q)
 
   return (
