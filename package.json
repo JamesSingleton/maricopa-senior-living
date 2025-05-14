@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "pnpm sanity-manifest && pnpm sanity-deploy && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "sanity-manifest": "npx sanity manifest extract --path public/studio/static",
+    "sanity-deploy": "SANITY_AUTH_TOKEN=process.env.SANITY_AUTH_TOKEN npx sanity schema deploy"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.3",
