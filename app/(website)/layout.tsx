@@ -1,10 +1,10 @@
 import { Suspense } from 'react'
 import Script from 'next/script'
-import PlausibleProvider from 'next-plausible'
 
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import RightSidebar from '@/components/RightSidebar'
+import Header from '@/components/site-header'
+import Footer from '@/components/site-footer'
+import Sidebar from '@/components/sidebar'
+import { Providers } from '@/components/providers'
 import { baseUrl } from '@/lib/constants'
 import { getNavigation } from '@/lib/sanity.fetch'
 import ScrollToTop from '@/components/ScrollToTop'
@@ -28,27 +28,20 @@ export default async function IndexLayout({ children }: { children: React.ReactN
   const navigation = await getNavigation()
 
   return (
-    <PlausibleProvider domain="maricopaseniorliving.org" trackFileDownloads trackOutboundLinks>
+    <Providers>
       <Script src="https://cdn.userway.org/widget.js" data-account="qeA6uoRyx5" data-position="2" />
-      <Suspense
-        fallback={
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div className="h-32 w-32 animate-spin rounded-full border-b-2 border-t-2 border-zinc-900" />
-          </div>
-        }
-      >
+      <Suspense fallback={null}>
         <Header menu={navigation.headerPrimary} />
       </Suspense>
-      <main className="py-8 md:py-10 lg:py-14 xl:py-16">
-        <div className="container grid grid-cols-12 gap-8">
-          <div className="col-span-12 lg:col-span-8">{children}</div>
-          <div className="col-span-12 space-y-8 lg:col-span-4">
-            <RightSidebar />
-          </div>
+      <div className="container mx-auto flex-grow px-4 py-6">
+        <div className="flex flex-col gap-8 lg:flex-row">
+          <main className="flex-1">{children}</main>
+          <Sidebar className="w-full lg:w-96" />
         </div>
-      </main>
-      <Footer menu={navigation.footer} />
+      </div>
+      <Footer />
+
       <ScrollToTop />
-    </PlausibleProvider>
+    </Providers>
   )
 }
