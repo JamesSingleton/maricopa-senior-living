@@ -20,11 +20,12 @@ export async function generateMetadata(
   {
     params,
   }: {
-    params: { category: string }
+    params: Promise<{ category: string }>
   },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const category = await getCategoryBySlug(params.category)
+  const { category: categoryParam } = await params
+  const category = await getCategoryBySlug(categoryParam)
   const previousOpenGraph = (await parent)?.openGraph
 
   if (!category) {
@@ -43,8 +44,9 @@ export async function generateMetadata(
   }
 }
 
-export default async function CategoryPage({ params }: { params: { category: string } }) {
-  const category = await getCategoryBySlug(params.category)
+export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
+  const { category: categoryParam } = await params
+  const category = await getCategoryBySlug(categoryParam)
 
   if (!category) {
     notFound()
