@@ -1,3 +1,4 @@
+import type { NextConfig } from 'next'
 // https://nextjs.org/docs/advanced-features/security-headers
 const ContentSecurityPolicy = `
     default-src 'self' vercel.live https://cdn.userway.org/;
@@ -23,10 +24,10 @@ const securityHeaders = [
     value: 'origin-when-cross-origin',
   },
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
-  {
-    key: 'X-Frame-Options',
-    value: 'DENY',
-  },
+  // {
+  //   key: 'X-Frame-Options',
+  //   value: 'DENY',
+  // },
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
   {
     key: 'X-Content-Type-Options',
@@ -49,8 +50,7 @@ const securityHeaders = [
   },
 ]
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   modularizeImports: {
     '@heroicons/react/24/outline': {
       transform: '@heroicons/react/24/outline/{{member}}',
@@ -83,7 +83,7 @@ const nextConfig = {
       },
     ],
   },
-  headers() {
+  async headers() {
     return [
       {
         source: '/(.*)',
