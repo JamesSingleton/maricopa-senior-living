@@ -7,7 +7,7 @@
     "build": "pnpm sanity-manifest && pnpm sanity-deploy && next build",
     "start": "next start",
     "lint": "next lint",
-    "sanity-manifest": "npx sanity manifest extract --path public/studio/static",
+    "sanity-manifest": "npx sanity manifest extract --path public/admin/static",
     "sanity-deploy": "npx sanity schema deploy --manifest-dir /public/static"
   },
   "dependencies": {
