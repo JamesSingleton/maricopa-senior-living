@@ -24,7 +24,7 @@ const Header = ({ menu }: { menu: any }) => {
         aria-label="Global"
       >
         <div className="flex items-center gap-x-12">
-          <Link href="/" className="text-xl font-bold">
+          <Link href="/" className="text-xl font-bold" prefetch={false}>
             Maricopa Senior Living
           </Link>
           <Popover.Group className="hidden lg:flex lg:gap-x-12">
@@ -37,6 +37,7 @@ const Header = ({ menu }: { menu: any }) => {
                       item.link.reference._type === 'page' ? '' : `/${item.link.reference._type}`
                     }/${item.link.reference.slug}`}
                     className="text-base font-semibold leading-6 text-zinc-900"
+                    prefetch={false}
                   >
                     {item.link.reference.title}
                   </Link>
@@ -103,7 +104,7 @@ const Header = ({ menu }: { menu: any }) => {
         <div className="fixed inset-0 z-10" />
         <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-zinc-900/10">
           <div className="flex items-center justify-between">
-            <Link href="/" className="text-xl font-bold">
+            <Link href="/" className="text-xl font-bold" prefetch={false}>
               Maricopa Senior Living
             </Link>
             <button
@@ -129,6 +130,7 @@ const Header = ({ menu }: { menu: any }) => {
                             : `/${item.link.reference._type}`
                         }/${item.link.reference.slug}`}
                         className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-zinc-900 hover:bg-zinc-50"
+                        prefetch={false}
                       >
                         {item.link.reference.title}
                       </Link>

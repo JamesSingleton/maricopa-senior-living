@@ -10,6 +10,7 @@ export default function ArticleCard({ post }: { post: Post }) {
     <article className="flex flex-col rounded-lg shadow-lg hover:shadow-xl">
       <Link
         href={`/articles/${post.slug}`}
+        prefetch={false}
         className="flex flex-col justify-start rounded-lg bg-white p-6"
       >
         {post.categories.map((category: any) => (

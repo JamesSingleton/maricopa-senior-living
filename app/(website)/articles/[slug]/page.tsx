@@ -96,6 +96,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                   <li key={tag._id}>
                     <Link
                       href={`/tag/${tag.slug}`}
+                      prefetch={false}
                       className="rounded bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
                     >
                       {tag.title}

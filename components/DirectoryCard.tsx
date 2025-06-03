@@ -145,6 +145,7 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
                       <Link
                         className="space-x-4 rounded bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
                         href={`/tag/${tag.slug}`}
+                        prefetch={false}
                       >
                         {tag.title}
                       </Link>

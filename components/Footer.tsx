@@ -26,11 +26,15 @@ export default function Footer({ menu }: { menu: FooterProps[] }) {
                 <Link
                   href={`/${item.reference.slug}`}
                   className="text-base leading-6 text-zinc-600 hover:text-zinc-900"
+                  prefetch={false}
                 >
                   {item.reference.title}
                 </Link>
               ) : (
-                <a href={item.url} className="text-base leading-6 text-zinc-600 hover:text-zinc-900">
+                <a
+                  href={item.url}
+                  className="text-base leading-6 text-zinc-600 hover:text-zinc-900"
+                >
                   {item.text}
                 </a>
               )}
@@ -38,7 +42,15 @@ export default function Footer({ menu }: { menu: FooterProps[] }) {
           ))}
         </nav>
         <p className="mt-10 text-center text-sm leading-5 text-zinc-500">
-          &copy; {new Date().getFullYear()} Maricopa Senior Living. All rights reserved. <a className="text-indigo-600 hover:text-indigo-700" target="_blank" rel="noopener" href="https://www.jamessingleton.me">Built and maintained by James Singleton</a>
+          &copy; {new Date().getFullYear()} Maricopa Senior Living. All rights reserved.{' '}
+          <a
+            className="text-indigo-600 hover:text-indigo-700"
+            target="_blank"
+            rel="noopener"
+            href="https://www.jamessingleton.me"
+          >
+            Built and maintained by James Singleton
+          </a>
         </p>
       </div>
     </footer>

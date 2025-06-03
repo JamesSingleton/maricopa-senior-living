@@ -22,6 +22,7 @@ const RightSidebar = async () => {
               <Link
                 href={`/category/${category.slug}`}
                 className="flex justify-between rounded bg-zinc-200 px-5 py-4 transition-all duration-150 hover:bg-red-400 hover:text-white"
+                prefetch={false}
               >
                 <span className="text-lg font-medium">{`${category.title} (${category.count})`}</span>
                 <ChevronRightIcon className="h-6 w-6" />
@@ -40,6 +41,7 @@ const RightSidebar = async () => {
                   title={tag.title}
                   href={`/tag/${tag.slug}`}
                   className="space-x-4 rounded bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
+                  prefetch={false}
                 >
                   {tag.title}
                 </Link>
@@ -54,7 +56,7 @@ const RightSidebar = async () => {
             key={`${joansCorner._id}_right_sidebar`}
             className="flex max-w-xl flex-col items-start justify-between"
           >
-            <Link href={`/articles/${joansCorner.slug}`}>
+            <Link href={`/articles/${joansCorner.slug}`} prefetch={false}>
               <div className="flex items-center gap-x-4 text-xs">
                 <Date dateString={joansCorner.publishedAt} className="text-zinc-500" />
               </div>
@@ -92,7 +94,7 @@ const RightSidebar = async () => {
               key={newsletter._id}
               className="flex max-w-xl flex-col items-start justify-between py-5"
             >
-              <Link href={`/articles/${newsletter.slug}`}>
+              <Link href={`/articles/${newsletter.slug}`} prefetch={false}>
                 <div className="flex items-center gap-x-4 text-xs">
                   <Date dateString={newsletter.publishedAt} className="text-zinc-500" />
                 </div>
@@ -116,7 +118,7 @@ const RightSidebar = async () => {
             key={`${whatsNew._id}_right_sidebar`}
             className="flex max-w-xl flex-col items-start justify-between"
           >
-            <Link href={`/articles/${whatsNew.slug}`}>
+            <Link href={`/articles/${whatsNew.slug}`} prefetch={false}>
               <div className="flex items-center gap-x-4 text-xs">
                 <Date dateString={whatsNew.publishedAt} className="text-zinc-500" />
               </div>
