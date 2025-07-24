@@ -15,7 +15,7 @@ const SearchBar = () => {
 
   return (
     <form onSubmit={handleSearch}>
-      <div className="relative flex items-center rounded-md bg-white py-1 pl-3 shadow">
+      <div className="relative flex items-center rounded-md bg-white py-1 pl-3 shadow-sm">
         <div className="flex flex-1 items-center justify-center px-2 py-4">
           <div className="w-full max-w-lg lg:max-w-xs">
             <label htmlFor="search" className="sr-only">
@@ -29,7 +29,7 @@ const SearchBar = () => {
                 ref={inputRef}
                 id="search"
                 name="search"
-                className="block w-full rounded-md border border-zinc-300 bg-white py-2 pl-10 pr-3 leading-5 placeholder-zinc-500 focus:border-indigo-500 focus:placeholder-zinc-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+                className="block w-full rounded-md border border-zinc-300 bg-white py-2 pl-10 pr-3 leading-5 placeholder-zinc-500 focus:border-indigo-500 focus:placeholder-zinc-400 focus:outline-hidden focus:ring-1 focus:ring-indigo-500 sm:text-sm"
                 placeholder="Search"
                 type="search"
               />

@@ -18,7 +18,7 @@ function convertBytes(bytes: number): string {
 
 const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
   return (
-    <div className="overflow-hidden bg-white shadow sm:rounded-lg">
+    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
       <div className="prose px-4 py-6 sm:px-6">
         <h2 className="text-2xl font-semibold leading-7 text-zinc-900">{directoryItem.title}</h2>
         {directoryItem.description && (
@@ -108,17 +108,17 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
                       >
                         <div className="flex w-0 flex-1 items-center">
                           <PaperClipIcon
-                            className="h-5 w-5 flex-shrink-0 text-zinc-400"
+                            className="h-5 w-5 shrink-0 text-zinc-400"
                             aria-hidden="true"
                           />
                           <div className="ml-4 flex min-w-0 flex-1 gap-2">
                             <span className="truncate font-medium">{attachment.name}</span>
-                            <span className="flex-shrink-0 text-zinc-400">
+                            <span className="shrink-0 text-zinc-400">
                               {attachmentAsset.extension.toUpperCase()}
                             </span>
                           </div>
                         </div>
-                        <div className="ml-4 flex-shrink-0">
+                        <div className="ml-4 shrink-0">
                           <a
                             href={attachmentAsset.url}
                             className="font-medium text-indigo-600 hover:text-indigo-500"
@@ -143,7 +143,7 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
                   {directoryItem.tags.map((tag: any, index: number) => (
                     <li key={`${tag._id}_${directoryItem.title}_${index}`}>
                       <Link
-                        className="space-x-4 rounded bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
+                        className="space-x-4 rounded-sm bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
                         href={`/tag/${tag.slug}`}
                         prefetch={false}
                       >
