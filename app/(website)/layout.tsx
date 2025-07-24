@@ -1,3 +1,4 @@
+import '@/app/globals.css'
 import { Suspense } from 'react'
 import Script from 'next/script'
 import PlausibleProvider from 'next-plausible'
@@ -8,8 +9,9 @@ import RightSidebar from '@/components/RightSidebar'
 import { baseUrl } from '@/lib/constants'
 import { getNavigation } from '@/lib/sanity.fetch'
 import ScrollToTop from '@/components/ScrollToTop'
+import type { Metadata } from 'next'
 
-export const metadata = {
+export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
     template: '%s | Maricopa Senior Living',
@@ -33,7 +35,7 @@ export default async function IndexLayout({ children }: { children: React.ReactN
       <Suspense
         fallback={
           <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div className="h-32 w-32 animate-spin rounded-full border-b-2 border-t-2 border-zinc-900" />
+            <div className="h-32 w-32 animate-spin rounded-full border-t-2 border-b-2 border-zinc-900" />
           </div>
         }
       >

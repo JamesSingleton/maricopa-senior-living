@@ -37,7 +37,7 @@ const ScrollToTop = () => {
         onClick={scrollToTop}
         className={clsx(
           isVisible ? 'opacity-100' : 'opacity-0',
-          'inline-flex items-center rounded-full bg-indigo-600 p-3 text-white shadow-sm transition-opacity hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+          'inline-flex items-center rounded-full bg-indigo-600 p-3 text-white shadow-xs transition-opacity hover:bg-indigo-700 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
         )}
       >
         <ArrowUpIcon className="h-6 w-6" aria-hidden="true" />
