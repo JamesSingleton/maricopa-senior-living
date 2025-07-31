@@ -20,6 +20,9 @@ importers:
       '@sanity/asset-utils':
         specifier: ^2.2.1
         version: 2.2.1
+      '@sanity/client':
+        specifier: ^7.8.1
+        version: 7.8.1(debug@4.4.1)
       '@sanity/icons':
         specifier: ^3.7.4
         version: 3.7.4(react@19.1.1)
