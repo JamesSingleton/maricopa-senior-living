@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "sanity-manifest": "npx sanity manifest extract --path public/admin/static",
-    "sanity-deploy": "npx sanity schema deploy --manifest-dir public/admin/static"
+    "sanity-deploy": "npx sanity schema deploy --manifest-dir public/admin/static",
+    "sanity-typegen": "sanity typegen generate"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.7",
