@@ -1,5 +1,0 @@
-{
-  "/(website)/icon-j8qpfc.jpg/route": "app/(website)/icon-j8qpfc.jpg/route.js",
-  "/(website)/page": "app/(website)/page.js",
-  "/(website)/category/[category]/page": "app/(website)/category/[category]/page.js"
-}
