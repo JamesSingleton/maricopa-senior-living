@@ -1,0 +1,21 @@
+
+> @maricopa-senior-living/web@0.1.0 dev /Users/jamessingleton/Code/Projects/maricopa-senior-living/apps/web
+> next dev
+
+   [1m[38;2;173;127;168m▲ Next.js 15.5.4[39m[22m
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.166:3000
+   - Environments: .env.local
+
+ [32m[1m✓[22m[39m Starting...
+ [32m[1m✓[22m[39m Ready in 2.3s
+ [37m[1m○[22m[39m Compiling / ...
+ [32m[1m✓[22m[39m Compiled / in 3.6s (1678 modules)
+ GET / [32m200[39m in 10517ms
+ [37m[1m○[22m[39m Compiling /icon-j8qpfc.jpg ...
+ [32m[1m✓[22m[39m Compiled /icon-j8qpfc.jpg in 1974ms (1224 modules)
+ GET /icon-j8qpfc.jpg?d8403c56c744296d [32m200[39m in 2367ms
+ [37m[1m○[22m[39m Compiling /category/[category] ...
+ [32m[1m✓[22m[39m Compiled /category/[category] in 883ms (1696 modules)
+ GET /category/abusepersonal-safety [32m200[39m in 476ms
+ GET /category/abusepersonal-safety [32m200[39m in 3354ms

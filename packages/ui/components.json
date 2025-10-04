@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "src/styles/globals.css",
+    "baseColor": "neutral",
+    "cssVariables": true
+  },
+  "iconLibrary": "lucide",
+  "aliases": {
+    "components": "@maricopa-senior-living/ui/components",
+    "utils": "@maricopa-senior-living/ui/lib/utils",
+    "hooks": "@maricopa-senior-living/ui/hooks",
+    "lib": "@maricopa-senior-living/ui/lib",
+    "ui": "@maricopa-senior-living/ui/components"
+  }
+}
