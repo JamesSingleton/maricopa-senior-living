@@ -26,6 +26,8 @@ export const singletonPlugin = (types: string[]) => {
   }
 }
 
+const hiddenIds = ['assist.instruction.context', 'media.tag', 'sanity.videoAsset']
+
 export const pageStructure = (typeDefArray: DocumentDefinition[]): StructureResolver => {
   return (S) => {
     // Goes through all of the singletons that were provided and translates them into something the
@@ -38,9 +40,14 @@ export const pageStructure = (typeDefArray: DocumentDefinition[]): StructureReso
     })
 
     // The default root list items (except custom ones)
-    const defaultListItems = S.documentTypeListItems().filter(
-      (listItem) => !typeDefArray.find((singleton) => singleton.name === listItem.getId()),
-    )
+    const defaultListItems = S.documentTypeListItems().filter((listItem) => {
+      const id = listItem.getId()
+      return (
+        !typeDefArray.find((singleton) => singleton.name === id) &&
+        id !== undefined &&
+        !hiddenIds.includes(id)
+      )
+    })
 
     return S.list()
       .title('Content')
