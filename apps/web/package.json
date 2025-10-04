@@ -2,6 +2,7 @@
   "name": "@maricopa-senior-living/web",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -13,6 +14,7 @@
   "dependencies": {
     "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.2.0",
+    "@maricopa-senior-living/ui": "workspace:*",
     "@portabletext/react": "^4.0.3",
     "@sanity/asset-utils": "^2.3.0",
     "@sanity/assist": "^5.0.0",

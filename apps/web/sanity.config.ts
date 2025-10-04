@@ -8,29 +8,27 @@ import { projectId, dataset } from './lib/sanity.api'
 import { pageStructure, singletonPlugin } from './sanity/plugins/settings'
 
 export default defineConfig({
-  name: 'default',
   title: 'Maricopa Senior Living',
-  projectId: projectId,
-  dataset: dataset,
+  basePath: '/admin',
+  projectId,
+  dataset,
+  schema: {
+    types: schemaTypes,
+  },
   mediaLibrary: {
     enabled: true,
   },
   plugins: [
     assist(),
+    visionTool(),
     structureTool({
       structure: pageStructure(SINGLETON_ITEMS),
     }),
-    visionTool(),
-    singletonPlugin([SINGLETON_ITEMS[0].name, SINGLETON_ITEMS[1].name]),
     media({
       creditLine: {
         enabled: true,
       },
     }),
+    singletonPlugin([SINGLETON_ITEMS[0].name, SINGLETON_ITEMS[1].name]),
   ],
-  basePath: '/admin',
-  apiVersion: '2023-04-27',
-  schema: {
-    types: schemaTypes,
-  },
 })
