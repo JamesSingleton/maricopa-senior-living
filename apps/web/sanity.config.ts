@@ -19,8 +19,6 @@ export default defineConfig({
     enabled: true,
   },
   plugins: [
-    assist(),
-    visionTool(),
     structureTool({
       structure: pageStructure(SINGLETON_ITEMS),
     }),
@@ -29,6 +27,8 @@ export default defineConfig({
         enabled: true,
       },
     }),
+    visionTool(),
+    assist(),
     singletonPlugin([SINGLETON_ITEMS[0].name, SINGLETON_ITEMS[1].name]),
   ],
 })
