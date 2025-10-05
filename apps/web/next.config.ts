@@ -59,6 +59,7 @@ const nextConfig: NextConfig = {
       transform: '@heroicons/react/20/solid/{{member}}',
     },
   },
+  transpilePackages: ['@maricopa-senior-living/ui'],
   images: {
     remotePatterns: [
       {

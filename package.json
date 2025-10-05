@@ -2,54 +2,20 @@
   "name": "maricopa-senior-living",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "pnpm sanity-manifest && pnpm sanity-deploy && next build",
-    "start": "next start",
-    "lint": "next lint",
-    "sanity-manifest": "npx sanity manifest extract --path public/admin/static",
-    "sanity-deploy": "npx sanity schema deploy --manifest-dir public/admin/static"
+  "packageManager": "pnpm@10.4.1",
+  "engines": {
+    "node": ">=20"
   },
-  "dependencies": {
-    "@headlessui/react": "^2.2.9",
-    "@heroicons/react": "^2.2.0",
-    "@portabletext/react": "^4.0.3",
-    "@sanity/asset-utils": "^2.3.0",
-    "@sanity/assist": "^5.0.0",
-    "@sanity/icons": "^3.7.4",
-    "@sanity/image-url": "^1.2.0",
-    "@sanity/uuid": "^3.0.2",
-    "@sanity/vision": "^4.10.2",
-    "clsx": "^2.1.1",
-    "date-fns": "^4.1.0",
-    "date-fns-tz": "^3.2.0",
-    "next": "^15.5.4",
-    "next-plausible": "^3.12.4",
-    "next-sanity": "^11.4.2",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
-    "sanity": "^4.10.2",
-    "sanity-image": "^1.0.0",
-    "sanity-plugin-media": "^4.0.0",
-    "sharp": "^0.34.4",
-    "styled-components": "^6.1.19"
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint"
   },
   "devDependencies": {
-    "@tailwindcss/aspect-ratio": "^0.4.2",
-    "@tailwindcss/forms": "^0.5.10",
-    "@tailwindcss/postcss": "^4.1.14",
-    "@tailwindcss/typography": "^0.5.19",
-    "@types/node": "^24.6.2",
-    "@types/react": "^19.2.0",
-    "@types/react-dom": "^19.2.0",
-    "@types/styled-components": "^5.1.34",
-    "eslint": "^9.37.0",
-    "eslint-config-next": "^15.5.4",
-    "eslint-config-prettier": "^10.1.8",
-    "postcss": "^8.5.6",
+    "@maricopa-senior-living/eslint-config": "workspace:*",
+    "@maricopa-senior-living/typescript-config": "workspace:*",
     "prettier": "^3.6.2",
-    "prettier-plugin-tailwindcss": "^0.6.14",
-    "tailwindcss": "^4.1.14",
-    "typescript": "^5.9.3"
+    "turbo": "^2.5.5",
+    "typescript": "5.7.3"
   }
 }
