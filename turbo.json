@@ -13,7 +13,15 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**", ".sanity/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", ".sanity/**"],
+      "env": [
+        "SANITY_API_PROJECT_ID",
+        "SANITY_API_DATASET",
+        "SANITY_STUDIO_PROJECT_ID",
+        "SANITY_STUDIO_DATASET",
+        "SANITY_WEBHOOK_SECRET",
+        "SANITY_AUTH_TOKEN"
+      ]
     },
     "lint": {
       "dependsOn": ["^lint"]
