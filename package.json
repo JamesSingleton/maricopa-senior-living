@@ -15,7 +15,7 @@
     "@maricopa-senior-living/eslint-config": "workspace:*",
     "@maricopa-senior-living/typescript-config": "workspace:*",
     "prettier": "^3.6.2",
-    "turbo": "^2.5.5",
-    "typescript": "5.7.3"
+    "turbo": "^2.6.0",
+    "typescript": "5.9.3"
   }
 }

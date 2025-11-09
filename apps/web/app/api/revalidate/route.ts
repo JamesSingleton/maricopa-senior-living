@@ -27,22 +27,22 @@ export async function POST(req: NextRequest) {
       return new Response(JSON.stringify({ message, body }), { status: 400 })
     }
 
-    revalidateTag(body._type)
+    revalidateTag(body._type, 'max')
 
     if (body.slug) {
-      revalidateTag(`${body._type}:${body.slug}`)
+      revalidateTag(`${body._type}:${body.slug}`, 'max')
     }
 
     if (body.categories && body.categories.length) {
       body.categories.forEach((category) => {
-        revalidateTag(`category:${category.slug}`)
+        revalidateTag(`category:${category.slug}`, 'max')
         // revalidatePath(`/category/${category.slug}`)
       })
     }
 
     if (body.tags && body.tags.length) {
       body.tags.forEach((tag) => {
-        revalidateTag(`tag:${tag.slug}`)
+        revalidateTag(`tag:${tag.slug}`, 'max')
       })
     }
 
