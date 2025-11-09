@@ -19,29 +19,29 @@
     "type": "sanity schema extract --enforce-required-fields && sanity typegen generate"
   },
   "dependencies": {
-    "@sanity/assist": "^5.0.0",
-    "@sanity/client": "^7.12.0",
-    "@sanity/functions": "^1.0.3",
+    "@sanity/assist": "^5.0.2",
+    "@sanity/client": "^7.12.1",
+    "@sanity/functions": "^1.1.0",
     "@sanity/icons": "^3.7.4",
-    "@sanity/ui": "^3.1.8",
-    "@sanity/vision": "^4.10.2",
-    "lucide-react": "^0.544.0",
+    "@sanity/ui": "^3.1.11",
+    "@sanity/vision": "^4.14.2",
+    "lucide-react": "^0.553.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "sanity": "^4.10.2",
+    "sanity": "^4.14.2",
     "sanity-plugin-media": "^4.0.0",
     "slugify": "^1.6.6",
     "styled-components": "^6.1.19"
   },
   "devDependencies": {
-    "@sanity/blueprints": "^0.3.0",
+    "@sanity/blueprints": "^0.4.1",
     "@sanity/eslint-config-studio": "^5.0.2",
-    "@types/react": "^19.2.0",
-    "eslint": "^9.37.0",
+    "@types/react": "^19.2.2",
+    "eslint": "^9.39.1",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "prettier": "^3.6.2",
-    "typescript-eslint": "^8.45.0"
+    "typescript-eslint": "^8.46.3"
   }
 }
