@@ -17,7 +17,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.544.0",
+    "lucide-react": "^0.545.0",
     "next-themes": "^0.4.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -28,10 +28,11 @@
     "@maricopa-senior-living/eslint-config": "workspace:^",
     "@maricopa-senior-living/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.1.14",
+    "@tailwindcss/typography": "^0.5.19",
     "@turbo/gen": "^2.5.8",
-    "@types/node": "^24.6.2",
-    "@types/react": "^19.2.0",
-    "@types/react-dom": "^19.2.0",
+    "@types/node": "^24.7.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.1",
     "tailwindcss": "^4.1.14",
     "typescript": "^5.9.3"
   }
