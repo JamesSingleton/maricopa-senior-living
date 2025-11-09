@@ -36,7 +36,7 @@ export async function generateMetadata(
 export default async function Home() {
   const homePageData = await getHomePage()
   return (
-    <div className="rounded-md bg-white px-8 py-8 shadow-lg lg:px-4 lg:py-4">
+    <div className="px-8 py-8 shadow-lg lg:px-4 lg:py-4">
       <figure>
         <ImageComponent
           image={homePageData?.image}
@@ -45,11 +45,11 @@ export default async function Home() {
           height={686}
           loading="eager"
         />
-        <figcaption className="mt-4 text-left text-sm italic text-zinc-500">
+        <figcaption className="text-muted-foreground mt-4 text-left text-sm italic">
           {homePageData?.image?.caption}
         </figcaption>
       </figure>
-      <div className="prose prose-indigo mx-auto pt-8 lg:pt-4">
+      <div className="prose dark:prose-invert mx-auto pt-8 lg:pt-4">
         <CustomPortableText value={homePageData?.content} />
       </div>
     </div>
