@@ -26,6 +26,15 @@ const RightSidebar = async () => {
         <div className="prose prose-lg">
           <CustomPortableText value={nonProfit.description} />
         </div>
+        <div>
+          <Link
+            href={`/category/${nonProfit.slug}`}
+            prefetch={false}
+            className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 focus-visible:outline-solid"
+          >
+            View More
+          </Link>
+        </div>
       </div>
       <div className="rounded-md bg-white p-8 shadow-lg">
         <h2 className="mb-8 text-lg font-bold lg:text-2xl">What&apos;s New!</h2>
