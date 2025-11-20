@@ -3,7 +3,7 @@ import { groq } from 'next-sanity'
 const authorFields = `
   name,
   "image": {
-    "asset": image.asset->{ 
+    "asset": image.asset->{
       _id,
       _type,
       metadata,
@@ -232,5 +232,9 @@ export const rightSidebarQuery = groq`{
     "slug": slug.current,
     publishedAt,
     "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
+  },
+  "nonProfit": *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{
+    ...,
+    "slug": slug.current,
   }
 }`

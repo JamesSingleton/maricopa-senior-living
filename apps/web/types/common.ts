@@ -60,4 +60,5 @@ export type RightSidebar = {
     publishedAt: string
     excerpt: string
   }[]
+  nonProfit: any
 }
