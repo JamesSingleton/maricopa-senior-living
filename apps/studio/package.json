@@ -25,7 +25,7 @@
     "@sanity/icons": "^3.7.4",
     "@sanity/ui": "^3.1.11",
     "@sanity/vision": "^4.21.1",
-    "lucide-react": "^0.560.0",
+    "lucide-react": "^0.561.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "sanity": "^4.21.1",
@@ -37,11 +37,11 @@
     "@sanity/blueprints": "^0.7.0",
     "@sanity/eslint-config-studio": "^5.0.2",
     "@types/react": "^19.2.7",
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "prettier": "^3.7.4",
-    "typescript-eslint": "^8.49.0"
+    "typescript-eslint": "^8.50.0"
   }
 }

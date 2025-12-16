@@ -102,10 +102,3 @@ export function getSearchResults(query: string) {
     tags: ['post', 'tag', 'category', 'service'],
   })
 }
-
-export function getHomePage() {
-  return sanityFetch<any>({
-    query: `*[_type == 'home'][0]`,
-    tags: ['home'],
-  })
-}
