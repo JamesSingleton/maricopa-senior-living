@@ -2,12 +2,18 @@ import { baseUrl } from '@/lib/constants'
 import ImageComponent from '@/components/ImageComponent'
 
 import type { Metadata, ResolvingMetadata } from 'next'
-import { getHomePage } from '@/lib/sanity.fetch'
 import { CustomPortableText } from '@/components/CustomPortableText'
+import { sanityFetch } from '@/lib/sanity/live'
 
 type Props = {
   params: Promise<{ id: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+async function fetchHomePageData() {
+  return await sanityFetch({
+    query: `*[_type == 'home'][0]`,
+  })
 }
 
 export async function generateMetadata(
@@ -34,7 +40,7 @@ export async function generateMetadata(
 }
 
 export default async function Home() {
-  const homePageData = await getHomePage()
+  const { data: homePageData } = await fetchHomePageData()
   return (
     <div className="rounded-md bg-white px-8 py-8 shadow-lg lg:px-4 lg:py-4">
       <figure>
@@ -45,7 +51,7 @@ export default async function Home() {
           height={686}
           loading="eager"
         />
-        <figcaption className="mt-4 text-left text-sm italic text-zinc-500">
+        <figcaption className="mt-4 text-left text-sm text-zinc-500 italic">
           {homePageData?.image?.caption}
         </figcaption>
       </figure>

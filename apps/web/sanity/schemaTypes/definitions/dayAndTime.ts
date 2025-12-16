@@ -16,7 +16,7 @@ const verifyInput = (dayAndTime: any) => {
   return opensAt < closesAt ? true : `Let's open the store before we close it on ${day}, shall we?`
 }
 
-export default defineType({
+export const dayAndTime = defineType({
   name: 'dayAndTime',
   title: 'Day and Time',
   type: 'object',

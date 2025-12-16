@@ -1,24 +1,22 @@
 import { defineField, defineType } from 'sanity'
 
-export default defineType({
-  name: 'page',
+export const author = defineType({
+  name: 'author',
+  title: 'Author',
   type: 'document',
-  title: 'Page',
-  description: 'Pages are used for static content like Disclaimers and About.',
   fields: [
     defineField({
-      name: 'title',
+      name: 'name',
+      title: 'Name',
       type: 'string',
-      title: 'Title',
       validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'slug',
-      type: 'slug',
       title: 'Slug',
-      validation: (rule) => rule.required(),
+      type: 'slug',
       options: {
-        source: 'title',
+        source: 'name',
         slugify: (input) =>
           input
             .toLowerCase()
@@ -29,17 +27,35 @@ export default defineType({
         maxLength: 96,
         isUnique: (value, context) => context.defaultIsUnique(value, context),
       },
+      validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'body',
-      type: 'blockContent',
-      title: 'Body',
+      name: 'image',
+      title: 'Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'bio',
+      title: 'Bio',
+      type: 'array',
+      of: [
+        {
+          title: 'Block',
+          type: 'block',
+          styles: [{ title: 'Normal', value: 'normal' }],
+          lists: [],
+        },
+      ],
     }),
   ],
   preview: {
     select: {
-      title: 'title',
+      title: 'name',
+      media: 'image',
     },
   },
 })

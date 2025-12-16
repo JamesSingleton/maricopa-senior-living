@@ -7,16 +7,25 @@ import { getRightSidebar } from '@/lib/sanity.fetch'
 import Date from '@/components/Date'
 import ImageComponent from './ImageComponent'
 import { CustomPortableText } from './CustomPortableText'
+import { sanityFetch } from '@/lib/sanity/live'
+import { highlightedCategories, highlightedTags } from '@/lib/sanity/query'
+
+async function fetchHighlightedCategories() {
+  return await sanityFetch({
+    query: highlightedCategories,
+  })
+}
+
+async function fetchHighlightedTags() {
+  return await sanityFetch({
+    query: highlightedTags,
+  })
+}
 
 const RightSidebar = async () => {
-  const {
-    highlightedCategories,
-    highlightedTags,
-    joansCorner,
-    whatsNew,
-    seniorCenterNewsletters,
-    nonProfit,
-  } = await getRightSidebar()
+  const { data: highlightedCategories } = await fetchHighlightedCategories()
+  const { data: highlightedTags } = await fetchHighlightedTags()
+  const { joansCorner, whatsNew, seniorCenterNewsletters, nonProfit } = await getRightSidebar()
 
   return (
     <>

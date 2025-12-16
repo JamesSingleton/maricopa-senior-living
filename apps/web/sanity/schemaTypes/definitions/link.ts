@@ -1,6 +1,6 @@
 import { defineType } from 'sanity'
 
-export default defineType({
+export const link = defineType({
   name: 'link',
   title: 'Link',
   type: 'object',
@@ -47,8 +47,8 @@ export default defineType({
       const { refSlug, refTitle, text, url } = selection
 
       return {
-        title: !text && !refTitle ? `Empty Text` : text ?? refTitle,
-        subtitle: !url && !refSlug ? `Empty Link` : refSlug ?? url,
+        title: !text && !refTitle ? `Empty Text` : (text ?? refTitle),
+        subtitle: !url && !refSlug ? `Empty Link` : (refSlug ?? url),
       }
     },
   },

@@ -1,11 +1,9 @@
-import { defineField, defineType } from 'sanity'
-import { TagIcon } from '@sanity/icons'
+import { defineField, defineType, defineArrayMember } from 'sanity'
 
-export default defineType({
-  name: 'tag',
-  title: 'Tag',
+export const category = defineType({
+  name: 'category',
+  title: 'Category',
   type: 'document',
-  icon: TagIcon,
   fields: [
     defineField({
       name: 'title',
@@ -36,7 +34,8 @@ export default defineType({
       title: 'Description',
       type: 'blockContent',
       description:
-        "This will get displayed under the title on the tag page as well as the page's description (what shows up on Google Search Results).",
+        "This will get displayed under the title on the category page as well as the page's description (what shows up on Google Search Results).",
+
       validation: (rule) => rule.required(),
     }),
     defineField({

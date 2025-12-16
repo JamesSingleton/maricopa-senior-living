@@ -66,7 +66,7 @@ export function CustomPortableText({
               <span className="font-medium">{value.description}</span>
             )}
             <a
-              className="inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white no-underline shadow-xs hover:bg-indigo-500 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              className="inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white no-underline shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 focus-visible:outline-solid"
               href={`${value.asset.url}?dl=${value.description}`}
             >
               <ArrowDownTrayIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
