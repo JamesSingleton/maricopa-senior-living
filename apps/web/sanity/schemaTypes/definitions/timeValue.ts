@@ -1,6 +1,6 @@
 import { defineType } from 'sanity'
 
-export const timeValueType = defineType({
+export const timeValue = defineType({
   name: 'timeValue',
   title: 'Time',
   type: 'string',

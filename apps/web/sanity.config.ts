@@ -1,11 +1,12 @@
+'use client'
 import { assist } from '@sanity/assist'
 import { visionTool } from '@sanity/vision'
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { media } from 'sanity-plugin-media'
-import { schemaTypes, SINGLETON_ITEMS } from './sanity/schemas'
+import schemaTypes from './sanity/schemaTypes'
 import { projectId, dataset } from './lib/sanity.api'
-import { pageStructure, singletonPlugin } from './sanity/plugins/settings'
+import { structure } from './sanity/studio-structure'
 
 export default defineConfig({
   title: 'Maricopa Senior Living',
@@ -20,8 +21,8 @@ export default defineConfig({
   },
   plugins: [
     structureTool({
-      structure: pageStructure(SINGLETON_ITEMS),
-    }),
+      structure,
+    }) as any,
     media({
       creditLine: {
         enabled: true,
@@ -29,6 +30,5 @@ export default defineConfig({
     }),
     visionTool(),
     assist(),
-    singletonPlugin([SINGLETON_ITEMS[0].name, SINGLETON_ITEMS[1].name]),
   ],
 })

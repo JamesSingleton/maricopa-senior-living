@@ -1,7 +1,7 @@
 import { defineField, defineType } from 'sanity'
 import { MenuIcon } from '@sanity/icons'
 
-export default defineType({
+export const navigation = defineType({
   name: 'navigation',
   type: 'document',
   icon: MenuIcon,
@@ -69,7 +69,7 @@ export default defineType({
               }
 
               return {
-                title: !text && !refTitle ? `Empty Text` : text ?? refTitle,
+                title: !text && !refTitle ? `Empty Text` : (text ?? refTitle),
                 subtitle: subtitle ?? `No link`,
               }
             },

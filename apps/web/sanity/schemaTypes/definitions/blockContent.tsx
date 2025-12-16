@@ -32,7 +32,7 @@ const SubscriptIcon = () => (
 )
 const SubscriptDecorator = (props: DecartorProps) => <sub>{props.children}</sub>
 
-export default defineType({
+export const blockContent = defineType({
   title: 'Block Content',
   name: 'blockContent',
   type: 'array',
