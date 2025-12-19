@@ -34,7 +34,7 @@
     "next-sanity": "^11.6.11",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "sanity": "^4.21.1",
+    "sanity": "^4.22.0",
     "sanity-image": "^1.0.0",
     "sanity-plugin-media": "^4.1.0",
     "sharp": "^0.34.5",
