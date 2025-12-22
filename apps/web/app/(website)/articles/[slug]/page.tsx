@@ -7,16 +7,43 @@ import { CustomPortableText } from '@/components/CustomPortableText'
 import Date from '@/components/Date'
 import BackButton from '@/components/BackButton'
 import ImageComponent from '@/components/ImageComponent'
+import { sanityFetch } from '@/lib/sanity/live'
+import { client } from '@/lib/sanity/client'
+import { queryArticleSlugPageData, queryArticlePaths } from '@/lib/sanity/query'
 
 import type { Metadata } from 'next'
 
-export async function generateStaticParams() {
-  const slugs = await getAllPostSlugs()
-
-  return slugs.map((slug) => ({
-    slug,
-  }))
+async function fetchArticleSlugPageData(slug: string) {
+  return await sanityFetch({
+    query: queryArticleSlugPageData,
+    params: { slug },
+  })
 }
+
+async function fetchArticlePaths() {
+  try {
+    const slugs = await client.fetch(queryArticlePaths)
+
+    if (!Array.isArray(slugs) || slugs.length === 0) {
+      return []
+    }
+    return slugs.map((slug) => ({
+      slug,
+    }))
+  } catch (error) {
+    console.error('Error fetching article paths:', error)
+    return []
+  }
+}
+
+export async function generateStaticParams() {
+  const paths = await fetchArticlePaths()
+
+  return paths
+}
+
+// Allow dynamic params for paths not generated at build time
+export const dynamicParams = true
 
 export async function generateMetadata({
   params,
@@ -46,7 +73,7 @@ export async function generateMetadata({
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const post = await getPostBySlug(slug)
+  const { data: post } = await fetchArticleSlugPageData(slug)
 
   if (!post) {
     notFound()
