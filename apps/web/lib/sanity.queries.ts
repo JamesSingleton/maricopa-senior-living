@@ -194,16 +194,6 @@ export const pageBySlug = groq`*[_type == "page" && slug.current == $slug][0]{
 }`
 
 export const rightSidebarQuery = groq`{
-  "joansCorner": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "Joan's Corner"]._id)][0]{
-    _id,
-    title,
-    "slug": slug.current,
-    "author": author->{
-      ${authorFields}
-    },
-    publishedAt,
-    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
-  },
   "whatsNew": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What's New!"]._id)][0]{
     _id,
     title,

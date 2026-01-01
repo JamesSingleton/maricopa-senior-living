@@ -51,7 +51,6 @@ export type RightSidebar = {
     slug: string
     count: number
   }[]
-  joansCorner: Post
   whatsNew: Post
   seniorCenterNewsletters: {
     _id: string
