@@ -12,6 +12,7 @@ import { client } from '@/lib/sanity/client'
 import { queryArticleSlugPageData, queryArticlePaths } from '@/lib/sanity/query'
 
 import type { Metadata } from 'next'
+import type { Tag } from '@/lib/sanity/sanity.types'
 
 async function fetchArticleSlugPageData(slug: string) {
   return await sanityFetch({
@@ -103,7 +104,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             {post.title}
           </h1>
-          {post.mainImage && post.mainImage.asset._ref.length > 0 && (
+          {post.mainImage && (
             <div className="flex items-center justify-center">
               <ImageComponent
                 image={post.mainImage}
@@ -119,7 +120,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <div className="mt-8 md:mt-14">
               <h2 className="text-xl font-semibold">Tags</h2>
               <ul className="not-prose flex list-none items-center space-x-4 pl-0" role="list">
-                {post.tags.map((tag) => (
+                {post.tags.map((tag: { _id: string; title: string; slug: string }) => (
                   <li key={tag._id}>
                     <Link
                       href={`/tag/${tag.slug}`}

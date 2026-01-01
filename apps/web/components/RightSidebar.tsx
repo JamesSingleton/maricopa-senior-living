@@ -25,7 +25,7 @@ async function fetchHighlightedTags() {
 const RightSidebar = async () => {
   const { data: highlightedCategories } = await fetchHighlightedCategories()
   const { data: highlightedTags } = await fetchHighlightedTags()
-  const { joansCorner, whatsNew, seniorCenterNewsletters, nonProfit } = await getRightSidebar()
+  const { whatsNew, seniorCenterNewsletters, nonProfit } = await getRightSidebar()
 
   return (
     <>
@@ -74,41 +74,6 @@ const RightSidebar = async () => {
                 />
                 <div className="text-sm leading-6">
                   <p className="font-semibold text-zinc-900">{whatsNew.author.name}</p>
-                </div>
-              </div>
-            </Link>
-          </article>
-        </div>
-      </div>
-      <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-lg font-bold lg:text-2xl">Joan&apos;s Corner</h2>
-        <div className="space-y-16">
-          <article
-            key={`${joansCorner._id}_right_sidebar`}
-            className="flex max-w-xl flex-col items-start justify-between"
-          >
-            <Link href={`/articles/${joansCorner.slug}`} prefetch={false}>
-              <div className="flex items-center gap-x-4 text-xs">
-                <Date dateString={joansCorner.publishedAt} className="text-zinc-500" />
-              </div>
-              <div className="group relative">
-                <h3 className="mt-3 text-lg leading-6 font-semibold text-zinc-900 group-hover:text-zinc-600">
-                  {joansCorner.title}
-                </h3>
-                <p className="mt-5 line-clamp-3 text-sm leading-6 text-zinc-600">
-                  {joansCorner.excerpt}
-                </p>
-              </div>
-              <div className="relative mt-8 flex items-center gap-x-4">
-                <ImageComponent
-                  image={joansCorner.author.image}
-                  alt={`${joansCorner.author.name} avatar`}
-                  className="h-10 w-10 rounded-full bg-zinc-50"
-                  width={40}
-                  height={40}
-                />
-                <div className="text-sm leading-6">
-                  <p className="font-semibold text-zinc-900">{joansCorner.author.name}</p>
                 </div>
               </div>
             </Link>
