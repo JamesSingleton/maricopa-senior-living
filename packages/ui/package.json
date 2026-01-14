@@ -28,9 +28,9 @@
     "@maricopa-senior-living/eslint-config": "workspace:^",
     "@maricopa-senior-living/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.1.18",
-    "@turbo/gen": "^2.7.2",
-    "@types/node": "^25.0.2",
-    "@types/react": "^19.2.7",
+    "@turbo/gen": "^2.7.4",
+    "@types/node": "^25.0.8",
+    "@types/react": "^19.2.8",
     "@types/react-dom": "^19.2.3",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3"

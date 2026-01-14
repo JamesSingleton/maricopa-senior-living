@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
-import { EnvelopeIcon } from '@heroicons/react/24/outline'
+import { EnvelopeIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline'
 
 import SearchBar from '@/components/SearchBar'
 import { getRightSidebar } from '@/lib/sanity.fetch'
@@ -143,8 +143,17 @@ const RightSidebar = async () => {
         </ul>
       </div>
       <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-lg font-bold lg:text-2xl">Please Share Your Feedback</h2>
-        <div className="space-y-4 text-center">
+        <h2 className="mb-8 text-lg font-bold lg:text-2xl">Support & Feedback</h2>
+        <div className="space-y-4 space-x-4 text-center">
+          <Link
+            href="https://www.paypal.com/donate?hosted_button_id=VDPMC329ZC5ZE"
+            className="inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 focus-visible:outline-solid"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <CurrencyDollarIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
+            Donate
+          </Link>
           <a
             href="mailto:ron@maricopaseniorliving.org"
             className="inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 focus-visible:outline-solid"
