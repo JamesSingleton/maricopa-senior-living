@@ -2,7 +2,11 @@ import { defineField, defineType } from 'sanity'
 
 import { createRadioListLayout, isValidUrl } from '../../utils/helper'
 
-// const allLinkableTypes = [{ type: 'blog' }, { type: 'blogIndex' }, { type: 'page' }]
+const allLinkableTypes = [
+  // { type: 'blog' },
+  // { type: 'blogIndex' },
+  { type: 'page' },
+]
 
 export const customUrl = defineType({
   name: 'customUrl',
@@ -37,9 +41,13 @@ export const customUrl = defineType({
         Rule.custom((value, { parent }) => {
           const type = (parent as { type?: string })?.type
           if (type === 'external') {
-            if (!value) return "URL can't be empty"
+            if (!value) {
+              return "URL can't be empty"
+            }
             const isValid = isValidUrl(value)
-            if (!isValid) return 'Invalid URL'
+            if (!isValid) {
+              return 'Invalid URL'
+            }
           }
           return true
         }),
@@ -54,21 +62,23 @@ export const customUrl = defineType({
       hidden: true,
       readOnly: true,
     }),
-    // defineField({
-    //   name: 'internal',
-    //   type: 'reference',
-    //   description: 'Select which page on your website this link should point to',
-    //   options: { disableNew: true },
-    //   hidden: ({ parent }) => parent?.type !== 'internal',
-    //   to: allLinkableTypes,
-    //   validation: (rule) => [
-    //     rule.custom((value, { parent }) => {
-    //       const type = (parent as { type?: string })?.type
-    //       if (type === 'internal' && !value?._ref) return "internal can't be empty"
-    //       return true
-    //     }),
-    //   ],
-    // }),
+    defineField({
+      name: 'internal',
+      type: 'reference',
+      description: 'Select which page on your website this link should point to',
+      options: { disableNew: true },
+      hidden: ({ parent }) => parent?.type !== 'internal',
+      to: allLinkableTypes,
+      validation: (rule) => [
+        rule.custom((value, { parent }) => {
+          const type = (parent as { type?: string })?.type
+          if (type === 'internal' && !value?._ref) {
+            return "internal can't be empty"
+          }
+          return true
+        }),
+      ],
+    }),
   ],
   preview: {
     select: {
@@ -78,13 +88,11 @@ export const customUrl = defineType({
       openInNewTab: 'openInNewTab',
     },
     prepare({ externalUrl, urlType, internalUrl, openInNewTab }) {
-      const url = urlType === 'external' ? externalUrl : `/${internalUrl}`
+      const url = urlType === 'external' ? externalUrl : `${internalUrl}`
       const newTabIndicator = openInNewTab ? ' ↗' : ''
-      const truncatedUrl = url?.length > 30 ? `${url.substring(0, 30)}...` : url
-
       return {
         title: `${urlType === 'external' ? 'External' : 'Internal'} Link`,
-        subtitle: `${truncatedUrl}${newTabIndicator}`,
+        subtitle: `${url}${newTabIndicator}`,
       }
     },
   },

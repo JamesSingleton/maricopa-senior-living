@@ -1,7 +1,8 @@
 import { LayoutPanelLeft, Link, PanelTop } from 'lucide-react'
 import { defineField, defineType } from 'sanity'
 
-import { buttonsField } from '../common'
+import { lucideIconPreview } from '../../components/icon-preview'
+import { buttonsField, iconField } from '../common'
 
 const navbarLink = defineField({
   name: 'navbarLink',
@@ -52,6 +53,7 @@ const navbarColumnLink = defineField({
   title: 'Navigation Column Link',
   description: 'A link within a navigation column',
   fields: [
+    iconField,
     defineField({
       name: 'name',
       type: 'string',
@@ -78,8 +80,9 @@ const navbarColumnLink = defineField({
       urlType: 'url.type',
       internalUrl: 'url.internal.slug.current',
       openInNewTab: 'url.openInNewTab',
+      icon: 'icon',
     },
-    prepare({ title, externalUrl, urlType, internalUrl, openInNewTab }) {
+    prepare({ title, icon, externalUrl, urlType, internalUrl, openInNewTab }) {
       const url = urlType === 'external' ? externalUrl : internalUrl
       const newTabIndicator = openInNewTab ? ' ↗' : ''
       const truncatedUrl = url?.length > 30 ? `${url.substring(0, 30)}...` : url
@@ -87,7 +90,7 @@ const navbarColumnLink = defineField({
       return {
         title: title || 'Untitled Link',
         subtitle: `${urlType === 'external' ? 'External' : 'Internal'} • ${truncatedUrl}${newTabIndicator}`,
-        media: Link,
+        media: lucideIconPreview(icon),
       }
     },
   },

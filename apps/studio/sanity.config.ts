@@ -2,6 +2,7 @@ import { assist } from '@sanity/assist'
 import { visionTool } from '@sanity/vision'
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
+import { lucideIconPicker } from 'sanity-plugin-lucide-icon-picker'
 import { media } from 'sanity-plugin-media'
 
 import { schemaTypes } from './schemaTypes'
@@ -26,5 +27,6 @@ export default defineConfig({
     visionTool(),
     media(),
     assist(),
+    lucideIconPicker(),
   ],
 })

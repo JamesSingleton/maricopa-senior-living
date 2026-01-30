@@ -1,0 +1,11 @@
+{
+  "extends": "@maricopa-senior-living/typescript-config/base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"],
+}
