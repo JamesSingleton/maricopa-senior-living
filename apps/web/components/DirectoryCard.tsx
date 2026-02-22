@@ -1,11 +1,20 @@
 import Link from 'next/link'
-import { PaperClipIcon } from '@heroicons/react/20/solid'
-import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
+import { Phone, Globe, MapPin, Clock, FileText, Tag } from 'lucide-react'
 import { getFileAsset } from '@sanity/asset-utils'
 
 import { dataset, projectId } from '@/lib/sanity.api'
 import BusinessHours from './BusinessHours'
 import { CustomPortableText } from './CustomPortableText'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Separator } from '@/components/ui/separator'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 
 function convertBytes(bytes: number): string {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
@@ -18,146 +27,229 @@ function convertBytes(bytes: number): string {
 
 const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
   return (
-    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-      <div className="prose px-4 py-6 sm:px-6">
-        <h2 className="text-2xl font-semibold leading-7 text-zinc-900">{directoryItem.title}</h2>
+    <Card className="w-full">
+      <CardHeader className="space-y-4">
+        <div className="flex items-start justify-between gap-4">
+          <CardTitle className="text-3xl font-bold leading-tight">
+            {directoryItem.title}
+          </CardTitle>
+          {directoryItem.tags && directoryItem.tags.length > 0 && (
+            <Badge variant="secondary" className="shrink-0">
+              <Tag className="mr-1 h-4 w-4" aria-hidden="true" />
+              {directoryItem.tags[0].title}
+            </Badge>
+          )}
+        </div>
+        
         {directoryItem.description && (
-          <CustomPortableText
-            paragraphClasses="mt-1 max-w-2xl text-sm leading-6 text-zinc-500"
-            value={directoryItem.description}
-          />
+          <div className="text-lg leading-relaxed text-muted-foreground">
+            <CustomPortableText
+              paragraphClasses="text-lg leading-relaxed"
+              value={directoryItem.description}
+            />
+          </div>
         )}
-      </div>
-      <div className="border-t border-zinc-100">
-        <dl className="divide-y divide-zinc-100">
-          {directoryItem.audience && (
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-zinc-900">Audience/Eligibility</dt>
-              <dd className="prose mt-1 text-sm leading-6 text-zinc-700 sm:col-span-2 sm:mt-0">
-                <CustomPortableText value={directoryItem.audience} />
-              </dd>
-            </div>
-          )}
-          {directoryItem.website && (
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-zinc-900">Website</dt>
-              <dd className="mt-1 text-sm leading-6 text-zinc-700 sm:col-span-2 sm:mt-0">
-                <a
-                  href={directoryItem.website}
-                  target="_blank"
-                  className="max-w-lg overflow-hidden break-words text-indigo-600 hover:text-indigo-500"
-                  rel="noreferrer noopener"
-                >
-                  {directoryItem.website}
-                  <span className="sr-only">(opens in a new tab)</span>
-                </a>
-              </dd>
-            </div>
-          )}
+      </CardHeader>
+
+      <CardContent className="space-y-6">
+        {/* Key Contact Information - Always Visible */}
+        <div className="space-y-4">
           {directoryItem.phone && (
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-zinc-900">Phone</dt>
-              <dd className="mt-1 text-sm leading-6 text-zinc-700 sm:col-span-2 sm:mt-0">
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <Phone className="h-6 w-6 text-primary" aria-hidden="true" />
+              </div>
+              <div className="flex-1">
+                <div className="text-sm font-semibold text-muted-foreground">Phone</div>
                 <a
                   href={`tel:${directoryItem.phone}`}
-                  className="text-indigo-600 hover:text-indigo-500"
+                  className="text-xl font-semibold text-foreground hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring rounded"
                 >
                   {directoryItem.phone}
                 </a>
-              </dd>
+              </div>
             </div>
           )}
-          {directoryItem.address && (
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-zinc-900">Location</dt>
-              <dd className="mt-1 text-sm leading-6 text-zinc-700 sm:col-span-2 sm:mt-0">
-                {directoryItem.address}
-              </dd>
-            </div>
-          )}
-          {directoryItem.businessHours && (
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-zinc-900">Hours</dt>
-              <dd className="mt-1 text-sm leading-6 text-zinc-700 sm:col-span-2 sm:mt-0">
-                <BusinessHours hours={directoryItem.businessHours} />
-              </dd>
-            </div>
-          )}
-          {directoryItem.notes && (
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-zinc-900">Notes</dt>
-              <dd className="prose mt-1 text-sm leading-6 text-zinc-700 sm:col-span-2 sm:mt-0">
-                <CustomPortableText value={directoryItem.notes} />
-              </dd>
-            </div>
-          )}
-          {directoryItem.attachments && (
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium leading-6 text-zinc-900">Attachments</dt>
-              <dd className="mt-2 text-sm text-zinc-900 sm:col-span-2 sm:mt-0">
-                <ul
-                  role="list"
-                  className="divide-y divide-zinc-100 rounded-md border border-zinc-200"
+
+          {directoryItem.website && (
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <Globe className="h-6 w-6 text-primary" aria-hidden="true" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-semibold text-muted-foreground">Website</div>
+                <a
+                  href={directoryItem.website}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-xl font-semibold text-foreground hover:text-primary transition-colors truncate block focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring rounded"
                 >
+                  Visit Website
+                  <span className="sr-only"> (opens in new tab)</span>
+                </a>
+              </div>
+            </div>
+          )}
+
+          {directoryItem.address && (
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <MapPin className="h-6 w-6 text-primary" aria-hidden="true" />
+              </div>
+              <div className="flex-1">
+                <div className="text-sm font-semibold text-muted-foreground">Location</div>
+                <div className="text-xl font-semibold text-foreground">
+                  {directoryItem.address}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {directoryItem.businessHours && (
+            <div className="flex items-start gap-3">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <Clock className="h-6 w-6 text-primary" aria-hidden="true" />
+              </div>
+              <div className="flex-1">
+                <div className="text-sm font-semibold text-muted-foreground">Hours</div>
+                <div className="text-lg">
+                  <BusinessHours hours={directoryItem.businessHours} />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <Separator />
+
+        {/* Collapsible Additional Details */}
+        <Accordion type="multiple" className="w-full">
+          {directoryItem.audience && (
+            <AccordionItem value="audience">
+              <AccordionTrigger className="text-xl">
+                Audience & Eligibility
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="prose prose-senior max-w-none text-lg">
+                  <CustomPortableText value={directoryItem.audience} />
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          )}
+
+          {directoryItem.notes && (
+            <AccordionItem value="notes">
+              <AccordionTrigger className="text-xl">
+                Additional Information
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="prose prose-senior max-w-none text-lg">
+                  <CustomPortableText value={directoryItem.notes} />
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          )}
+
+          {directoryItem.attachments && directoryItem.attachments.length > 0 && (
+            <AccordionItem value="attachments">
+              <AccordionTrigger className="text-xl">
+                <span className="flex items-center gap-2">
+                  <FileText className="h-5 w-5" aria-hidden="true" />
+                  Attachments ({directoryItem.attachments.length})
+                </span>
+              </AccordionTrigger>
+              <AccordionContent>
+                <ul className="space-y-3">
                   {directoryItem.attachments.map((attachment: any) => {
                     const attachmentAsset = getFileAsset(attachment, { dataset, projectId })
                     return (
                       <li
                         key={attachment._key}
-                        className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6"
+                        className="flex items-center justify-between rounded-lg border-2 border-border p-4"
                       >
-                        <div className="flex w-0 flex-1 items-center">
-                          <PaperClipIcon
-                            className="h-5 w-5 shrink-0 text-zinc-400"
-                            aria-hidden="true"
-                          />
-                          <div className="ml-4 flex min-w-0 flex-1 gap-2">
-                            <span className="truncate font-medium">{attachment.name}</span>
-                            <span className="shrink-0 text-zinc-400">
+                        <div className="flex items-center gap-3 flex-1 min-w-0">
+                          <FileText className="h-6 w-6 shrink-0 text-muted-foreground" aria-hidden="true" />
+                          <div className="min-w-0 flex-1">
+                            <div className="truncate text-lg font-semibold">
+                              {attachment.name}
+                            </div>
+                            <div className="text-base text-muted-foreground">
                               {attachmentAsset.extension.toUpperCase()}
-                            </span>
+                            </div>
                           </div>
                         </div>
-                        <div className="ml-4 shrink-0">
+                        <Button asChild variant="outline" size="default" className="ml-4 shrink-0">
                           <a
                             href={attachmentAsset.url}
-                            className="font-medium text-indigo-600 hover:text-indigo-500"
                             target="_blank"
                             rel="noreferrer noopener"
                           >
                             Download
                           </a>
-                        </div>
+                        </Button>
                       </li>
                     )
                   })}
                 </ul>
-              </dd>
-            </div>
+              </AccordionContent>
+            </AccordionItem>
           )}
-          {directoryItem.tags && (
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium leading-6 text-zinc-900">Tags</dt>
-              <dd className="mt-2 text-sm text-zinc-900 sm:col-span-2 sm:mt-0">
-                <ul className="flex flex-wrap gap-2">
-                  {directoryItem.tags.map((tag: any, index: number) => (
-                    <li key={`${tag._id}_${directoryItem.title}_${index}`}>
-                      <Link
-                        className="space-x-4 rounded-sm bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
-                        href={`/tag/${tag.slug}`}
-                        prefetch={false}
-                      >
-                        {tag.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </dd>
+        </Accordion>
+
+        {/* Tags */}
+        {directoryItem.tags && directoryItem.tags.length > 1 && (
+          <div>
+            <div className="mb-3 text-sm font-semibold text-muted-foreground">Related Topics</div>
+            <div className="flex flex-wrap gap-2">
+              {directoryItem.tags.map((tag: any, index: number) => (
+                <Link
+                  key={`${tag._id}_${directoryItem.title}_${index}`}
+                  href={`/tag/${tag.slug}`}
+                  prefetch={false}
+                >
+                  <Badge variant="outline" className="cursor-pointer hover:bg-accent text-base px-3 py-1">
+                    {tag.title}
+                  </Badge>
+                </Link>
+              ))}
             </div>
-          )}
-        </dl>
-      </div>
-    </div>
+          </div>
+        )}
+      </CardContent>
+
+      <CardFooter className="flex flex-wrap gap-3">
+        {directoryItem.phone && (
+          <Button asChild size="lg" variant="default">
+            <a href={`tel:${directoryItem.phone}`}>
+              <Phone className="mr-2 h-5 w-5" aria-hidden="true" />
+              Call Now
+            </a>
+          </Button>
+        )}
+        {directoryItem.website && (
+          <Button asChild size="lg" variant="secondary">
+            <a href={directoryItem.website} target="_blank" rel="noreferrer noopener">
+              <Globe className="mr-2 h-5 w-5" aria-hidden="true" />
+              Visit Website
+              <span className="sr-only"> (opens in new tab)</span>
+            </a>
+          </Button>
+        )}
+        {directoryItem.address && (
+          <Button asChild size="lg" variant="outline">
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(directoryItem.address)}`}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <MapPin className="mr-2 h-5 w-5" aria-hidden="true" />
+              Get Directions
+              <span className="sr-only"> (opens in new tab)</span>
+            </a>
+          </Button>
+        )}
+      </CardFooter>
+    </Card>
   )
 }
 

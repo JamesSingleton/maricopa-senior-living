@@ -1,182 +1,291 @@
 'use client'
 
-import { Fragment, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import clsx from 'clsx'
+import { usePathname, useSearchParams, useRouter } from 'next/navigation'
+import { Menu, Search, X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from '@/components/ui/navigation-menu'
+import { cn } from '@/lib/utils'
 
 const Header = ({ menu }: { menu: any }) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const router = useRouter()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [showSearch, setShowSearch] = useState(false)
 
   useEffect(() => {
     setMobileMenuOpen(false)
   }, [pathname, searchParams])
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery)}`)
+      setSearchQuery('')
+      setShowSearch(false)
+    }
+  }
+
   return (
-    <header className="bg-white">
-      <nav
-        className="container mx-auto flex items-center justify-between p-6 lg:px-8"
-        aria-label="Global"
-      >
-        <div className="flex items-center gap-x-12">
-          <Link href="/" className="text-xl font-bold" prefetch={false}>
-            Maricopa Senior Living
-          </Link>
-          <Popover.Group className="hidden lg:flex lg:gap-x-12">
-            {menu.map((item: any) => {
-              if (item.link.reference) {
-                return (
-                  <Link
-                    key={item._key}
-                    href={`${
-                      item.link.reference._type === 'page' ? '' : `/${item.link.reference._type}`
-                    }/${item.link.reference.slug}`}
-                    className="text-base font-semibold leading-6 text-zinc-900"
-                    prefetch={false}
-                  >
-                    {item.link.reference.title}
-                  </Link>
-                )
-              }
+    <>
+      {/* Skip to content link */}
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
 
-              return (
-                <Popover className="relative" key={item._key}>
-                  <Popover.Button className="flex items-center gap-x-1 text-base font-semibold leading-6 text-zinc-900">
-                    {item.link.text}
-                    <ChevronDownIcon
-                      className="h-5 w-5 flex-none text-zinc-400"
-                      aria-hidden="true"
-                    />
-                  </Popover.Button>
-
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-200"
-                    enterFrom="opacity-0 translate-y-1"
-                    enterTo="opacity-100 translate-y-0"
-                    leave="transition ease-in duration-150"
-                    leaveFrom="opacity-100 translate-y-0"
-                    leaveTo="opacity-0 translate-y-1"
-                  >
-                    <Popover.Panel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-sm rounded-xl bg-white p-2 shadow-lg ring-1 ring-zinc-900/5">
-                      {({ close }) => {
-                        return item.children.map((child: any) => (
-                          <a
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            key={child._key}
-                            href={child.link.url}
-                            onClick={() => close()}
-                            className="flex items-center rounded-lg px-3 py-2 text-base font-semibold leading-6 text-zinc-900 hover:bg-zinc-100"
-                          >
-                            <span>{child.link.text}</span>
-                            <ArrowTopRightOnSquareIcon
-                              className="h-5 w-5 pl-1"
-                              aria-label="(opens in a new tab)"
-                            />
-                          </a>
-                        ))
-                      }}
-                    </Popover.Panel>
-                  </Transition>
-                </Popover>
-              )
-            })}
-          </Popover.Group>
-        </div>
-        <div className="flex lg:hidden">
-          <button
-            type="button"
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-            onClick={() => setMobileMenuOpen(true)}
-          >
-            <span className="sr-only">Open main menu</span>
-            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-          </button>
-        </div>
-      </nav>
-      <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
-        <div className="fixed inset-0 z-10" />
-        <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-zinc-900/10">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="text-xl font-bold" prefetch={false}>
-              Maricopa Senior Living
-            </Link>
-            <button
-              type="button"
-              className="-m-2.5 rounded-md p-2.5 text-zinc-700"
-              onClick={() => setMobileMenuOpen(false)}
+      <header className="sticky top-0 z-50 w-full border-b-2 border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <nav className="container mx-auto flex h-20 items-center justify-between px-6 lg:px-8" aria-label="Main navigation">
+          {/* Logo */}
+          <div className="flex items-center">
+            <Link 
+              href="/" 
+              className="text-2xl font-bold text-foreground hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg px-2 py-1" 
+              prefetch={false}
             >
-              <span className="sr-only">Close menu</span>
-              <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-            </button>
+              <span className="sr-only">Maricopa Senior Living - </span>Home
+            </Link>
           </div>
-          <div className="mt-6 flow-root">
-            <div className="-my-6 divide-y divide-zinc-500/10">
-              <div className="space-y-2 py-6">
+
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex lg:items-center lg:gap-4">
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <Link href="/" legacyBehavior passHref>
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                      Home
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+
                 {menu.map((item: any) => {
                   if (item.link.reference) {
+                    const href = `${item.link.reference._type === 'page' ? '' : `/${item.link.reference._type}`}/${item.link.reference.slug}`
                     return (
-                      <Link
-                        key={item._key}
-                        href={`${
-                          item.link.reference._type === 'page'
-                            ? ''
-                            : `/${item.link.reference._type}`
-                        }/${item.link.reference.slug}`}
-                        className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-zinc-900 hover:bg-zinc-50"
-                        prefetch={false}
-                      >
-                        {item.link.reference.title}
-                      </Link>
+                      <NavigationMenuItem key={item._key}>
+                        <Link href={href} legacyBehavior passHref>
+                          <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                            {item.link.reference.title}
+                          </NavigationMenuLink>
+                        </Link>
+                      </NavigationMenuItem>
                     )
                   }
 
-                  return (
-                    <Disclosure as="div" className="-mx-3" key={item._key}>
-                      {({ open }) => (
-                        <>
-                          <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 hover:bg-zinc-50">
-                            {item.link.text}
-                            <ChevronDownIcon
-                              className={clsx(open ? 'rotate-180' : '', 'h-5 w-5 flex-none')}
-                              aria-hidden="true"
-                            />
-                          </Disclosure.Button>
-                          <Disclosure.Panel className="mt-2 space-y-2">
+                  if (item.children && item.children.length > 0) {
+                    return (
+                      <NavigationMenuItem key={item._key}>
+                        <NavigationMenuTrigger>{item.link.text}</NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                          <ul className="grid w-[400px] gap-3 p-4">
                             {item.children.map((child: any) => (
-                              <Disclosure.Button
-                                key={child._key}
-                                href={child.link.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                as="a"
-                                className="flex items-center rounded-lg py-2 pl-6 pr-3 text-base font-semibold leading-7 text-zinc-900 hover:bg-zinc-100"
-                              >
-                                <span>{child.link.text}</span>
-                                <ArrowTopRightOnSquareIcon
-                                  className="h-4 w-4 pl-1"
-                                  aria-label="(opens in a new tab)"
-                                />
-                              </Disclosure.Button>
+                              <li key={child._key}>
+                                <NavigationMenuLink asChild>
+                                  <a
+                                    href={child.link.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={cn(
+                                      "block select-none space-y-1 rounded-lg p-4 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                                    )}
+                                  >
+                                    <div className="text-lg font-semibold leading-none">
+                                      {child.link.text}
+                                      <span className="sr-only"> (opens in new tab)</span>
+                                    </div>
+                                  </a>
+                                </NavigationMenuLink>
+                              </li>
                             ))}
-                          </Disclosure.Panel>
-                        </>
-                      )}
-                    </Disclosure>
-                  )
+                          </ul>
+                        </NavigationMenuContent>
+                      </NavigationMenuItem>
+                    )
+                  }
+
+                  return null
                 })}
-              </div>
+
+                <NavigationMenuItem>
+                  <Link href="/blog" legacyBehavior passHref>
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                      Blog
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <Link href="/newsletters" legacyBehavior passHref>
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                      Newsletters
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+
+            {/* Search Toggle Button (Desktop) */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowSearch(!showSearch)}
+              aria-label="Toggle search"
+              className="ml-2"
+            >
+              {showSearch ? <X className="h-6 w-6" /> : <Search className="h-6 w-6" />}
+            </Button>
+
+            {/* Newsletter CTA */}
+            <Link href="/newsletters">
+              <Button variant="default" size="default" className="ml-2">
+                Subscribe
+              </Button>
+            </Link>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="flex items-center gap-2 lg:hidden">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowSearch(!showSearch)}
+              aria-label="Toggle search"
+            >
+              {showSearch ? <X className="h-6 w-6" /> : <Search className="h-6 w-6" />}
+            </Button>
+
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" aria-label="Open main menu">
+                  <Menu className="h-8 w-8" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+                <SheetHeader>
+                  <SheetTitle className="text-left text-2xl">Menu</SheetTitle>
+                </SheetHeader>
+                <div className="mt-8 flex flex-col space-y-3">
+                  <Link
+                    href="/"
+                    className="rounded-lg px-4 py-3 text-xl font-semibold hover:bg-accent hover:text-accent-foreground transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Home
+                  </Link>
+
+                  {menu.map((item: any) => {
+                    if (item.link.reference) {
+                      const href = `${item.link.reference._type === 'page' ? '' : `/${item.link.reference._type}`}/${item.link.reference.slug}`
+                      return (
+                        <Link
+                          key={item._key}
+                          href={href}
+                          className="rounded-lg px-4 py-3 text-xl font-semibold hover:bg-accent hover:text-accent-foreground transition-colors"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          {item.link.reference.title}
+                        </Link>
+                      )
+                    }
+
+                    if (item.children && item.children.length > 0) {
+                      return (
+                        <div key={item._key} className="space-y-2">
+                          <div className="px-4 py-2 text-xl font-bold text-muted-foreground">
+                            {item.link.text}
+                          </div>
+                          {item.children.map((child: any) => (
+                            <a
+                              key={child._key}
+                              href={child.link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="block rounded-lg px-4 py-3 pl-8 text-lg font-semibold hover:bg-accent hover:text-accent-foreground transition-colors"
+                              onClick={() => setMobileMenuOpen(false)}
+                            >
+                              {child.link.text}
+                              <span className="sr-only"> (opens in new tab)</span>
+                            </a>
+                          ))}
+                        </div>
+                      )
+                    }
+
+                    return null
+                  })}
+
+                  <Link
+                    href="/blog"
+                    className="rounded-lg px-4 py-3 text-xl font-semibold hover:bg-accent hover:text-accent-foreground transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Blog
+                  </Link>
+
+                  <Link
+                    href="/newsletters"
+                    className="rounded-lg px-4 py-3 text-xl font-semibold hover:bg-accent hover:text-accent-foreground transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Newsletters
+                  </Link>
+
+                  <div className="pt-4">
+                    <Link href="/newsletters" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="default" size="lg" className="w-full">
+                        Subscribe to Newsletter
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+        </nav>
+
+        {/* Search Bar (Expandable) */}
+        {showSearch && (
+          <div className="border-t-2 border-border bg-background/95 backdrop-blur">
+            <div className="container mx-auto px-6 py-4 lg:px-8">
+              <form onSubmit={handleSearch} className="flex gap-2">
+                <Input
+                  type="search"
+                  placeholder="Search articles and services..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="flex-1 text-lg"
+                  aria-label="Search"
+                  autoFocus
+                />
+                <Button type="submit" size="lg">
+                  <Search className="h-5 w-5 mr-2" />
+                  Search
+                </Button>
+              </form>
             </div>
           </div>
-        </Dialog.Panel>
-      </Dialog>
-    </header>
+        )}
+      </header>
+    </>
   )
 }
 

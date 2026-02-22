@@ -5,26 +5,57 @@
 @plugin '@tailwindcss/aspect-ratio';
 
 @theme {
+  /* Fonts */
   --font-sans:
     var(--font-inter), ui-sans-serif, system-ui, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --font-mono:
     var(--font-roboto-mono), ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+  /* Semantic Design Tokens - Light Mode */
+  --color-background: #fafaf9;
+  --color-foreground: #1c1917;
+  
+  --color-card: #ffffff;
+  --color-card-foreground: #1c1917;
+  
+  --color-popover: #ffffff;
+  --color-popover-foreground: #1c1917;
+  
+  --color-primary: #4d7c0f;
+  --color-primary-foreground: #fefce8;
+  
+  --color-secondary: #78716c;
+  --color-secondary-foreground: #fafaf9;
+  
+  --color-muted: #e7e5e4;
+  --color-muted-foreground: #57534e;
+  
+  --color-accent: #84cc16;
+  --color-accent-foreground: #1c1917;
+  
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #fef2f2;
+  
+  --color-border: #d6d3d1;
+  --color-input: #a8a29e;
+  --color-ring: #4d7c0f;
+  
+  /* Radius for rounded corners */
+  --radius: 0.75rem;
 }
 
 @utility container {
   margin-inline: auto;
   padding-inline: 1rem;
+  max-width: 1400px;
 }
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
   looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
 */
 @layer base {
   *,
@@ -32,6 +63,157 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
+    border-color: var(--color-border, currentcolor);
+  }
+
+  /* Senior-Friendly Base Styles */
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-size: 18px;
+    line-height: 1.7;
+  }
+
+  /* Enhanced Focus Styles for Accessibility */
+  *:focus-visible {
+    outline: 3px solid var(--color-ring);
+    outline-offset: 3px;
+  }
+
+  /* Typography Enhancements */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  /* Enhanced Link Styles */
+  a {
+    text-decoration-line: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+    transition: color 0.2s;
+  }
+
+  a:hover {
+    text-decoration-thickness: 3px;
+  }
+
+  /* Skip Links */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--color-primary);
+    color: var(--color-primary-foreground);
+    padding: 8px 16px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.125rem;
+    z-index: 100;
+  }
+
+  .skip-link:focus {
+    top: 0;
+  }
+
+  /* Screen Reader Only Utility */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Accordion Animations */
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+/* Custom Prose Styles for Blog Content */
+@layer utilities {
+  .prose-senior {
+    @apply prose prose-lg max-w-4xl;
+    font-size: 1.125rem;
+    line-height: 1.8;
+  }
+
+  .prose-senior h1 {
+    font-size: 2.5rem;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+  }
+
+  .prose-senior h2 {
+    font-size: 2rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .prose-senior h3 {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .prose-senior p {
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .prose-senior a {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .prose-senior strong {
+    font-weight: 700;
+    color: var(--color-foreground);
+  }
+
+  .prose-senior ul,
+  .prose-senior ol {
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    padding-left: 1.75rem;
+  }
+
+  .prose-senior li {
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
   }
 }

@@ -50,6 +50,28 @@ const postFields = `
   },
 `
 
+const newsletterFields = `
+  _id,
+  _updatedAt,
+  _type,
+  title,
+  excerpt,
+  "slug": slug.current,
+  "author": author->{
+    ${authorFields}
+  },
+  mainImage,
+  publishedAt,
+  featured,
+  "content": content[]{
+    ...,
+    _type == "attachment" => {
+      ...,
+      asset->
+    }
+  },
+`
+
 export const allPosts = groq`*[_type == "post" && isArchived != true] | order(publishedAt desc){
   ${postFields}
 }`
@@ -215,4 +237,25 @@ export const rightSidebarQuery = groq`{
     ...,
     "slug": slug.current,
   }
+}`
+
+// Newsletter queries
+export const allNewsletters = groq`*[_type == "newsletter" && isArchived != true] | order(publishedAt desc){
+  ${newsletterFields}
+}`
+
+export const allNewsletterSlugs = groq`
+*[_type == "newsletter" && defined(slug.current) && isArchived != true][].slug.current
+`
+
+export const newsletterBySlug = groq`*[_type == "newsletter" && slug.current == $slug && isArchived != true]{
+  ${newsletterFields}
+}[0]`
+
+export const latestNewsletter = groq`*[_type == "newsletter" && isArchived != true] | order(publishedAt desc)[0]{
+  ${newsletterFields}
+}`
+
+export const featuredNewsletter = groq`*[_type == "newsletter" && featured == true && isArchived != true] | order(publishedAt desc)[0]{
+  ${newsletterFields}
 }`
