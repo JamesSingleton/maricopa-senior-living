@@ -5,7 +5,6 @@ import PlausibleProvider from 'next-plausible'
 
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import RightSidebar from '@/components/RightSidebar'
 import { baseUrl } from '@/lib/constants'
 import { getNavigation } from '@/lib/sanity.fetch'
 import ScrollToTop from '@/components/ScrollToTop'
@@ -43,12 +42,9 @@ export default async function IndexLayout({ children }: { children: React.ReactN
       >
         <Header menu={navigation.headerPrimary} />
       </Suspense>
-      <main className="py-8 md:py-10 lg:py-14 xl:py-16">
-        <div className="container grid grid-cols-12 gap-8">
-          <div className="col-span-12 lg:col-span-8">{children}</div>
-          <div className="col-span-12 space-y-8 lg:col-span-4">
-            <RightSidebar />
-          </div>
+      <main id="main-content" className="py-8 md:py-10 lg:py-14 xl:py-16">
+        <div className="container mx-auto px-6 lg:px-8">
+          {children}
         </div>
       </main>
       <Footer menu={navigation.footer} />
