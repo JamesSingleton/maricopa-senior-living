@@ -1,14 +1,13 @@
-import Link from 'next/link'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
-import { EnvelopeIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline'
-
-import SearchBar from '@/components/SearchBar'
-import { getRightSidebar } from '@/lib/sanity.fetch'
+import { CurrencyDollarIcon, EnvelopeIcon } from '@heroicons/react/24/outline'
+import Link from 'next/link'
 import Date from '@/components/Date'
-import ImageComponent from './ImageComponent'
-import { CustomPortableText } from './CustomPortableText'
+import SearchBar from '@/components/SearchBar'
 import { sanityFetch } from '@/lib/sanity/live'
 import { highlightedCategories, highlightedTags } from '@/lib/sanity/query'
+import { getRightSidebar } from '@/lib/sanity.fetch'
+import { CustomPortableText } from './CustomPortableText'
+import ImageComponent from './ImageComponent'
 
 async function fetchHighlightedCategories() {
   return await sanityFetch({
@@ -81,9 +80,7 @@ const RightSidebar = async () => {
         </div>
       </div>
       <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-lg font-bold lg:text-2xl">
-          Community/Senior Center Calendar and Newsletters
-        </h2>
+        <h2 className="mb-8 text-lg font-bold lg:text-2xl">Community/Senior Center Calendar</h2>
         <div className="divide-y divide-zinc-200">
           {seniorCenterNewsletters.map((newsletter: any) => (
             <article
