@@ -46,17 +46,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" suppressHydrationWarning>
       <Script src="https://cdn.userway.org/widget.js" data-account="qeA6uoRyx5" data-position="2" />
-      <body className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased`}>
+      <body
+        className={`${fontSans.variable} ${fontMono.variable} flex min-h-screen flex-col font-sans antialiased`}
+      >
         <PlausibleProvider domain="maricopaseniorliving.org" trackFileDownloads trackOutboundLinks>
           <Navbar navbarData={nav.navbarData} settingsData={nav.settingsData} />
-          <main className="py-8 md:py-10 lg:py-14 xl:py-16">
-            <div className="container grid grid-cols-12 gap-8">
-              <div className="col-span-12 lg:col-span-8">{children}</div>
-              <div className="col-span-12 space-y-8 lg:col-span-4">
-                <RightSidebar />
-              </div>
-            </div>
-          </main>
+          <main className="flex-1">{children}</main>
           <SanityLive />
         </PlausibleProvider>
       </body>

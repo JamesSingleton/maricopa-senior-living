@@ -1,41 +1,95 @@
+import { DocumentIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
+import { GROUPS, GROUP } from '../../utils/constants'
+import {
+  documentSlugField,
+  imageWithAltField,
+  ogFields,
+  seoFields,
+  pageBuilderField,
+} from '../common'
 
-import { createSlug, isUnique } from '../../utils/slug'
+// import {
+//   documentSlugField,
+//   imageWithAltField,
+//   pageBuilderField,
+// } from "@/schemaTypes/common";
 
 export const page = defineType({
   name: 'page',
-  type: 'document',
   title: 'Page',
-  description: 'Pages are used for static content like Disclaimers and About.',
+  type: 'document',
+  icon: DocumentIcon,
+  description:
+    "Create a new page for your website, like an 'About Us' or 'Contact' page. Each page has its own web address and content that you can customize.",
+  groups: GROUPS,
   fields: [
     defineField({
       name: 'title',
       type: 'string',
       title: 'Title',
-      validation: (rule) => rule.required(),
+      description: 'The main heading that appears at the top of your page and in browser tabs',
+      group: GROUP.MAIN_CONTENT,
+      validation: (Rule) => Rule.required().error('A page title is required'),
     }),
     defineField({
-      name: 'slug',
-      type: 'slug',
-      title: 'Slug',
-      validation: (rule) => rule.required(),
-      options: {
-        source: 'title',
-        slugify: createSlug,
-        maxLength: 96,
-        isUnique: isUnique,
-      },
+      name: 'description',
+      type: 'text',
+      title: 'Description',
+      description:
+        'A brief summary of what this page is about. This text helps search engines understand your page and may appear in search results.',
+      rows: 3,
+      group: GROUP.MAIN_CONTENT,
+      validation: (rule) => [
+        rule
+          .min(140)
+          .warning(
+            'The meta description should be at least 140 characters for optimal SEO visibility in search results',
+          ),
+        rule
+          .max(160)
+          .warning(
+            'The meta description should not exceed 160 characters as it will be truncated in search results',
+          ),
+      ],
+    }),
+    documentSlugField('page', {
+      group: GROUP.MAIN_CONTENT,
+    }),
+    imageWithAltField({
+      title: 'Image',
+      description:
+        'A main picture for this page that can be used when sharing on social media or in search results',
+      group: GROUP.MAIN_CONTENT,
     }),
     defineField({
       name: 'body',
       type: 'blockContent',
       title: 'Body',
       validation: (rule) => rule.required(),
+      group: GROUP.MAIN_CONTENT,
     }),
+    pageBuilderField,
+    ...seoFields.filter((field) => field.name !== 'seoHideFromLists'),
+    ...ogFields,
   ],
   preview: {
     select: {
       title: 'title',
+      slug: 'slug.current',
+      media: 'image',
+      isPrivate: 'seoNoIndex',
+      hasPageBuilder: 'pageBuilder',
+    },
+    prepare: ({ title, slug, media, isPrivate, hasPageBuilder }) => {
+      const statusEmoji = isPrivate ? '🔒' : '🌎'
+      const builderEmoji = hasPageBuilder?.length ? `🧱 ${hasPageBuilder.length}` : '🏗️'
+
+      return {
+        title: `${title || 'Untitled Page'}`,
+        subtitle: `${statusEmoji} ${builderEmoji} | 🔗 ${slug || 'no-slug'}`,
+        media,
+      }
     },
   },
 })

@@ -1,7 +1,5 @@
 import sanityStudio from '@sanity/eslint-config-studio'
-import eslintPluginImport from 'eslint-plugin-import'
 import eslintPluginPrettier from 'eslint-plugin-prettier'
-import eslintPluginSimpleImportSort from 'eslint-plugin-simple-import-sort'
 import tseslint from 'typescript-eslint'
 
 /** @type {import('eslint').Linter.Config} */
@@ -11,8 +9,6 @@ export default [
   {
     plugins: {
       prettier: eslintPluginPrettier,
-      'simple-import-sort': eslintPluginSimpleImportSort,
-      import: eslintPluginImport,
       '@typescript-eslint': tseslint.plugin,
     },
     languageOptions: {

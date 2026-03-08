@@ -8,6 +8,7 @@ import {
 } from 'sanity'
 import slugify from 'slugify'
 
+import { API_VERSION } from './constants'
 import type { PathnameParams } from './types'
 
 export function defineSlug(schema: PathnameParams = { name: 'slug' }): FieldDefinition<'slug'> {
@@ -31,7 +32,7 @@ export function defineSlug(schema: PathnameParams = { name: 'slug' }): FieldDefi
 
 export async function isUnique(slug: string, context: SlugValidationContext): Promise<boolean> {
   const { document, getClient } = context
-  const client = getClient({ apiVersion: '2025-02-10' })
+  const client = getClient({ apiVersion: API_VERSION })
   const id = getPublishedId(document?._id ?? '')
   const draftId = getDraftId(id)
   const params = {
@@ -45,16 +46,32 @@ export async function isUnique(slug: string, context: SlugValidationContext): Pr
 }
 
 export const getDocTypePrefix = (type: string) => {
-  if (['page'].includes(type)) return ''
+  if (['page'].includes(type)) {
+    return ''
+  }
   return type
 }
 
+const slugMapper = {
+  homePage: '/',
+  blogIndex: '/blog',
+} as Record<string, string>
+
 export const createSlug: SlugifierFn = (input, _, { parent }) => {
+  const { _type } = parent as {
+    _type: string
+  }
+
+  if (slugMapper[_type]) {
+    return slugMapper[_type]
+  }
+
+  const prefix = getDocTypePrefix(_type)
+
   const slug = slugify(input, {
     lower: true,
     remove: /[^a-zA-Z0-9 ]/g,
-    trim: true,
   })
 
-  return slug
+  return `/${[prefix, slug].filter(Boolean).join('/')}`
 }

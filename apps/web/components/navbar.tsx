@@ -62,7 +62,6 @@ export function NavbarColumn({
         <NavigationMenuContent>
           <ul className={cn('p-0', layoutClass)}>
             {column.links?.map((item) => {
-              console.log('*** items', item)
               return (
                 <li key={item._key}>
                   <MenuItemLink

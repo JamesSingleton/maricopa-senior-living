@@ -14,8 +14,8 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "catalog:",
     "@maricopa-senior-living/typescript-config": "workspace:*",
+    "@types/node": "^25.2.2",
     "typescript": "catalog:"
   },
   "exports": {

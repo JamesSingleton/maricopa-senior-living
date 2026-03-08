@@ -1,3 +1,4 @@
+import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list'
 import {
   BookMarked,
   CogIcon,
@@ -35,6 +36,13 @@ type CreateList = {
   S: StructureBuilder
 } & Base
 
+type CreateIndexList = {
+  S: StructureBuilder
+  list: Base
+  index: Base<SingletonType>
+  context: StructureResolverContext
+}
+
 const createSingleton = ({ S, type, title, icon }: CreateSingleton) => {
   const newTitle = title ?? getTitleCase(type)
   return S.listItem()
@@ -51,6 +59,33 @@ const createList = ({ S, type, icon, title, id }: CreateList) => {
     .icon(icon ?? File)
 }
 
+const createIndexListWithOrderableItems = ({ S, index, list, context }: CreateIndexList) => {
+  const indexTitle = index.title ?? getTitleCase(index.type)
+  const listTitle = list.title ?? getTitleCase(list.type)
+  return S.listItem()
+    .title(listTitle)
+    .icon(index.icon ?? File)
+    .child(
+      S.list()
+        .title(indexTitle)
+        .items([
+          S.listItem()
+            .title(indexTitle)
+            .icon(index.icon ?? File)
+            .child(
+              S.document().views([S.view.form()]).schemaType(index.type).documentId(index.type),
+            ),
+          orderableDocumentListDeskItem({
+            type: list.type,
+            S,
+            context,
+            icon: list.icon ?? File,
+            title: `${listTitle}`,
+          }),
+        ]),
+    )
+}
+
 export const structure = (S: StructureBuilder, context: StructureResolverContext) => {
   return S.list()
     .title('Content')
@@ -60,12 +95,12 @@ export const structure = (S: StructureBuilder, context: StructureResolverContext
       // createHierarchicalPageStructure(S, context),
       // createSlugBasedStructure(S, "page"),
       // createSlugBasedStructure(S, 'page'),
-      // createIndexListWithOrderableItems({
-      //   S,
-      //   index: { type: 'blogIndex', icon: BookMarked },
-      //   list: { type: 'blog', title: 'Blogs', icon: FileText },
-      //   context,
-      // }),
+      createIndexListWithOrderableItems({
+        S,
+        index: { type: 'blogIndex', icon: BookMarked },
+        list: { type: 'blog', title: 'Blogs', icon: FileText },
+        context,
+      }),
       // createList({
       //   S,
       //   type: 'faq',
