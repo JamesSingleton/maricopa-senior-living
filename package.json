@@ -2,7 +2,7 @@
   "name": "maricopa-senior-living",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@10.23.0",
+  "packageManager": "pnpm@10.32.1",
   "engines": {
     "node": ">=20"
   },
@@ -15,7 +15,7 @@
     "@maricopa-senior-living/eslint-config": "workspace:*",
     "@maricopa-senior-living/typescript-config": "workspace:*",
     "prettier": "^3.8.1",
-    "turbo": "^2.8.14",
+    "turbo": "^2.8.16",
     "typescript": "5.9.3"
   }
 }

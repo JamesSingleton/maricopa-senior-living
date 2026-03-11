@@ -24,65 +24,69 @@ async function fetchHighlightedTags() {
 const RightSidebar = async () => {
   const { data: highlightedCategories } = await fetchHighlightedCategories()
   const { data: highlightedTags } = await fetchHighlightedTags()
-  const { whatsNew, seniorCenterNewsletters, nonProfit } = await getRightSidebar()
+  const { whatsNew, seniorCenterNewsletters, nonProfit, newsletter } = await getRightSidebar()
 
   return (
     <>
       <SearchBar />
-      <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-lg font-bold lg:text-2xl">{nonProfit.title}</h2>
-        <div className="prose prose-lg">
-          <CustomPortableText value={nonProfit.description} />
-        </div>
-        <div>
-          <Link
-            href={`/category/${nonProfit.slug}`}
-            prefetch={false}
-            className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 focus-visible:outline-solid"
-          >
-            View More
-          </Link>
-        </div>
-      </div>
-      <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-lg font-bold lg:text-2xl">What&apos;s New!</h2>
-        <div className="space-y-16">
-          <article
-            key={`${whatsNew._id}_right_sidebar`}
-            className="flex max-w-xl flex-col items-start justify-between"
-          >
-            <Link href={`/articles/${whatsNew.slug}`} prefetch={false}>
-              <div className="flex items-center gap-x-4 text-xs">
-                <Date dateString={whatsNew.publishedAt} className="text-zinc-500" />
-              </div>
-              <div className="group relative">
-                <h3 className="mt-3 text-lg leading-6 font-semibold text-zinc-900 group-hover:text-zinc-600">
-                  {whatsNew.title}
-                </h3>
-                <p className="mt-5 line-clamp-3 text-sm leading-6 text-zinc-600">
-                  {whatsNew.excerpt}
-                </p>
-              </div>
-              <div className="relative mt-8 flex items-center gap-x-4">
-                <ImageComponent
-                  image={whatsNew.author.image}
-                  alt={`${whatsNew.author.name} avatar`}
-                  className="h-10 w-10 rounded-full bg-zinc-50"
-                  width={40}
-                  height={40}
-                />
-                <div className="text-sm leading-6">
-                  <p className="font-semibold text-zinc-900">{whatsNew.author.name}</p>
-                </div>
-              </div>
+      {nonProfit && (
+        <div className="rounded-md bg-white p-8 shadow-lg">
+          <h2 className="mb-8 text-lg font-bold lg:text-2xl">{nonProfit.title}</h2>
+          <div className="prose prose-lg">
+            <CustomPortableText value={nonProfit.description} />
+          </div>
+          <div>
+            <Link
+              href={`/category/${nonProfit.slug}`}
+              prefetch={false}
+              className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 focus-visible:outline-solid"
+            >
+              View More
             </Link>
-          </article>
+          </div>
         </div>
-      </div>
+      )}
+      {whatsNew && (
+        <div className="rounded-md bg-white p-8 shadow-lg">
+          <h2 className="mb-8 text-lg font-bold lg:text-2xl">What&apos;s New!</h2>
+          <div className="space-y-16">
+            <article
+              key={`${whatsNew._id}_right_sidebar`}
+              className="flex max-w-xl flex-col items-start justify-between"
+            >
+              <Link href={`/articles/${whatsNew.slug}`} prefetch={false}>
+                <div className="flex items-center gap-x-4 text-xs">
+                  <Date dateString={whatsNew.publishedAt} className="text-zinc-500" />
+                </div>
+                <div className="group relative">
+                  <h3 className="mt-3 text-lg leading-6 font-semibold text-zinc-900 group-hover:text-zinc-600">
+                    {whatsNew.title}
+                  </h3>
+                  <p className="mt-5 line-clamp-3 text-sm leading-6 text-zinc-600">
+                    {whatsNew.excerpt}
+                  </p>
+                </div>
+                <div className="relative mt-8 flex items-center gap-x-4">
+                  <ImageComponent
+                    image={whatsNew.author.image}
+                    alt={`${whatsNew.author.name} avatar`}
+                    className="h-10 w-10 rounded-full bg-zinc-50"
+                    width={40}
+                    height={40}
+                  />
+                  <div className="text-sm leading-6">
+                    <p className="font-semibold text-zinc-900">{whatsNew.author.name}</p>
+                  </div>
+                </div>
+              </Link>
+            </article>
+          </div>
+        </div>
+      )}
       <div className="rounded-md bg-white p-8 shadow-lg">
         <h2 className="mb-8 text-lg font-bold lg:text-2xl">Community/Senior Center Calendar</h2>
         <div className="divide-y divide-zinc-200">
-          {seniorCenterNewsletters.map((newsletter: any) => (
+          {seniorCenterNewsletters.map((newsletter) => (
             <article
               key={newsletter._id}
               className="flex max-w-xl flex-col items-start justify-between py-5"
@@ -104,10 +108,37 @@ const RightSidebar = async () => {
           ))}
         </div>
       </div>
+      {newsletter && (
+        <div className="rounded-md bg-white p-8 shadow-lg">
+          <h2 className="mb-8 text-lg font-bold lg:text-2xl">
+            <span className="italic">Keeping you informed...still</span> Newsletter
+          </h2>
+          <div className="divide-y divide-zinc-200">
+            <article
+              key={newsletter._id}
+              className="flex max-w-xl flex-col items-start justify-between py-5"
+            >
+              <Link href={`/articles/${newsletter.slug}`} prefetch={false}>
+                <div className="flex items-center gap-x-4 text-xs">
+                  <Date dateString={newsletter.publishedAt} className="text-zinc-500" />
+                </div>
+                <div className="group relative">
+                  <h3 className="mt-3 text-lg leading-6 font-semibold text-zinc-900 group-hover:text-zinc-600">
+                    {newsletter.title}
+                  </h3>
+                  <p className="mt-5 line-clamp-3 text-sm leading-6 text-zinc-600">
+                    {newsletter.excerpt}
+                  </p>
+                </div>
+              </Link>
+            </article>
+          </div>
+        </div>
+      )}
       <div className="rounded-md bg-white p-8 shadow-lg">
         <h2 className="mb-8 text-xl font-bold lg:text-2xl">Categories</h2>
         <ul className="space-y-4">
-          {highlightedCategories.map((category: any) => (
+          {highlightedCategories.map((category) => (
             <li key={category._id} className="block">
               <Link
                 href={`/category/${category.slug}`}

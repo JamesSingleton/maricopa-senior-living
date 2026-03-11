@@ -214,5 +214,12 @@ export const rightSidebarQuery = groq`{
   "nonProfit": *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{
     ...,
     "slug": slug.current,
+  },
+  "newsletter": *[_type == "post" && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"]._id)][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    publishedAt,
+    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
   }
 }`

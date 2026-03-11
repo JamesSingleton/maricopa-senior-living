@@ -1,5 +1,5 @@
-import type { Post } from './Post'
 import type { PortableTextBlock } from 'sanity'
+import type { Post } from './Post'
 
 export type Service = {
   _id: string
@@ -60,4 +60,5 @@ export type RightSidebar = {
     excerpt: string
   }[]
   nonProfit: any
+  newsletter: any
 }

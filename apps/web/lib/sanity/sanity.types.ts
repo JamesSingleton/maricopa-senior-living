@@ -581,6 +581,7 @@ export type SanityImageMetadata = {
   palette?: SanityImagePalette
   lqip?: string
   blurHash?: string
+  thumbHash?: string
   hasAlpha?: boolean
   isOpaque?: boolean
 }
@@ -596,14 +597,14 @@ export type SanityFileAsset = {
   title?: string
   description?: string
   altText?: string
-  sha1hash?: string
-  extension?: string
-  mimeType?: string
-  size?: number
-  assetId?: string
+  sha1hash: string
+  extension: string
+  mimeType: string
+  size: number
+  assetId: string
   uploadId?: string
-  path?: string
-  url?: string
+  path: string
+  url: string
   source?: SanityAssetSourceData
 }
 
@@ -625,14 +626,14 @@ export type SanityImageAsset = {
   title?: string
   description?: string
   altText?: string
-  sha1hash?: string
-  extension?: string
-  mimeType?: string
-  size?: number
-  assetId?: string
+  sha1hash: string
+  extension: string
+  mimeType: string
+  size: number
+  assetId: string
   uploadId?: string
-  path?: string
-  url?: string
+  path: string
+  url: string
   metadata?: SanityImageMetadata
   source?: SanityAssetSourceData
 }
@@ -712,7 +713,7 @@ export type AllPostsResult = Array<{
         _id: string
         _type: 'sanity.imageAsset'
         metadata: SanityImageMetadata | null
-        url: string | null
+        url: string
       } | null
     }
     slug: string
@@ -750,14 +751,14 @@ export type AllPostsResult = Array<{
           title?: string
           description?: string
           altText?: string
-          sha1hash?: string
-          extension?: string
-          mimeType?: string
-          size?: number
-          assetId?: string
+          sha1hash: string
+          extension: string
+          mimeType: string
+          size: number
+          assetId: string
           uploadId?: string
-          path?: string
-          url?: string
+          path: string
+          url: string
           source?: SanityAssetSourceData
         }
         media?: unknown
@@ -817,7 +818,7 @@ export type PostBySlugResult = {
         _id: string
         _type: 'sanity.imageAsset'
         metadata: SanityImageMetadata | null
-        url: string | null
+        url: string
       } | null
     }
     slug: string
@@ -855,14 +856,14 @@ export type PostBySlugResult = {
           title?: string
           description?: string
           altText?: string
-          sha1hash?: string
-          extension?: string
-          mimeType?: string
-          size?: number
-          assetId?: string
+          sha1hash: string
+          extension: string
+          mimeType: string
+          size: number
+          assetId: string
           uploadId?: string
-          path?: string
-          url?: string
+          path: string
+          url: string
           source?: SanityAssetSourceData
         }
         media?: unknown
@@ -966,7 +967,7 @@ export type CategoryBySlugResult = {
               _id: string
               _type: 'sanity.imageAsset'
               metadata: SanityImageMetadata | null
-              url: string | null
+              url: string
             } | null
           }
           slug: string
@@ -1013,7 +1014,7 @@ export type TagBySlugResult = {
           _id: string
           _type: 'sanity.imageAsset'
           metadata: SanityImageMetadata | null
-          url: string | null
+          url: string
         } | null
       }
       slug: string
@@ -1051,14 +1052,14 @@ export type TagBySlugResult = {
             title?: string
             description?: string
             altText?: string
-            sha1hash?: string
-            extension?: string
-            mimeType?: string
-            size?: number
-            assetId?: string
+            sha1hash: string
+            extension: string
+            mimeType: string
+            size: number
+            assetId: string
             uploadId?: string
-            path?: string
-            url?: string
+            path: string
+            url: string
             source?: SanityAssetSourceData
           }
           media?: unknown
@@ -1152,7 +1153,7 @@ export type SearchResult = Array<
             _id: string
             _type: 'sanity.imageAsset'
             metadata: SanityImageMetadata | null
-            url: string | null
+            url: string
           } | null
         }
         slug: string
@@ -1191,14 +1192,14 @@ export type SearchResult = Array<
               title?: string
               description?: string
               altText?: string
-              sha1hash?: string
-              extension?: string
-              mimeType?: string
-              size?: number
-              assetId?: string
+              sha1hash: string
+              extension: string
+              mimeType: string
+              size: number
+              assetId: string
               uploadId?: string
-              path?: string
-              url?: string
+              path: string
+              url: string
               source?: SanityAssetSourceData
             }
             media?: unknown
@@ -1359,14 +1360,14 @@ export type PageBySlugResult = {
           title?: string
           description?: string
           altText?: string
-          sha1hash?: string
-          extension?: string
-          mimeType?: string
-          size?: number
-          assetId?: string
+          sha1hash: string
+          extension: string
+          mimeType: string
+          size: number
+          assetId: string
           uploadId?: string
-          path?: string
-          url?: string
+          path: string
+          url: string
           source?: SanityAssetSourceData
         }
         media?: unknown
@@ -1406,7 +1407,7 @@ export type PageBySlugResult = {
 
 // Source: lib/sanity.queries.ts
 // Variable: rightSidebarQuery
-// Query: {  "whatsNew": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What's New!"]._id)][0]{    _id,    title,    "slug": slug.current,    "author": author->{        name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,    },    publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  },  "seniorCenterNewsletters": *[(_type == "post" && isArchived != true && references(*[_type == "category" && title == "City of Maricopa Community / Senior Center"]._id))][0..1] | order(publishedAt desc){    _id,    title,    "slug": slug.current,    publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  },  "nonProfit": *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{    ...,    "slug": slug.current,  }}
+// Query: {  "whatsNew": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What's New!"]._id)][0]{    _id,    title,    "slug": slug.current,    "author": author->{        name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,    },    publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  },  "seniorCenterNewsletters": *[(_type == "post" && isArchived != true && references(*[_type == "category" && title == "City of Maricopa Community / Senior Center"]._id))][0..1] | order(publishedAt desc){    _id,    title,    "slug": slug.current,    publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  },  "nonProfit": *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{    ...,    "slug": slug.current,  },  "newsletter": *[_type == "post" && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"]._id)][0]{    _id,    title,    "slug": slug.current,    publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  }}
 export type RightSidebarQueryResult = {
   whatsNew: {
     _id: string
@@ -1419,7 +1420,7 @@ export type RightSidebarQueryResult = {
           _id: string
           _type: 'sanity.imageAsset'
           metadata: SanityImageMetadata | null
-          url: string | null
+          url: string
         } | null
       }
       slug: string
@@ -1444,6 +1445,13 @@ export type RightSidebarQueryResult = {
     slug: string
     description: BlockContent
     highlight?: boolean
+  } | null
+  newsletter: {
+    _id: string
+    title: string
+    slug: string
+    publishedAt: string
+    excerpt: string
   } | null
 }
 
@@ -1484,7 +1492,7 @@ export type QueryArticleSlugPageDataResult = {
         _id: string
         _type: 'sanity.imageAsset'
         metadata: SanityImageMetadata | null
-        url: string | null
+        url: string
       } | null
     }
     slug: string
@@ -1522,14 +1530,14 @@ export type QueryArticleSlugPageDataResult = {
           title?: string
           description?: string
           altText?: string
-          sha1hash?: string
-          extension?: string
-          mimeType?: string
-          size?: number
-          assetId?: string
+          sha1hash: string
+          extension: string
+          mimeType: string
+          size: number
+          assetId: string
           uploadId?: string
-          path?: string
-          url?: string
+          path: string
+          url: string
           source?: SanityAssetSourceData
         }
         media?: unknown
@@ -1586,7 +1594,7 @@ declare module '@sanity/client' {
     '\n*[(_type == "post" && isArchived != true && (title match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*")) ||\n(_type == "service" && (title match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*"))] | score(\n  boost(title match "*" + $query + "*", 4)\n)| order(_score desc){\n  ...,\n  _score,\n  _type == "post" => {\n    \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n  },\n  _type == "service" => {\n    ...,\n    tags[]->{\n      _id,\n      title,\n      "slug": slug.current,\n    }\n  },\n}\n': SearchResult
     '*[_type == "navigation"][0]{\n  "headerPrimary": headerPrimary[]{\n    _key,\n    "link": link{\n      url,\n      text,\n      reference->{\n        _id,\n        _type,\n        title,\n        "slug": slug.current\n      }\n    },\n    children\n  },\n  "footer": footer[]{\n    _key,\n    url,\n    text,\n    reference->{\n      _id,\n      _type,\n      title,\n      "slug": slug.current\n    }\n  },\n}': NavigationQueryResult
     '*[_type == "page" && slug.current == $slug][0]{\n  title,\n  "slug": slug.current,\n  "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n}': PageBySlugResult
-    '{\n  "whatsNew": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What\'s New!"]._id)][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    "author": author->{\n      \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n    },\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  },\n  "seniorCenterNewsletters": *[(_type == "post" && isArchived != true && references(*[_type == "category" && title == "City of Maricopa Community / Senior Center"]._id))][0..1] | order(publishedAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  },\n  "nonProfit": *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{\n    ...,\n    "slug": slug.current,\n  }\n}': RightSidebarQueryResult
+    '{\n  "whatsNew": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What\'s New!"]._id)][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    "author": author->{\n      \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n    },\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  },\n  "seniorCenterNewsletters": *[(_type == "post" && isArchived != true && references(*[_type == "category" && title == "City of Maricopa Community / Senior Center"]._id))][0..1] | order(publishedAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  },\n  "nonProfit": *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{\n    ...,\n    "slug": slug.current,\n  },\n  "newsletter": *[_type == "post" && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"]._id)][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  }\n}': RightSidebarQueryResult
     '\n  *[_type == "category" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{\n    _id,\n    title,\n    "slug": slug.current,\n    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])\n  } | order(title asc, count desc)\n': HighlightedCategoriesResult
     '\n  *[_type == "tag" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{\n    _id,\n    title,\n    "slug": slug.current,\n    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])\n  } | order(title asc, count desc)\n': HighlightedTagsResult
     '\n  *[_type == "post" && slug.current == $slug][0]{\n    \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n  }\n': QueryArticleSlugPageDataResult

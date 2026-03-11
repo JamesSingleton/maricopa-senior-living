@@ -1,8 +1,10 @@
 import 'server-only'
 
-import { client } from './sanity.client'
-
 import type { QueryParams } from 'next-sanity'
+import type { CategoryPage, GroupItem } from '@/types/common'
+import type { Post } from '@/types/Post'
+import type { RightSidebarQueryResult } from './sanity/sanity.types'
+import { client } from './sanity.client'
 import {
   allCategories,
   allPostSlugs,
@@ -15,8 +17,6 @@ import {
   search,
   tagBySlug,
 } from './sanity.queries'
-import { CategoryPage, GroupItem, RightSidebar } from '@/types/common'
-import { Post } from '@/types/Post'
 
 export const token = process.env.SANITY_API_READ_TOKEN
 
@@ -44,7 +44,7 @@ export function getNavigation() {
 }
 
 export function getRightSidebar() {
-  return sanityFetch<RightSidebar>({
+  return sanityFetch<RightSidebarQueryResult>({
     query: rightSidebarQuery,
     tags: ['category', 'tag', 'post'],
   })
@@ -97,7 +97,7 @@ export function getTags() {
 export function getSearchResults(query: string) {
   return sanityFetch<any>({
     query: search,
-    // @ts-ignore
+    // @ts-expect-error
     params: { query },
     tags: ['post', 'tag', 'category', 'service'],
   })
