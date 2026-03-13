@@ -1,4 +1,5 @@
 import { CalendarIcon } from "@heroicons/react/24/outline";
+import { sanityFetch } from "@maricopa-senior-living/sanity/live";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -8,7 +9,6 @@ import { CustomPortableText } from "@/components/CustomPortableText";
 import DateComponent from "@/components/Date";
 import ImageComponent from "@/components/ImageComponent";
 import { client } from "@/lib/sanity/client";
-import { sanityFetch } from "@/lib/sanity/live";
 import {
   queryArticlePaths,
   queryArticleSlugPageData,

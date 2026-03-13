@@ -1,4 +1,5 @@
 import "@/app/globals.css";
+import { SanityLive } from "@maricopa-senior-living/sanity/live";
 import type { Metadata } from "next";
 import Script from "next/script";
 import PlausibleProvider from "next-plausible";
@@ -9,7 +10,6 @@ import Header from "@/components/Header";
 import RightSidebar from "@/components/RightSidebar";
 import ScrollToTop from "@/components/ScrollToTop";
 import { baseUrl } from "@/lib/constants";
-import { SanityLive } from "@/lib/sanity/live";
 import { getNavigation } from "@/lib/sanity.fetch";
 
 export const metadata: Metadata = {

@@ -1,10 +1,10 @@
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { CurrencyDollarIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
+import { sanityFetch } from "@maricopa-senior-living/sanity/live";
 import Link from "next/link";
 
 import DateComponent from "@/components/Date";
 import SearchBar from "@/components/SearchBar";
-import { sanityFetch } from "@/lib/sanity/live";
 import { highlightedCategories, highlightedTags } from "@/lib/sanity/query";
 import { getRightSidebar } from "@/lib/sanity.fetch";
 import { CustomPortableText } from "./CustomPortableText";

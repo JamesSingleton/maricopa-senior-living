@@ -1,9 +1,9 @@
+import { sanityFetch } from "@maricopa-senior-living/sanity/live";
 import type { Metadata, ResolvingMetadata } from "next";
 
 import { CustomPortableText } from "@/components/CustomPortableText";
 import ImageComponent from "@/components/ImageComponent";
 import { baseUrl } from "@/lib/constants";
-import { sanityFetch } from "@/lib/sanity/live";
 
 type Props = {
   params: Promise<{ id: string }>;

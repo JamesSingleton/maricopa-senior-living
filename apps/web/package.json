@@ -21,6 +21,7 @@
     "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.2.0",
     "@maricopa-senior-living/env": "workspace:*",
+    "@maricopa-senior-living/sanity": "workspace:*",
     "@maricopa-senior-living/ui": "workspace:*",
     "@portabletext/react": "^6.0.3",
     "@sanity/asset-utils": "^2.3.0",
