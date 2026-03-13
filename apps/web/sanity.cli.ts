@@ -5,10 +5,16 @@ export default defineCliConfig({
     projectId: "bksfw1p8",
     dataset: "production",
   },
+  schemaExtraction: {
+    enabled: true,
+    enforceRequiredFields: true,
+  },
   typegen: {
-    path: "./**/*.{ts,tsx,js,jsx}",
-    generates: "./lib/sanity/sanity.types.ts",
+    enabled: true,
+    formatGeneratedCode: true,
+    path: "../../packages/sanity/src/**/*.{ts,tsx,js,jsx}",
     schema: "schema.json",
+    generates: "../../packages/sanity/src/sanity.types.ts",
     overloadClientMethods: true,
   },
 });

@@ -1,0 +1,30 @@
+{
+  "name": "@maricopa-senior-living/sanity",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@maricopa-senior-living/env": "workspace:*",
+    "@sanity/asset-utils": "^2.3.0",
+    "@sanity/client": "catalog:",
+    "@sanity/image-url": "^2.0.3",
+    "next-sanity": "^12.1.1",
+    "sanity-image": "^1.1.0"
+  },
+  "devDependencies": {
+    "@maricopa-senior-living/typescript-config": "workspace:*",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "typescript": "catalog:"
+  },
+  "exports": {
+    "./client": "./src/client.ts",
+    "./query": "./src/query.ts",
+    "./live": "./src/live.ts",
+    "./image": "./src/image.ts",
+    "./types": "./src/sanity.types.ts"
+  }
+}

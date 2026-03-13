@@ -10,9 +10,12 @@
     "start": "next start",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "sanity:extract": "sanity schema extract",
     "sanity-manifest": "npx sanity manifest extract --path public/admin/static",
     "sanity-deploy": "npx sanity schema deploy --manifest-dir public/admin/static",
-    "type": "sanity schema extract --enforce-required-fields && sanity typegen generate"
+    "sanity:type": "sanity typegen generate"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
