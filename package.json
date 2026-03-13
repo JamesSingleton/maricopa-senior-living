@@ -17,8 +17,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.4.6",
     "@maricopa-senior-living/typescript-config": "workspace:*",
-    "prettier": "^3.8.1",
     "turbo": "^2.8.16",
-    "typescript": "5.9.3"
+    "typescript": "catalog:"
   }
 }
