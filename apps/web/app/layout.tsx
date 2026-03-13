@@ -1,23 +1,29 @@
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Geist, Geist_Mono } from "next/font/google";
 
-import '@maricopa-senior-living/ui/globals.css'
+import "@maricopa-senior-living/ui/globals.css";
 
 const fontSans = Geist({
-  subsets: ['latin'],
-  variable: '--font-sans',
-})
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 const fontMono = Geist_Mono({
-  subsets: ['latin'],
-  variable: '--font-mono',
-})
+  subsets: ["latin"],
+  variable: "--font-mono",
+});
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased`}>
+      <body
+        className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased`}
+      >
         {children}
       </body>
     </html>
-  )
+  );
 }

@@ -14,636 +14,643 @@
 
 // Source: schema.json
 export type TimeValue =
-  | '00:00'
-  | '00:30'
-  | '01:00'
-  | '01:30'
-  | '02:00'
-  | '02:30'
-  | '03:00'
-  | '03:30'
-  | '04:00'
-  | '04:30'
-  | '05:00'
-  | '05:30'
-  | '06:00'
-  | '06:30'
-  | '07:00'
-  | '07:30'
-  | '08:00'
-  | '08:30'
-  | '09:00'
-  | '09:30'
-  | '10:00'
-  | '10:30'
-  | '11:00'
-  | '11:30'
-  | '12:00'
-  | '12:30'
-  | '13:00'
-  | '13:30'
-  | '14:00'
-  | '14:30'
-  | '15:00'
-  | '15:30'
-  | '16:00'
-  | '16:30'
-  | '17:00'
-  | '17:30'
-  | '18:00'
-  | '18:30'
-  | '19:00'
-  | '19:30'
-  | '20:00'
-  | '20:30'
-  | '21:00'
-  | '21:30'
-  | '22:00'
-  | '22:30'
-  | '23:00'
-  | '23:30'
+  | "00:00"
+  | "00:30"
+  | "01:00"
+  | "01:30"
+  | "02:00"
+  | "02:30"
+  | "03:00"
+  | "03:30"
+  | "04:00"
+  | "04:30"
+  | "05:00"
+  | "05:30"
+  | "06:00"
+  | "06:30"
+  | "07:00"
+  | "07:30"
+  | "08:00"
+  | "08:30"
+  | "09:00"
+  | "09:30"
+  | "10:00"
+  | "10:30"
+  | "11:00"
+  | "11:30"
+  | "12:00"
+  | "12:30"
+  | "13:00"
+  | "13:30"
+  | "14:00"
+  | "14:30"
+  | "15:00"
+  | "15:30"
+  | "16:00"
+  | "16:30"
+  | "17:00"
+  | "17:30"
+  | "18:00"
+  | "18:30"
+  | "19:00"
+  | "19:30"
+  | "20:00"
+  | "20:30"
+  | "21:00"
+  | "21:30"
+  | "22:00"
+  | "22:30"
+  | "23:00"
+  | "23:30";
 
 export type CategoryReference = {
-  _ref: string
-  _type: 'reference'
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: 'category'
-}
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "category";
+};
 
 export type TagReference = {
-  _ref: string
-  _type: 'reference'
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: 'tag'
-}
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "tag";
+};
 
 export type PageReference = {
-  _ref: string
-  _type: 'reference'
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: 'page'
-}
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "page";
+};
 
 export type Link = {
-  _type: 'link'
-  reference?: CategoryReference | TagReference | PageReference
-  text?: string
-  url?: string
-}
+  _type: "link";
+  reference?: CategoryReference | TagReference | PageReference;
+  text?: string;
+  url?: string;
+};
 
 export type SanityImageAssetReference = {
-  _ref: string
-  _type: 'reference'
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
-}
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
 
 export type SanityFileAssetReference = {
-  _ref: string
-  _type: 'reference'
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: 'sanity.fileAsset'
-}
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+};
 
 export type BlockContent = Array<
   | {
       children?: Array<{
-        marks?: Array<string>
-        text?: string
-        _type: 'span'
-        _key: string
-      }>
-      style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
-      listItem?: 'bullet' | 'number'
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+      listItem?: "bullet" | "number";
       markDefs?: Array<{
-        href?: string
-        _type: 'link'
-        _key: string
-      }>
-      level?: number
-      _type: 'block'
-      _key: string
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
     }
   | {
-      asset: SanityImageAssetReference
-      media?: unknown
-      hotspot?: SanityImageHotspot
-      crop?: SanityImageCrop
-      alt: string
-      _type: 'image'
-      _key: string
+      asset: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt: string;
+      _type: "image";
+      _key: string;
     }
   | {
-      asset: SanityFileAssetReference
-      media?: unknown
-      description: string
-      _type: 'attachment'
-      _key: string
+      asset: SanityFileAssetReference;
+      media?: unknown;
+      description: string;
+      _type: "attachment";
+      _key: string;
     }
->
+>;
 
 export type DayAndTime = {
-  _type: 'dayAndTime'
-  day?: 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday'
-  opensAt?: TimeValue
-  closesAt?: TimeValue
-}
+  _type: "dayAndTime";
+  day?:
+    | "Monday"
+    | "Tuesday"
+    | "Wednesday"
+    | "Thursday"
+    | "Friday"
+    | "Saturday"
+    | "Sunday";
+  opensAt?: TimeValue;
+  closesAt?: TimeValue;
+};
 
 export type Navigation = {
-  _id: string
-  _type: 'navigation'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
+  _id: string;
+  _type: "navigation";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
   headerPrimary?: Array<{
-    link?: Link
+    link?: Link;
     children?: Array<{
-      link?: Link
-      _type: 'item'
-      _key: string
-    }>
-    _type: 'item'
-    _key: string
-  }>
+      link?: Link;
+      _type: "item";
+      _key: string;
+    }>;
+    _type: "item";
+    _key: string;
+  }>;
   footer?: Array<
     {
-      _key: string
+      _key: string;
     } & Link
-  >
-}
+  >;
+};
 
 export type Home = {
-  _id: string
-  _type: 'home'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
+  _id: string;
+  _type: "home";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
   image?: {
-    asset?: SanityImageAssetReference
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    alt: string
-    caption?: string
-    _type: 'image'
-  }
-  content?: BlockContent
-}
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    caption?: string;
+    _type: "image";
+  };
+  content?: BlockContent;
+};
 
 export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top: number
-  bottom: number
-  left: number
-  right: number
-}
+  _type: "sanity.imageCrop";
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+};
 
 export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x: number
-  y: number
-  height: number
-  width: number
-}
+  _type: "sanity.imageHotspot";
+  x: number;
+  y: number;
+  height: number;
+  width: number;
+};
 
 export type Category = {
-  _id: string
-  _type: 'category'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title: string
-  slug: Slug
-  description: BlockContent
-  highlight?: boolean
-}
+  _id: string;
+  _type: "category";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  slug: Slug;
+  description: BlockContent;
+  highlight?: boolean;
+};
 
 export type Slug = {
-  _type: 'slug'
-  current: string
-  source?: string
-}
+  _type: "slug";
+  current: string;
+  source?: string;
+};
 
 export type Tag = {
-  _id: string
-  _type: 'tag'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title: string
-  slug: Slug
-  description: BlockContent
-  highlight?: boolean
-}
+  _id: string;
+  _type: "tag";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  slug: Slug;
+  description: BlockContent;
+  highlight?: boolean;
+};
 
 export type Service = {
-  _id: string
-  _type: 'service'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title: string
+  _id: string;
+  _type: "service";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
   categories: Array<
     {
-      _key: string
+      _key: string;
     } & CategoryReference
-  >
+  >;
   tags?: Array<
     {
-      _key: string
+      _key: string;
     } & TagReference
-  >
-  description?: BlockContent
-  audience?: BlockContent
-  website?: string
-  phone?: string
-  address?: string
+  >;
+  description?: BlockContent;
+  audience?: BlockContent;
+  website?: string;
+  phone?: string;
+  address?: string;
   businessHours?: Array<
     {
-      _key: string
+      _key: string;
     } & DayAndTime
-  >
-  notes?: BlockContent
+  >;
+  notes?: BlockContent;
   attachments?: Array<{
-    asset?: SanityFileAssetReference
-    media?: unknown
-    name: string
-    _type: 'file'
-    _key: string
-  }>
-}
+    asset?: SanityFileAssetReference;
+    media?: unknown;
+    name: string;
+    _type: "file";
+    _key: string;
+  }>;
+};
 
 export type AuthorReference = {
-  _ref: string
-  _type: 'reference'
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: 'author'
-}
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "author";
+};
 
 export type Post = {
-  _id: string
-  _type: 'post'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title: string
-  slug: Slug
-  author: AuthorReference
+  _id: string;
+  _type: "post";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  slug: Slug;
+  author: AuthorReference;
   mainImage?: {
-    asset?: SanityImageAssetReference
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    alt: string
-    _type: 'image'
-  }
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+  };
   categories: Array<
     {
-      _key: string
+      _key: string;
     } & CategoryReference
-  >
+  >;
   tags?: Array<
     {
-      _key: string
+      _key: string;
     } & TagReference
-  >
-  publishedAt: string
-  isArchived?: boolean
-  body: BlockContent
-}
+  >;
+  publishedAt: string;
+  isArchived?: boolean;
+  body: BlockContent;
+};
 
 export type Page = {
-  _id: string
-  _type: 'page'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title: string
-  slug: Slug
-  body: BlockContent
-}
+  _id: string;
+  _type: "page";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  slug: Slug;
+  body: BlockContent;
+};
 
 export type Author = {
-  _id: string
-  _type: 'author'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  name: string
-  slug: Slug
+  _id: string;
+  _type: "author";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name: string;
+  slug: Slug;
   image: {
-    asset?: SanityImageAssetReference
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    _type: 'image'
-  }
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
   bio?: Array<{
     children?: Array<{
-      marks?: Array<string>
-      text?: string
-      _type: 'span'
-      _key: string
-    }>
-    style?: 'normal'
-    listItem?: never
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal";
+    listItem?: never;
     markDefs?: Array<{
-      href?: string
-      _type: 'link'
-      _key: string
-    }>
-    level?: number
-    _type: 'block'
-    _key: string
-  }>
-}
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+};
 
 export type SanityVideoMetadataPlayback = {
-  _type: 'sanity.videoMetadata.playback'
-  policy?: string
-}
+  _type: "sanity.videoMetadata.playback";
+  policy?: string;
+};
 
 export type SanityVideoMetadata = {
-  _type: 'sanity.videoMetadata'
-  duration?: number
-  framerate?: number
-  aspectRatio?: number
-  hasAudio?: boolean
-  codec?: string
-  bitrate?: number
-}
+  _type: "sanity.videoMetadata";
+  duration?: number;
+  framerate?: number;
+  aspectRatio?: number;
+  hasAudio?: boolean;
+  codec?: string;
+  bitrate?: number;
+};
 
 export type SanityVideoAsset = {
-  _id: string
-  _type: 'sanity.videoAsset'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  originalFilename?: string
-  label?: string
-  title?: string
-  description?: string
-  altText?: string
-  creditLine?: string
-  metadata?: SanityVideoMetadata
-  sha1hash?: string
-  extension?: string
-  mimeType?: string
-  size?: number
-  assetId?: string
-  uploadId?: string
-  path?: string
-  url?: string
-}
+  _id: string;
+  _type: "sanity.videoAsset";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  originalFilename?: string;
+  label?: string;
+  title?: string;
+  description?: string;
+  altText?: string;
+  creditLine?: string;
+  metadata?: SanityVideoMetadata;
+  sha1hash?: string;
+  extension?: string;
+  mimeType?: string;
+  size?: number;
+  assetId?: string;
+  uploadId?: string;
+  path?: string;
+  url?: string;
+};
 
 export type SanityVideo = {
-  _type: 'sanity.video'
-  asset?: unknown
-  media?: unknown
-}
+  _type: "sanity.video";
+  asset?: unknown;
+  media?: unknown;
+};
 
 export type SanityAssistInstructionTask = {
-  _type: 'sanity.assist.instructionTask'
-  path?: string
-  instructionKey?: string
-  started?: string
-  updated?: string
-  info?: string
-}
+  _type: "sanity.assist.instructionTask";
+  path?: string;
+  instructionKey?: string;
+  started?: string;
+  updated?: string;
+  info?: string;
+};
 
 export type SanityAssistTaskStatus = {
-  _type: 'sanity.assist.task.status'
+  _type: "sanity.assist.task.status";
   tasks?: Array<
     {
-      _key: string
+      _key: string;
     } & SanityAssistInstructionTask
-  >
-}
+  >;
+};
 
 export type SanityAssistSchemaTypeAnnotations = {
-  _type: 'sanity.assist.schemaType.annotations'
-  title?: string
+  _type: "sanity.assist.schemaType.annotations";
+  title?: string;
   fields?: Array<
     {
-      _key: string
+      _key: string;
     } & SanityAssistSchemaTypeField
-  >
-}
+  >;
+};
 
 export type SanityAssistOutputType = {
-  _type: 'sanity.assist.output.type'
-  type?: string
-}
+  _type: "sanity.assist.output.type";
+  type?: string;
+};
 
 export type SanityAssistOutputField = {
-  _type: 'sanity.assist.output.field'
-  path?: string
-}
+  _type: "sanity.assist.output.field";
+  path?: string;
+};
 
 export type AssistInstructionContextReference = {
-  _ref: string
-  _type: 'reference'
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: 'assist.instruction.context'
-}
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "assist.instruction.context";
+};
 
 export type SanityAssistInstructionContext = {
-  _type: 'sanity.assist.instruction.context'
-  reference: AssistInstructionContextReference
-}
+  _type: "sanity.assist.instruction.context";
+  reference: AssistInstructionContextReference;
+};
 
 export type AssistInstructionContext = {
-  _id: string
-  _type: 'assist.instruction.context'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title?: string
+  _id: string;
+  _type: "assist.instruction.context";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
   context?: Array<{
     children?: Array<{
-      marks?: Array<string>
-      text?: string
-      _type: 'span'
-      _key: string
-    }>
-    style?: 'normal'
-    listItem?: never
-    markDefs?: null
-    level?: number
-    _type: 'block'
-    _key: string
-  }>
-}
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal";
+    listItem?: never;
+    markDefs?: null;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+};
 
 export type SanityAssistInstructionUserInput = {
-  _type: 'sanity.assist.instruction.userInput'
-  message: string
-  description?: string
-}
+  _type: "sanity.assist.instruction.userInput";
+  message: string;
+  description?: string;
+};
 
 export type SanityAssistInstructionPrompt = Array<{
   children?: Array<
     | {
-        marks?: Array<string>
-        text?: string
-        _type: 'span'
-        _key: string
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
       }
     | ({
-        _key: string
+        _key: string;
       } & SanityAssistInstructionFieldRef)
     | ({
-        _key: string
+        _key: string;
       } & SanityAssistInstructionContext)
     | ({
-        _key: string
+        _key: string;
       } & SanityAssistInstructionUserInput)
-  >
-  style?: 'normal'
-  listItem?: never
-  markDefs?: null
-  level?: number
-  _type: 'block'
-  _key: string
-}>
+  >;
+  style?: "normal";
+  listItem?: never;
+  markDefs?: null;
+  level?: number;
+  _type: "block";
+  _key: string;
+}>;
 
 export type SanityAssistInstructionFieldRef = {
-  _type: 'sanity.assist.instruction.fieldRef'
-  path?: string
-}
+  _type: "sanity.assist.instruction.fieldRef";
+  path?: string;
+};
 
 export type SanityAssistInstruction = {
-  _type: 'sanity.assist.instruction'
-  prompt?: SanityAssistInstructionPrompt
-  icon?: string
-  title?: string
-  userId?: string
-  createdById?: string
+  _type: "sanity.assist.instruction";
+  prompt?: SanityAssistInstructionPrompt;
+  icon?: string;
+  title?: string;
+  userId?: string;
+  createdById?: string;
   output?: Array<
     | ({
-        _key: string
+        _key: string;
       } & SanityAssistOutputField)
     | ({
-        _key: string
+        _key: string;
       } & SanityAssistOutputType)
-  >
-}
+  >;
+};
 
 export type SanityAssistSchemaTypeField = {
-  _type: 'sanity.assist.schemaType.field'
-  path?: string
+  _type: "sanity.assist.schemaType.field";
+  path?: string;
   instructions?: Array<
     {
-      _key: string
+      _key: string;
     } & SanityAssistInstruction
-  >
-}
+  >;
+};
 
 export type MediaTag = {
-  _id: string
-  _type: 'media.tag'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  name?: Slug
-}
+  _id: string;
+  _type: "media.tag";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: Slug;
+};
 
 export type SanityImagePaletteSwatch = {
-  _type: 'sanity.imagePaletteSwatch'
-  background?: string
-  foreground?: string
-  population?: number
-  title?: string
-}
+  _type: "sanity.imagePaletteSwatch";
+  background?: string;
+  foreground?: string;
+  population?: number;
+  title?: string;
+};
 
 export type SanityImagePalette = {
-  _type: 'sanity.imagePalette'
-  darkMuted?: SanityImagePaletteSwatch
-  lightVibrant?: SanityImagePaletteSwatch
-  darkVibrant?: SanityImagePaletteSwatch
-  vibrant?: SanityImagePaletteSwatch
-  dominant?: SanityImagePaletteSwatch
-  lightMuted?: SanityImagePaletteSwatch
-  muted?: SanityImagePaletteSwatch
-}
+  _type: "sanity.imagePalette";
+  darkMuted?: SanityImagePaletteSwatch;
+  lightVibrant?: SanityImagePaletteSwatch;
+  darkVibrant?: SanityImagePaletteSwatch;
+  vibrant?: SanityImagePaletteSwatch;
+  dominant?: SanityImagePaletteSwatch;
+  lightMuted?: SanityImagePaletteSwatch;
+  muted?: SanityImagePaletteSwatch;
+};
 
 export type SanityImageDimensions = {
-  _type: 'sanity.imageDimensions'
-  height: number
-  width: number
-  aspectRatio: number
-}
+  _type: "sanity.imageDimensions";
+  height: number;
+  width: number;
+  aspectRatio: number;
+};
 
 export type SanityImageMetadata = {
-  _type: 'sanity.imageMetadata'
-  location?: Geopoint
-  dimensions?: SanityImageDimensions
-  palette?: SanityImagePalette
-  lqip?: string
-  blurHash?: string
-  thumbHash?: string
-  hasAlpha?: boolean
-  isOpaque?: boolean
-}
+  _type: "sanity.imageMetadata";
+  location?: Geopoint;
+  dimensions?: SanityImageDimensions;
+  palette?: SanityImagePalette;
+  lqip?: string;
+  blurHash?: string;
+  thumbHash?: string;
+  hasAlpha?: boolean;
+  isOpaque?: boolean;
+};
 
 export type SanityFileAsset = {
-  _id: string
-  _type: 'sanity.fileAsset'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  originalFilename?: string
-  label?: string
-  title?: string
-  description?: string
-  altText?: string
-  sha1hash: string
-  extension: string
-  mimeType: string
-  size: number
-  assetId: string
-  uploadId?: string
-  path: string
-  url: string
-  source?: SanityAssetSourceData
-}
+  _id: string;
+  _type: "sanity.fileAsset";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  originalFilename?: string;
+  label?: string;
+  title?: string;
+  description?: string;
+  altText?: string;
+  sha1hash: string;
+  extension: string;
+  mimeType: string;
+  size: number;
+  assetId: string;
+  uploadId?: string;
+  path: string;
+  url: string;
+  source?: SanityAssetSourceData;
+};
 
 export type SanityAssetSourceData = {
-  _type: 'sanity.assetSourceData'
-  name?: string
-  id?: string
-  url?: string
-}
+  _type: "sanity.assetSourceData";
+  name?: string;
+  id?: string;
+  url?: string;
+};
 
 export type SanityImageAsset = {
-  _id: string
-  _type: 'sanity.imageAsset'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  originalFilename?: string
-  label?: string
-  title?: string
-  description?: string
-  altText?: string
-  sha1hash: string
-  extension: string
-  mimeType: string
-  size: number
-  assetId: string
-  uploadId?: string
-  path: string
-  url: string
-  metadata?: SanityImageMetadata
-  source?: SanityAssetSourceData
-}
+  _id: string;
+  _type: "sanity.imageAsset";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  originalFilename?: string;
+  label?: string;
+  title?: string;
+  description?: string;
+  altText?: string;
+  sha1hash: string;
+  extension: string;
+  mimeType: string;
+  size: number;
+  assetId: string;
+  uploadId?: string;
+  path: string;
+  url: string;
+  metadata?: SanityImageMetadata;
+  source?: SanityAssetSourceData;
+};
 
 export type Geopoint = {
-  _type: 'geopoint'
-  lat?: number
-  lng?: number
-  alt?: number
-}
+  _type: "geopoint";
+  lat?: number;
+  lng?: number;
+  alt?: number;
+};
 
 export type AllSanitySchemaTypes =
   | TimeValue
@@ -692,912 +699,960 @@ export type AllSanitySchemaTypes =
   | SanityFileAsset
   | SanityAssetSourceData
   | SanityImageAsset
-  | Geopoint
+  | Geopoint;
 
-export declare const internalGroqTypeReferenceTo: unique symbol
+export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: lib/sanity.queries.ts
 // Variable: allPosts
 // Query: *[_type == "post" && isArchived != true] | order(publishedAt desc){    _id,  _updatedAt,  _type,  title,  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  "slug": slug.current,  "author": author->{      name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,  },  mainImage,  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  "tags": tags[]->{    _id,    title,    "slug": slug.current,  } {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  },  publishedAt,  "body": body[]{    ...,    _type == "attachment" => {      ...,      asset->    }  },}
 export type AllPostsResult = Array<{
-  _id: string
-  _updatedAt: string
-  _type: 'post'
-  title: string
-  excerpt: string
-  slug: string
+  _id: string;
+  _updatedAt: string;
+  _type: "post";
+  title: string;
+  excerpt: string;
+  slug: string;
   author: {
-    name: string
+    name: string;
     image: {
       asset: {
-        _id: string
-        _type: 'sanity.imageAsset'
-        metadata: SanityImageMetadata | null
-        url: string
-      } | null
-    }
-    slug: string
-  }
+        _id: string;
+        _type: "sanity.imageAsset";
+        metadata: SanityImageMetadata | null;
+        url: string;
+      } | null;
+    };
+    slug: string;
+  };
   mainImage: {
-    asset?: SanityImageAssetReference
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    alt: string
-    _type: 'image'
-  } | null
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+  } | null;
   categories: Array<{
-    _id: string
-    title: string
-    slug: string
-  }>
+    _id: string;
+    title: string;
+    slug: string;
+  }>;
   tags: Array<{
-    _id: string
-    title: string
-    slug: string
-    rank: 2
-  }> | null
-  publishedAt: string
+    _id: string;
+    title: string;
+    slug: string;
+    rank: 2;
+  }> | null;
+  publishedAt: string;
   body: Array<
     | {
         asset: {
-          _id: string
-          _type: 'sanity.fileAsset'
-          _createdAt: string
-          _updatedAt: string
-          _rev: string
-          originalFilename?: string
-          label?: string
-          title?: string
-          description?: string
-          altText?: string
-          sha1hash: string
-          extension: string
-          mimeType: string
-          size: number
-          assetId: string
-          uploadId?: string
-          path: string
-          url: string
-          source?: SanityAssetSourceData
-        }
-        media?: unknown
-        description: string
-        _type: 'attachment'
-        _key: string
+          _id: string;
+          _type: "sanity.fileAsset";
+          _createdAt: string;
+          _updatedAt: string;
+          _rev: string;
+          originalFilename?: string;
+          label?: string;
+          title?: string;
+          description?: string;
+          altText?: string;
+          sha1hash: string;
+          extension: string;
+          mimeType: string;
+          size: number;
+          assetId: string;
+          uploadId?: string;
+          path: string;
+          url: string;
+          source?: SanityAssetSourceData;
+        };
+        media?: unknown;
+        description: string;
+        _type: "attachment";
+        _key: string;
       }
     | {
         children?: Array<{
-          marks?: Array<string>
-          text?: string
-          _type: 'span'
-          _key: string
-        }>
-        style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
-        listItem?: 'bullet' | 'number'
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
+        listItem?: "bullet" | "number";
         markDefs?: Array<{
-          href?: string
-          _type: 'link'
-          _key: string
-        }>
-        level?: number
-        _type: 'block'
-        _key: string
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
       }
     | {
-        asset: SanityImageAssetReference
-        media?: unknown
-        hotspot?: SanityImageHotspot
-        crop?: SanityImageCrop
-        alt: string
-        _type: 'image'
-        _key: string
+        asset: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt: string;
+        _type: "image";
+        _key: string;
       }
-  >
-}>
+  >;
+}>;
 
 // Source: lib/sanity.queries.ts
 // Variable: allPostSlugs
 // Query: *[_type == "post" && defined(slug.current) && isArchived != true][].slug.current
-export type AllPostSlugsResult = Array<string>
+export type AllPostSlugsResult = Array<string>;
 
 // Source: lib/sanity.queries.ts
 // Variable: postBySlug
 // Query: *[_type == "post" && slug.current == $slug && isArchived != true]{    _id,  _updatedAt,  _type,  title,  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  "slug": slug.current,  "author": author->{      name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,  },  mainImage,  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  "tags": tags[]->{    _id,    title,    "slug": slug.current,  } {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  },  publishedAt,  "body": body[]{    ...,    _type == "attachment" => {      ...,      asset->    }  },}[0]
 export type PostBySlugResult = {
-  _id: string
-  _updatedAt: string
-  _type: 'post'
-  title: string
-  excerpt: string
-  slug: string
+  _id: string;
+  _updatedAt: string;
+  _type: "post";
+  title: string;
+  excerpt: string;
+  slug: string;
   author: {
-    name: string
+    name: string;
     image: {
       asset: {
-        _id: string
-        _type: 'sanity.imageAsset'
-        metadata: SanityImageMetadata | null
-        url: string
-      } | null
-    }
-    slug: string
-  }
+        _id: string;
+        _type: "sanity.imageAsset";
+        metadata: SanityImageMetadata | null;
+        url: string;
+      } | null;
+    };
+    slug: string;
+  };
   mainImage: {
-    asset?: SanityImageAssetReference
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    alt: string
-    _type: 'image'
-  } | null
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+  } | null;
   categories: Array<{
-    _id: string
-    title: string
-    slug: string
-  }>
+    _id: string;
+    title: string;
+    slug: string;
+  }>;
   tags: Array<{
-    _id: string
-    title: string
-    slug: string
-    rank: 2
-  }> | null
-  publishedAt: string
+    _id: string;
+    title: string;
+    slug: string;
+    rank: 2;
+  }> | null;
+  publishedAt: string;
   body: Array<
     | {
         asset: {
-          _id: string
-          _type: 'sanity.fileAsset'
-          _createdAt: string
-          _updatedAt: string
-          _rev: string
-          originalFilename?: string
-          label?: string
-          title?: string
-          description?: string
-          altText?: string
-          sha1hash: string
-          extension: string
-          mimeType: string
-          size: number
-          assetId: string
-          uploadId?: string
-          path: string
-          url: string
-          source?: SanityAssetSourceData
-        }
-        media?: unknown
-        description: string
-        _type: 'attachment'
-        _key: string
+          _id: string;
+          _type: "sanity.fileAsset";
+          _createdAt: string;
+          _updatedAt: string;
+          _rev: string;
+          originalFilename?: string;
+          label?: string;
+          title?: string;
+          description?: string;
+          altText?: string;
+          sha1hash: string;
+          extension: string;
+          mimeType: string;
+          size: number;
+          assetId: string;
+          uploadId?: string;
+          path: string;
+          url: string;
+          source?: SanityAssetSourceData;
+        };
+        media?: unknown;
+        description: string;
+        _type: "attachment";
+        _key: string;
       }
     | {
         children?: Array<{
-          marks?: Array<string>
-          text?: string
-          _type: 'span'
-          _key: string
-        }>
-        style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
-        listItem?: 'bullet' | 'number'
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
+        listItem?: "bullet" | "number";
         markDefs?: Array<{
-          href?: string
-          _type: 'link'
-          _key: string
-        }>
-        level?: number
-        _type: 'block'
-        _key: string
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
       }
     | {
-        asset: SanityImageAssetReference
-        media?: unknown
-        hotspot?: SanityImageHotspot
-        crop?: SanityImageCrop
-        alt: string
-        _type: 'image'
-        _key: string
+        asset: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt: string;
+        _type: "image";
+        _key: string;
       }
-  >
-} | null
+  >;
+} | null;
 
 // Source: lib/sanity.queries.ts
 // Variable: allCategories
 // Query: *[_type == "category"][].slug.current
-export type AllCategoriesResult = Array<string>
+export type AllCategoriesResult = Array<string>;
 
 // Source: lib/sanity.queries.ts
 // Variable: categoryBySlug
 // Query: *[_type == "category" && slug.current == $slug]{  title,  "slug": slug.current,  description,  "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",  "combinedList": [    ...(*[_type == "service" && references(^._id)]{      ...,      tags[]->{        _id,        title,        "slug": slug.current,      }    }),    ...(*[_type == "post" && references(^._id) && isArchived != true]{      _id,      _updatedAt,      _type,      publishedAt,      title,      "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",      "slug": slug.current,      "author": author->{          name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,      },      "categories": categories[]->{        _id,        title,        "slug": slug.current,      },      "tags": tags[]->{        _id,        title,        "slug": slug.current,      }    })  ] {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  } | order(rank),}[0]
 export type CategoryBySlugResult = {
-  title: string
-  slug: string
-  description: BlockContent
-  excerpt: string
+  title: string;
+  slug: string;
+  description: BlockContent;
+  excerpt: string;
   combinedList: Array<
     | {
-        _id: string
-        _type: 'service'
-        _createdAt: string
-        _updatedAt: string
-        _rev: string
-        title: string
+        _id: string;
+        _type: "service";
+        _createdAt: string;
+        _updatedAt: string;
+        _rev: string;
+        title: string;
         categories: Array<
           {
-            _key: string
+            _key: string;
           } & CategoryReference
-        >
+        >;
         tags: Array<{
-          _id: string
-          title: string
-          slug: string
-        }> | null
-        description?: BlockContent
-        audience?: BlockContent
-        website?: string
-        phone?: string
-        address?: string
+          _id: string;
+          title: string;
+          slug: string;
+        }> | null;
+        description?: BlockContent;
+        audience?: BlockContent;
+        website?: string;
+        phone?: string;
+        address?: string;
         businessHours?: Array<
           {
-            _key: string
+            _key: string;
           } & DayAndTime
-        >
-        notes?: BlockContent
+        >;
+        notes?: BlockContent;
         attachments?: Array<{
-          asset?: SanityFileAssetReference
-          media?: unknown
-          name: string
-          _type: 'file'
-          _key: string
-        }>
-        rank: 1 | 2
+          asset?: SanityFileAssetReference;
+          media?: unknown;
+          name: string;
+          _type: "file";
+          _key: string;
+        }>;
+        rank: 1 | 2;
       }
     | {
-        _id: string
-        _updatedAt: string
-        _type: 'post'
-        publishedAt: string
-        title: string
-        excerpt: string
-        slug: string
+        _id: string;
+        _updatedAt: string;
+        _type: "post";
+        publishedAt: string;
+        title: string;
+        excerpt: string;
+        slug: string;
         author: {
-          name: string
+          name: string;
           image: {
             asset: {
-              _id: string
-              _type: 'sanity.imageAsset'
-              metadata: SanityImageMetadata | null
-              url: string
-            } | null
-          }
-          slug: string
-        }
+              _id: string;
+              _type: "sanity.imageAsset";
+              metadata: SanityImageMetadata | null;
+              url: string;
+            } | null;
+          };
+          slug: string;
+        };
         categories: Array<{
-          _id: string
-          title: string
-          slug: string
-        }>
+          _id: string;
+          title: string;
+          slug: string;
+        }>;
         tags: Array<{
-          _id: string
-          title: string
-          slug: string
-        }> | null
-        rank: 1 | 2
+          _id: string;
+          title: string;
+          slug: string;
+        }> | null;
+        rank: 1 | 2;
       }
-  >
-} | null
+  >;
+} | null;
 
 // Source: lib/sanity.queries.ts
 // Variable: allTags
 // Query: *[_type == "tag" && defined(slug.current)][].slug.current
-export type AllTagsResult = Array<string>
+export type AllTagsResult = Array<string>;
 
 // Source: lib/sanity.queries.ts
 // Variable: tagBySlug
 // Query: *[_type == "tag" && slug.current == $slug]{  title,  "slug": slug.current,  description,  "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",  "posts": *[_type == "post" && references(^._id) && isArchived != true]{      _id,  _updatedAt,  _type,  title,  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  "slug": slug.current,  "author": author->{      name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,  },  mainImage,  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  "tags": tags[]->{    _id,    title,    "slug": slug.current,  } {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  },  publishedAt,  "body": body[]{    ...,    _type == "attachment" => {      ...,      asset->    }  },  },  "services": *[_type == "service" && references(^._id)]{    ...,    tags[]->{      _id,      title,      "slug": slug.current,    }  },}[0]
 export type TagBySlugResult = {
-  title: string
-  slug: string
-  description: BlockContent
-  excerpt: string
+  title: string;
+  slug: string;
+  description: BlockContent;
+  excerpt: string;
   posts: Array<{
-    _id: string
-    _updatedAt: string
-    _type: 'post'
-    title: string
-    excerpt: string
-    slug: string
+    _id: string;
+    _updatedAt: string;
+    _type: "post";
+    title: string;
+    excerpt: string;
+    slug: string;
     author: {
-      name: string
+      name: string;
       image: {
         asset: {
-          _id: string
-          _type: 'sanity.imageAsset'
-          metadata: SanityImageMetadata | null
-          url: string
-        } | null
-      }
-      slug: string
-    }
+          _id: string;
+          _type: "sanity.imageAsset";
+          metadata: SanityImageMetadata | null;
+          url: string;
+        } | null;
+      };
+      slug: string;
+    };
     mainImage: {
-      asset?: SanityImageAssetReference
-      media?: unknown
-      hotspot?: SanityImageHotspot
-      crop?: SanityImageCrop
-      alt: string
-      _type: 'image'
-    } | null
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt: string;
+      _type: "image";
+    } | null;
     categories: Array<{
-      _id: string
-      title: string
-      slug: string
-    }>
+      _id: string;
+      title: string;
+      slug: string;
+    }>;
     tags: Array<{
-      _id: string
-      title: string
-      slug: string
-      rank: 2
-    }> | null
-    publishedAt: string
+      _id: string;
+      title: string;
+      slug: string;
+      rank: 2;
+    }> | null;
+    publishedAt: string;
     body: Array<
       | {
           asset: {
-            _id: string
-            _type: 'sanity.fileAsset'
-            _createdAt: string
-            _updatedAt: string
-            _rev: string
-            originalFilename?: string
-            label?: string
-            title?: string
-            description?: string
-            altText?: string
-            sha1hash: string
-            extension: string
-            mimeType: string
-            size: number
-            assetId: string
-            uploadId?: string
-            path: string
-            url: string
-            source?: SanityAssetSourceData
-          }
-          media?: unknown
-          description: string
-          _type: 'attachment'
-          _key: string
+            _id: string;
+            _type: "sanity.fileAsset";
+            _createdAt: string;
+            _updatedAt: string;
+            _rev: string;
+            originalFilename?: string;
+            label?: string;
+            title?: string;
+            description?: string;
+            altText?: string;
+            sha1hash: string;
+            extension: string;
+            mimeType: string;
+            size: number;
+            assetId: string;
+            uploadId?: string;
+            path: string;
+            url: string;
+            source?: SanityAssetSourceData;
+          };
+          media?: unknown;
+          description: string;
+          _type: "attachment";
+          _key: string;
         }
       | {
           children?: Array<{
-            marks?: Array<string>
-            text?: string
-            _type: 'span'
-            _key: string
-          }>
-          style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
-          listItem?: 'bullet' | 'number'
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?:
+            | "blockquote"
+            | "h1"
+            | "h2"
+            | "h3"
+            | "h4"
+            | "h5"
+            | "h6"
+            | "normal";
+          listItem?: "bullet" | "number";
           markDefs?: Array<{
-            href?: string
-            _type: 'link'
-            _key: string
-          }>
-          level?: number
-          _type: 'block'
-          _key: string
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
         }
       | {
-          asset: SanityImageAssetReference
-          media?: unknown
-          hotspot?: SanityImageHotspot
-          crop?: SanityImageCrop
-          alt: string
-          _type: 'image'
-          _key: string
+          asset: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt: string;
+          _type: "image";
+          _key: string;
         }
-    >
-  }>
+    >;
+  }>;
   services: Array<{
-    _id: string
-    _type: 'service'
-    _createdAt: string
-    _updatedAt: string
-    _rev: string
-    title: string
+    _id: string;
+    _type: "service";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    title: string;
     categories: Array<
       {
-        _key: string
+        _key: string;
       } & CategoryReference
-    >
+    >;
     tags: Array<{
-      _id: string
-      title: string
-      slug: string
-    }> | null
-    description?: BlockContent
-    audience?: BlockContent
-    website?: string
-    phone?: string
-    address?: string
+      _id: string;
+      title: string;
+      slug: string;
+    }> | null;
+    description?: BlockContent;
+    audience?: BlockContent;
+    website?: string;
+    phone?: string;
+    address?: string;
     businessHours?: Array<
       {
-        _key: string
+        _key: string;
       } & DayAndTime
-    >
-    notes?: BlockContent
+    >;
+    notes?: BlockContent;
     attachments?: Array<{
-      asset?: SanityFileAssetReference
-      media?: unknown
-      name: string
-      _type: 'file'
-      _key: string
-    }>
-  }>
-} | null
+      asset?: SanityFileAssetReference;
+      media?: unknown;
+      name: string;
+      _type: "file";
+      _key: string;
+    }>;
+  }>;
+} | null;
 
 // Source: lib/sanity.queries.ts
 // Variable: search
 // Query: *[(_type == "post" && isArchived != true && (title match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*")) ||(_type == "service" && (title match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*"))] | score(  boost(title match "*" + $query + "*", 4))| order(_score desc){  ...,  _score,  _type == "post" => {      _id,  _updatedAt,  _type,  title,  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  "slug": slug.current,  "author": author->{      name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,  },  mainImage,  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  "tags": tags[]->{    _id,    title,    "slug": slug.current,  } {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  },  publishedAt,  "body": body[]{    ...,    _type == "attachment" => {      ...,      asset->    }  },  },  _type == "service" => {    ...,    tags[]->{      _id,      title,      "slug": slug.current,    }  },}
 export type SearchResult = Array<
   | {
-      _id: string
-      _type: 'post'
-      _createdAt: string
-      _updatedAt: string
-      _rev: string
-      title: string
-      slug: string
+      _id: string;
+      _type: "post";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      title: string;
+      slug: string;
       author: {
-        name: string
+        name: string;
         image: {
           asset: {
-            _id: string
-            _type: 'sanity.imageAsset'
-            metadata: SanityImageMetadata | null
-            url: string
-          } | null
-        }
-        slug: string
-      }
+            _id: string;
+            _type: "sanity.imageAsset";
+            metadata: SanityImageMetadata | null;
+            url: string;
+          } | null;
+        };
+        slug: string;
+      };
       mainImage: {
-        asset?: SanityImageAssetReference
-        media?: unknown
-        hotspot?: SanityImageHotspot
-        crop?: SanityImageCrop
-        alt: string
-        _type: 'image'
-      } | null
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt: string;
+        _type: "image";
+      } | null;
       categories: Array<{
-        _id: string
-        title: string
-        slug: string
-      }>
+        _id: string;
+        title: string;
+        slug: string;
+      }>;
       tags: Array<{
-        _id: string
-        title: string
-        slug: string
-        rank: 2
-      }> | null
-      publishedAt: string
-      isArchived?: boolean
+        _id: string;
+        title: string;
+        slug: string;
+        rank: 2;
+      }> | null;
+      publishedAt: string;
+      isArchived?: boolean;
       body: Array<
         | {
             asset: {
-              _id: string
-              _type: 'sanity.fileAsset'
-              _createdAt: string
-              _updatedAt: string
-              _rev: string
-              originalFilename?: string
-              label?: string
-              title?: string
-              description?: string
-              altText?: string
-              sha1hash: string
-              extension: string
-              mimeType: string
-              size: number
-              assetId: string
-              uploadId?: string
-              path: string
-              url: string
-              source?: SanityAssetSourceData
-            }
-            media?: unknown
-            description: string
-            _type: 'attachment'
-            _key: string
+              _id: string;
+              _type: "sanity.fileAsset";
+              _createdAt: string;
+              _updatedAt: string;
+              _rev: string;
+              originalFilename?: string;
+              label?: string;
+              title?: string;
+              description?: string;
+              altText?: string;
+              sha1hash: string;
+              extension: string;
+              mimeType: string;
+              size: number;
+              assetId: string;
+              uploadId?: string;
+              path: string;
+              url: string;
+              source?: SanityAssetSourceData;
+            };
+            media?: unknown;
+            description: string;
+            _type: "attachment";
+            _key: string;
           }
         | {
             children?: Array<{
-              marks?: Array<string>
-              text?: string
-              _type: 'span'
-              _key: string
-            }>
-            style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
-            listItem?: 'bullet' | 'number'
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?:
+              | "blockquote"
+              | "h1"
+              | "h2"
+              | "h3"
+              | "h4"
+              | "h5"
+              | "h6"
+              | "normal";
+            listItem?: "bullet" | "number";
             markDefs?: Array<{
-              href?: string
-              _type: 'link'
-              _key: string
-            }>
-            level?: number
-            _type: 'block'
-            _key: string
+              href?: string;
+              _type: "link";
+              _key: string;
+            }>;
+            level?: number;
+            _type: "block";
+            _key: string;
           }
         | {
-            asset: SanityImageAssetReference
-            media?: unknown
-            hotspot?: SanityImageHotspot
-            crop?: SanityImageCrop
-            alt: string
-            _type: 'image'
-            _key: string
+            asset: SanityImageAssetReference;
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            alt: string;
+            _type: "image";
+            _key: string;
           }
-      >
-      _score: null
-      excerpt: string
+      >;
+      _score: null;
+      excerpt: string;
     }
   | {
-      _id: string
-      _type: 'service'
-      _createdAt: string
-      _updatedAt: string
-      _rev: string
-      title: string
+      _id: string;
+      _type: "service";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      title: string;
       categories: Array<
         {
-          _key: string
+          _key: string;
         } & CategoryReference
-      >
+      >;
       tags: Array<{
-        _id: string
-        title: string
-        slug: string
-      }> | null
-      description?: BlockContent
-      audience?: BlockContent
-      website?: string
-      phone?: string
-      address?: string
+        _id: string;
+        title: string;
+        slug: string;
+      }> | null;
+      description?: BlockContent;
+      audience?: BlockContent;
+      website?: string;
+      phone?: string;
+      address?: string;
       businessHours?: Array<
         {
-          _key: string
+          _key: string;
         } & DayAndTime
-      >
-      notes?: BlockContent
+      >;
+      notes?: BlockContent;
       attachments?: Array<{
-        asset?: SanityFileAssetReference
-        media?: unknown
-        name: string
-        _type: 'file'
-        _key: string
-      }>
-      _score: null
+        asset?: SanityFileAssetReference;
+        media?: unknown;
+        name: string;
+        _type: "file";
+        _key: string;
+      }>;
+      _score: null;
     }
->
+>;
 
 // Source: lib/sanity.queries.ts
 // Variable: navigationQuery
 // Query: *[_type == "navigation"][0]{  "headerPrimary": headerPrimary[]{    _key,    "link": link{      url,      text,      reference->{        _id,        _type,        title,        "slug": slug.current      }    },    children  },  "footer": footer[]{    _key,    url,    text,    reference->{      _id,      _type,      title,      "slug": slug.current    }  },}
 export type NavigationQueryResult = {
   headerPrimary: Array<{
-    _key: string
+    _key: string;
     link: {
-      url: string | null
-      text: string | null
+      url: string | null;
+      text: string | null;
       reference:
         | {
-            _id: string
-            _type: 'category'
-            title: string
-            slug: string
+            _id: string;
+            _type: "category";
+            title: string;
+            slug: string;
           }
         | {
-            _id: string
-            _type: 'page'
-            title: string
-            slug: string
+            _id: string;
+            _type: "page";
+            title: string;
+            slug: string;
           }
         | {
-            _id: string
-            _type: 'tag'
-            title: string
-            slug: string
+            _id: string;
+            _type: "tag";
+            title: string;
+            slug: string;
           }
-        | null
-    } | null
+        | null;
+    } | null;
     children: Array<{
-      link?: Link
-      _type: 'item'
-      _key: string
-    }> | null
-  }> | null
+      link?: Link;
+      _type: "item";
+      _key: string;
+    }> | null;
+  }> | null;
   footer: Array<{
-    _key: string
-    url: string | null
-    text: string | null
+    _key: string;
+    url: string | null;
+    text: string | null;
     reference:
       | {
-          _id: string
-          _type: 'category'
-          title: string
-          slug: string
+          _id: string;
+          _type: "category";
+          title: string;
+          slug: string;
         }
       | {
-          _id: string
-          _type: 'page'
-          title: string
-          slug: string
+          _id: string;
+          _type: "page";
+          title: string;
+          slug: string;
         }
       | {
-          _id: string
-          _type: 'tag'
-          title: string
-          slug: string
+          _id: string;
+          _type: "tag";
+          title: string;
+          slug: string;
         }
-      | null
-  }> | null
-} | null
+      | null;
+  }> | null;
+} | null;
 
 // Source: lib/sanity.queries.ts
 // Variable: pageBySlug
 // Query: *[_type == "page" && slug.current == $slug][0]{  title,  "slug": slug.current,  "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",  "body": body[]{    ...,    _type == "attachment" => {      ...,      asset->    }  },}
 export type PageBySlugResult = {
-  title: string
-  slug: string
-  excerpt: string
+  title: string;
+  slug: string;
+  excerpt: string;
   body: Array<
     | {
         asset: {
-          _id: string
-          _type: 'sanity.fileAsset'
-          _createdAt: string
-          _updatedAt: string
-          _rev: string
-          originalFilename?: string
-          label?: string
-          title?: string
-          description?: string
-          altText?: string
-          sha1hash: string
-          extension: string
-          mimeType: string
-          size: number
-          assetId: string
-          uploadId?: string
-          path: string
-          url: string
-          source?: SanityAssetSourceData
-        }
-        media?: unknown
-        description: string
-        _type: 'attachment'
-        _key: string
+          _id: string;
+          _type: "sanity.fileAsset";
+          _createdAt: string;
+          _updatedAt: string;
+          _rev: string;
+          originalFilename?: string;
+          label?: string;
+          title?: string;
+          description?: string;
+          altText?: string;
+          sha1hash: string;
+          extension: string;
+          mimeType: string;
+          size: number;
+          assetId: string;
+          uploadId?: string;
+          path: string;
+          url: string;
+          source?: SanityAssetSourceData;
+        };
+        media?: unknown;
+        description: string;
+        _type: "attachment";
+        _key: string;
       }
     | {
         children?: Array<{
-          marks?: Array<string>
-          text?: string
-          _type: 'span'
-          _key: string
-        }>
-        style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
-        listItem?: 'bullet' | 'number'
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
+        listItem?: "bullet" | "number";
         markDefs?: Array<{
-          href?: string
-          _type: 'link'
-          _key: string
-        }>
-        level?: number
-        _type: 'block'
-        _key: string
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
       }
     | {
-        asset: SanityImageAssetReference
-        media?: unknown
-        hotspot?: SanityImageHotspot
-        crop?: SanityImageCrop
-        alt: string
-        _type: 'image'
-        _key: string
+        asset: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt: string;
+        _type: "image";
+        _key: string;
       }
-  >
-} | null
+  >;
+} | null;
 
 // Source: lib/sanity.queries.ts
 // Variable: rightSidebarQuery
 // Query: {  "whatsNew": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What's New!"]._id)][0]{    _id,    title,    "slug": slug.current,    "author": author->{        name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,    },    publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  },  "seniorCenterNewsletters": *[(_type == "post" && isArchived != true && references(*[_type == "category" && title == "City of Maricopa Community / Senior Center"]._id))][0..1] | order(publishedAt desc){    _id,    title,    "slug": slug.current,    publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  },  "nonProfit": *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{    ...,    "slug": slug.current,  },  "newsletter": *[_type == "post" && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"]._id)][0]{    _id,    title,    "slug": slug.current,    publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  }}
 export type RightSidebarQueryResult = {
   whatsNew: {
-    _id: string
-    title: string
-    slug: string
+    _id: string;
+    title: string;
+    slug: string;
     author: {
-      name: string
+      name: string;
       image: {
         asset: {
-          _id: string
-          _type: 'sanity.imageAsset'
-          metadata: SanityImageMetadata | null
-          url: string
-        } | null
-      }
-      slug: string
-    }
-    publishedAt: string
-    excerpt: string
-  } | null
+          _id: string;
+          _type: "sanity.imageAsset";
+          metadata: SanityImageMetadata | null;
+          url: string;
+        } | null;
+      };
+      slug: string;
+    };
+    publishedAt: string;
+    excerpt: string;
+  } | null;
   seniorCenterNewsletters: Array<{
-    _id: string
-    title: string
-    slug: string
-    publishedAt: string
-    excerpt: string
-  }>
+    _id: string;
+    title: string;
+    slug: string;
+    publishedAt: string;
+    excerpt: string;
+  }>;
   nonProfit: {
-    _id: string
-    _type: 'category'
-    _createdAt: string
-    _updatedAt: string
-    _rev: string
-    title: string
-    slug: string
-    description: BlockContent
-    highlight?: boolean
-  } | null
+    _id: string;
+    _type: "category";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    title: string;
+    slug: string;
+    description: BlockContent;
+    highlight?: boolean;
+  } | null;
   newsletter: {
-    _id: string
-    title: string
-    slug: string
-    publishedAt: string
-    excerpt: string
-  } | null
-}
+    _id: string;
+    title: string;
+    slug: string;
+    publishedAt: string;
+    excerpt: string;
+  } | null;
+};
 
 // Source: lib/sanity/query.ts
 // Variable: highlightedCategories
 // Query: *[_type == "category" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{    _id,    title,    "slug": slug.current,    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])  } | order(title asc, count desc)
 export type HighlightedCategoriesResult = Array<{
-  _id: string
-  title: string
-  slug: string
-  count: number
-}>
+  _id: string;
+  title: string;
+  slug: string;
+  count: number;
+}>;
 
 // Source: lib/sanity/query.ts
 // Variable: highlightedTags
 // Query: *[_type == "tag" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{    _id,    title,    "slug": slug.current,    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])  } | order(title asc, count desc)
 export type HighlightedTagsResult = Array<{
-  _id: string
-  title: string
-  slug: string
-  count: number
-}>
+  _id: string;
+  title: string;
+  slug: string;
+  count: number;
+}>;
 
 // Source: lib/sanity/query.ts
 // Variable: queryArticleSlugPageData
 // Query: *[_type == "post" && slug.current == $slug][0]{      _id,  _updatedAt,  _type,  title,  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  "slug": slug.current,  "author": author->{      name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,  },  mainImage,  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  "tags": tags[]->{    _id,    title,    "slug": slug.current,  } {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  },  publishedAt,  "body": body[]{    ...,    _type == "attachment" => {      ...,      asset->    }  },  }
 export type QueryArticleSlugPageDataResult = {
-  _id: string
-  _updatedAt: string
-  _type: 'post'
-  title: string
-  excerpt: string
-  slug: string
+  _id: string;
+  _updatedAt: string;
+  _type: "post";
+  title: string;
+  excerpt: string;
+  slug: string;
   author: {
-    name: string
+    name: string;
     image: {
       asset: {
-        _id: string
-        _type: 'sanity.imageAsset'
-        metadata: SanityImageMetadata | null
-        url: string
-      } | null
-    }
-    slug: string
-  }
+        _id: string;
+        _type: "sanity.imageAsset";
+        metadata: SanityImageMetadata | null;
+        url: string;
+      } | null;
+    };
+    slug: string;
+  };
   mainImage: {
-    asset?: SanityImageAssetReference
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    alt: string
-    _type: 'image'
-  } | null
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+  } | null;
   categories: Array<{
-    _id: string
-    title: string
-    slug: string
-  }>
+    _id: string;
+    title: string;
+    slug: string;
+  }>;
   tags: Array<{
-    _id: string
-    title: string
-    slug: string
-    rank: 2
-  }> | null
-  publishedAt: string
+    _id: string;
+    title: string;
+    slug: string;
+    rank: 2;
+  }> | null;
+  publishedAt: string;
   body: Array<
     | {
         asset: {
-          _id: string
-          _type: 'sanity.fileAsset'
-          _createdAt: string
-          _updatedAt: string
-          _rev: string
-          originalFilename?: string
-          label?: string
-          title?: string
-          description?: string
-          altText?: string
-          sha1hash: string
-          extension: string
-          mimeType: string
-          size: number
-          assetId: string
-          uploadId?: string
-          path: string
-          url: string
-          source?: SanityAssetSourceData
-        }
-        media?: unknown
-        description: string
-        _type: 'attachment'
-        _key: string
+          _id: string;
+          _type: "sanity.fileAsset";
+          _createdAt: string;
+          _updatedAt: string;
+          _rev: string;
+          originalFilename?: string;
+          label?: string;
+          title?: string;
+          description?: string;
+          altText?: string;
+          sha1hash: string;
+          extension: string;
+          mimeType: string;
+          size: number;
+          assetId: string;
+          uploadId?: string;
+          path: string;
+          url: string;
+          source?: SanityAssetSourceData;
+        };
+        media?: unknown;
+        description: string;
+        _type: "attachment";
+        _key: string;
       }
     | {
         children?: Array<{
-          marks?: Array<string>
-          text?: string
-          _type: 'span'
-          _key: string
-        }>
-        style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
-        listItem?: 'bullet' | 'number'
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
+        listItem?: "bullet" | "number";
         markDefs?: Array<{
-          href?: string
-          _type: 'link'
-          _key: string
-        }>
-        level?: number
-        _type: 'block'
-        _key: string
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
       }
     | {
-        asset: SanityImageAssetReference
-        media?: unknown
-        hotspot?: SanityImageHotspot
-        crop?: SanityImageCrop
-        alt: string
-        _type: 'image'
-        _key: string
+        asset: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt: string;
+        _type: "image";
+        _key: string;
       }
-  >
-} | null
+  >;
+} | null;
 
 // Source: lib/sanity/query.ts
 // Variable: queryArticlePaths
 // Query: *[_type == "post" && defined(slug.current)].slug.current
-export type QueryArticlePathsResult = Array<string>
+export type QueryArticlePathsResult = Array<string>;
 
 // Query TypeMap
-import '@sanity/client'
-declare module '@sanity/client' {
+import "@sanity/client";
+declare module "@sanity/client" {
   interface SanityQueries {
-    '*[_type == "post" && isArchived != true] | order(publishedAt desc){\n  \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n}': AllPostsResult
-    '\n*[_type == "post" && defined(slug.current) && isArchived != true][].slug.current\n': AllPostSlugsResult
-    '*[_type == "post" && slug.current == $slug && isArchived != true]{\n  \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n}[0]': PostBySlugResult
-    '*[_type == "category"][].slug.current': AllCategoriesResult
-    '*[_type == "category" && slug.current == $slug]{\n  title,\n  "slug": slug.current,\n  description,\n  "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",\n  "combinedList": [\n    ...(*[_type == "service" && references(^._id)]{\n      ...,\n      tags[]->{\n        _id,\n        title,\n        "slug": slug.current,\n      }\n    }),\n    ...(*[_type == "post" && references(^._id) && isArchived != true]{\n      _id,\n      _updatedAt,\n      _type,\n      publishedAt,\n      title,\n      "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n      "slug": slug.current,\n      "author": author->{\n        \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n      },\n      "categories": categories[]->{\n        _id,\n        title,\n        "slug": slug.current,\n      },\n      "tags": tags[]->{\n        _id,\n        title,\n        "slug": slug.current,\n      }\n    })\n  ] {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  } | order(rank),\n}[0]': CategoryBySlugResult
-    '*[_type == "tag" && defined(slug.current)][].slug.current': AllTagsResult
-    '*[_type == "tag" && slug.current == $slug]{\n  title,\n  "slug": slug.current,\n  description,\n  "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",\n  "posts": *[_type == "post" && references(^._id) && isArchived != true]{\n    \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n  },\n  "services": *[_type == "service" && references(^._id)]{\n    ...,\n    tags[]->{\n      _id,\n      title,\n      "slug": slug.current,\n    }\n  },\n}[0]': TagBySlugResult
-    '\n*[(_type == "post" && isArchived != true && (title match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*")) ||\n(_type == "service" && (title match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*"))] | score(\n  boost(title match "*" + $query + "*", 4)\n)| order(_score desc){\n  ...,\n  _score,\n  _type == "post" => {\n    \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n  },\n  _type == "service" => {\n    ...,\n    tags[]->{\n      _id,\n      title,\n      "slug": slug.current,\n    }\n  },\n}\n': SearchResult
-    '*[_type == "navigation"][0]{\n  "headerPrimary": headerPrimary[]{\n    _key,\n    "link": link{\n      url,\n      text,\n      reference->{\n        _id,\n        _type,\n        title,\n        "slug": slug.current\n      }\n    },\n    children\n  },\n  "footer": footer[]{\n    _key,\n    url,\n    text,\n    reference->{\n      _id,\n      _type,\n      title,\n      "slug": slug.current\n    }\n  },\n}': NavigationQueryResult
-    '*[_type == "page" && slug.current == $slug][0]{\n  title,\n  "slug": slug.current,\n  "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n}': PageBySlugResult
-    '{\n  "whatsNew": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What\'s New!"]._id)][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    "author": author->{\n      \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n    },\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  },\n  "seniorCenterNewsletters": *[(_type == "post" && isArchived != true && references(*[_type == "category" && title == "City of Maricopa Community / Senior Center"]._id))][0..1] | order(publishedAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  },\n  "nonProfit": *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{\n    ...,\n    "slug": slug.current,\n  },\n  "newsletter": *[_type == "post" && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"]._id)][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  }\n}': RightSidebarQueryResult
-    '\n  *[_type == "category" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{\n    _id,\n    title,\n    "slug": slug.current,\n    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])\n  } | order(title asc, count desc)\n': HighlightedCategoriesResult
-    '\n  *[_type == "tag" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{\n    _id,\n    title,\n    "slug": slug.current,\n    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])\n  } | order(title asc, count desc)\n': HighlightedTagsResult
-    '\n  *[_type == "post" && slug.current == $slug][0]{\n    \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n  }\n': QueryArticleSlugPageDataResult
-    '\n  *[_type == "post" && defined(slug.current)].slug.current\n': QueryArticlePathsResult
+    '*[_type == "post" && isArchived != true] | order(publishedAt desc){\n  \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n}': AllPostsResult;
+    '\n*[_type == "post" && defined(slug.current) && isArchived != true][].slug.current\n': AllPostSlugsResult;
+    '*[_type == "post" && slug.current == $slug && isArchived != true]{\n  \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n}[0]': PostBySlugResult;
+    '*[_type == "category"][].slug.current': AllCategoriesResult;
+    '*[_type == "category" && slug.current == $slug]{\n  title,\n  "slug": slug.current,\n  description,\n  "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",\n  "combinedList": [\n    ...(*[_type == "service" && references(^._id)]{\n      ...,\n      tags[]->{\n        _id,\n        title,\n        "slug": slug.current,\n      }\n    }),\n    ...(*[_type == "post" && references(^._id) && isArchived != true]{\n      _id,\n      _updatedAt,\n      _type,\n      publishedAt,\n      title,\n      "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n      "slug": slug.current,\n      "author": author->{\n        \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n      },\n      "categories": categories[]->{\n        _id,\n        title,\n        "slug": slug.current,\n      },\n      "tags": tags[]->{\n        _id,\n        title,\n        "slug": slug.current,\n      }\n    })\n  ] {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  } | order(rank),\n}[0]': CategoryBySlugResult;
+    '*[_type == "tag" && defined(slug.current)][].slug.current': AllTagsResult;
+    '*[_type == "tag" && slug.current == $slug]{\n  title,\n  "slug": slug.current,\n  description,\n  "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",\n  "posts": *[_type == "post" && references(^._id) && isArchived != true]{\n    \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n  },\n  "services": *[_type == "service" && references(^._id)]{\n    ...,\n    tags[]->{\n      _id,\n      title,\n      "slug": slug.current,\n    }\n  },\n}[0]': TagBySlugResult;
+    '\n*[(_type == "post" && isArchived != true && (title match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*")) ||\n(_type == "service" && (title match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*"))] | score(\n  boost(title match "*" + $query + "*", 4)\n)| order(_score desc){\n  ...,\n  _score,\n  _type == "post" => {\n    \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n  },\n  _type == "service" => {\n    ...,\n    tags[]->{\n      _id,\n      title,\n      "slug": slug.current,\n    }\n  },\n}\n': SearchResult;
+    '*[_type == "navigation"][0]{\n  "headerPrimary": headerPrimary[]{\n    _key,\n    "link": link{\n      url,\n      text,\n      reference->{\n        _id,\n        _type,\n        title,\n        "slug": slug.current\n      }\n    },\n    children\n  },\n  "footer": footer[]{\n    _key,\n    url,\n    text,\n    reference->{\n      _id,\n      _type,\n      title,\n      "slug": slug.current\n    }\n  },\n}': NavigationQueryResult;
+    '*[_type == "page" && slug.current == $slug][0]{\n  title,\n  "slug": slug.current,\n  "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n}': PageBySlugResult;
+    '{\n  "whatsNew": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What\'s New!"]._id)][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    "author": author->{\n      \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n    },\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  },\n  "seniorCenterNewsletters": *[(_type == "post" && isArchived != true && references(*[_type == "category" && title == "City of Maricopa Community / Senior Center"]._id))][0..1] | order(publishedAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  },\n  "nonProfit": *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{\n    ...,\n    "slug": slug.current,\n  },\n  "newsletter": *[_type == "post" && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"]._id)][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  }\n}': RightSidebarQueryResult;
+    '\n  *[_type == "category" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{\n    _id,\n    title,\n    "slug": slug.current,\n    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])\n  } | order(title asc, count desc)\n': HighlightedCategoriesResult;
+    '\n  *[_type == "tag" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{\n    _id,\n    title,\n    "slug": slug.current,\n    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])\n  } | order(title asc, count desc)\n': HighlightedTagsResult;
+    '\n  *[_type == "post" && slug.current == $slug][0]{\n    \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n  }\n': QueryArticleSlugPageDataResult;
+    '\n  *[_type == "post" && defined(slug.current)].slug.current\n': QueryArticlePathsResult;
   }
 }

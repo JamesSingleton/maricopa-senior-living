@@ -1,9 +1,8 @@
-import Link from 'next/link'
+import Link from "next/link";
 
-import ImageComponent from './ImageComponent'
-import Date from './Date'
-
-import type { Post } from '@/types/Post'
+import type { Post } from "@/types/Post";
+import DateComponent from "./Date";
+import ImageComponent from "./ImageComponent";
 
 export default function ArticleCard({ post }: { post: Post }) {
   return (
@@ -14,7 +13,10 @@ export default function ArticleCard({ post }: { post: Post }) {
         className="flex flex-col justify-start rounded-lg bg-white p-6"
       >
         {post.categories.map((category: any) => (
-          <span key={category.title} className="pb-4 text-sm font-bold uppercase text-blue-700">
+          <span
+            key={category.title}
+            className="pb-4 text-sm font-bold uppercase text-blue-700"
+          >
             {category.title}
           </span>
         ))}
@@ -31,13 +33,15 @@ export default function ArticleCard({ post }: { post: Post }) {
             />
           </div>
           <div className="ml-3">
-            <p className="text-sm font-medium text-zinc-900">{post.author.name}</p>
+            <p className="text-sm font-medium text-zinc-900">
+              {post.author.name}
+            </p>
             <div className="flex space-x-1 text-sm text-zinc-500">
-              <Date dateString={post.publishedAt} />
+              <DateComponent dateString={post.publishedAt} />
             </div>
           </div>
         </div>
       </Link>
     </article>
-  )
+  );
 }

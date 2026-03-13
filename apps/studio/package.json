@@ -7,15 +7,12 @@
     "start": "sanity start",
     "build": "sanity build",
     "deploy": "sanity deploy",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --check .",
-    "format:fix": "prettier --write .",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
     "deploy-graphql": "sanity graphql deploy",
     "extract": "sanity schema extract --enforce-required-fields",
     "check-types": "tsc --noEmit",
-    "check": "npm run lint && npm run format && npm run check-types",
-    "check:fix": "npm run lint:fix && npm run format:fix",
+    "check": "pnpm run lint && pnpm run format && pnpm run check-types",
     "type": "sanity schema extract --enforce-required-fields && sanity typegen generate"
   },
   "dependencies": {
@@ -35,14 +32,7 @@
   },
   "devDependencies": {
     "@sanity/blueprints": "^0.13.1",
-    "@sanity/eslint-config-studio": "^6.0.0",
     "@types/node": "^25.3.5",
-    "@types/react": "^19.2.14",
-    "eslint": "^9.39.2",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-prettier": "^5.5.5",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "prettier": "^3.8.1",
-    "typescript-eslint": "^8.56.1"
+    "@types/react": "^19.2.14"
   }
 }

@@ -1,37 +1,41 @@
-import { ChevronRightIcon } from '@heroicons/react/20/solid'
-import { CurrencyDollarIcon, EnvelopeIcon } from '@heroicons/react/24/outline'
-import Link from 'next/link'
-import Date from '@/components/Date'
-import SearchBar from '@/components/SearchBar'
-import { sanityFetch } from '@/lib/sanity/live'
-import { highlightedCategories, highlightedTags } from '@/lib/sanity/query'
-import { getRightSidebar } from '@/lib/sanity.fetch'
-import { CustomPortableText } from './CustomPortableText'
-import ImageComponent from './ImageComponent'
+import { ChevronRightIcon } from "@heroicons/react/20/solid";
+import { CurrencyDollarIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
+
+import DateComponent from "@/components/Date";
+import SearchBar from "@/components/SearchBar";
+import { sanityFetch } from "@/lib/sanity/live";
+import { highlightedCategories, highlightedTags } from "@/lib/sanity/query";
+import { getRightSidebar } from "@/lib/sanity.fetch";
+import { CustomPortableText } from "./CustomPortableText";
+import ImageComponent from "./ImageComponent";
 
 async function fetchHighlightedCategories() {
   return await sanityFetch({
     query: highlightedCategories,
-  })
+  });
 }
 
 async function fetchHighlightedTags() {
   return await sanityFetch({
     query: highlightedTags,
-  })
+  });
 }
 
 const RightSidebar = async () => {
-  const { data: highlightedCategories } = await fetchHighlightedCategories()
-  const { data: highlightedTags } = await fetchHighlightedTags()
-  const { whatsNew, seniorCenterNewsletters, nonProfit, newsletter } = await getRightSidebar()
+  const { data: highlightedCategories } = await fetchHighlightedCategories();
+  const { data: highlightedTags } = await fetchHighlightedTags();
+  const { whatsNew, seniorCenterNewsletters, nonProfit, newsletter } =
+    await getRightSidebar();
 
   return (
     <>
       <SearchBar />
       {nonProfit && (
         <div className="rounded-md bg-white p-8 shadow-lg">
-          <h2 className="mb-8 text-lg font-bold lg:text-2xl">{nonProfit.title}</h2>
+          <h2 className="mb-8 text-lg font-bold lg:text-2xl">
+            {nonProfit.title}
+          </h2>
           <div className="prose prose-lg">
             <CustomPortableText value={nonProfit.description} />
           </div>
@@ -48,7 +52,9 @@ const RightSidebar = async () => {
       )}
       {whatsNew && (
         <div className="rounded-md bg-white p-8 shadow-lg">
-          <h2 className="mb-8 text-lg font-bold lg:text-2xl">What&apos;s New!</h2>
+          <h2 className="mb-8 text-lg font-bold lg:text-2xl">
+            What&apos;s New!
+          </h2>
           <div className="space-y-16">
             <article
               key={`${whatsNew._id}_right_sidebar`}
@@ -56,7 +62,10 @@ const RightSidebar = async () => {
             >
               <Link href={`/articles/${whatsNew.slug}`} prefetch={false}>
                 <div className="flex items-center gap-x-4 text-xs">
-                  <Date dateString={whatsNew.publishedAt} className="text-zinc-500" />
+                  <DateComponent
+                    dateString={whatsNew.publishedAt}
+                    className="text-zinc-500"
+                  />
                 </div>
                 <div className="group relative">
                   <h3 className="mt-3 text-lg leading-6 font-semibold text-zinc-900 group-hover:text-zinc-600">
@@ -75,7 +84,9 @@ const RightSidebar = async () => {
                     height={40}
                   />
                   <div className="text-sm leading-6">
-                    <p className="font-semibold text-zinc-900">{whatsNew.author.name}</p>
+                    <p className="font-semibold text-zinc-900">
+                      {whatsNew.author.name}
+                    </p>
                   </div>
                 </div>
               </Link>
@@ -84,7 +95,9 @@ const RightSidebar = async () => {
         </div>
       )}
       <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-lg font-bold lg:text-2xl">Community/Senior Center Calendar</h2>
+        <h2 className="mb-8 text-lg font-bold lg:text-2xl">
+          Community/Senior Center Calendar
+        </h2>
         <div className="divide-y divide-zinc-200">
           {seniorCenterNewsletters.map((newsletter) => (
             <article
@@ -93,7 +106,10 @@ const RightSidebar = async () => {
             >
               <Link href={`/articles/${newsletter.slug}`} prefetch={false}>
                 <div className="flex items-center gap-x-4 text-xs">
-                  <Date dateString={newsletter.publishedAt} className="text-zinc-500" />
+                  <DateComponent
+                    dateString={newsletter.publishedAt}
+                    className="text-zinc-500"
+                  />
                 </div>
                 <div className="group relative">
                   <h3 className="mt-3 text-lg leading-6 font-semibold text-zinc-900 group-hover:text-zinc-600">
@@ -111,7 +127,8 @@ const RightSidebar = async () => {
       {newsletter && (
         <div className="rounded-md bg-white p-8 shadow-lg">
           <h2 className="mb-8 text-lg font-bold lg:text-2xl">
-            <span className="italic">Keeping you informed...still</span> Newsletter
+            <span className="italic">Keeping you informed...still</span>{" "}
+            Newsletter
           </h2>
           <div className="divide-y divide-zinc-200">
             <article
@@ -120,7 +137,10 @@ const RightSidebar = async () => {
             >
               <Link href={`/articles/${newsletter.slug}`} prefetch={false}>
                 <div className="flex items-center gap-x-4 text-xs">
-                  <Date dateString={newsletter.publishedAt} className="text-zinc-500" />
+                  <DateComponent
+                    dateString={newsletter.publishedAt}
+                    className="text-zinc-500"
+                  />
                 </div>
                 <div className="group relative">
                   <h3 className="mt-3 text-lg leading-6 font-semibold text-zinc-900 group-hover:text-zinc-600">
@@ -171,7 +191,9 @@ const RightSidebar = async () => {
         </ul>
       </div>
       <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-lg font-bold lg:text-2xl">Support & Feedback</h2>
+        <h2 className="mb-8 text-lg font-bold lg:text-2xl">
+          Support & Feedback
+        </h2>
         <div className="space-y-4 space-x-4 text-center">
           <Link
             href="https://www.paypal.com/donate?hosted_button_id=VDPMC329ZC5ZE"
@@ -179,7 +201,10 @@ const RightSidebar = async () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <CurrencyDollarIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
+            <CurrencyDollarIcon
+              className="-ml-0.5 h-5 w-5"
+              aria-hidden="true"
+            />
             Donate
           </Link>
           <a
@@ -193,7 +218,7 @@ const RightSidebar = async () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default RightSidebar
+export default RightSidebar;

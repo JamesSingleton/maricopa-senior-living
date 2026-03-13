@@ -1,10 +1,11 @@
-import 'server-only'
+import "server-only";
 
-import type { QueryParams } from 'next-sanity'
-import type { CategoryPage, GroupItem } from '@/types/common'
-import type { Post } from '@/types/Post'
-import type { RightSidebarQueryResult } from './sanity/sanity.types'
-import { client } from './sanity.client'
+import type { QueryParams } from "next-sanity";
+
+import type { CategoryPage, GroupItem } from "@/types/common";
+import type { Post } from "@/types/Post";
+import type { RightSidebarQueryResult } from "./sanity/sanity.types";
+import { client } from "./sanity.client";
 import {
   allCategories,
   allPostSlugs,
@@ -16,38 +17,38 @@ import {
   rightSidebarQuery,
   search,
   tagBySlug,
-} from './sanity.queries'
+} from "./sanity.queries";
 
-export const token = process.env.SANITY_API_READ_TOKEN
+export const token = process.env.SANITY_API_READ_TOKEN;
 
 export async function sanityFetch<QueryResponse>({
   query,
   params = {},
   tags,
 }: {
-  query: string
-  params?: QueryParams
-  tags?: string[]
+  query: string;
+  params?: QueryParams;
+  tags?: string[];
 }) {
   return client.fetch<QueryResponse>(query, params, {
     next: {
       tags,
     },
-  })
+  });
 }
 
 export function getNavigation() {
   return sanityFetch<any>({
     query: navigationQuery,
-    tags: ['navigation'],
-  })
+    tags: ["navigation"],
+  });
 }
 
 export function getRightSidebar() {
   return sanityFetch<RightSidebarQueryResult>({
     query: rightSidebarQuery,
-    tags: ['category', 'tag', 'post'],
-  })
+    tags: ["category", "tag", "post"],
+  });
 }
 
 export function getCategoryBySlug(slug: string) {
@@ -55,11 +56,15 @@ export function getCategoryBySlug(slug: string) {
     query: categoryBySlug,
     params: { slug },
     tags: [`category:${slug}`],
-  })
+  });
 }
 
 export function getCategories() {
-  return client.fetch<string[]>(allCategories, {}, { token, perspective: 'published' })
+  return client.fetch<string[]>(
+    allCategories,
+    {},
+    { token, perspective: "published" },
+  );
 }
 
 export function getPageBySlug(slug: string) {
@@ -67,7 +72,7 @@ export function getPageBySlug(slug: string) {
     query: pageBySlug,
     params: { slug },
     tags: [`page:${slug}`],
-  })
+  });
 }
 
 export function getPostBySlug(slug: string) {
@@ -75,11 +80,15 @@ export function getPostBySlug(slug: string) {
     query: postBySlug,
     params: { slug },
     tags: [`post:${slug}`],
-  })
+  });
 }
 
 export function getAllPostSlugs() {
-  return client.fetch<string[]>(allPostSlugs, {}, { token, perspective: 'published' })
+  return client.fetch<string[]>(
+    allPostSlugs,
+    {},
+    { token, perspective: "published" },
+  );
 }
 
 export function getTagBySlug(slug: string) {
@@ -87,11 +96,15 @@ export function getTagBySlug(slug: string) {
     query: tagBySlug,
     params: { slug },
     tags: [`tag:${slug}`],
-  })
+  });
 }
 
 export function getTags() {
-  return client.fetch<string[]>(allTags, {}, { token, perspective: 'published' })
+  return client.fetch<string[]>(
+    allTags,
+    {},
+    { token, perspective: "published" },
+  );
 }
 
 export function getSearchResults(query: string) {
@@ -99,6 +112,6 @@ export function getSearchResults(query: string) {
     query: search,
     // @ts-expect-error
     params: { query },
-    tags: ['post', 'tag', 'category', 'service'],
-  })
+    tags: ["post", "tag", "category", "service"],
+  });
 }

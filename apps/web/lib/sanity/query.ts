@@ -1,6 +1,6 @@
-import { defineQuery } from 'next-sanity'
+import { defineQuery } from "next-sanity";
 
-const COUNT_FOR_SIDEBAR = /* groq */ `count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])`
+const COUNT_FOR_SIDEBAR = /* groq */ `count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])`;
 
 const imageFields = /* groq */ `
   "id": asset._ref,
@@ -22,7 +22,7 @@ const imageFields = /* groq */ `
     right,
     top
   }
-`
+`;
 
 const authorFields = `
   name,
@@ -35,7 +35,7 @@ const authorFields = `
     }
   },
   "slug": slug.current,
-`
+`;
 
 const postFields = `
   _id,
@@ -72,7 +72,7 @@ const postFields = `
       asset->
     }
   },
-`
+`;
 
 export const highlightedCategories = defineQuery(`
   *[_type == "category" && ${COUNT_FOR_SIDEBAR} > 0 && highlight == true]{
@@ -81,7 +81,7 @@ export const highlightedCategories = defineQuery(`
     "slug": slug.current,
     "count": ${COUNT_FOR_SIDEBAR}
   } | order(title asc, count desc)
-`)
+`);
 
 export const highlightedTags = defineQuery(`
   *[_type == "tag" && ${COUNT_FOR_SIDEBAR} > 0 && highlight == true]{
@@ -90,14 +90,14 @@ export const highlightedTags = defineQuery(`
     "slug": slug.current,
     "count": ${COUNT_FOR_SIDEBAR}
   } | order(title asc, count desc)
-`)
+`);
 
 export const queryArticleSlugPageData = defineQuery(`
   *[_type == "post" && slug.current == $slug][0]{
     ${postFields}
   }
-`)
+`);
 
 export const queryArticlePaths = defineQuery(`
   *[_type == "post" && defined(slug.current)].slug.current
-`)
+`);

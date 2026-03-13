@@ -1,16 +1,16 @@
-import { getSearchResults } from '@/lib/sanity.fetch'
-import ArticleCard from '@/components/ArticleCard'
-import DirectoryCard from '@/components/DirectoryCard'
+import ArticleCard from "@/components/ArticleCard";
+import DirectoryCard from "@/components/DirectoryCard";
+import { getSearchResults } from "@/lib/sanity.fetch";
 
 export default async function Page({
   params,
   searchParams,
 }: {
-  params: Promise<{ slug: string }>
-  searchParams: Promise<{ q: string }>
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ q: string }>;
 }) {
-  const { q } = await searchParams
-  const results = await getSearchResults(q)
+  const { q } = await searchParams;
+  const results = await getSearchResults(q);
 
   return (
     <>
@@ -20,13 +20,13 @@ export default async function Page({
       <section className="space-y-8 pt-4">
         {results.length > 0 &&
           results.map((result: any) => {
-            if (result._type === 'post') {
-              return <ArticleCard key={result._id} post={result} />
-            } else if (result._type === 'service') {
-              return <DirectoryCard key={result._id} directoryItem={result} />
+            if (result._type === "post") {
+              return <ArticleCard key={result._id} post={result} />;
+            } else if (result._type === "service") {
+              return <DirectoryCard key={result._id} directoryItem={result} />;
             }
           })}
       </section>
     </>
-  )
+  );
 }

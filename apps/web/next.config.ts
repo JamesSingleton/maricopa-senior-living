@@ -1,4 +1,5 @@
-import type { NextConfig } from 'next'
+import type { NextConfig } from "next";
+
 // https://nextjs.org/docs/advanced-features/security-headers
 const ContentSecurityPolicy = `
     default-src 'self' vercel.live https://cdn.userway.org/;
@@ -10,18 +11,18 @@ const ContentSecurityPolicy = `
     font-src 'self' https://cdn.userway.org/ https://fonts.gstatic.com/ https://fonts.googleapis.com/;
     script-src-elem 'self' 'unsafe-eval' 'unsafe-inline' plausible.io https://cdn.userway.org/ https://core.sanity-cdn.com/;
     style-src-elem 'self' 'unsafe-inline' https://cdn.userway.org/;
-`
+`;
 
 const securityHeaders = [
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
   {
-    key: 'Content-Security-Policy',
-    value: ContentSecurityPolicy.replace(/\n/g, ''),
+    key: "Content-Security-Policy",
+    value: ContentSecurityPolicy.replace(/\n/g, ""),
   },
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
   {
-    key: 'Referrer-Policy',
-    value: 'origin-when-cross-origin',
+    key: "Referrer-Policy",
+    value: "origin-when-cross-origin",
   },
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
   // {
@@ -30,68 +31,68 @@ const securityHeaders = [
   // },
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
   {
-    key: 'X-Content-Type-Options',
-    value: 'nosniff',
+    key: "X-Content-Type-Options",
+    value: "nosniff",
   },
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-DNS-Prefetch-Control
   {
-    key: 'X-DNS-Prefetch-Control',
-    value: 'on',
+    key: "X-DNS-Prefetch-Control",
+    value: "on",
   },
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
   {
-    key: 'Strict-Transport-Security',
-    value: 'max-age=31536000; includeSubDomains; preload',
+    key: "Strict-Transport-Security",
+    value: "max-age=31536000; includeSubDomains; preload",
   },
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy
   {
-    key: 'Permissions-Policy',
-    value: 'camera=(), microphone=(), geolocation=()',
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=()",
   },
-]
+];
 
 const nextConfig: NextConfig = {
   modularizeImports: {
-    '@heroicons/react/24/outline': {
-      transform: '@heroicons/react/24/outline/{{member}}',
+    "@heroicons/react/24/outline": {
+      transform: "@heroicons/react/24/outline/{{member}}",
     },
-    '@heroicons/react/20/solid': {
-      transform: '@heroicons/react/20/solid/{{member}}',
+    "@heroicons/react/20/solid": {
+      transform: "@heroicons/react/20/solid/{{member}}",
     },
   },
-  transpilePackages: ['@maricopa-senior-living/ui'],
+  transpilePackages: ["@maricopa-senior-living/ui"],
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'cdn.sanity.io',
+        protocol: "https",
+        hostname: "cdn.sanity.io",
       },
       {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
+        protocol: "https",
+        hostname: "images.unsplash.com",
       },
       {
-        protocol: 'https',
-        hostname: 'bestwpware.com',
+        protocol: "https",
+        hostname: "bestwpware.com",
       },
       {
-        protocol: 'https',
-        hostname: 'maricopaseniorliving.org',
+        protocol: "https",
+        hostname: "maricopaseniorliving.org",
       },
       {
-        protocol: 'https',
-        hostname: 'secure.gravatar.com',
+        protocol: "https",
+        hostname: "secure.gravatar.com",
       },
     ],
   },
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: "/(.*)",
         headers: securityHeaders,
       },
-    ]
+    ];
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

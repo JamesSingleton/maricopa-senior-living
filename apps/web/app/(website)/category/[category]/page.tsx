@@ -1,12 +1,12 @@
-import type { Metadata, ResolvingMetadata } from 'next'
-import Image from 'next/image'
-import { notFound } from 'next/navigation'
+import type { Metadata, ResolvingMetadata } from "next";
+import Image from "next/image";
+import { notFound } from "next/navigation";
 
-import { getCategoryBySlug } from '@/lib/sanity.fetch'
-import { CustomPortableText } from '@/components/CustomPortableText'
-import ArticleCard from '@/components/ArticleCard'
-import DirectoryCard from '@/components/DirectoryCard'
-import { baseUrl } from '@/lib/constants'
+import ArticleCard from "@/components/ArticleCard";
+import { CustomPortableText } from "@/components/CustomPortableText";
+import DirectoryCard from "@/components/DirectoryCard";
+import { baseUrl } from "@/lib/constants";
+import { getCategoryBySlug } from "@/lib/sanity.fetch";
 
 // export async function generateStaticParams() {
 //   const categories = await getCategories()
@@ -20,16 +20,16 @@ export async function generateMetadata(
   {
     params,
   }: {
-    params: Promise<{ category: string }>
+    params: Promise<{ category: string }>;
   },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const { category: categoryParam } = await params
-  const category = await getCategoryBySlug(categoryParam)
-  const previousOpenGraph = (await parent)?.openGraph
+  const { category: categoryParam } = await params;
+  const category = await getCategoryBySlug(categoryParam);
+  const previousOpenGraph = (await parent)?.openGraph;
 
   if (!category) {
-    return {}
+    return {};
   }
 
   return {
@@ -41,15 +41,19 @@ export async function generateMetadata(
       description: `${category.excerpt}`,
       url: `${baseUrl}/category/${category.slug}`,
     },
-  }
+  };
 }
 
-export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
-  const { category: categoryParam } = await params
-  const category = await getCategoryBySlug(categoryParam)
+export default async function CategoryPage({
+  params,
+}: {
+  params: Promise<{ category: string }>;
+}) {
+  const { category: categoryParam } = await params;
+  const category = await getCategoryBySlug(categoryParam);
 
   if (!category) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -65,12 +69,12 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
       )}
       <section className="space-y-8 pt-4">
         {category.combinedList.map((item: any) => {
-          if (item._type === 'post') {
-            return <ArticleCard key={item._id} post={item} />
+          if (item._type === "post") {
+            return <ArticleCard key={item._id} post={item} />;
           }
-          return <DirectoryCard key={item._id} directoryItem={item} />
+          return <DirectoryCard key={item._id} directoryItem={item} />;
         })}
       </section>
     </>
-  )
+  );
 }

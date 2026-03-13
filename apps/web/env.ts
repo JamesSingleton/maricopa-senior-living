@@ -1,10 +1,12 @@
-import { vercel } from '@t3-oss/env-core/presets-zod'
-import { createEnv } from '@t3-oss/env-nextjs'
-import { z } from 'zod'
+import { vercel } from "@t3-oss/env-core/presets-zod";
+import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
 
 export const env = createEnv({
   shared: {
-    NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+    NODE_ENV: z
+      .enum(["development", "production", "test"])
+      .default("development"),
   },
 
   server: {
@@ -17,15 +19,17 @@ export const env = createEnv({
      *  Learn more: https://vercel.com/docs/environment-variables/framework-environment-variables#using-prefixed-framework-environment-variables-locally)
      */
 
-    NEXT_PUBLIC_VERCEL_ENV: z.enum(['production', 'preview', 'development']).default('development'),
+    NEXT_PUBLIC_VERCEL_ENV: z
+      .enum(["production", "preview", "development"])
+      .default("development"),
     NEXT_PUBLIC_VERCEL_URL: z
       .string()
-      .default('localhost:3000')
+      .default("localhost:3000")
       .transform((url) => {
-        if (url.includes('localhost')) {
-          return `http://${url}`
+        if (url.includes("localhost")) {
+          return `http://${url}`;
         }
-        return `https://${url}`
+        return `https://${url}`;
       }),
 
     NEXT_PUBLIC_SANITY_PROJECT_ID: z.string().min(1),
@@ -47,4 +51,4 @@ export const env = createEnv({
   },
 
   extends: [vercel()],
-})
+});

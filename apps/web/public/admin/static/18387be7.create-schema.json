@@ -696,10 +696,7 @@
                 "flag": "uri",
                 "constraint": {
                   "options": {
-                    "scheme": [
-                      "/^http$/",
-                      "/^https$/"
-                    ],
+                    "scheme": ["/^http$/", "/^https$/"],
                     "allowRelative": false,
                     "relativeOnly": false,
                     "allowCredentials": false
@@ -824,11 +821,7 @@
                 "flag": "uri",
                 "constraint": {
                   "options": {
-                    "scheme": [
-                      "/^https$/",
-                      "/^mailto$/",
-                      "/^tel$/"
-                    ],
+                    "scheme": ["/^https$/", "/^mailto$/", "/^tel$/"],
                     "allowRelative": false,
                     "relativeOnly": false,
                     "allowCredentials": false

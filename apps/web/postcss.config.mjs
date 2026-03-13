@@ -1,1 +1,1 @@
-export { default } from '@maricopa-senior-living/ui/postcss.config'
+export { default } from "@maricopa-senior-living/ui/postcss.config";

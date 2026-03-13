@@ -1,76 +1,76 @@
-import { ImageHotspot, ImageCrop, Image } from 'sanity'
+import type { Image, ImageCrop, ImageHotspot } from "sanity";
 
-import { env } from '@/env'
+import { env } from "@/env";
 
 // Base URL construction
 export const SANITY_BASE_URL =
-  `https://cdn.sanity.io/images/${env.NEXT_PUBLIC_SANITY_PROJECT_ID}/${env.NEXT_PUBLIC_SANITY_DATASET}/` as const
+  `https://cdn.sanity.io/images/${env.NEXT_PUBLIC_SANITY_PROJECT_ID}/${env.NEXT_PUBLIC_SANITY_DATASET}/` as const;
 
 // Type guards
 function isValidNumber(value: unknown): value is number {
-  return typeof value === 'number' && !Number.isNaN(value)
+  return typeof value === "number" && !Number.isNaN(value);
 }
 
 function isValidHotspot(hotspot: unknown): hotspot is ImageHotspot {
-  if (!hotspot || typeof hotspot !== 'object') {
-    return false
+  if (!hotspot || typeof hotspot !== "object") {
+    return false;
   }
-  const h = hotspot as Record<string, unknown>
-  return isValidNumber(h.x) && isValidNumber(h.y)
+  const h = hotspot as Record<string, unknown>;
+  return isValidNumber(h.x) && isValidNumber(h.y);
 }
 
 function isValidCrop(crop: unknown): crop is ImageCrop {
-  if (!crop || typeof crop !== 'object') {
-    return false
+  if (!crop || typeof crop !== "object") {
+    return false;
   }
-  const c = crop as Record<string, unknown>
+  const c = crop as Record<string, unknown>;
   return (
     isValidNumber(c.top) &&
     isValidNumber(c.bottom) &&
     isValidNumber(c.left) &&
     isValidNumber(c.right)
-  )
+  );
 }
 
 // Pure functions for data processing
 function extractHotspot(image: Image): ImageHotspot | undefined {
   if (!isValidHotspot(image?.hotspot)) {
-    return
+    return;
   }
   return {
     x: image.hotspot.x,
     y: image.hotspot.y,
     width: image.hotspot.width,
     height: image.hotspot.height,
-  }
+  };
 }
 
 function extractCrop(image: Image): ImageCrop | undefined {
   if (!isValidCrop(image?.crop)) {
-    return
+    return;
   }
   return {
     top: image.crop.top,
     bottom: image.crop.bottom,
     left: image.crop.left,
     right: image.crop.right,
-  }
+  };
 }
 
 function hasPreview(preview: unknown): preview is string {
-  return typeof preview === 'string' && preview.length > 0
+  return typeof preview === "string" && preview.length > 0;
 }
 
 // Main image processing function
 export function processImageData(image: Image): Image | null {
   // Early return for invalid image data
-  if (!image?.id || typeof image.id !== 'string') {
-    return null
+  if (!image?.id || typeof image.id !== "string") {
+    return null;
   }
 
-  const hotspot = extractHotspot(image)
-  const crop = extractCrop(image)
-  const preview = hasPreview(image.preview) ? image.preview : undefined
+  const hotspot = extractHotspot(image);
+  const crop = extractCrop(image);
+  const preview = hasPreview(image.preview) ? image.preview : undefined;
 
   return {
     id: image.id,
@@ -78,5 +78,5 @@ export function processImageData(image: Image): Image | null {
     ...(preview && { preview }),
     ...(hotspot && { hotspot }),
     ...(crop && { crop }),
-  }
+  };
 }

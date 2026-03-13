@@ -1,17 +1,17 @@
-'use client'
-import { useRef } from 'react'
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+"use client";
+import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import { useRef } from "react";
 
 const SearchBar = () => {
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    const input = inputRef.current
+    e.preventDefault();
+    const input = inputRef.current;
     if (input && input.value) {
-      window.location.href = `/search?q=${input.value}`
+      window.location.href = `/search?q=${input.value}`;
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSearch}>
@@ -23,7 +23,10 @@ const SearchBar = () => {
             </label>
             <div className="relative">
               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                <MagnifyingGlassIcon className="h-5 w-5 text-zinc-400" aria-hidden="true" />
+                <MagnifyingGlassIcon
+                  className="h-5 w-5 text-zinc-400"
+                  aria-hidden="true"
+                />
               </div>
               <input
                 ref={inputRef}
@@ -38,7 +41,7 @@ const SearchBar = () => {
         </div>
       </div>
     </form>
-  )
-}
+  );
+};
 
-export default SearchBar
+export default SearchBar;

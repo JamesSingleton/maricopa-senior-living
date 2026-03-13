@@ -1,21 +1,25 @@
-'use client'
+"use client";
 
-import { Fragment, useState, useEffect } from 'react'
-import Link from 'next/link'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import clsx from 'clsx'
+import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import {
+  ArrowTopRightOnSquareIcon,
+  Bars3Icon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import clsx from "clsx";
+import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
+import { Fragment, useEffect, useState } from "react";
 
 const Header = ({ menu }: { menu: any }) => {
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    setMobileMenuOpen(false)
-  }, [pathname, searchParams])
+    setMobileMenuOpen(false);
+  }, [pathname, searchParams]);
 
   return (
     <header className="bg-white">
@@ -34,14 +38,16 @@ const Header = ({ menu }: { menu: any }) => {
                   <Link
                     key={item._key}
                     href={`${
-                      item.link.reference._type === 'page' ? '' : `/${item.link.reference._type}`
+                      item.link.reference._type === "page"
+                        ? ""
+                        : `/${item.link.reference._type}`
                     }/${item.link.reference.slug}`}
                     className="text-base font-semibold leading-6 text-zinc-900"
                     prefetch={false}
                   >
                     {item.link.reference.title}
                   </Link>
-                )
+                );
               }
 
               return (
@@ -80,12 +86,12 @@ const Header = ({ menu }: { menu: any }) => {
                               aria-label="(opens in a new tab)"
                             />
                           </a>
-                        ))
+                        ));
                       }}
                     </Popover.Panel>
                   </Transition>
                 </Popover>
-              )
+              );
             })}
           </Popover.Group>
         </div>
@@ -100,7 +106,12 @@ const Header = ({ menu }: { menu: any }) => {
           </button>
         </div>
       </nav>
-      <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
+      <Dialog
+        as="div"
+        className="lg:hidden"
+        open={mobileMenuOpen}
+        onClose={setMobileMenuOpen}
+      >
         <div className="fixed inset-0 z-10" />
         <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-zinc-900/10">
           <div className="flex items-center justify-between">
@@ -125,8 +136,8 @@ const Header = ({ menu }: { menu: any }) => {
                       <Link
                         key={item._key}
                         href={`${
-                          item.link.reference._type === 'page'
-                            ? ''
+                          item.link.reference._type === "page"
+                            ? ""
                             : `/${item.link.reference._type}`
                         }/${item.link.reference.slug}`}
                         className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-zinc-900 hover:bg-zinc-50"
@@ -134,7 +145,7 @@ const Header = ({ menu }: { menu: any }) => {
                       >
                         {item.link.reference.title}
                       </Link>
-                    )
+                    );
                   }
 
                   return (
@@ -144,7 +155,10 @@ const Header = ({ menu }: { menu: any }) => {
                           <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 hover:bg-zinc-50">
                             {item.link.text}
                             <ChevronDownIcon
-                              className={clsx(open ? 'rotate-180' : '', 'h-5 w-5 flex-none')}
+                              className={clsx(
+                                open ? "rotate-180" : "",
+                                "h-5 w-5 flex-none",
+                              )}
                               aria-hidden="true"
                             />
                           </Disclosure.Button>
@@ -169,7 +183,7 @@ const Header = ({ menu }: { menu: any }) => {
                         </>
                       )}
                     </Disclosure>
-                  )
+                  );
                 })}
               </div>
             </div>
@@ -177,7 +191,7 @@ const Header = ({ menu }: { menu: any }) => {
         </Dialog.Panel>
       </Dialog>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

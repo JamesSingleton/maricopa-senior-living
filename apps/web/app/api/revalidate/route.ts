@@ -1,55 +1,59 @@
-import { revalidateTag, revalidatePath } from 'next/cache'
-import { parseBody } from 'next-sanity/webhook'
+import { revalidatePath, revalidateTag } from "next/cache";
+import { type NextRequest, NextResponse } from "next/server";
+import { parseBody } from "next-sanity/webhook";
 
-import { webhookSecret } from '@/lib/sanity.api'
-
-import { type NextRequest, NextResponse } from 'next/server'
+import { webhookSecret } from "@/lib/sanity.api";
 
 type WebhookPaylod = {
-  _type: string
-  slug?: string
-  categories?: { slug: string }[]
-  tags?: { slug: string }[]
-}
+  _type: string;
+  slug?: string;
+  categories?: { slug: string }[];
+  tags?: { slug: string }[];
+};
 
 export async function POST(req: NextRequest) {
   try {
-    const { isValidSignature, body } = await parseBody<WebhookPaylod>(req, webhookSecret)
+    const { isValidSignature, body } = await parseBody<WebhookPaylod>(
+      req,
+      webhookSecret,
+    );
 
     if (!isValidSignature) {
-      const message = 'Invalid Signature'
+      const message = "Invalid Signature";
 
-      return new Response(JSON.stringify({ message, isValidSignature, body }), { status: 401 })
+      return new Response(JSON.stringify({ message, isValidSignature, body }), {
+        status: 401,
+      });
     }
 
     if (!body?._type) {
-      const message = 'Bad Request, missing type'
-      return new Response(JSON.stringify({ message, body }), { status: 400 })
+      const message = "Bad Request, missing type";
+      return new Response(JSON.stringify({ message, body }), { status: 400 });
     }
 
-    revalidateTag(body._type, 'max')
+    revalidateTag(body._type, "max");
 
     if (body.slug) {
-      revalidateTag(`${body._type}:${body.slug}`, 'max')
+      revalidateTag(`${body._type}:${body.slug}`, "max");
     }
 
     if (body.categories && body.categories.length) {
       body.categories.forEach((category) => {
-        revalidateTag(`category:${category.slug}`, 'max')
+        revalidateTag(`category:${category.slug}`, "max");
         // revalidatePath(`/category/${category.slug}`)
-      })
+      });
     }
 
     if (body.tags && body.tags.length) {
       body.tags.forEach((tag) => {
-        revalidateTag(`tag:${tag.slug}`, 'max')
-      })
+        revalidateTag(`tag:${tag.slug}`, "max");
+      });
     }
 
-    return NextResponse.json({ body })
+    return NextResponse.json({ body });
   } catch (error: any) {
-    console.error(error)
+    console.error(error);
 
-    return new Response(error?.message, { status: 500 })
+    return new Response(error?.message, { status: 500 });
   }
 }

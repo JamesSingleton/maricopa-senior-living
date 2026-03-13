@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import { SanityImage } from 'sanity-image'
+import { SanityImage } from "sanity-image";
 
-import { projectId, dataset } from '@/lib/sanity.api'
+import { dataset, projectId } from "@/lib/sanity.api";
 
 const ImageComponent = ({
   image,
@@ -10,16 +10,16 @@ const ImageComponent = ({
   className,
   width,
   height,
-  mode = 'cover',
-  loading = 'lazy',
+  mode = "cover",
+  loading = "lazy",
 }: {
-  image: any
-  alt?: string
-  className?: string
-  width: number
-  height: number
-  mode?: 'cover' | 'contain'
-  loading?: 'lazy' | 'eager'
+  image: any;
+  alt?: string;
+  className?: string;
+  width: number;
+  height: number;
+  mode?: "cover" | "contain";
+  loading?: "lazy" | "eager";
 }) => {
   return (
     <SanityImage
@@ -36,7 +36,7 @@ const ImageComponent = ({
       title={alt}
       loading={loading}
     />
-  )
-}
+  );
+};
 
-export default ImageComponent
+export default ImageComponent;

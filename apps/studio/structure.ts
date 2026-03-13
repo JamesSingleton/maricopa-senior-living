@@ -3,9 +3,7 @@ import {
   CogIcon,
   File,
   FileText,
-  HomeIcon,
   type LucideIcon,
-  MessageCircle,
   PanelBottomIcon,
   PanelsTopLeftIcon,
   PanelTopIcon,
@@ -13,47 +11,53 @@ import {
   TagIcon,
   TagsIcon,
   User,
-} from 'lucide-react'
-import type { ListItemBuilder, StructureBuilder, StructureResolverContext } from 'sanity/structure'
+} from "lucide-react";
+import type {
+  StructureBuilder,
+  StructureResolverContext,
+} from "sanity/structure";
 
-import type { SchemaType, SingletonType } from './schemaTypes'
-import { getTitleCase } from './utils/helper'
+import type { SchemaType, SingletonType } from "./schemaTypes";
+import { getTitleCase } from "./utils/helper";
 
 type Base<T = SchemaType> = {
-  id?: string
-  type: T
-  preview?: boolean
-  title?: string
-  icon?: LucideIcon
-}
+  id?: string;
+  type: T;
+  preview?: boolean;
+  title?: string;
+  icon?: LucideIcon;
+};
 
 type CreateSingleton = {
-  S: StructureBuilder
-} & Base<SingletonType>
+  S: StructureBuilder;
+} & Base<SingletonType>;
 
 type CreateList = {
-  S: StructureBuilder
-} & Base
+  S: StructureBuilder;
+} & Base;
 
 const createSingleton = ({ S, type, title, icon }: CreateSingleton) => {
-  const newTitle = title ?? getTitleCase(type)
+  const newTitle = title ?? getTitleCase(type);
   return S.listItem()
     .title(newTitle)
     .icon(icon ?? File)
-    .child(S.document().schemaType(type).documentId(type))
-}
+    .child(S.document().schemaType(type).documentId(type));
+};
 
 const createList = ({ S, type, icon, title, id }: CreateList) => {
-  const newTitle = title ?? getTitleCase(type)
+  const newTitle = title ?? getTitleCase(type);
   return S.documentTypeListItem(type)
     .id(id ?? type)
     .title(newTitle)
-    .icon(icon ?? File)
-}
+    .icon(icon ?? File);
+};
 
-export const structure = (S: StructureBuilder, context: StructureResolverContext) => {
+export const structure = (
+  S: StructureBuilder,
+  context: StructureResolverContext,
+) => {
   return S.list()
-    .title('Content')
+    .title("Content")
     .items([
       // createSingleton({ S, type: 'homePage', icon: HomeIcon }),
       S.divider(),
@@ -72,39 +76,39 @@ export const structure = (S: StructureBuilder, context: StructureResolverContext
       //   title: 'FAQs',
       //   icon: MessageCircle,
       // }),
-      createList({ S, type: 'author', title: 'Authors', icon: User }),
-      createList({ S, type: 'category', title: 'Categories', icon: TagIcon }),
-      createList({ S, type: 'page', title: 'Pages', icon: PanelsTopLeftIcon }),
-      createList({ S, type: 'post', title: 'Posts', icon: FileText }),
-      createList({ S, type: 'service', title: 'Services', icon: BookMarked }),
-      createList({ S, type: 'tag', title: 'Tags', icon: TagsIcon }),
+      createList({ S, type: "author", title: "Authors", icon: User }),
+      createList({ S, type: "category", title: "Categories", icon: TagIcon }),
+      createList({ S, type: "page", title: "Pages", icon: PanelsTopLeftIcon }),
+      createList({ S, type: "post", title: "Posts", icon: FileText }),
+      createList({ S, type: "service", title: "Services", icon: BookMarked }),
+      createList({ S, type: "tag", title: "Tags", icon: TagsIcon }),
       S.divider(),
       S.listItem()
-        .title('Site Configuration')
+        .title("Site Configuration")
         .icon(Settings2)
         .child(
           S.list()
-            .title('Site Configuration')
+            .title("Site Configuration")
             .items([
               createSingleton({
                 S,
-                type: 'navbar',
-                title: 'Navigation',
+                type: "navbar",
+                title: "Navigation",
                 icon: PanelTopIcon,
               }),
               createSingleton({
                 S,
-                type: 'footer',
-                title: 'Footer',
+                type: "footer",
+                title: "Footer",
                 icon: PanelBottomIcon,
               }),
               createSingleton({
                 S,
-                type: 'settings',
-                title: 'Global Settings',
+                type: "settings",
+                title: "Global Settings",
                 icon: CogIcon,
               }),
             ]),
         ),
-    ])
-}
+    ]);
+};

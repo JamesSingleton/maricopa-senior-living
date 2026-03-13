@@ -1,61 +1,62 @@
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { CalendarIcon } from '@heroicons/react/24/outline'
+import { CalendarIcon } from "@heroicons/react/24/outline";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 
-import { getPostBySlug, getAllPostSlugs } from '@/lib/sanity.fetch'
-import { CustomPortableText } from '@/components/CustomPortableText'
-import Date from '@/components/Date'
-import BackButton from '@/components/BackButton'
-import ImageComponent from '@/components/ImageComponent'
-import { sanityFetch } from '@/lib/sanity/live'
-import { client } from '@/lib/sanity/client'
-import { queryArticleSlugPageData, queryArticlePaths } from '@/lib/sanity/query'
-
-import type { Metadata } from 'next'
-import type { Tag } from '@/lib/sanity/sanity.types'
+import BackButton from "@/components/BackButton";
+import { CustomPortableText } from "@/components/CustomPortableText";
+import DateComponent from "@/components/Date";
+import ImageComponent from "@/components/ImageComponent";
+import { client } from "@/lib/sanity/client";
+import { sanityFetch } from "@/lib/sanity/live";
+import {
+  queryArticlePaths,
+  queryArticleSlugPageData,
+} from "@/lib/sanity/query";
+import { getPostBySlug } from "@/lib/sanity.fetch";
 
 async function fetchArticleSlugPageData(slug: string) {
   return await sanityFetch({
     query: queryArticleSlugPageData,
     params: { slug },
-  })
+  });
 }
 
 async function fetchArticlePaths() {
   try {
-    const slugs = await client.fetch(queryArticlePaths)
+    const slugs = await client.fetch(queryArticlePaths);
 
     if (!Array.isArray(slugs) || slugs.length === 0) {
-      return []
+      return [];
     }
     return slugs.map((slug) => ({
       slug,
-    }))
+    }));
   } catch (error) {
-    console.error('Error fetching article paths:', error)
-    return []
+    console.error("Error fetching article paths:", error);
+    return [];
   }
 }
 
 export async function generateStaticParams() {
-  const paths = await fetchArticlePaths()
+  const paths = await fetchArticlePaths();
 
-  return paths
+  return paths;
 }
 
 // Allow dynamic params for paths not generated at build time
-export const dynamicParams = true
+export const dynamicParams = true;
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params
-  const post = await getPostBySlug(slug)
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
 
   if (!post) {
-    return {}
+    return {};
   }
 
   return {
@@ -64,20 +65,24 @@ export async function generateMetadata({
     openGraph: {
       title: `${post.title}`,
       description: `${post.excerpt}`,
-      type: 'article',
+      type: "article",
       tags: post.tags.map((tag) => tag.title),
       publishedTime: post.publishedAt,
       modifiedTime: post._updatedAt,
     },
-  }
+  };
 }
 
-export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  const { data: post } = await fetchArticleSlugPageData(slug)
+export default async function ArticlePage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const { data: post } = await fetchArticleSlugPageData(slug);
 
   if (!post) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -98,7 +103,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             </span>
             <span className="flex items-center space-x-2">
               <CalendarIcon className="h-5 w-5 text-zinc-500" />
-              <span className="sr-only">Published on</span> <Date dateString={post.publishedAt} />
+              <span className="sr-only">Published on</span>{" "}
+              <DateComponent dateString={post.publishedAt} />
             </span>
           </div>
           <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -119,23 +125,25 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           {post.tags && (
             <div className="mt-8 md:mt-14">
               <h2 className="text-xl font-semibold">Tags</h2>
-              <ul className="not-prose flex list-none items-center space-x-4 pl-0" role="list">
-                {post.tags.map((tag: { _id: string; title: string; slug: string }) => (
-                  <li key={tag._id}>
-                    <Link
-                      href={`/tag/${tag.slug}`}
-                      prefetch={false}
-                      className="rounded bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
-                    >
-                      {tag.title}
-                    </Link>
-                  </li>
-                ))}
+              <ul className="not-prose flex list-none items-center space-x-4 pl-0">
+                {post.tags.map(
+                  (tag: { _id: string; title: string; slug: string }) => (
+                    <li key={tag._id}>
+                      <Link
+                        href={`/tag/${tag.slug}`}
+                        prefetch={false}
+                        className="rounded bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
+                      >
+                        {tag.title}
+                      </Link>
+                    </li>
+                  ),
+                )}
               </ul>
             </div>
           )}
         </div>
       </article>
     </>
-  )
+  );
 }

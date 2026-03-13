@@ -1,26 +1,28 @@
-import Link from 'next/link'
-import { PaperClipIcon } from '@heroicons/react/20/solid'
-import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
-import { getFileAsset } from '@sanity/asset-utils'
+import { PaperClipIcon } from "@heroicons/react/20/solid";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import { getFileAsset } from "@sanity/asset-utils";
+import Link from "next/link";
 
-import { dataset, projectId } from '@/lib/sanity.api'
-import BusinessHours from './BusinessHours'
-import { CustomPortableText } from './CustomPortableText'
+import { dataset, projectId } from "@/lib/sanity.api";
+import BusinessHours from "./BusinessHours";
+import { CustomPortableText } from "./CustomPortableText";
 
 function convertBytes(bytes: number): string {
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
   if (bytes === 0) {
-    return '0 Bytes'
+    return "0 Bytes";
   }
-  const i = Math.floor(Math.log(bytes) / Math.log(1024))
-  return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i]
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  return parseFloat((bytes / 1024 ** i).toFixed(2)) + " " + sizes[i];
 }
 
 const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
   return (
     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
       <div className="prose px-4 py-6 sm:px-6">
-        <h2 className="text-2xl font-semibold leading-7 text-zinc-900">{directoryItem.title}</h2>
+        <h2 className="text-2xl font-semibold leading-7 text-zinc-900">
+          {directoryItem.title}
+        </h2>
         {directoryItem.description && (
           <CustomPortableText
             paragraphClasses="mt-1 max-w-2xl text-sm leading-6 text-zinc-500"
@@ -32,7 +34,9 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
         <dl className="divide-y divide-zinc-100">
           {directoryItem.audience && (
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-zinc-900">Audience/Eligibility</dt>
+              <dt className="text-sm font-medium text-zinc-900">
+                Audience/Eligibility
+              </dt>
               <dd className="prose mt-1 text-sm leading-6 text-zinc-700 sm:col-span-2 sm:mt-0">
                 <CustomPortableText value={directoryItem.audience} />
               </dd>
@@ -93,14 +97,16 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
           )}
           {directoryItem.attachments && (
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium leading-6 text-zinc-900">Attachments</dt>
+              <dt className="text-sm font-medium leading-6 text-zinc-900">
+                Attachments
+              </dt>
               <dd className="mt-2 text-sm text-zinc-900 sm:col-span-2 sm:mt-0">
-                <ul
-                  role="list"
-                  className="divide-y divide-zinc-100 rounded-md border border-zinc-200"
-                >
+                <ul className="divide-y divide-zinc-100 rounded-md border border-zinc-200">
                   {directoryItem.attachments.map((attachment: any) => {
-                    const attachmentAsset = getFileAsset(attachment, { dataset, projectId })
+                    const attachmentAsset = getFileAsset(attachment, {
+                      dataset,
+                      projectId,
+                    });
                     return (
                       <li
                         key={attachment._key}
@@ -112,7 +118,9 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
                             aria-hidden="true"
                           />
                           <div className="ml-4 flex min-w-0 flex-1 gap-2">
-                            <span className="truncate font-medium">{attachment.name}</span>
+                            <span className="truncate font-medium">
+                              {attachment.name}
+                            </span>
                             <span className="shrink-0 text-zinc-400">
                               {attachmentAsset.extension.toUpperCase()}
                             </span>
@@ -129,7 +137,7 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
                           </a>
                         </div>
                       </li>
-                    )
+                    );
                   })}
                 </ul>
               </dd>
@@ -137,11 +145,13 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
           )}
           {directoryItem.tags && (
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium leading-6 text-zinc-900">Tags</dt>
+              <dt className="text-sm font-medium leading-6 text-zinc-900">
+                Tags
+              </dt>
               <dd className="mt-2 text-sm text-zinc-900 sm:col-span-2 sm:mt-0">
                 <ul className="flex flex-wrap gap-2">
-                  {directoryItem.tags.map((tag: any, index: number) => (
-                    <li key={`${tag._id}_${directoryItem.title}_${index}`}>
+                  {directoryItem.tags.map((tag: any) => (
+                    <li key={`${tag._id}_${directoryItem.title}`}>
                       <Link
                         className="space-x-4 rounded-sm bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
                         href={`/tag/${tag.slug}`}
@@ -158,7 +168,7 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
         </dl>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DirectoryCard
+export default DirectoryCard;

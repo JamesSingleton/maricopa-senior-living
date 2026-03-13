@@ -1,90 +1,102 @@
-import type { StructureBuilder, StructureResolverContext } from 'sanity/structure'
-import { File, HomeIcon, MenuIcon, TagIcon, type LucideIcon } from 'lucide-react'
+import {
+  File,
+  HomeIcon,
+  type LucideIcon,
+  MenuIcon,
+  TagIcon,
+} from "lucide-react";
+import type {
+  StructureBuilder,
+  StructureResolverContext,
+} from "sanity/structure";
 
-import { SchemaType, SingletonType } from './schemaTypes'
+import type { SchemaType, SingletonType } from "./schemaTypes";
 
 type Base<T = SchemaType> = {
-  id?: string
-  type: T
-  preview?: boolean
-  title: string
-  icon?: LucideIcon
-}
+  id?: string;
+  type: T;
+  preview?: boolean;
+  title: string;
+  icon?: LucideIcon;
+};
 
 type CreateSingleton = {
-  S: StructureBuilder
-} & Base<SingletonType>
+  S: StructureBuilder;
+} & Base<SingletonType>;
 
 const createSingleton = ({ S, type, title, icon }: CreateSingleton) => {
   return S.listItem()
     .title(title)
     .icon(icon ?? File)
-    .child(S.document().schemaType(type).documentId(type))
-}
+    .child(S.document().schemaType(type).documentId(type));
+};
 
 type CreateList = {
-  S: StructureBuilder
-} & Base
+  S: StructureBuilder;
+} & Base;
 
 const createList = ({ S, type, icon, title, id }: CreateList) => {
   return S.documentTypeListItem(type)
     .id(id ?? type)
     .title(title)
-    .icon(icon ?? File)
-}
+    .icon(icon ?? File);
+};
 
-export const structure = (S: StructureBuilder, context: StructureResolverContext) =>
+export const structure = (
+  S: StructureBuilder,
+  context: StructureResolverContext,
+) =>
   S.list()
-    .title('Content')
+    .title("Content")
     .items([
       createList({
         S,
-        type: 'post',
+        type: "post",
         icon: File,
-        title: 'Posts',
+        title: "Posts",
       }),
       createList({
         S,
-        type: 'author',
+        type: "author",
         icon: File,
-        title: 'Authors',
+        title: "Authors",
       }),
       createList({
         S,
-        type: 'category',
+        type: "category",
         icon: File,
-        title: 'Categories',
+        title: "Categories",
       }),
       createList({
         S,
-        type: 'tag',
+        type: "tag",
         icon: TagIcon,
-        title: 'Tags',
+        title: "Tags",
       }),
       createList({
         S,
-        type: 'service',
+        type: "service",
         icon: File,
-        title: 'Services',
+        title: "Services",
       }),
 
       createList({
         S,
-        type: 'page',
+        type: "page",
         icon: File,
-        title: 'Pages',
+        title: "Pages",
       }),
       S.divider(),
       createSingleton({
         S,
-        type: 'home',
+        type: "home",
         icon: HomeIcon,
-        title: 'Home',
+        title: "Home",
       }),
       createSingleton({
         S,
-        type: 'navigation',
+        type: "navigation",
         icon: MenuIcon,
-        title: 'Navigation',
+        title: "Navigation",
       }),
-    ])
+    ]);

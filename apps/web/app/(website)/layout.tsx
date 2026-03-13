@@ -1,39 +1,50 @@
-import '@/app/globals.css'
-import { Suspense } from 'react'
-import Script from 'next/script'
-import PlausibleProvider from 'next-plausible'
+import "@/app/globals.css";
+import type { Metadata } from "next";
+import Script from "next/script";
+import PlausibleProvider from "next-plausible";
+import { Suspense } from "react";
 
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import RightSidebar from '@/components/RightSidebar'
-import { baseUrl } from '@/lib/constants'
-import { getNavigation } from '@/lib/sanity.fetch'
-import ScrollToTop from '@/components/ScrollToTop'
-import { SanityLive } from '@/lib/sanity/live'
-
-import type { Metadata } from 'next'
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import RightSidebar from "@/components/RightSidebar";
+import ScrollToTop from "@/components/ScrollToTop";
+import { baseUrl } from "@/lib/constants";
+import { SanityLive } from "@/lib/sanity/live";
+import { getNavigation } from "@/lib/sanity.fetch";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    template: '%s | Maricopa Senior Living',
-    default: 'Maricopa Senior Living - Aging Well Your Way!',
+    template: "%s | Maricopa Senior Living",
+    default: "Maricopa Senior Living - Aging Well Your Way!",
   },
   openGraph: {
-    type: 'website',
+    type: "website",
     title: {
-      template: '%s | Maricopa Senior Living',
-      default: 'Maricopa Senior Living - Aging Well Your Way!',
+      template: "%s | Maricopa Senior Living",
+      default: "Maricopa Senior Living - Aging Well Your Way!",
     },
   },
-}
+};
 
-export default async function IndexLayout({ children }: { children: React.ReactNode }) {
-  const navigation = await getNavigation()
+export default async function IndexLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const navigation = await getNavigation();
 
   return (
-    <PlausibleProvider domain="maricopaseniorliving.org" trackFileDownloads trackOutboundLinks>
-      <Script src="https://cdn.userway.org/widget.js" data-account="qeA6uoRyx5" data-position="2" />
+    <PlausibleProvider
+      domain="maricopaseniorliving.org"
+      trackFileDownloads
+      trackOutboundLinks
+    >
+      <Script
+        src="https://cdn.userway.org/widget.js"
+        data-account="qeA6uoRyx5"
+        data-position="2"
+      />
       <Suspense
         fallback={
           <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -55,5 +66,5 @@ export default async function IndexLayout({ children }: { children: React.ReactN
       <ScrollToTop />
       <SanityLive />
     </PlausibleProvider>
-  )
+  );
 }

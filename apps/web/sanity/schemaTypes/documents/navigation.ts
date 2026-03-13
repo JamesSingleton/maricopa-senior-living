@@ -1,44 +1,44 @@
-import { defineField, defineType } from 'sanity'
-import { MenuIcon } from '@sanity/icons'
+import { MenuIcon } from "@sanity/icons";
+import { defineField, defineType } from "sanity";
 
 export const navigation = defineType({
-  name: 'navigation',
-  type: 'document',
+  name: "navigation",
+  type: "document",
   icon: MenuIcon,
-  title: 'Navigation',
+  title: "Navigation",
   fields: [
     defineField({
-      name: 'headerPrimary',
+      name: "headerPrimary",
       description: '"Mega menu" items with child links',
-      type: 'array',
+      type: "array",
       of: [
         defineField({
-          name: 'item',
-          type: 'object',
+          name: "item",
+          type: "object",
           fields: [
             defineField({
-              name: 'link',
-              type: 'link',
+              name: "link",
+              type: "link",
             }),
             defineField({
-              name: 'children',
-              type: 'array',
+              name: "children",
+              type: "array",
               of: [
                 defineField({
-                  name: 'item',
-                  type: 'object',
-                  fields: [{ name: 'link', type: 'link' }],
+                  name: "item",
+                  type: "object",
+                  fields: [{ name: "link", type: "link" }],
                   preview: {
                     select: {
-                      title: 'link.text',
-                      url: 'link.url',
-                      ref: 'link.reference.slug.current',
+                      title: "link.text",
+                      url: "link.url",
+                      ref: "link.reference.slug.current",
                     },
                     prepare({ title, url, ref }) {
                       return {
                         title,
                         subtitle: ref ?? url,
-                      }
+                      };
                     },
                   },
                 }),
@@ -47,48 +47,48 @@ export const navigation = defineType({
           ],
           preview: {
             select: {
-              children: 'children',
-              refSlug: 'link.reference.slug.current',
-              refTitle: 'link.reference.title',
-              text: 'link.text',
-              url: 'link.url',
+              children: "children",
+              refSlug: "link.reference.slug.current",
+              refTitle: "link.reference.title",
+              text: "link.text",
+              url: "link.url",
             },
             prepare(selection) {
-              const { children, refSlug, refTitle, text, url } = selection
+              const { children, refSlug, refTitle, text, url } = selection;
 
-              let subtitle
+              let subtitle: string | undefined;
               if (children) {
                 subtitle =
                   children.length === 1
                     ? `${children.length} Child Link`
-                    : `${children.length} Child Links`
+                    : `${children.length} Child Links`;
               } else if (refSlug) {
-                subtitle = refSlug
+                subtitle = refSlug;
               } else if (url) {
-                subtitle = url
+                subtitle = url;
               }
 
               return {
                 title: !text && !refTitle ? `Empty Text` : (text ?? refTitle),
                 subtitle: subtitle ?? `No link`,
-              }
+              };
             },
           },
         }),
       ],
     }),
     defineField({
-      name: 'footer',
-      description: 'Additional links in the website Footer',
-      type: 'array',
-      of: [{ name: 'link', type: 'link' }],
+      name: "footer",
+      description: "Additional links in the website Footer",
+      type: "array",
+      of: [{ name: "link", type: "link" }],
     }),
   ],
   preview: {
     prepare() {
       return {
-        title: 'Menus',
-      }
+        title: "Menus",
+      };
     },
   },
-})
+});

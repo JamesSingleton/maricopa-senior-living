@@ -1,4 +1,4 @@
-import { groq } from 'next-sanity'
+import { groq } from "next-sanity";
 
 const authorFields = `
   name,
@@ -11,7 +11,7 @@ const authorFields = `
     }
   },
   "slug": slug.current,
-`
+`;
 
 const postFields = `
   _id,
@@ -48,21 +48,21 @@ const postFields = `
       asset->
     }
   },
-`
+`;
 
 export const allPosts = groq`*[_type == "post" && isArchived != true] | order(publishedAt desc){
   ${postFields}
-}`
+}`;
 
 export const allPostSlugs = groq`
 *[_type == "post" && defined(slug.current) && isArchived != true][].slug.current
-`
+`;
 
 export const postBySlug = groq`*[_type == "post" && slug.current == $slug && isArchived != true]{
   ${postFields}
-}[0]`
+}[0]`;
 
-export const allCategories = groq`*[_type == "category"][].slug.current`
+export const allCategories = groq`*[_type == "category"][].slug.current`;
 
 export const categoryBySlug = groq`*[_type == "category" && slug.current == $slug]{
   title,
@@ -107,11 +107,11 @@ export const categoryBySlug = groq`*[_type == "category" && slug.current == $slu
       2
     )
   } | order(rank),
-}[0]`
+}[0]`;
 
-const COUNT_FOR_SIDEBAR = `count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])`
+const COUNT_FOR_SIDEBAR = `count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])`;
 
-export const allTags = groq`*[_type == "tag" && defined(slug.current)][].slug.current`
+export const allTags = groq`*[_type == "tag" && defined(slug.current)][].slug.current`;
 
 export const tagBySlug = groq`*[_type == "tag" && slug.current == $slug]{
   title,
@@ -129,7 +129,7 @@ export const tagBySlug = groq`*[_type == "tag" && slug.current == $slug]{
       "slug": slug.current,
     }
   },
-}[0]`
+}[0]`;
 
 export const search = groq`
 *[(_type == "post" && isArchived != true && (title match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*")) ||
@@ -150,7 +150,7 @@ export const search = groq`
     }
   },
 }
-`
+`;
 
 export const navigationQuery = groq`*[_type == "navigation"][0]{
   "headerPrimary": headerPrimary[]{
@@ -178,7 +178,7 @@ export const navigationQuery = groq`*[_type == "navigation"][0]{
       "slug": slug.current
     }
   },
-}`
+}`;
 
 export const pageBySlug = groq`*[_type == "page" && slug.current == $slug][0]{
   title,
@@ -191,7 +191,7 @@ export const pageBySlug = groq`*[_type == "page" && slug.current == $slug][0]{
       asset->
     }
   },
-}`
+}`;
 
 export const rightSidebarQuery = groq`{
   "whatsNew": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What's New!"]._id)][0]{
@@ -222,4 +222,4 @@ export const rightSidebarQuery = groq`{
     publishedAt,
     "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
   }
-}`
+}`;

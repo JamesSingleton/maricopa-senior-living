@@ -1,14 +1,18 @@
-import { notFound } from 'next/navigation'
+import { notFound } from "next/navigation";
 
-import { getPageBySlug } from '@/lib/sanity.fetch'
-import { CustomPortableText } from '@/components/CustomPortableText'
+import { CustomPortableText } from "@/components/CustomPortableText";
+import { getPageBySlug } from "@/lib/sanity.fetch";
 
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  const pageData = await getPageBySlug(slug)
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const pageData = await getPageBySlug(slug);
 
   if (!pageData) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -20,5 +24,5 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <CustomPortableText value={pageData.body} />
       </section>
     </>
-  )
+  );
 }

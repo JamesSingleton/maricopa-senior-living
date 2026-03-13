@@ -1,15 +1,15 @@
-import Link from 'next/link'
+import Link from "next/link";
 
 interface FooterProps {
-  _key: string
-  url: string
-  text: string
+  _key: string;
+  url: string;
+  text: string;
   reference: {
-    _id: string
-    _type: string
-    slug: string
-    title: string
-  }
+    _id: string;
+    _type: string;
+    slug: string;
+    title: string;
+  };
 }
 
 export default function Footer({ menu }: { menu: FooterProps[] }) {
@@ -42,7 +42,8 @@ export default function Footer({ menu }: { menu: FooterProps[] }) {
           ))}
         </nav>
         <p className="mt-10 text-center text-sm leading-5 text-zinc-500">
-          &copy; {new Date().getFullYear()} Maricopa Senior Living. All rights reserved.{' '}
+          &copy; {new Date().getFullYear()} Maricopa Senior Living. All rights
+          reserved.{" "}
           <a
             className="text-indigo-600 hover:text-indigo-700"
             target="_blank"
@@ -54,5 +55,5 @@ export default function Footer({ menu }: { menu: FooterProps[] }) {
         </p>
       </div>
     </footer>
-  )
+  );
 }
