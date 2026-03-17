@@ -37,7 +37,7 @@
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "lucide-react": "catalog:",
-    "next": "^16.1.6",
+    "next": "^16.1.7",
     "next-plausible": "^3.12.5",
     "next-sanity": "^12.1.1",
     "react": "catalog:",
