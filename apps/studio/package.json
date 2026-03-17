@@ -16,18 +16,18 @@
     "type": "sanity schema extract --enforce-required-fields && sanity typegen generate"
   },
   "dependencies": {
-    "@sanity/assist": "^6.0.2",
+    "@sanity/assist": "^6.0.3",
     "@sanity/client": "catalog:",
     "@sanity/functions": "^1.2.1",
     "@sanity/icons": "^3.7.4",
-    "@sanity/ui": "^3.1.13",
-    "@sanity/vision": "^5.15.0",
+    "@sanity/ui": "^3.1.14",
+    "@sanity/vision": "^5.16.0",
     "lucide-react": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "sanity": "^5.15.0",
+    "sanity": "^5.16.0",
     "sanity-plugin-media": "^4.1.0",
-    "slugify": "^1.6.6",
+    "slugify": "^1.6.8",
     "styled-components": "^6.3.11"
   },
   "devDependencies": {
