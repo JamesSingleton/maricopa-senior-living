@@ -215,7 +215,7 @@ export const rightSidebarQuery = groq`{
     ...,
     "slug": slug.current,
   },
-  "newsletter": *[_type == "post" && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"]._id)][0]{
+  "newsletter": *[_type == "post" && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"]._id)] | order(publishedAt desc)[0]{
     _id,
     title,
     "slug": slug.current,

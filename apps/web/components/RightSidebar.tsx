@@ -6,7 +6,7 @@ import Link from "next/link";
 import DateComponent from "@/components/Date";
 import SearchBar from "@/components/SearchBar";
 import { highlightedCategories, highlightedTags } from "@/lib/sanity/query";
-import { getRightSidebar } from "@/lib/sanity.fetch";
+import { rightSidebarQuery } from "@/lib/sanity.queries";
 import { CustomPortableText } from "./CustomPortableText";
 import ImageComponent from "./ImageComponent";
 
@@ -22,11 +22,24 @@ async function fetchHighlightedTags() {
   });
 }
 
+async function fetchRightSidebar() {
+  return await sanityFetch({
+    query: rightSidebarQuery,
+  });
+}
+
 const RightSidebar = async () => {
-  const { data: highlightedCategories } = await fetchHighlightedCategories();
-  const { data: highlightedTags } = await fetchHighlightedTags();
-  const { whatsNew, seniorCenterNewsletters, nonProfit, newsletter } =
-    await getRightSidebar();
+  const [
+    { data: highlightedCategories },
+    { data: highlightedTags },
+    {
+      data: { whatsNew, seniorCenterNewsletters, nonProfit, newsletter },
+    },
+  ] = await Promise.all([
+    fetchHighlightedCategories(),
+    fetchHighlightedTags(),
+    fetchRightSidebar(),
+  ]);
 
   return (
     <>

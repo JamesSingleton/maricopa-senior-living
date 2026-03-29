@@ -4,7 +4,6 @@ import type { QueryParams } from "next-sanity";
 
 import type { CategoryPage, GroupItem } from "@/types/common";
 import type { Post } from "@/types/Post";
-import type { RightSidebarQueryResult } from "./sanity/sanity.types";
 import { client } from "./sanity.client";
 import {
   allCategories,
@@ -14,7 +13,6 @@ import {
   navigationQuery,
   pageBySlug,
   postBySlug,
-  rightSidebarQuery,
   search,
   tagBySlug,
 } from "./sanity.queries";
@@ -41,13 +39,6 @@ export function getNavigation() {
   return sanityFetch<any>({
     query: navigationQuery,
     tags: ["navigation"],
-  });
-}
-
-export function getRightSidebar() {
-  return sanityFetch<RightSidebarQueryResult>({
-    query: rightSidebarQuery,
-    tags: ["category", "tag", "post"],
   });
 }
 
