@@ -43,7 +43,11 @@
 
     /* custom brand tokens */
 
+    --brand-terracotta: oklch(0.52 0.14 35);
+    --brand-sand: oklch(0.88 0.04 80);
+    --brand-sage: oklch(0.52 0.1 155);
     --brand-deep: oklch(0.22 0.04 40);
+    --brand-cream: oklch(0.97 0.01 80);
 }
 
 .dark {
@@ -126,6 +130,7 @@
     * {
         @apply border-border outline-ring/50;
     }
+
     body {
         @apply bg-background text-foreground;
     }

@@ -46,7 +46,7 @@ function LinkGroupCard({ group }: { group: ExternalLinkGroup }) {
       {/* Header */}
       <div className="flex items-start justify-between gap-4 mb-5">
         <div className="flex items-start gap-4">
-          <div className="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0 bg-white/60">
+          <div className="w-11 h-11 rounded-lg flex items-center justify-center shrink-0 bg-white/60">
             <Icon className="w-5 h-5" aria-hidden="true" />
           </div>
           <div>
@@ -68,7 +68,7 @@ function LinkGroupCard({ group }: { group: ExternalLinkGroup }) {
             </p>
           </div>
         </div>
-        <span className="font-sans text-xs font-semibold text-muted-foreground flex-shrink-0">
+        <span className="font-sans text-xs font-semibold text-muted-foreground shrink-0">
           {group.links.length} link{group.links.length !== 1 ? "s" : ""}
         </span>
       </div>
@@ -84,10 +84,6 @@ function LinkGroupCard({ group }: { group: ExternalLinkGroup }) {
               className="group flex items-start gap-3 p-3.5 rounded-lg bg-white/50 hover:bg-white/80 border border-white/60 hover:border-white transition-all"
               aria-label={`${link.label}${link.description ? ` — ${link.description}` : ""} (opens in new tab)`}
             >
-              <ExternalLink
-                className="w-4 h-4 text-current opacity-50 group-hover:opacity-100 flex-shrink-0 mt-0.5 transition-opacity"
-                aria-hidden="true"
-              />
               <div className="min-w-0">
                 <span className="font-sans font-semibold text-sm text-foreground group-hover:text-primary transition-colors block truncate">
                   {link.label}
@@ -98,8 +94,8 @@ function LinkGroupCard({ group }: { group: ExternalLinkGroup }) {
                   </span>
                 )}
               </div>
-              <ChevronRight
-                className="w-4 h-4 text-muted-foreground flex-shrink-0 self-center ml-auto opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all"
+              <ExternalLink
+                className="w-4 h-4 text-current opacity-50 group-hover:opacity-100 ml-auto shrink-0 mt-0.5 transition-opacity"
                 aria-hidden="true"
               />
             </a>

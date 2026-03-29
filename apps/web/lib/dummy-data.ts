@@ -1235,39 +1235,105 @@ export const EXTERNAL_LINK_GROUPS: ExternalLinkGroup[] = [
     colorClass: "text-blue-700 bg-blue-50 border-blue-200",
     links: [
       {
-        label: "City of Maricopa Official Website",
+        label: "City of Maricopa Home Page",
         url: "https://www.maricopa-az.gov",
         description: "Official city government portal",
       },
       {
-        label: "City Council & Meetings",
-        url: "https://www.maricopa-az.gov/government/city-council",
+        label: "Mayor and Council",
+        url: "https://www.maricopa-az.gov/departments/mayor-council-1538",
         description: "Council members, agendas, and schedules",
       },
       {
-        label: "Parks & Recreation",
-        url: "https://www.maricopa-az.gov/residents/parks",
-        description: "Parks, trails, and recreation programs",
+        label: "Departments",
+        url: "https://www.maricopa-az.gov/departments",
+        description: "City departments and services",
       },
       {
-        label: "City Utilities",
-        url: "https://www.maricopa-az.gov/residents/utilities",
-        description: "Water, sewer, and trash services",
+        label: "City of Maricopa eNews",
+        url: "https://www.maricopa-az.gov/departments/communications-and-cultural-services-department/maricopa-enews",
+        description: "Subscribe to the weekly city newsletter",
       },
       {
-        label: "Senior Programs",
-        url: "https://www.maricopa-az.gov/residents/seniors",
-        description: "City-sponsored programs for adults 55+",
+        label: "What's New Maricopa",
+        url: "https://maricopa-az.maps.arcgis.com/apps/instant/portfolio/index.html?appid=5e1870db1c064ac58ffb0b817a0a219a",
+        description: "Stay up to date on all development projects in the city",
+      },
+      {
+        label: "City Meeting Calendars, Agendas & Minutes",
+        url: "https://maricopa.legistar.com/Calendar.aspx",
+        description: "Meeting calendars, agendas, notes, and minutes",
+      },
+      {
+        label: "Meeting Notices & Public Hearing Notices",
+        url: "https://www.maricopa-az.gov/departments/city-clerk-s-office/public-notices",
+        description: "Official public notices and hearing announcements",
+      },
+      {
+        label: "Communications and Cultural Services",
+        url: "https://www.maricopa-az.gov/departments/communications-and-cultural-services-department",
+        description: "Stay in touch with what's happening in Maricopa",
+      },
+      {
+        label: "City of Maricopa Organization Chart",
+        url: "https://www.maricopa-az.gov/home/showdocument?id=5647&t=637829608234448588",
+        description: "City organizational structure and leadership chart",
+      },
+      {
+        label: "ActiveNet — Recreation Programs",
+        url: "https://anc.apm.activecommunities.com/cityofmaricoparec/activity/search?onlineSiteId=0&locale=en-US&activity_select_param=2&viewMode=list",
+        description: "Register for city recreation activities and programs",
+      },
+      {
+        label: "MET Transit Service",
+        url: "https://www.maricopa-az.gov/departments/transit",
+        description: "Maricopa's public transportation service",
+      },
+      {
+        label: "Strategic Planning — 2040 Vision Plan",
+        url: "https://www.maricopa-az.gov/home/showdocument?id=4",
+        description: "City of Maricopa long-range 2040 vision and goals",
+      },
+      {
+        label: "Strategic Planning Priorities (Current)",
+        url: "https://www.maricopa-az.gov/home/showpublisheddocument/6357/638835264201952922",
+        description: "Current city strategic planning priorities",
+      },
+      {
+        label: "General Plan (Adopted May 17, 2016)",
+        url: "https://www.maricopa-az.gov/home/showdocument?id=5127",
+        description: "Current adopted general plan document",
+      },
+      {
+        label: "2026 General Plan Update",
+        url: "https://www.maricopa-az.gov/departments/planning-maricopa-general-plan",
+        description: "In-progress update to the city's general plan",
+      },
+      {
+        label: "Capital Improvement Plan",
+        url: "https://city-maricopa-az-budget-book.cleargov.com/17596/introduction",
+        description: "City capital projects and infrastructure investments",
+      },
+      {
+        label: "City Budget",
+        url: "https://www.maricopa-az.gov/departments/budget",
+        description: "City of Maricopa annual budgets and financial documents",
+      },
+      {
+        label: "Maricopa Library — Adult Events Calendar",
+        url: "https://pcld.libnet.info/events?d=2025-02-04&l=Maricopa+Library+and+Cultural+Center&a=Adults&v=grid",
+        description:
+          "Upcoming adult events at the Maricopa Library and Cultural Center",
+      },
+      {
+        label: "You Are Not Alone (YANA)",
+        url: "https://www.maricopa-az.gov/departments/city-of-maricopa-police-department/victim-services/you-are-not-alone",
+        description: "Police Department victim services and support resources",
       },
       {
         label: "Emergency Management",
-        url: "https://www.maricopa-az.gov/government/emergency-management",
+        url: "https://www.maricopa-az.gov/departments/emergency-management",
         description: "Emergency preparedness and alerts",
-      },
-      {
-        label: "Public Safety — Police & Fire",
-        url: "https://www.maricopa-az.gov/departments/police",
-        description: "Maricopa Police Department and Fire District",
       },
     ],
   },
@@ -1280,29 +1346,34 @@ export const EXTERNAL_LINK_GROUPS: ExternalLinkGroup[] = [
     colorClass: "text-orange-700 bg-orange-50 border-orange-200",
     links: [
       {
-        label: "InMaricopa.com — Home",
-        url: "https://www.inmaricopa.com",
+        label: "Home",
+        url: "https://www.inmaricopa.com/",
         description: "Maricopa's local news source",
       },
       {
-        label: "Local News Headlines",
-        url: "https://www.inmaricopa.com/news",
-        description: "Latest news from Maricopa",
+        label: "Government",
+        url: "https://www.inmaricopa.com/government/",
+        description: "Local government news and coverage",
       },
       {
-        label: "Community Events Calendar",
-        url: "https://www.inmaricopa.com/events",
-        description: "Upcoming events in Maricopa",
+        label: "Public Safety",
+        url: "https://www.inmaricopa.com/public-safety/",
+        description: "Police, fire, and public safety news",
       },
       {
-        label: "Business Directory",
-        url: "https://www.inmaricopa.com/directory",
-        description: "Local businesses serving the community",
+        label: "Restaurant Guide",
+        url: "https://magazines.inmaricopa.com/view/205654283/",
+        description: "Maricopa restaurant guide and dining directory",
       },
       {
-        label: "Letters & Opinion",
-        url: "https://www.inmaricopa.com/opinion",
-        description: "Community voices and letters to the editor",
+        label: "Things to Do in Maricopa",
+        url: "https://magazines.inmaricopa.com/view/773399012/",
+        description: "Activities, events, and attractions in the area",
+      },
+      {
+        label: "Traffic (Including SR 347 Cameras)",
+        url: "https://www.inmaricopa.com/maricopa-traffic/",
+        description: "Live traffic conditions and SR 347 camera feeds",
       },
     ],
   },
@@ -1317,28 +1388,29 @@ export const EXTERNAL_LINK_GROUPS: ExternalLinkGroup[] = [
     links: [
       {
         label: "National Weather Service — Phoenix",
-        url: "https://www.weather.gov/psr",
+        url: "https://www.weather.gov/psr/",
         description: "Official NWS forecasts for the Maricopa region",
       },
       {
-        label: "Maricopa 7-Day Forecast",
-        url: "https://forecast.weather.gov/MapClick.php?CityName=Maricopa&state=AZ",
-        description: "Local 7-day forecast from weather.gov",
+        label: "NWS — City of Maricopa Forecast",
+        url: "https://forecast.weather.gov/MapClick.php?lat=33.059300000000064&lon=-112.04808999999995",
+        description: "Pinpoint NWS forecast for the City of Maricopa",
       },
       {
-        label: "Weather.com — Maricopa, AZ",
-        url: "https://weather.com/weather/today/l/Maricopa+AZ",
-        description: "Hourly and 10-day forecasts",
+        label: "NWS — Heat Safety Tips",
+        url: "https://www.weather.gov/safety/heat",
+        description:
+          "Official heat safety guidance from the National Weather Service",
       },
       {
-        label: "Maricopa County Extreme Heat Alerts",
-        url: "https://www.maricopa.gov/5059/Extreme-Heat",
-        description: "Official extreme heat safety alerts",
+        label: "NWS — Summer Safety",
+        url: "https://www.weather.gov/wrn/summer-safety",
+        description: "Summer weather safety tips and resources",
       },
       {
-        label: "AZ Monsoon Season Guide",
-        url: "https://www.weather.gov/psr/Monsoon",
-        description: "Monsoon safety and preparedness",
+        label: "ADEQ — West Pinal Air Quality Forecast",
+        url: "https://azdeq.gov/forecast/WestPinal",
+        description: "Air quality forecast for the West Pinal County area",
       },
     ],
   },
@@ -1351,39 +1423,135 @@ export const EXTERNAL_LINK_GROUPS: ExternalLinkGroup[] = [
     colorClass: "text-emerald-700 bg-emerald-50 border-emerald-200",
     links: [
       {
-        label: "Pinal County Government",
-        url: "https://www.pinalcountyaz.gov",
-        description: "Pinal County official services and departments",
+        label: "AARP — Arizona",
+        url: "https://states.aarp.org/arizona/",
+        description: "AARP Arizona chapter resources and advocacy",
       },
       {
-        label: "Maricopa Public Library",
-        url: "https://mcldaz.org",
-        description: "Library services and digital resources",
+        label: "Alzheimer's Association — Desert Southwest Chapter",
+        url: "https://www.alz.org/dsw?set=1",
+        description: "Local Alzheimer's support, education, and care resources",
       },
       {
-        label: "Banner Casa Grande Medical Center",
-        url: "https://www.bannerhealth.com/locations/casa-grande",
-        description: "Nearest full-service hospital to Maricopa",
+        label: "Arizona Caregiver Coalition",
+        url: "https://www.azcaregiver.org/",
+        description: "Support resources for caregivers across Arizona",
       },
       {
-        label: "AZ Department of Economic Security",
-        url: "https://des.az.gov",
+        label: "Arizona Department of Economic Security",
+        url: "https://des.az.gov/",
         description: "Benefits, food assistance, and aging services",
       },
       {
-        label: "AZ AHCCCS — Arizona Medicaid",
-        url: "https://www.healthearizonaplus.gov",
+        label: "Arizona Department of Health Services",
+        url: "https://www.azdhs.gov/index.php",
+        description: "Arizona public health programs and resources",
+      },
+      {
+        label: "AZ Attorney General — Life Care Planning",
+        url: "https://www.azag.gov/issues/elder-affairs/life-care-planning",
+        description:
+          "Free advanced directives and life care planning documents",
+      },
+      {
+        label: "Arizona Healthcare Directives Registry",
+        url: "https://azhdr.org/",
+        description: "Register and access advanced healthcare directives",
+      },
+      {
+        label: "AZ Health Care Cost Containment System (AHCCCS)",
+        url: "https://www.azahcccs.gov/",
         description: "Arizona Medicaid information and enrollment",
       },
       {
-        label: "Pinal County Senior Services",
-        url: "https://www.pinalcountyaz.gov/seniors",
-        description: "County-sponsored senior programs",
+        label: "AZ Dept of Veterans' Services",
+        url: "https://dvs.az.gov/",
+        description: "Arizona state veterans services and programs",
       },
       {
-        label: "Maricopa Unified School District",
-        url: "https://www.maricopausd.org",
-        description: "MUSD schools and community education",
+        label: "AZ Veterans' Benefits Resource Guide",
+        url: "https://dvs.az.gov/resources/arizona-benefits-guide",
+        description: "Comprehensive guide to Arizona veterans benefits",
+      },
+      {
+        label: "Arizona Voter Information Portal",
+        url: "https://my.arizona.vote/PortalList.aspx",
+        description: "Voter registration, polling places, and election info",
+      },
+      {
+        label: "Banner Health — Support Groups & Events Calendar",
+        url: "https://www.bannerhealth.com/calendar?category=BALZH&range=10&PageNo=1&Tnoi=19",
+        description: "Health classes, support groups, and events open to all",
+      },
+      {
+        label: "BE AWESOME Resource Guide",
+        url: "https://img1.wsimg.com/blobby/go/fad8f167-77e8-4546-8a58-d22e8b7014b5/downloads/RESOURCE%20GUIDE%202022%202.0.pdf?ver=1728932959283",
+        description: "Local community resource guide (PDF)",
+      },
+      {
+        label: "Central Arizona Aging",
+        url: "https://www.caaging.org/",
+        description:
+          "Area Agency on Aging serving Pinal County seniors (formerly PGCSC)",
+      },
+      {
+        label: "Central Arizona Aging Resource Guide",
+        url: "https://www.caaging.org/wp-content/uploads/2024/11/Central-Arizona-Aging-Guide-2024.pdf",
+        description:
+          "2024 comprehensive aging resource guide for the region (PDF)",
+      },
+      {
+        label: "Community Action Human Resource Agency (CAHRA)",
+        url: "https://www.cahra.org/",
+        description:
+          "Local assistance programs for low-income and vulnerable residents",
+      },
+      {
+        label: "CopaResources.com",
+        url: "https://www.coparesources.com/",
+        description: "Maricopa community resource directory by James Singleton",
+      },
+      {
+        label: "Hospice of the Valley",
+        url: "https://www.hov.org/",
+        description: "Hospice care and end-of-life support services",
+      },
+      {
+        label: "Maricopa Library and Cultural Center",
+        url: "https://www.maricopa-az.gov/departments/maricopa-library-cultural-center",
+        description: "Library services, programs, and cultural events",
+      },
+      {
+        label: "2-1-1 Arizona",
+        url: "https://211arizona.org/",
+        description:
+          "Dial 2-1-1 or search online for local assistance resources",
+      },
+      {
+        label: "Neighbors Who Care",
+        url: "https://neighborswhocare.com/",
+        description:
+          "Excellent senior resources and volunteer support services",
+      },
+      {
+        label: "Neighbors Who Care — Caregiver's Guide",
+        url: "https://neighborswhocare.com/caregiver-challenge-ebook/",
+        description: "Free caregiver's guide download",
+      },
+      {
+        label: "Pinal Cares",
+        url: "https://www.pinal.gov/845/Pinal-Cares",
+        description: "Listing of Pinal County assistance and support resources",
+      },
+      {
+        label: "Pinal County Library District",
+        url: "https://www.pinal.gov/639/Library-District",
+        description: "Pinal County library branches and services",
+      },
+      {
+        label: "Pinal Votes",
+        url: "https://www.pinal.gov/794/Pinal-Votes",
+        description: "Pinal County elections, voter registration, and results",
       },
     ],
   },
@@ -1396,39 +1564,140 @@ export const EXTERNAL_LINK_GROUPS: ExternalLinkGroup[] = [
     colorClass: "text-indigo-700 bg-indigo-50 border-indigo-200",
     links: [
       {
-        label: "Medicare.gov",
+        label: "AARP",
+        url: "https://www.aarp.org/",
+        description: "Advocacy and resources for adults 50+",
+      },
+      {
+        label: "AARP Virtual Community Center",
+        url: "https://local.aarp.org/virtual-community-center/",
+        description: "Online classes, events, and activities from AARP",
+      },
+      {
+        label: "Al-Anon Family Groups",
+        url: "https://al-anon.org/",
+        description:
+          "Support for families and friends of people with alcohol problems",
+      },
+      {
+        label: "Alzheimer's Association",
+        url: "https://www.alz.org/",
+        description:
+          "National Alzheimer's care, support, and research resources",
+      },
+      {
+        label: "Alzheimers.gov",
+        url: "https://www.alzheimers.gov/alzheimers-dementias",
+        description: "Federal government Alzheimer's and dementia information",
+      },
+      {
+        label: "American Cancer Society",
+        url: "https://www.cancer.org/",
+        description: "Cancer research, support, and prevention resources",
+      },
+      {
+        label: "American Diabetes Association",
+        url: "https://diabetes.org/",
+        description: "Diabetes management, research, and advocacy",
+      },
+      {
+        label: "American Heart Association",
+        url: "https://www.heart.org/",
+        description: "Heart disease and stroke prevention resources",
+      },
+      {
+        label: "Careblazers",
+        url: "https://careblazers.com/about/",
+        description: "Support services and training for dementia caregivers",
+      },
+      {
+        label: "Centers for Disease Control & Prevention",
+        url: "https://www.cdc.gov/",
+        description:
+          "National public health information and disease prevention",
+      },
+      {
+        label: "Centers for Medicare and Medicaid Services",
+        url: "https://www.cms.gov/",
+        description: "Federal agency overseeing Medicare and Medicaid programs",
+      },
+      {
+        label: "Federal Trade Commission",
+        url: "https://consumer.ftc.gov/",
+        description: "Consumer protection, fraud alerts, and scam reporting",
+      },
+      {
+        label: "Hearing Loss Association of America (HLAA)",
+        url: "https://www.hearingloss.org/",
+        description: "Resources and advocacy for people with hearing loss",
+      },
+      {
+        label: "U.S. Dept. of Housing and Urban Development (HUD)",
+        url: "https://www.hud.gov/topics",
+        description: "Federal housing assistance and programs",
+      },
+      {
+        label: "Internal Revenue Service",
+        url: "https://www.irs.gov/",
+        description: "Federal tax information, forms, and filing resources",
+      },
+      {
+        label: "Medicaid",
+        url: "https://www.medicaid.gov/",
+        description: "Federal Medicaid program information and eligibility",
+      },
+      {
+        label: "Medicare",
         url: "https://www.medicare.gov",
         description: "Official Medicare information and plan comparison",
       },
       {
-        label: "Social Security Administration",
-        url: "https://www.ssa.gov",
+        label: "National Council on Aging",
+        url: "https://www.ncoa.org/",
+        description:
+          "Programs and resources to support older adults nationwide",
+      },
+      {
+        label: "National Institutes of Health",
+        url: "https://www.nih.gov/",
+        description: "Federal health research and medical information",
+      },
+      {
+        label: "Ready.gov",
+        url: "https://www.ready.gov/",
+        description:
+          "Federal emergency preparedness guidance for individuals and families",
+      },
+      {
+        label: "Red Cross",
+        url: "https://www.redcross.org/",
+        description: "Disaster relief, blood donations, and emergency services",
+      },
+      {
+        label: "Senior Planet (AARP)",
+        url: "https://seniorplanet.org/",
+        description: "Technology training and online programs for older adults",
+      },
+      {
+        label: "Social Security",
+        url: "https://www.ssa.gov/",
         description: "Benefits, estimates, and online services",
       },
       {
-        label: "USA.gov — Benefits for Seniors",
-        url: "https://www.usa.gov/senior-citizens",
-        description: "Federal benefits and resources",
+        label: "Veterans Affairs",
+        url: "https://www.va.gov/",
+        description: "Federal benefits and services for U.S. veterans",
       },
       {
-        label: "AARP",
-        url: "https://www.aarp.org",
-        description: "Advocacy and resources for adults 50+",
+        label: "USDA — Food Safety",
+        url: "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/steps-keep-food-safe",
+        description: "Safe food handling and preparation guidance",
       },
       {
-        label: "Eldercare Locator",
-        url: "https://eldercare.acl.gov",
-        description: "Find local aging services anywhere in the U.S.",
-      },
-      {
-        label: "BenefitsCheckUp — NCOA",
-        url: "https://www.benefitscheckup.org",
-        description: "Discover benefits programs you may qualify for",
-      },
-      {
-        label: "National Institute on Aging",
-        url: "https://www.nia.nih.gov",
-        description: "Science-based health information for seniors",
+        label: "U.S. Dept. of Health and Human Services",
+        url: "https://www.hhs.gov/",
+        description:
+          "Federal health and human services programs and information",
       },
     ],
   },
@@ -1442,28 +1711,33 @@ export const EXTERNAL_LINK_GROUPS: ExternalLinkGroup[] = [
     badge: "Live Traffic",
     links: [
       {
-        label: "AZ 511 — SR 347 Traffic Map",
-        url: "https://az511.gov",
+        label: "Current SR 347 Traffic Status",
+        url: "https://sr347.com/",
+        description: "Real-time SR 347 traffic conditions and updates",
+      },
+      {
+        label: "AZ 511 — Arizona Traveler Information",
+        url: "https://az511.com/about/about",
         description: "Real-time conditions on SR 347 and all AZ highways",
       },
       {
         label: "ADOT — SR 347 Project Info",
-        url: "https://azdot.gov/sr347",
+        url: "https://www.azdot.gov/sr347",
         description: "Arizona DOT project updates for SR 347",
       },
       {
-        label: "Google Maps — SR 347",
-        url: "https://maps.google.com/?q=SR+347+Maricopa+AZ",
-        description: "Live traffic on Google Maps for SR 347",
+        label: "Building Better Roads — Sales Tax Tracker",
+        url: "https://www.maricopa-az.gov/departments/city-manager-s-office/transportation-sales-tax-initative",
+        description: "Track how transportation sales tax funds are being spent",
       },
       {
-        label: "Waze — Maricopa Commute",
-        url: "https://www.waze.com",
-        description: "Community-based real-time traffic and navigation",
+        label: "347 Facts — Contact ADOT",
+        url: "https://347facts.com/",
+        description: "SR 347 advocacy site with ADOT contact tools",
       },
       {
-        label: "InMaricopa — Road Closures",
-        url: "https://www.inmaricopa.com/category/roads",
+        label: "Current City of Maricopa Area Traffic",
+        url: "https://www.inmaricopa.com/maricopa-traffic/",
         description: "Local coverage of road closures and SR 347 updates",
       },
     ],
