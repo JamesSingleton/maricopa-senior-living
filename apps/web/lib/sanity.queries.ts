@@ -192,34 +192,3 @@ export const pageBySlug = groq`*[_type == "page" && slug.current == $slug][0]{
     }
   },
 }`;
-
-export const rightSidebarQuery = groq`{
-  "whatsNew": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What's New!"]._id)][0]{
-    _id,
-    title,
-    "slug": slug.current,
-    "author": author->{
-      ${authorFields}
-    },
-    publishedAt,
-    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
-  },
-  "seniorCenterNewsletters": *[(_type == "post" && isArchived != true && references(*[_type == "category" && title == "City of Maricopa Community / Senior Center"]._id))][0..1] | order(publishedAt desc){
-    _id,
-    title,
-    "slug": slug.current,
-    publishedAt,
-    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
-  },
-  "nonProfit": *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{
-    ...,
-    "slug": slug.current,
-  },
-  "newsletter": *[_type == "post" && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"]._id)] | order(publishedAt desc)[0]{
-    _id,
-    title,
-    "slug": slug.current,
-    publishedAt,
-    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
-  }
-}`;

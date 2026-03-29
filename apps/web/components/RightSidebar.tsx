@@ -5,8 +5,11 @@ import Link from "next/link";
 
 import DateComponent from "@/components/Date";
 import SearchBar from "@/components/SearchBar";
-import { highlightedCategories, highlightedTags } from "@/lib/sanity/query";
-import { rightSidebarQuery } from "@/lib/sanity.queries";
+import {
+  highlightedCategories,
+  highlightedTags,
+  rightSidebarQuery,
+} from "@/lib/sanity/query";
 import { CustomPortableText } from "./CustomPortableText";
 import ImageComponent from "./ImageComponent";
 
@@ -32,14 +35,15 @@ const RightSidebar = async () => {
   const [
     { data: highlightedCategories },
     { data: highlightedTags },
-    {
-      data: { whatsNew, seniorCenterNewsletters, nonProfit, newsletter },
-    },
+    { data: rightSidebarData },
   ] = await Promise.all([
     fetchHighlightedCategories(),
     fetchHighlightedTags(),
     fetchRightSidebar(),
   ]);
+
+  const { whatsNew, seniorCenterNewsletters, nonProfit, newsletter } =
+    rightSidebarData;
 
   return (
     <>
@@ -112,24 +116,27 @@ const RightSidebar = async () => {
           Community/Senior Center Calendar
         </h2>
         <div className="divide-y divide-zinc-200">
-          {seniorCenterNewsletters.map((newsletter) => (
+          {seniorCenterNewsletters?.map((seniorCenterNewsletter: any) => (
             <article
-              key={newsletter._id}
+              key={seniorCenterNewsletter._id}
               className="flex max-w-xl flex-col items-start justify-between py-5"
             >
-              <Link href={`/articles/${newsletter.slug}`} prefetch={false}>
+              <Link
+                href={`/articles/${seniorCenterNewsletter.slug}`}
+                prefetch={false}
+              >
                 <div className="flex items-center gap-x-4 text-xs">
                   <DateComponent
-                    dateString={newsletter.publishedAt}
+                    dateString={seniorCenterNewsletter.publishedAt}
                     className="text-zinc-500"
                   />
                 </div>
                 <div className="group relative">
                   <h3 className="mt-3 text-lg leading-6 font-semibold text-zinc-900 group-hover:text-zinc-600">
-                    {newsletter.title}
+                    {seniorCenterNewsletter.title}
                   </h3>
                   <p className="mt-5 line-clamp-3 text-sm leading-6 text-zinc-600">
-                    {newsletter.excerpt}
+                    {seniorCenterNewsletter.excerpt}
                   </p>
                 </div>
               </Link>
@@ -171,7 +178,7 @@ const RightSidebar = async () => {
       <div className="rounded-md bg-white p-8 shadow-lg">
         <h2 className="mb-8 text-xl font-bold lg:text-2xl">Categories</h2>
         <ul className="space-y-4">
-          {highlightedCategories.map((category) => (
+          {highlightedCategories.map((category: any) => (
             <li key={category._id} className="block">
               <Link
                 href={`/category/${category.slug}`}
@@ -188,19 +195,18 @@ const RightSidebar = async () => {
       <div className="rounded-md bg-white p-8 shadow-lg">
         <h2 className="mb-8 text-lg font-bold lg:text-2xl">Tags</h2>
         <ul className="flex flex-wrap">
-          {highlightedTags &&
-            highlightedTags.map((tag: any) => (
-              <li className="mr-2 pb-2" key={tag._id}>
-                <Link
-                  title={tag.title}
-                  href={`/tag/${tag.slug}`}
-                  className="space-x-4 rounded-sm bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
-                  prefetch={false}
-                >
-                  {tag.title}
-                </Link>
-              </li>
-            ))}
+          {highlightedTags?.map((tag: any) => (
+            <li className="mr-2 pb-2" key={tag._id}>
+              <Link
+                title={tag.title}
+                href={`/tag/${tag.slug}`}
+                className="space-x-4 rounded-sm bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
+                prefetch={false}
+              >
+                {tag.title}
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
       <div className="rounded-md bg-white p-8 shadow-lg">
