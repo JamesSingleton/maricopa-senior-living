@@ -10,8 +10,8 @@
     "@maricopa-senior-living/env": "workspace:*",
     "@sanity/asset-utils": "^2.3.0",
     "@sanity/client": "catalog:",
-    "@sanity/image-url": "^2.0.3",
-    "next-sanity": "^12.1.1",
+    "@sanity/image-url": "^2.1.1",
+    "next-sanity": "^12.2.1",
     "sanity-image": "^1.1.0"
   },
   "devDependencies": {
