@@ -1,20 +1,19 @@
+import { sanityFetch } from "@maricopa-senior-living/sanity/live";
+import { categoryBySlug } from "@maricopa-senior-living/sanity/query";
 import type { Metadata, ResolvingMetadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import ArticleCard from "@/components/ArticleCard";
 import { CustomPortableText } from "@/components/CustomPortableText";
 import DirectoryCard from "@/components/DirectoryCard";
 import { baseUrl } from "@/lib/constants";
-import { getCategoryBySlug } from "@/lib/sanity.fetch";
 
-// export async function generateStaticParams() {
-//   const categories = await getCategories()
-
-//   return categories.map((category) => ({
-//     category: category.slug,
-//   }))
-// }
+async function fetchCategoryBySlug(slug: string) {
+  return await sanityFetch({
+    query: categoryBySlug,
+    params: { slug },
+  });
+}
 
 export async function generateMetadata(
   {
@@ -25,7 +24,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { category: categoryParam } = await params;
-  const category = await getCategoryBySlug(categoryParam);
+  const { data: category } = await fetchCategoryBySlug(categoryParam);
   const previousOpenGraph = (await parent)?.openGraph;
 
   if (!category) {
@@ -50,7 +49,7 @@ export default async function CategoryPage({
   params: Promise<{ category: string }>;
 }) {
   const { category: categoryParam } = await params;
-  const category = await getCategoryBySlug(categoryParam);
+  const { data: category } = await fetchCategoryBySlug(categoryParam);
 
   if (!category) {
     notFound();

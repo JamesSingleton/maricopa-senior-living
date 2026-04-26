@@ -705,8 +705,22 @@ export type AllSanitySchemaTypes =
 
 // Source: ../../packages/sanity/src/query.ts
 // Variable: queryImageType
-// Query: *[_type == "page" && defined(image)][0]{      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }  }.image
-export type QueryImageTypeResult = null;
+// Query: *[_type == "home" && defined(image)][0]{      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }  }.image
+export type QueryImageTypeResult = {
+  id: string | null;
+  preview: string | null;
+  alt: string;
+  hotspot: {
+    x: number;
+    y: number;
+  } | null;
+  crop: {
+    bottom: number;
+    left: number;
+    right: number;
+    top: number;
+  } | null;
+} | null;
 
 // Source: ../../packages/sanity/src/query.ts
 // Variable: querySlugPageData
@@ -763,11 +777,201 @@ export type QueryBlogSlugPageDataResult = null;
 // Query: *[_type == "blog" && defined(slug.current)].slug.current
 export type QueryBlogPathsResult = Array<never>;
 
+// Source: ../../packages/sanity/src/query.ts
+// Variable: pageBySlug
+// Query: *[_type == "page" && slug.current == $slug][0]{  title,  "slug": slug.current,  "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",  "body": body[]{    ...,    _type == "attachment" => {      ...,      asset->    }  },}
+export type PageBySlugResult = {
+  title: string;
+  slug: string;
+  excerpt: string;
+  body: Array<
+    | {
+        asset: {
+          _id: string;
+          _type: "sanity.fileAsset";
+          _createdAt: string;
+          _updatedAt: string;
+          _rev: string;
+          originalFilename?: string;
+          label?: string;
+          title?: string;
+          description?: string;
+          altText?: string;
+          sha1hash: string;
+          extension: string;
+          mimeType: string;
+          size: number;
+          assetId: string;
+          uploadId?: string;
+          path: string;
+          url: string;
+          source?: SanityAssetSourceData;
+        };
+        media?: unknown;
+        description: string;
+        _type: "attachment";
+        _key: string;
+      }
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt: string;
+        _type: "image";
+        _key: string;
+      }
+  >;
+} | null;
+
+// Source: ../../packages/sanity/src/query.ts
+// Variable: categoryBySlug
+// Query: *[_type == "category" && slug.current == $slug]{  title,  "slug": slug.current,  description,  "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",  "combinedList": [    ...(*[_type == "service" && references(^._id)]{      ...,      tags[]->{        _id,        title,        "slug": slug.current,      }    }),    ...(*[_type == "post" && references(^._id) && isArchived != true]{      _id,      _updatedAt,      _type,      publishedAt,      title,      "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",      "slug": slug.current,        image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  },      "author": author->{          _id,  name,  position,    image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }      },      "categories": categories[]->{        _id,        title,        "slug": slug.current,      },      "tags": tags[]->{        _id,        title,        "slug": slug.current,      }    })  ] {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  } | order(rank),}[0]
+export type CategoryBySlugResult = {
+  title: string;
+  slug: string;
+  description: BlockContent;
+  excerpt: string;
+  combinedList: Array<
+    | {
+        _id: string;
+        _type: "service";
+        _createdAt: string;
+        _updatedAt: string;
+        _rev: string;
+        title: string;
+        categories: Array<
+          {
+            _key: string;
+          } & CategoryReference
+        >;
+        tags: Array<{
+          _id: string;
+          title: string;
+          slug: string;
+        }> | null;
+        description?: BlockContent;
+        audience?: BlockContent;
+        website?: string;
+        phone?: string;
+        address?: string;
+        businessHours?: Array<
+          {
+            _key: string;
+          } & DayAndTime
+        >;
+        notes?: BlockContent;
+        attachments?: Array<{
+          asset?: SanityFileAssetReference;
+          media?: unknown;
+          name: string;
+          _type: "file";
+          _key: string;
+        }>;
+        rank: 1 | 2;
+      }
+    | {
+        _id: string;
+        _updatedAt: string;
+        _type: "post";
+        publishedAt: string;
+        title: string;
+        excerpt: string;
+        slug: string;
+        image: null;
+        author: {
+          _id: string;
+          name: string;
+          position: null;
+          image: {
+            id: string | null;
+            preview: string | null;
+            alt: string | "untitled";
+            hotspot: {
+              x: number;
+              y: number;
+            } | null;
+            crop: {
+              bottom: number;
+              left: number;
+              right: number;
+              top: number;
+            } | null;
+          };
+        };
+        categories: Array<{
+          _id: string;
+          title: string;
+          slug: string;
+        }>;
+        tags: Array<{
+          _id: string;
+          title: string;
+          slug: string;
+        }> | null;
+        rank: 1 | 2;
+      }
+  >;
+} | null;
+
+// Source: ../../packages/sanity/src/query.ts
+// Variable: queryHomePage
+// Query: *[_type == 'home'][0]{    ...,      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }  }
+export type QueryHomePageResult = {
+  _id: string;
+  _type: "home";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  image: {
+    id: string | null;
+    preview: string | null;
+    alt: string;
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      bottom: number;
+      left: number;
+      right: number;
+      top: number;
+    } | null;
+  } | null;
+  content?: BlockContent;
+} | null;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '\n  *[_type == "page" && defined(image)][0]{\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n  }.image\n': QueryImageTypeResult;
+    '\n  *[_type == "home" && defined(image)][0]{\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n  }.image\n': QueryImageTypeResult;
     '\n  *[_type == "page" && slug.current == $slug][0]{\n    ...,\n    "slug": slug.current,\n    \n  pageBuilder[]{\n    ...,\n    _type,\n\n  }\n\n  }\n  ': QuerySlugPageDataResult;
     '\n  *[_type == "navbar" && _id == "navbar"][0]{\n    _id,\n    columns[]{\n      _key,\n      _type == "navbarColumn" => {\n        "type": "column",\n        title,\n        links[]{\n          _key,\n          name,\n          icon,\n          description,\n          "openInNewTab": url.openInNewTab,\n          "href": select(\n            url.type == "internal" => url.internal->slug.current,\n            url.type == "external" => url.external,\n            url.href\n          )\n        }\n      },\n      _type == "navbarLink" => {\n        "type": "link",\n        name,\n        description,\n        "openInNewTab": url.openInNewTab,\n        "href": select(\n          url.type == "internal" => url.internal->slug.current,\n          url.type == "external" => url.external,\n          url.href\n        )\n      }\n    },\n    \n  buttons[]{\n    text,\n    variant,\n    _key,\n    _type,\n    "openInNewTab": url.openInNewTab,\n    "href": select(\n      url.type == "internal" => url.internal->slug.current,\n      url.type == "external" => url.external,\n      url.href\n    ),\n  }\n,\n  }\n': QueryNavbarDataResult;
     '\n  *[_type == "settings"][0]{\n    _id,\n    _type,\n    siteTitle,\n    logo {\n      \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n    },\n    siteDescription,\n    socialLinks{\n      linkedin,\n      facebook,\n      twitter,\n      instagram,\n      youtube\n    }\n  }\n': QueryGlobalSeoSettingsResult;
@@ -777,5 +981,8 @@ declare module "@sanity/client" {
     '\n  count(*[_type == "blog" && (seoHideFromLists != true)])\n': QueryBlogIndexPageBlogsCountResult;
     '\n  *[_type == "blog" && slug.current == $slug][0]{\n    ...,\n    "slug": slug.current,\n    \n  authors[0]->{\n    _id,\n    name,\n    position,\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n  }\n,\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n,\n    \n  richText[]{\n    ...,\n    _type == "block" => {\n      ...,\n      \n  markDefs[]{\n    ...,\n    \n  ...customLink{\n    openInNewTab,\n    "href": select(\n      type == "internal" => internal->slug.current,\n      type == "external" => external,\n      "#"\n    ),\n  }\n\n  }\n\n    },\n    _type == "image" => {\n      \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n      "caption": caption\n    }\n  }\n,\n    \n  pageBuilder[]{\n    ...,\n    _type,\n\n  }\n\n  }\n': QueryBlogSlugPageDataResult;
     '\n  *[_type == "blog" && defined(slug.current)].slug.current\n': QueryBlogPathsResult;
+    '*[_type == "page" && slug.current == $slug][0]{\n  title,\n  "slug": slug.current,\n  "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n}': PageBySlugResult;
+    '*[_type == "category" && slug.current == $slug]{\n  title,\n  "slug": slug.current,\n  description,\n  "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",\n  "combinedList": [\n    ...(*[_type == "service" && references(^._id)]{\n      ...,\n      tags[]->{\n        _id,\n        title,\n        "slug": slug.current,\n      }\n    }),\n    ...(*[_type == "post" && references(^._id) && isArchived != true]{\n      _id,\n      _updatedAt,\n      _type,\n      publishedAt,\n      title,\n      "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n      "slug": slug.current,\n      \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n,\n      "author": author->{\n        \n  _id,\n  name,\n  position,\n  \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n\n      },\n      "categories": categories[]->{\n        _id,\n        title,\n        "slug": slug.current,\n      },\n      "tags": tags[]->{\n        _id,\n        title,\n        "slug": slug.current,\n      }\n    })\n  ] {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  } | order(rank),\n}[0]': CategoryBySlugResult;
+    '\n  *[_type == \'home\'][0]{\n    ...,\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n  }\n  ': QueryHomePageResult;
   }
 }

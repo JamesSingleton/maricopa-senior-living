@@ -1,17 +1,14 @@
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { CurrencyDollarIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
 import { sanityFetch } from "@maricopa-senior-living/sanity/live";
+import { rightSidebarQuery } from "@maricopa-senior-living/sanity/query";
 import Link from "next/link";
 
 import DateComponent from "@/components/Date";
 import SearchBar from "@/components/SearchBar";
-import {
-  highlightedCategories,
-  highlightedTags,
-  rightSidebarQuery,
-} from "@/lib/sanity/query";
+import { highlightedCategories, highlightedTags } from "@/lib/sanity/query";
 import { CustomPortableText } from "./CustomPortableText";
-import ImageComponent from "./ImageComponent";
+import { SanityImage } from "./elements/sanity-image";
 
 async function fetchHighlightedCategories() {
   return await sanityFetch({
@@ -93,7 +90,7 @@ const RightSidebar = async () => {
                   </p>
                 </div>
                 <div className="relative mt-8 flex items-center gap-x-4">
-                  <ImageComponent
+                  <SanityImage
                     image={whatsNew.author.image}
                     alt={`${whatsNew.author.name} avatar`}
                     className="h-10 w-10 rounded-full bg-zinc-50"

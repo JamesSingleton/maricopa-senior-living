@@ -7,13 +7,13 @@ import { notFound } from "next/navigation";
 import BackButton from "@/components/BackButton";
 import { CustomPortableText } from "@/components/CustomPortableText";
 import DateComponent from "@/components/Date";
+import { SanityImage } from "@/components/elements/sanity-image";
 import ImageComponent from "@/components/ImageComponent";
 import { client } from "@/lib/sanity/client";
 import {
   queryArticlePaths,
   queryArticleSlugPageData,
 } from "@/lib/sanity/query";
-import { getPostBySlug } from "@/lib/sanity.fetch";
 
 async function fetchArticleSlugPageData(slug: string) {
   return await sanityFetch({
@@ -53,7 +53,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const { data: post } = await fetchArticleSlugPageData(slug);
 
   if (!post) {
     return {};
@@ -66,7 +66,7 @@ export async function generateMetadata({
       title: `${post.title}`,
       description: `${post.excerpt}`,
       type: "article",
-      tags: post.tags.map((tag) => tag.title),
+      tags: post.tags.map((tag: { title: string }) => tag.title),
       publishedTime: post.publishedAt,
       modifiedTime: post._updatedAt,
     },
@@ -92,7 +92,7 @@ export default async function ArticlePage({
         <div className="px-4 py-4 sm:px-10 sm:py-10">
           <div className="flex flex-wrap space-x-5 xl:space-x-10">
             <span className="flex items-center space-x-2">
-              <ImageComponent
+              <SanityImage
                 image={post.author.image}
                 alt={`Avatar of ${post.author.name}`}
                 width={24}
@@ -112,7 +112,7 @@ export default async function ArticlePage({
           </h1>
           {post.mainImage && (
             <div className="flex items-center justify-center">
-              <ImageComponent
+              <SanityImage
                 image={post.mainImage}
                 alt={post.mainImage.alt}
                 width={1024}

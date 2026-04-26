@@ -1,7 +1,15 @@
+import { sanityFetch } from "@maricopa-senior-living/sanity/live";
+import { pageBySlug } from "@maricopa-senior-living/sanity/query";
 import { notFound } from "next/navigation";
 
 import { CustomPortableText } from "@/components/CustomPortableText";
-import { getPageBySlug } from "@/lib/sanity.fetch";
+
+async function fetchPageBySlug(slug: string) {
+  return await sanityFetch({
+    query: pageBySlug,
+    params: { slug },
+  });
+}
 
 export default async function Page({
   params,
@@ -9,7 +17,7 @@ export default async function Page({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const pageData = await getPageBySlug(slug);
+  const { data: pageData } = await fetchPageBySlug(slug);
 
   if (!pageData) {
     notFound();

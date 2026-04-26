@@ -1,8 +1,9 @@
 import { sanityFetch } from "@maricopa-senior-living/sanity/live";
+import { queryHomePage } from "@maricopa-senior-living/sanity/query";
 import type { Metadata, ResolvingMetadata } from "next";
 
 import { CustomPortableText } from "@/components/CustomPortableText";
-import ImageComponent from "@/components/ImageComponent";
+import { SanityImage } from "@/components/elements/sanity-image";
 import { baseUrl } from "@/lib/constants";
 
 type Props = {
@@ -12,7 +13,7 @@ type Props = {
 
 async function fetchHomePageData() {
   return await sanityFetch({
-    query: `*[_type == 'home'][0]`,
+    query: queryHomePage,
   });
 }
 
@@ -41,22 +42,16 @@ export async function generateMetadata(
 
 export default async function Home() {
   const { data: homePageData } = await fetchHomePageData();
+
+  if (!homePageData) {
+    return <div>No home page data</div>;
+  }
+
   return (
     <div className="rounded-md bg-white px-8 py-8 shadow-lg lg:px-4 lg:py-4">
-      <figure>
-        <ImageComponent
-          image={homePageData?.image}
-          alt={homePageData?.image?.alt}
-          width={1024}
-          height={686}
-          loading="eager"
-        />
-        <figcaption className="mt-4 text-left text-sm text-zinc-500 italic">
-          {homePageData?.image?.caption}
-        </figcaption>
-      </figure>
+      <SanityImage image={homePageData.image!} height={686} width={1024} />
       <div className="prose prose-indigo mx-auto pt-8 lg:pt-4">
-        <CustomPortableText value={homePageData?.content} />
+        <CustomPortableText value={homePageData.content!} />
       </div>
     </div>
   );

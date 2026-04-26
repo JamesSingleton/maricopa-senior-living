@@ -84,6 +84,13 @@ const blogAuthorFragment = /* groq */ `
   }
 `;
 
+const authorFragment = /* groq */ `
+  _id,
+  name,
+  position,
+  ${imageFragment}
+`;
+
 const blogCardFragment = /* groq */ `
   _type,
   _id,
@@ -102,7 +109,7 @@ const blogCardFragment = /* groq */ `
  * Helps with TypeScript inference for image objects
  */
 export const queryImageType = defineQuery(`
-  *[_type == "page" && defined(image)][0]{
+  *[_type == "home" && defined(image)][0]{
     ${imageFragment}
   }.image
 `);
@@ -222,3 +229,102 @@ export const queryBlogSlugPageData = defineQuery(`
 export const queryBlogPaths = defineQuery(`
   *[_type == "blog" && defined(slug.current)].slug.current
 `);
+
+export const pageBySlug =
+  defineQuery(`*[_type == "page" && slug.current == $slug][0]{
+  title,
+  "slug": slug.current,
+  "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",
+  "body": body[]{
+    ...,
+    _type == "attachment" => {
+      ...,
+      asset->
+    }
+  },
+}`);
+
+export const categoryBySlug =
+  defineQuery(`*[_type == "category" && slug.current == $slug]{
+  title,
+  "slug": slug.current,
+  description,
+  "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",
+  "combinedList": [
+    ...(*[_type == "service" && references(^._id)]{
+      ...,
+      tags[]->{
+        _id,
+        title,
+        "slug": slug.current,
+      }
+    }),
+    ...(*[_type == "post" && references(^._id) && isArchived != true]{
+      _id,
+      _updatedAt,
+      _type,
+      publishedAt,
+      title,
+      "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
+      "slug": slug.current,
+      ${imageFragment},
+      "author": author->{
+        ${authorFragment}
+      },
+      "categories": categories[]->{
+        _id,
+        title,
+        "slug": slug.current,
+      },
+      "tags": tags[]->{
+        _id,
+        title,
+        "slug": slug.current,
+      }
+    })
+  ] {
+    ...,
+    "rank": select(
+      count(tags[title == "Local Resources"]) > 0 => 1,
+      2
+    )
+  } | order(rank),
+}[0]`);
+
+export const queryHomePage = defineQuery(`
+  *[_type == 'home'][0]{
+    ...,
+    ${imageFragment}
+  }
+  `);
+
+export const rightSidebarQuery = defineQuery(`{
+  "whatsNew": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What's New!"]._id)][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    "author": author->{
+      ${authorFragment}
+    },
+    publishedAt,
+    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
+  },
+  "seniorCenterNewsletters": *[(_type == "post" && isArchived != true && references(*[_type == "category" && title == "City of Maricopa Community / Senior Center"]._id))][0..1] | order(publishedAt desc){
+    _id,
+    title,
+    "slug": slug.current,
+    publishedAt,
+    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
+  },
+  "nonProfit": *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{
+    ...,
+    "slug": slug.current,
+  },
+  "newsletter": *[_type == "post" && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"]._id)] | order(publishedAt desc)[0]{
+    _id,
+    title,
+    "slug": slug.current,
+    publishedAt,
+    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
+  }
+}`);

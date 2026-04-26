@@ -23,8 +23,8 @@ const ImageComponent = ({
 }) => {
   return (
     <SanityImage
-      key={image.asset._ref ?? image.asset._id}
-      id={image.asset._ref ?? image.asset._id}
+      key={image.id ?? image.asset._id}
+      id={image.id ?? image.asset._id}
       alt={image.alt}
       width={width}
       height={height}

@@ -58,22 +58,6 @@ export function getCategories() {
   );
 }
 
-export function getPageBySlug(slug: string) {
-  return sanityFetch<any>({
-    query: pageBySlug,
-    params: { slug },
-    tags: [`page:${slug}`],
-  });
-}
-
-export function getPostBySlug(slug: string) {
-  return sanityFetch<Post>({
-    query: postBySlug,
-    params: { slug },
-    tags: [`post:${slug}`],
-  });
-}
-
 export function getAllPostSlugs() {
   return client.fetch<string[]>(
     allPostSlugs,

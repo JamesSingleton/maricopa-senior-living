@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import type { Post } from "@/types/Post";
 import DateComponent from "./Date";
-import ImageComponent from "./ImageComponent";
+import { SanityImage } from "./elements/sanity-image";
 
 export default function ArticleCard({ post }: { post: Post }) {
   return (
@@ -24,12 +24,12 @@ export default function ArticleCard({ post }: { post: Post }) {
         <p className="py-6">{post.excerpt}</p>
         <div className="flex items-center">
           <div className="shrink-0">
-            <ImageComponent
-              className="h-10 w-10 rounded-full object-cover"
+            <SanityImage
               image={post.author.image}
               alt={post.author.name}
               width={40}
               height={40}
+              className="size-10 flex-none rounded-full bg-gray-50"
             />
           </div>
           <div className="ml-3">
