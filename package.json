@@ -15,9 +15,9 @@
     "lint": "turbo lint"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.10",
+    "@biomejs/biome": "^2.4.13",
     "@maricopa-senior-living/typescript-config": "workspace:*",
-    "turbo": "^2.9.3",
+    "turbo": "^2.9.6",
     "typescript": "catalog:"
   }
 }
