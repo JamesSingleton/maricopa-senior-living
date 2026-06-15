@@ -35,11 +35,7 @@ export default async function IndexLayout({
   const navigation = await getNavigation();
 
   return (
-    <PlausibleProvider
-      domain="maricopaseniorliving.org"
-      trackFileDownloads
-      trackOutboundLinks
-    >
+    <PlausibleProvider src="https://plausible.io/js/pa-_c-PnIRRG3vdbjzqvT4GH.js">
       <Script
         src="https://cdn.userway.org/widget.js"
         data-account="qeA6uoRyx5"
