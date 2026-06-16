@@ -703,12 +703,12 @@ export type AllSanitySchemaTypes =
   | SanityImageAsset
   | Geopoint;
 
-// Source: ../../packages/sanity/src/query.ts
+// Source: ../../packages/sanity/src/queries.ts
 // Variable: queryImageType
 // Query: *[_type == "page" && defined(image)][0]{      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }  }.image
 export type QueryImageTypeResult = null;
 
-// Source: ../../packages/sanity/src/query.ts
+// Source: ../../packages/sanity/src/queries.ts
 // Variable: querySlugPageData
 // Query: *[_type == "page" && slug.current == $slug][0]{    ...,    "slug": slug.current,      pageBuilder[]{    ...,    _type,  }  }
 export type QuerySlugPageDataResult = {
@@ -723,45 +723,228 @@ export type QuerySlugPageDataResult = {
   pageBuilder: null;
 } | null;
 
-// Source: ../../packages/sanity/src/query.ts
+// Source: ../../packages/sanity/src/queries.ts
 // Variable: queryNavbarData
 // Query: *[_type == "navbar" && _id == "navbar"][0]{    _id,    columns[]{      _key,      _type == "navbarColumn" => {        "type": "column",        title,        links[]{          _key,          name,          icon,          description,          "openInNewTab": url.openInNewTab,          "href": select(            url.type == "internal" => url.internal->slug.current,            url.type == "external" => url.external,            url.href          )        }      },      _type == "navbarLink" => {        "type": "link",        name,        description,        "openInNewTab": url.openInNewTab,        "href": select(          url.type == "internal" => url.internal->slug.current,          url.type == "external" => url.external,          url.href        )      }    },      buttons[]{    text,    variant,    _key,    _type,    "openInNewTab": url.openInNewTab,    "href": select(      url.type == "internal" => url.internal->slug.current,      url.type == "external" => url.external,      url.href    ),  },  }
 export type QueryNavbarDataResult = null;
 
-// Source: ../../packages/sanity/src/query.ts
+// Source: ../../packages/sanity/src/queries.ts
 // Variable: queryGlobalSeoSettings
 // Query: *[_type == "settings"][0]{    _id,    _type,    siteTitle,    logo {        "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }    },    siteDescription,    socialLinks{      linkedin,      facebook,      twitter,      instagram,      youtube    }  }
 export type QueryGlobalSeoSettingsResult = null;
 
-// Source: ../../packages/sanity/src/query.ts
+// Source: ../../packages/sanity/src/queries.ts
 // Variable: queryBlogIndexPageData
 // Query: *[_type == "blogIndex"][0]{    ...,    _id,    _type,    title,    description,    "displayFeaturedBlogs" : displayFeaturedBlogs == "yes",    "featuredBlogsCount" : featuredBlogsCount,      pageBuilder[]{    ...,    _type,  },    "slug": slug.current  }
 export type QueryBlogIndexPageDataResult = null;
 
-// Source: ../../packages/sanity/src/query.ts
+// Source: ../../packages/sanity/src/queries.ts
 // Variable: queryBlogIndexPageBlogs
 // Query: *[_type == "blog" && (seoHideFromLists != true)] | order(orderRank asc) [$start...$end]{      _type,  _id,  title,  description,  "slug":slug.current,  orderRank,    image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  },  publishedAt,    authors[0]->{    _id,    name,    position,      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }  }  }
 export type QueryBlogIndexPageBlogsResult = Array<never>;
 
-// Source: ../../packages/sanity/src/query.ts
+// Source: ../../packages/sanity/src/queries.ts
 // Variable: queryAllBlogDataForSearch
 // Query: *[_type == "blog" && defined(slug.current) && (seoHideFromLists != true)]{      _type,  _id,  title,  description,  "slug":slug.current,  orderRank,    image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  },  publishedAt,    authors[0]->{    _id,    name,    position,      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }  }  }
 export type QueryAllBlogDataForSearchResult = Array<never>;
 
-// Source: ../../packages/sanity/src/query.ts
+// Source: ../../packages/sanity/src/queries.ts
 // Variable: queryBlogIndexPageBlogsCount
 // Query: count(*[_type == "blog" && (seoHideFromLists != true)])
 export type QueryBlogIndexPageBlogsCountResult = number;
 
-// Source: ../../packages/sanity/src/query.ts
+// Source: ../../packages/sanity/src/queries.ts
 // Variable: queryBlogSlugPageData
 // Query: *[_type == "blog" && slug.current == $slug][0]{    ...,    "slug": slug.current,      authors[0]->{    _id,    name,    position,      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }  },      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  },      richText[]{    ...,    _type == "block" => {      ...,        markDefs[]{    ...,      ...customLink{    openInNewTab,    "href": select(      type == "internal" => internal->slug.current,      type == "external" => external,      "#"    ),  }  }    },    _type == "image" => {        "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  },      "caption": caption    }  },      pageBuilder[]{    ...,    _type,  }  }
 export type QueryBlogSlugPageDataResult = null;
 
-// Source: ../../packages/sanity/src/query.ts
+// Source: ../../packages/sanity/src/queries.ts
 // Variable: queryBlogPaths
 // Query: *[_type == "blog" && defined(slug.current)].slug.current
 export type QueryBlogPathsResult = Array<never>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: highlightedCategories
+// Query: *[_type == "category" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{    _id,    title,    "slug": slug.current,    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])  } | order(title asc, count desc)
+export type HighlightedCategoriesResult = Array<{
+  _id: string;
+  title: string;
+  slug: string;
+  count: number;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: highlightedTags
+// Query: *[_type == "tag" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{    _id,    title,    "slug": slug.current,    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])  } | order(title asc, count desc)
+export type HighlightedTagsResult = Array<{
+  _id: string;
+  title: string;
+  slug: string;
+  count: number;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryArticleSlugPageData
+// Query: *[_type == "post" && slug.current == $slug][0]{      _id,  _updatedAt,  _type,  title,  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  "slug": slug.current,  "author": author->{      name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,  },  mainImage,  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  "tags": tags[]->{    _id,    title,    "slug": slug.current,  } {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  },  publishedAt,  "body": body[]{    ...,    _type == "attachment" => {      ...,      asset->    }  },  }
+export type QueryArticleSlugPageDataResult = {
+  _id: string;
+  _updatedAt: string;
+  _type: "post";
+  title: string;
+  excerpt: string;
+  slug: string;
+  author: {
+    name: string;
+    image: {
+      asset: {
+        _id: string;
+        _type: "sanity.imageAsset";
+        metadata: SanityImageMetadata | null;
+        url: string;
+      } | null;
+    };
+    slug: string;
+  };
+  mainImage: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+  } | null;
+  categories: Array<{
+    _id: string;
+    title: string;
+    slug: string;
+  }>;
+  tags: Array<{
+    _id: string;
+    title: string;
+    slug: string;
+    rank: 2;
+  }> | null;
+  publishedAt: string;
+  body: Array<
+    | {
+        asset: {
+          _id: string;
+          _type: "sanity.fileAsset";
+          _createdAt: string;
+          _updatedAt: string;
+          _rev: string;
+          originalFilename?: string;
+          label?: string;
+          title?: string;
+          description?: string;
+          altText?: string;
+          sha1hash: string;
+          extension: string;
+          mimeType: string;
+          size: number;
+          assetId: string;
+          uploadId?: string;
+          path: string;
+          url: string;
+          source?: SanityAssetSourceData;
+        };
+        media?: unknown;
+        description: string;
+        _type: "attachment";
+        _key: string;
+      }
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt: string;
+        _type: "image";
+        _key: string;
+      }
+  >;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryArticlePaths
+// Query: *[_type == "post" && defined(slug.current)].slug.current
+export type QueryArticlePathsResult = Array<string>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: rightSidebarQuery
+// Query: {  "whatsNew": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What's New!"]._id)][0]{    _id,    title,    "slug": slug.current,    "author": author->{        name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,    },    publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  },  "seniorCenterNewsletters": *[(_type == "post" && isArchived != true && references(*[_type == "category" && title == "City of Maricopa Community / Senior Center"]._id))][0..1] | order(publishedAt desc){    _id,    title,    "slug": slug.current,    publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  },  "nonProfit": *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{    ...,    "slug": slug.current,  },  "newsletter": *[_type == "post" && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"]._id)] | order(publishedAt desc)[0]{    _id,    title,    "slug": slug.current,    publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  }}
+export type RightSidebarQueryResult = {
+  whatsNew: {
+    _id: string;
+    title: string;
+    slug: string;
+    author: {
+      name: string;
+      image: {
+        asset: {
+          _id: string;
+          _type: "sanity.imageAsset";
+          metadata: SanityImageMetadata | null;
+          url: string;
+        } | null;
+      };
+      slug: string;
+    };
+    publishedAt: string;
+    excerpt: string;
+  } | null;
+  seniorCenterNewsletters: Array<{
+    _id: string;
+    title: string;
+    slug: string;
+    publishedAt: string;
+    excerpt: string;
+  }>;
+  nonProfit: {
+    _id: string;
+    _type: "category";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    title: string;
+    slug: string;
+    description: BlockContent;
+    highlight?: boolean;
+  } | null;
+  newsletter: {
+    _id: string;
+    title: string;
+    slug: string;
+    publishedAt: string;
+    excerpt: string;
+  } | null;
+};
 
 // Query TypeMap
 import "@sanity/client";
@@ -777,5 +960,10 @@ declare module "@sanity/client" {
     '\n  count(*[_type == "blog" && (seoHideFromLists != true)])\n': QueryBlogIndexPageBlogsCountResult;
     '\n  *[_type == "blog" && slug.current == $slug][0]{\n    ...,\n    "slug": slug.current,\n    \n  authors[0]->{\n    _id,\n    name,\n    position,\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n  }\n,\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n,\n    \n  richText[]{\n    ...,\n    _type == "block" => {\n      ...,\n      \n  markDefs[]{\n    ...,\n    \n  ...customLink{\n    openInNewTab,\n    "href": select(\n      type == "internal" => internal->slug.current,\n      type == "external" => external,\n      "#"\n    ),\n  }\n\n  }\n\n    },\n    _type == "image" => {\n      \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n      "caption": caption\n    }\n  }\n,\n    \n  pageBuilder[]{\n    ...,\n    _type,\n\n  }\n\n  }\n': QueryBlogSlugPageDataResult;
     '\n  *[_type == "blog" && defined(slug.current)].slug.current\n': QueryBlogPathsResult;
+    '\n  *[_type == "category" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{\n    _id,\n    title,\n    "slug": slug.current,\n    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])\n  } | order(title asc, count desc)\n': HighlightedCategoriesResult;
+    '\n  *[_type == "tag" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{\n    _id,\n    title,\n    "slug": slug.current,\n    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])\n  } | order(title asc, count desc)\n': HighlightedTagsResult;
+    '\n  *[_type == "post" && slug.current == $slug][0]{\n    \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n  }\n': QueryArticleSlugPageDataResult;
+    '\n  *[_type == "post" && defined(slug.current)].slug.current\n': QueryArticlePathsResult;
+    '{\n  "whatsNew": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What\'s New!"]._id)][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    "author": author->{\n      \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n    },\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  },\n  "seniorCenterNewsletters": *[(_type == "post" && isArchived != true && references(*[_type == "category" && title == "City of Maricopa Community / Senior Center"]._id))][0..1] | order(publishedAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  },\n  "nonProfit": *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{\n    ...,\n    "slug": slug.current,\n  },\n  "newsletter": *[_type == "post" && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"]._id)] | order(publishedAt desc)[0]{\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  }\n}': RightSidebarQueryResult;
   }
 }

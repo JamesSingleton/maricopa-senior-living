@@ -9,7 +9,7 @@ import {
   highlightedCategories,
   highlightedTags,
   rightSidebarQuery,
-} from "@/lib/sanity/query";
+} from "@maricopa-senior-living/sanity/queries";
 import { CustomPortableText } from "./CustomPortableText";
 import ImageComponent from "./ImageComponent";
 

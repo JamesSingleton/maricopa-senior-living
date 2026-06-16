@@ -4,6 +4,7 @@ import type { Metadata, ResolvingMetadata } from "next";
 import { CustomPortableText } from "@/components/CustomPortableText";
 import ImageComponent from "@/components/ImageComponent";
 import { baseUrl } from "@/lib/constants";
+import { queryHomePageData } from "@maricopa-senior-living/sanity/queries";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -12,7 +13,7 @@ type Props = {
 
 async function fetchHomePageData() {
   return await sanityFetch({
-    query: `*[_type == 'home'][0]`,
+    query: queryHomePageData,
   });
 }
 
@@ -56,7 +57,7 @@ export default async function Home() {
         </figcaption>
       </figure>
       <div className="prose prose-indigo mx-auto pt-8 lg:pt-4">
-        <CustomPortableText value={homePageData?.content} />
+        <CustomPortableText value={homePageData?.content ?? []} />
       </div>
     </div>
   );

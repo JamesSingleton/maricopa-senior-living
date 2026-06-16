@@ -25,7 +25,7 @@
     "@maricopa-senior-living/ui": "workspace:*",
     "@portabletext/react": "^6.2.0",
     "@sanity/asset-utils": "^2.3.0",
-    "@sanity/assist": "^6.1.1",
+    "@sanity/assist": "^6.1.2",
     "@sanity/client": "catalog:",
     "@sanity/icons": "^3.7.4",
     "@sanity/image-url": "^2.1.1",

@@ -1,5 +1,10 @@
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import { sanityFetch } from "@maricopa-senior-living/sanity/live";
+import {
+  queryArticlePaths,
+  queryArticleSlugPageData,
+} from "@maricopa-senior-living/sanity/queries";
+import type { QueryArticleSlugPageDataResult } from "@maricopa-senior-living/sanity/types";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -9,17 +14,18 @@ import { CustomPortableText } from "@/components/CustomPortableText";
 import DateComponent from "@/components/Date";
 import ImageComponent from "@/components/ImageComponent";
 import { client } from "@/lib/sanity/client";
-import {
-  queryArticlePaths,
-  queryArticleSlugPageData,
-} from "@/lib/sanity/query";
 import { getPostBySlug } from "@/lib/sanity.fetch";
 
 async function fetchArticleSlugPageData(slug: string) {
-  return await sanityFetch({
+  const result = await sanityFetch({
     query: queryArticleSlugPageData,
     params: { slug },
   });
+
+  return {
+    ...result,
+    data: result.data as QueryArticleSlugPageDataResult,
+  };
 }
 
 async function fetchArticlePaths() {
@@ -126,19 +132,17 @@ export default async function ArticlePage({
             <div className="mt-8 md:mt-14">
               <h2 className="text-xl font-semibold">Tags</h2>
               <ul className="not-prose flex list-none items-center space-x-4 pl-0">
-                {post.tags.map(
-                  (tag: { _id: string; title: string; slug: string }) => (
-                    <li key={tag._id}>
-                      <Link
-                        href={`/tag/${tag.slug}`}
-                        prefetch={false}
-                        className="rounded bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
-                      >
-                        {tag.title}
-                      </Link>
-                    </li>
-                  ),
-                )}
+                {post.tags.map((tag) => (
+                  <li key={tag._id}>
+                    <Link
+                      href={`/tag/${tag.slug}`}
+                      prefetch={false}
+                      className="rounded bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
+                    >
+                      {tag.title}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
           )}
