@@ -1,37 +1,27 @@
+import { DocumentIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
 
-import { createSlug, isUnique } from "../../utils/slug";
+import { pageBuilderField } from "../definitions/page-builder";
+import { seoFields, seoGroup, slugField } from "../shared";
 
 export const page = defineType({
   name: "page",
   type: "document",
-  title: "Page",
-  description: "Pages are used for static content like Disclaimers and About.",
+  title: "Info Page",
+  icon: DocumentIcon,
+  description: "Pages for static content like About, Contact, and Disclaimers.",
+  groups: [{ name: "content", title: "Content", default: true }, seoGroup],
   fields: [
     defineField({
       name: "title",
       type: "string",
       title: "Title",
+      group: "content",
       validation: (rule) => rule.required(),
     }),
-    defineField({
-      name: "slug",
-      type: "slug",
-      title: "Slug",
-      validation: (rule) => rule.required(),
-      options: {
-        source: "title",
-        slugify: createSlug,
-        maxLength: 96,
-        isUnique: isUnique,
-      },
-    }),
-    defineField({
-      name: "body",
-      type: "blockContent",
-      title: "Body",
-      validation: (rule) => rule.required(),
-    }),
+    { ...slugField({ source: "title" }), group: "content" },
+    { ...pageBuilderField, group: "content" },
+    ...seoFields,
   ],
   preview: {
     select: {

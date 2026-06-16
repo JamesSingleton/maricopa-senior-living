@@ -13,7 +13,7 @@ export default defineCliConfig({
     enabled: true,
     formatGeneratedCode: true,
     path: "../../packages/sanity/src/**/*.{ts,tsx,js,jsx}",
-    schema: "schema.json",
+    schema: "../studio/schema.json",
     generates: "../../packages/sanity/src/sanity.types.ts",
     overloadClientMethods: true,
   },

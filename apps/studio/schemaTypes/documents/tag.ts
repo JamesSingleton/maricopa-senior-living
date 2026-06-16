@@ -1,7 +1,7 @@
 import { TagIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
 
-import { createSlug, isUnique } from "../../utils/slug";
+import { taxonomySlugField } from "../../utils/slug";
 
 export const tag = defineType({
   name: "tag",
@@ -15,18 +15,7 @@ export const tag = defineType({
       type: "string",
       validation: (rule) => rule.required(),
     }),
-    defineField({
-      name: "slug",
-      title: "Slug",
-      type: "slug",
-      options: {
-        source: "title",
-        slugify: createSlug,
-        maxLength: 96,
-        isUnique: isUnique,
-      },
-      validation: (rule) => rule.required(),
-    }),
+    taxonomySlugField("tag"),
     defineField({
       name: "description",
       title: "Description",
@@ -40,7 +29,7 @@ export const tag = defineType({
       title: "Highlight",
       type: "boolean",
       description:
-        "If checked, this category will be highlighted on the right sidebar.",
+        "If checked, this tag will be highlighted on the right sidebar.",
       initialValue: false,
     }),
   ],

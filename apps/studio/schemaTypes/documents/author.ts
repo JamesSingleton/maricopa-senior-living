@@ -47,6 +47,12 @@ export const author = defineType({
         },
       ],
     }),
+    defineField({
+      name: "position",
+      title: "Position / Title",
+      type: "string",
+      description: 'Job title or role, e.g. "Executive Director"',
+    }),
   ],
   preview: {
     select: {

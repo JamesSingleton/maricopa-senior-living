@@ -102,7 +102,7 @@ const blogCardFragment = /* groq */ `
  * Helps with TypeScript inference for image objects
  */
 export const queryImageType = defineQuery(`
-  *[_type == "page" && defined(image)][0]{
+  *[_type == "blog" && defined(image)][0]{
     ${imageFragment}
   }.image
 `);
@@ -111,7 +111,71 @@ const pageBuilderFragment = /* groq */ `
   pageBuilder[]{
     ...,
     _type,
-
+    _type == "featuredResources" => {
+      ...,
+      resources[]->{
+        _id,
+        title,
+        "slug": slug.current,
+        resourceType,
+        description
+      }
+    },
+    _type == "featuredEvents" => {
+      ...,
+      events[]->{
+        _id,
+        title,
+        "slug": slug.current,
+        summary,
+        startDateTime,
+        image {
+          ${imageFields}
+        }
+      }
+    },
+    _type == "featuredBlogPosts" => {
+      ...,
+      posts[]->{
+        ${blogCardFragment}
+      }
+    },
+    _type == "featuredArticles" => {
+      ...,
+      articles[]->{
+        _id,
+        title,
+        "slug": slug.current,
+        excerpt,
+        publishedAt,
+        sourceName,
+        mainImage {
+          ${imageFields}
+        }
+      }
+    },
+    _type == "hero" => {
+      ...,
+      image {
+        ${imageFields}
+      },
+      ${buttonsFragment}
+    },
+    _type == "splitImage" => {
+      ...,
+      image {
+        ${imageFields}
+      },
+      ${richTextFragment}
+    },
+    _type == "richTextBlock" => {
+      ...,
+      ${richTextFragment}
+    },
+    _type == "callToAction" => {
+      ...,
+      ${buttonsFragment}
+    }
   }
 `;
 
@@ -221,4 +285,105 @@ export const queryBlogSlugPageData = defineQuery(`
 
 export const queryBlogPaths = defineQuery(`
   *[_type == "blog" && defined(slug.current)].slug.current
+`);
+
+export const queryHomePageData = defineQuery(`
+  *[_type == "home" && _id == "home"][0]{
+    _id,
+    title,
+    ${pageBuilderFragment}
+  }
+`);
+
+export const queryArticleSlugPageData = defineQuery(`
+  *[_type == "article" && slug.current == $slug][0]{
+    ...,
+    "slug": slug.current,
+    author->{
+      _id,
+      name,
+      slug,
+      image
+    },
+    mainImage {
+      ${imageFields}
+    },
+    categories[]->{
+      _id,
+      title,
+      "slug": slug.current
+    },
+    tags[]->{
+      _id,
+      title,
+      "slug": slug.current
+    }
+  }
+`);
+
+export const queryArticlePaths = defineQuery(`
+  *[_type == "article" && defined(slug.current) && isArchived != true].slug.current
+`);
+
+export const queryEventSlugPageData = defineQuery(`
+  *[_type == "event" && slug.current == $slug][0]{
+    ...,
+    "slug": slug.current,
+    image {
+      ${imageFields}
+    },
+    categories[]->{
+      _id,
+      title,
+      "slug": slug.current
+    },
+    tags[]->{
+      _id,
+      title,
+      "slug": slug.current
+    },
+    relatedResources[]->{
+      _id,
+      title,
+      "slug": slug.current,
+      resourceType,
+      website,
+      phone,
+      address
+    },
+    recapBlog->{
+      _id,
+      title,
+      "slug": slug.current
+    }
+  }
+`);
+
+export const queryEventPaths = defineQuery(`
+  *[_type == "event" && defined(slug.current) && isArchived != true].slug.current
+`);
+
+export const queryResourceSlugPageData = defineQuery(`
+  *[_type == "resource" && slug.current == $slug][0]{
+    ...,
+    "slug": slug.current,
+    categories[]->{
+      _id,
+      title,
+      "slug": slug.current
+    },
+    tags[]->{
+      _id,
+      title,
+      "slug": slug.current
+    },
+    attachments[]{
+      ...,
+      asset->
+    }
+  }
+`);
+
+export const queryResourcePaths = defineQuery(`
+  *[_type == "resource" && defined(slug.current)].slug.current
 `);

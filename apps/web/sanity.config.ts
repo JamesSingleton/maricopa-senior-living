@@ -5,9 +5,9 @@ import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { media } from "sanity-plugin-media";
 
+import schemaTypes from "../studio/schemaTypes";
+import { structure } from "../studio/structure";
 import { dataset, projectId } from "./lib/sanity.api";
-import schemaTypes from "./sanity/schemaTypes";
-import { structure } from "./sanity/studio-structure";
 
 export default defineConfig({
   title: "Maricopa Senior Living",

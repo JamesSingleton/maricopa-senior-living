@@ -1,7 +1,6 @@
 {
   "extends": "@maricopa-senior-living/typescript-config/nextjs.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
       "@maricopa-senior-living/ui/*": ["../../packages/ui/src/*"],
@@ -13,7 +12,11 @@
     "next.config.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "../studio/schemaTypes/**/*.ts",
+    "../studio/schemaTypes/**/*.tsx",
+    "../studio/structure/**/*.ts",
+    "../studio/utils/**/*.ts"
   ],
   "exclude": ["node_modules", ".next"]
 }

@@ -2,7 +2,16 @@ import { defineField, defineType } from "sanity";
 
 import { createRadioListLayout, isValidUrl } from "../../utils/helper";
 
-// const allLinkableTypes = [{ type: 'blog' }, { type: 'blogIndex' }, { type: 'page' }]
+const allLinkableTypes = [
+  { type: "page" },
+  { type: "blog" },
+  { type: "blogIndex" },
+  { type: "article" },
+  { type: "resource" },
+  { type: "event" },
+  { type: "category" },
+  { type: "tag" },
+];
 
 export const customUrl = defineType({
   name: "customUrl",
@@ -55,37 +64,52 @@ export const customUrl = defineType({
       hidden: true,
       readOnly: true,
     }),
-    // defineField({
-    //   name: 'internal',
-    //   type: 'reference',
-    //   description: 'Select which page on your website this link should point to',
-    //   options: { disableNew: true },
-    //   hidden: ({ parent }) => parent?.type !== 'internal',
-    //   to: allLinkableTypes,
-    //   validation: (rule) => [
-    //     rule.custom((value, { parent }) => {
-    //       const type = (parent as { type?: string })?.type
-    //       if (type === 'internal' && !value?._ref) return "internal can't be empty"
-    //       return true
-    //     }),
-    //   ],
-    // }),
+    defineField({
+      name: "internal",
+      type: "reference",
+      title: "Internal Page",
+      description:
+        "Select which page on your website this link should point to",
+      options: { disableNew: true },
+      hidden: ({ parent }) => parent?.type !== "internal",
+      to: allLinkableTypes,
+      validation: (rule) => [
+        rule.custom((value, { parent }) => {
+          const type = (parent as { type?: string })?.type;
+          if (type === "internal" && !value?._ref) {
+            return "Please select an internal page.";
+          }
+          return true;
+        }),
+      ],
+    }),
   ],
   preview: {
     select: {
       externalUrl: "external",
       urlType: "type",
-      internalUrl: "internal.slug.current",
+      internalTitle: "internal.title",
+      internalSlug: "internal.slug.current",
       openInNewTab: "openInNewTab",
     },
-    prepare({ externalUrl, urlType, internalUrl, openInNewTab }) {
-      const url = urlType === "external" ? externalUrl : `/${internalUrl}`;
+    prepare({
+      externalUrl,
+      urlType,
+      internalTitle,
+      internalSlug,
+      openInNewTab,
+    }) {
+      const url =
+        urlType === "external" ? externalUrl : `/${internalSlug ?? ""}`;
       const newTabIndicator = openInNewTab ? " ↗" : "";
       const truncatedUrl =
         url?.length > 30 ? `${url.substring(0, 30)}...` : url;
 
       return {
-        title: `${urlType === "external" ? "External" : "Internal"} Link`,
+        title:
+          urlType === "internal"
+            ? internalTitle || "Internal Link"
+            : "External Link",
         subtitle: `${truncatedUrl}${newTabIndicator}`,
       };
     },

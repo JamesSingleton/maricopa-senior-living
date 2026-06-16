@@ -1,3 +1,4 @@
+import { blocks } from "../blocks";
 import { blockContent } from "./block-content";
 import { button } from "./button";
 import { customUrl } from "./custom-url";
@@ -12,4 +13,5 @@ export const definitions = [
   dayAndTime,
   richText,
   timeValue,
+  ...blocks,
 ];
