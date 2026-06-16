@@ -8,13 +8,13 @@ import { getImageDimensions } from "@sanity/asset-utils";
 import Image from "next/image";
 import type { PortableTextBlock } from "sanity";
 
-import { urlForImage } from "@/lib/sanity.image";
+import { urlFor } from "@maricopa-senior-living/sanity/client";
 
 const ImageComponent = ({ value }: { value: any }) => {
   const { width, height } = getImageDimensions(value);
   return (
     <Image
-      src={urlForImage(value).fit("min").auto("format").url()}
+      src={urlFor(value).fit("min").auto("format").url()}
       alt={value.alt || " "}
       width={width}
       height={height}

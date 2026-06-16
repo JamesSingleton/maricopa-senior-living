@@ -967,6 +967,783 @@ export type QueryHomePageDataResult = {
   content?: BlockContent;
 } | null;
 
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryAllPosts
+// Query: *[_type == "post" && isArchived != true] | order(publishedAt desc){      _id,  _updatedAt,  _type,  title,  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  "slug": slug.current,  "author": author->{      name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,  },  mainImage,  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  "tags": tags[]->{    _id,    title,    "slug": slug.current,  } {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  },  publishedAt,  "body": body[]{    ...,    _type == "attachment" => {      ...,      asset->    }  },  }
+export type QueryAllPostsResult = Array<{
+  _id: string;
+  _updatedAt: string;
+  _type: "post";
+  title: string;
+  excerpt: string;
+  slug: string;
+  author: {
+    name: string;
+    image: {
+      asset: {
+        _id: string;
+        _type: "sanity.imageAsset";
+        metadata: SanityImageMetadata | null;
+        url: string;
+      } | null;
+    };
+    slug: string;
+  };
+  mainImage: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+  } | null;
+  categories: Array<{
+    _id: string;
+    title: string;
+    slug: string;
+  }>;
+  tags: Array<{
+    _id: string;
+    title: string;
+    slug: string;
+    rank: 2;
+  }> | null;
+  publishedAt: string;
+  body: Array<
+    | {
+        asset: {
+          _id: string;
+          _type: "sanity.fileAsset";
+          _createdAt: string;
+          _updatedAt: string;
+          _rev: string;
+          originalFilename?: string;
+          label?: string;
+          title?: string;
+          description?: string;
+          altText?: string;
+          sha1hash: string;
+          extension: string;
+          mimeType: string;
+          size: number;
+          assetId: string;
+          uploadId?: string;
+          path: string;
+          url: string;
+          source?: SanityAssetSourceData;
+        };
+        media?: unknown;
+        description: string;
+        _type: "attachment";
+        _key: string;
+      }
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt: string;
+        _type: "image";
+        _key: string;
+      }
+  >;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryAllPostSlugs
+// Query: *[_type == "post" && defined(slug.current) && isArchived != true][].slug.current
+export type QueryAllPostSlugsResult = Array<string>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryRecentArticleSlugs
+// Query: *[_type == "post" && defined(slug.current) && isArchived != true] | order(_updatedAt desc) [0...100]{"slug": slug.current}
+export type QueryRecentArticleSlugsResult = Array<{
+  slug: string;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryAllPageSlugs
+// Query: *[_type == "page" && defined(slug.current)]{"slug": slug.current}
+export type QueryAllPageSlugsResult = Array<{
+  slug: string;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryPostBySlug
+// Query: *[_type == "post" && slug.current == $slug && isArchived != true]{      _id,  _updatedAt,  _type,  title,  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  "slug": slug.current,  "author": author->{      name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,  },  mainImage,  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  "tags": tags[]->{    _id,    title,    "slug": slug.current,  } {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  },  publishedAt,  "body": body[]{    ...,    _type == "attachment" => {      ...,      asset->    }  },  }[0]
+export type QueryPostBySlugResult = {
+  _id: string;
+  _updatedAt: string;
+  _type: "post";
+  title: string;
+  excerpt: string;
+  slug: string;
+  author: {
+    name: string;
+    image: {
+      asset: {
+        _id: string;
+        _type: "sanity.imageAsset";
+        metadata: SanityImageMetadata | null;
+        url: string;
+      } | null;
+    };
+    slug: string;
+  };
+  mainImage: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+  } | null;
+  categories: Array<{
+    _id: string;
+    title: string;
+    slug: string;
+  }>;
+  tags: Array<{
+    _id: string;
+    title: string;
+    slug: string;
+    rank: 2;
+  }> | null;
+  publishedAt: string;
+  body: Array<
+    | {
+        asset: {
+          _id: string;
+          _type: "sanity.fileAsset";
+          _createdAt: string;
+          _updatedAt: string;
+          _rev: string;
+          originalFilename?: string;
+          label?: string;
+          title?: string;
+          description?: string;
+          altText?: string;
+          sha1hash: string;
+          extension: string;
+          mimeType: string;
+          size: number;
+          assetId: string;
+          uploadId?: string;
+          path: string;
+          url: string;
+          source?: SanityAssetSourceData;
+        };
+        media?: unknown;
+        description: string;
+        _type: "attachment";
+        _key: string;
+      }
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt: string;
+        _type: "image";
+        _key: string;
+      }
+  >;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryAllCategories
+// Query: *[_type == "category"][].slug.current
+export type QueryAllCategoriesResult = Array<string>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryCategoryPaths
+// Query: *[_type == "category" && defined(slug.current)]{"category": slug.current}
+export type QueryCategoryPathsResult = Array<{
+  category: string;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryCategoryBySlug
+// Query: *[_type == "category" && slug.current == $slug]{    title,    "slug": slug.current,    description,    "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",    "combinedList": [      ...(*[_type == "service" && references(^._id)]{        ...,        tags[]->{          _id,          title,          "slug": slug.current,        }      }),      ...(*[_type == "post" && references(^._id) && isArchived != true]{        _id,        _updatedAt,        _type,        publishedAt,        title,        "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",        "slug": slug.current,        "author": author->{            name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,        },        "categories": categories[]->{          _id,          title,          "slug": slug.current,        },        "tags": tags[]->{          _id,          title,          "slug": slug.current,        }      })    ] {      ...,      "rank": select(        count(tags[title == "Local Resources"]) > 0 => 1,        2      )    } | order(rank),  }[0]
+export type QueryCategoryBySlugResult = {
+  title: string;
+  slug: string;
+  description: BlockContent;
+  excerpt: string;
+  combinedList: Array<
+    | {
+        _id: string;
+        _type: "service";
+        _createdAt: string;
+        _updatedAt: string;
+        _rev: string;
+        title: string;
+        categories: Array<
+          {
+            _key: string;
+          } & CategoryReference
+        >;
+        tags: Array<{
+          _id: string;
+          title: string;
+          slug: string;
+        }> | null;
+        description?: BlockContent;
+        audience?: BlockContent;
+        website?: string;
+        phone?: string;
+        address?: string;
+        businessHours?: Array<
+          {
+            _key: string;
+          } & DayAndTime
+        >;
+        notes?: BlockContent;
+        attachments?: Array<{
+          asset?: SanityFileAssetReference;
+          media?: unknown;
+          name: string;
+          _type: "file";
+          _key: string;
+        }>;
+        rank: 1 | 2;
+      }
+    | {
+        _id: string;
+        _updatedAt: string;
+        _type: "post";
+        publishedAt: string;
+        title: string;
+        excerpt: string;
+        slug: string;
+        author: {
+          name: string;
+          image: {
+            asset: {
+              _id: string;
+              _type: "sanity.imageAsset";
+              metadata: SanityImageMetadata | null;
+              url: string;
+            } | null;
+          };
+          slug: string;
+        };
+        categories: Array<{
+          _id: string;
+          title: string;
+          slug: string;
+        }>;
+        tags: Array<{
+          _id: string;
+          title: string;
+          slug: string;
+        }> | null;
+        rank: 1 | 2;
+      }
+  >;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryAllTags
+// Query: *[_type == "tag" && defined(slug.current)][].slug.current
+export type QueryAllTagsResult = Array<string>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryTagPaths
+// Query: *[_type == "tag" && defined(slug.current)]{"tag": slug.current}
+export type QueryTagPathsResult = Array<{
+  tag: string;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryTagBySlug
+// Query: *[_type == "tag" && slug.current == $slug]{    title,    "slug": slug.current,    description,    "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",    "posts": *[_type == "post" && references(^._id) && isArchived != true]{        _id,  _updatedAt,  _type,  title,  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  "slug": slug.current,  "author": author->{      name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,  },  mainImage,  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  "tags": tags[]->{    _id,    title,    "slug": slug.current,  } {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  },  publishedAt,  "body": body[]{    ...,    _type == "attachment" => {      ...,      asset->    }  },    },    "services": *[_type == "service" && references(^._id)]{      ...,      tags[]->{        _id,        title,        "slug": slug.current,      }    },  }[0]
+export type QueryTagBySlugResult = {
+  title: string;
+  slug: string;
+  description: BlockContent;
+  excerpt: string;
+  posts: Array<{
+    _id: string;
+    _updatedAt: string;
+    _type: "post";
+    title: string;
+    excerpt: string;
+    slug: string;
+    author: {
+      name: string;
+      image: {
+        asset: {
+          _id: string;
+          _type: "sanity.imageAsset";
+          metadata: SanityImageMetadata | null;
+          url: string;
+        } | null;
+      };
+      slug: string;
+    };
+    mainImage: {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt: string;
+      _type: "image";
+    } | null;
+    categories: Array<{
+      _id: string;
+      title: string;
+      slug: string;
+    }>;
+    tags: Array<{
+      _id: string;
+      title: string;
+      slug: string;
+      rank: 2;
+    }> | null;
+    publishedAt: string;
+    body: Array<
+      | {
+          asset: {
+            _id: string;
+            _type: "sanity.fileAsset";
+            _createdAt: string;
+            _updatedAt: string;
+            _rev: string;
+            originalFilename?: string;
+            label?: string;
+            title?: string;
+            description?: string;
+            altText?: string;
+            sha1hash: string;
+            extension: string;
+            mimeType: string;
+            size: number;
+            assetId: string;
+            uploadId?: string;
+            path: string;
+            url: string;
+            source?: SanityAssetSourceData;
+          };
+          media?: unknown;
+          description: string;
+          _type: "attachment";
+          _key: string;
+        }
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?:
+            | "blockquote"
+            | "h1"
+            | "h2"
+            | "h3"
+            | "h4"
+            | "h5"
+            | "h6"
+            | "normal";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt: string;
+          _type: "image";
+          _key: string;
+        }
+    >;
+  }>;
+  services: Array<{
+    _id: string;
+    _type: "service";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    title: string;
+    categories: Array<
+      {
+        _key: string;
+      } & CategoryReference
+    >;
+    tags: Array<{
+      _id: string;
+      title: string;
+      slug: string;
+    }> | null;
+    description?: BlockContent;
+    audience?: BlockContent;
+    website?: string;
+    phone?: string;
+    address?: string;
+    businessHours?: Array<
+      {
+        _key: string;
+      } & DayAndTime
+    >;
+    notes?: BlockContent;
+    attachments?: Array<{
+      asset?: SanityFileAssetReference;
+      media?: unknown;
+      name: string;
+      _type: "file";
+      _key: string;
+    }>;
+  }>;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: querySearch
+// Query: *[(_type == "post" && isArchived != true && (title match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*")) ||  (_type == "service" && (title match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*"))] | score(    boost(title match "*" + $query + "*", 4)  )| order(_score desc){    ...,    _score,    _type == "post" => {        _id,  _updatedAt,  _type,  title,  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  "slug": slug.current,  "author": author->{      name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,  },  mainImage,  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  "tags": tags[]->{    _id,    title,    "slug": slug.current,  } {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  },  publishedAt,  "body": body[]{    ...,    _type == "attachment" => {      ...,      asset->    }  },    },    _type == "service" => {      ...,      tags[]->{        _id,        title,        "slug": slug.current,      }    },  }
+export type QuerySearchResult = Array<
+  | {
+      _id: string;
+      _type: "post";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      title: string;
+      slug: string;
+      author: {
+        name: string;
+        image: {
+          asset: {
+            _id: string;
+            _type: "sanity.imageAsset";
+            metadata: SanityImageMetadata | null;
+            url: string;
+          } | null;
+        };
+        slug: string;
+      };
+      mainImage: {
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt: string;
+        _type: "image";
+      } | null;
+      categories: Array<{
+        _id: string;
+        title: string;
+        slug: string;
+      }>;
+      tags: Array<{
+        _id: string;
+        title: string;
+        slug: string;
+        rank: 2;
+      }> | null;
+      publishedAt: string;
+      isArchived?: boolean;
+      body: Array<
+        | {
+            asset: {
+              _id: string;
+              _type: "sanity.fileAsset";
+              _createdAt: string;
+              _updatedAt: string;
+              _rev: string;
+              originalFilename?: string;
+              label?: string;
+              title?: string;
+              description?: string;
+              altText?: string;
+              sha1hash: string;
+              extension: string;
+              mimeType: string;
+              size: number;
+              assetId: string;
+              uploadId?: string;
+              path: string;
+              url: string;
+              source?: SanityAssetSourceData;
+            };
+            media?: unknown;
+            description: string;
+            _type: "attachment";
+            _key: string;
+          }
+        | {
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?:
+              | "blockquote"
+              | "h1"
+              | "h2"
+              | "h3"
+              | "h4"
+              | "h5"
+              | "h6"
+              | "normal";
+            listItem?: "bullet" | "number";
+            markDefs?: Array<{
+              href?: string;
+              _type: "link";
+              _key: string;
+            }>;
+            level?: number;
+            _type: "block";
+            _key: string;
+          }
+        | {
+            asset: SanityImageAssetReference;
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            alt: string;
+            _type: "image";
+            _key: string;
+          }
+      >;
+      _score: null;
+      excerpt: string;
+    }
+  | {
+      _id: string;
+      _type: "service";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      title: string;
+      categories: Array<
+        {
+          _key: string;
+        } & CategoryReference
+      >;
+      tags: Array<{
+        _id: string;
+        title: string;
+        slug: string;
+      }> | null;
+      description?: BlockContent;
+      audience?: BlockContent;
+      website?: string;
+      phone?: string;
+      address?: string;
+      businessHours?: Array<
+        {
+          _key: string;
+        } & DayAndTime
+      >;
+      notes?: BlockContent;
+      attachments?: Array<{
+        asset?: SanityFileAssetReference;
+        media?: unknown;
+        name: string;
+        _type: "file";
+        _key: string;
+      }>;
+      _score: null;
+    }
+>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryNavigation
+// Query: *[_type == "navigation"][0]{    "headerPrimary": headerPrimary[]{      _key,      "link": link{        url,        text,        reference->{          _id,          _type,          title,          "slug": slug.current        }      },      children    },    "footer": footer[]{      _key,      url,      text,      reference->{        _id,        _type,        title,        "slug": slug.current      }    },  }
+export type QueryNavigationResult = {
+  headerPrimary: Array<{
+    _key: string;
+    link: {
+      url: string | null;
+      text: string | null;
+      reference:
+        | {
+            _id: string;
+            _type: "category";
+            title: string;
+            slug: string;
+          }
+        | {
+            _id: string;
+            _type: "page";
+            title: string;
+            slug: string;
+          }
+        | {
+            _id: string;
+            _type: "tag";
+            title: string;
+            slug: string;
+          }
+        | null;
+    } | null;
+    children: Array<{
+      link?: Link;
+      _type: "item";
+      _key: string;
+    }> | null;
+  }> | null;
+  footer: Array<{
+    _key: string;
+    url: string | null;
+    text: string | null;
+    reference:
+      | {
+          _id: string;
+          _type: "category";
+          title: string;
+          slug: string;
+        }
+      | {
+          _id: string;
+          _type: "page";
+          title: string;
+          slug: string;
+        }
+      | {
+          _id: string;
+          _type: "tag";
+          title: string;
+          slug: string;
+        }
+      | null;
+  }> | null;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryPageBySlug
+// Query: *[_type == "page" && slug.current == $slug][0]{    title,    "slug": slug.current,    "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",    "body": body[]{      ...,      _type == "attachment" => {        ...,        asset->      }    },  }
+export type QueryPageBySlugResult = {
+  title: string;
+  slug: string;
+  excerpt: string;
+  body: Array<
+    | {
+        asset: {
+          _id: string;
+          _type: "sanity.fileAsset";
+          _createdAt: string;
+          _updatedAt: string;
+          _rev: string;
+          originalFilename?: string;
+          label?: string;
+          title?: string;
+          description?: string;
+          altText?: string;
+          sha1hash: string;
+          extension: string;
+          mimeType: string;
+          size: number;
+          assetId: string;
+          uploadId?: string;
+          path: string;
+          url: string;
+          source?: SanityAssetSourceData;
+        };
+        media?: unknown;
+        description: string;
+        _type: "attachment";
+        _key: string;
+      }
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt: string;
+        _type: "image";
+        _key: string;
+      }
+  >;
+} | null;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
@@ -987,5 +1764,19 @@ declare module "@sanity/client" {
     '\n  *[_type == "post" && defined(slug.current)].slug.current\n': QueryArticlePathsResult;
     '{\n  "whatsNew": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What\'s New!"]._id)][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    "author": author->{\n      \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n    },\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  },\n  "seniorCenterNewsletters": *[(_type == "post" && isArchived != true && references(*[_type == "category" && title == "City of Maricopa Community / Senior Center"]._id))][0..1] | order(publishedAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  },\n  "nonProfit": *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{\n    ...,\n    "slug": slug.current,\n  },\n  "newsletter": *[_type == "post" && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"]._id)] | order(publishedAt desc)[0]{\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  }\n}': RightSidebarQueryResult;
     '\n  *[_type == "home"][0]\n': QueryHomePageDataResult;
+    '\n  *[_type == "post" && isArchived != true] | order(publishedAt desc){\n    \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n  }\n': QueryAllPostsResult;
+    '\n  *[_type == "post" && defined(slug.current) && isArchived != true][].slug.current\n': QueryAllPostSlugsResult;
+    '\n  *[_type == "post" && defined(slug.current) && isArchived != true] | order(_updatedAt desc) [0...100]{"slug": slug.current}\n': QueryRecentArticleSlugsResult;
+    '\n  *[_type == "page" && defined(slug.current)]{"slug": slug.current}\n': QueryAllPageSlugsResult;
+    '\n  *[_type == "post" && slug.current == $slug && isArchived != true]{\n    \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n  }[0]\n': QueryPostBySlugResult;
+    '\n  *[_type == "category"][].slug.current\n': QueryAllCategoriesResult;
+    '\n  *[_type == "category" && defined(slug.current)]{"category": slug.current}\n': QueryCategoryPathsResult;
+    '\n  *[_type == "category" && slug.current == $slug]{\n    title,\n    "slug": slug.current,\n    description,\n    "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",\n    "combinedList": [\n      ...(*[_type == "service" && references(^._id)]{\n        ...,\n        tags[]->{\n          _id,\n          title,\n          "slug": slug.current,\n        }\n      }),\n      ...(*[_type == "post" && references(^._id) && isArchived != true]{\n        _id,\n        _updatedAt,\n        _type,\n        publishedAt,\n        title,\n        "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n        "slug": slug.current,\n        "author": author->{\n          \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n        },\n        "categories": categories[]->{\n          _id,\n          title,\n          "slug": slug.current,\n        },\n        "tags": tags[]->{\n          _id,\n          title,\n          "slug": slug.current,\n        }\n      })\n    ] {\n      ...,\n      "rank": select(\n        count(tags[title == "Local Resources"]) > 0 => 1,\n        2\n      )\n    } | order(rank),\n  }[0]\n': QueryCategoryBySlugResult;
+    '\n  *[_type == "tag" && defined(slug.current)][].slug.current\n': QueryAllTagsResult;
+    '\n  *[_type == "tag" && defined(slug.current)]{"tag": slug.current}\n': QueryTagPathsResult;
+    '\n  *[_type == "tag" && slug.current == $slug]{\n    title,\n    "slug": slug.current,\n    description,\n    "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",\n    "posts": *[_type == "post" && references(^._id) && isArchived != true]{\n      \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n    },\n    "services": *[_type == "service" && references(^._id)]{\n      ...,\n      tags[]->{\n        _id,\n        title,\n        "slug": slug.current,\n      }\n    },\n  }[0]\n': QueryTagBySlugResult;
+    '\n  *[(_type == "post" && isArchived != true && (title match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*")) ||\n  (_type == "service" && (title match "*" + $query + "*" || tags[]->title match "*" + $query + "*" || categories[]->title match "*" + $query + "*"))] | score(\n    boost(title match "*" + $query + "*", 4)\n  )| order(_score desc){\n    ...,\n    _score,\n    _type == "post" => {\n      \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n    },\n    _type == "service" => {\n      ...,\n      tags[]->{\n        _id,\n        title,\n        "slug": slug.current,\n      }\n    },\n  }\n': QuerySearchResult;
+    '\n  *[_type == "navigation"][0]{\n    "headerPrimary": headerPrimary[]{\n      _key,\n      "link": link{\n        url,\n        text,\n        reference->{\n          _id,\n          _type,\n          title,\n          "slug": slug.current\n        }\n      },\n      children\n    },\n    "footer": footer[]{\n      _key,\n      url,\n      text,\n      reference->{\n        _id,\n        _type,\n        title,\n        "slug": slug.current\n      }\n    },\n  }\n': QueryNavigationResult;
+    '\n  *[_type == "page" && slug.current == $slug][0]{\n    title,\n    "slug": slug.current,\n    "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",\n    "body": body[]{\n      ...,\n      _type == "attachment" => {\n        ...,\n        asset->\n      }\n    },\n  }\n': QueryPageBySlugResult;
   }
 }

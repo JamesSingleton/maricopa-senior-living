@@ -2,7 +2,7 @@
 
 import { SanityImage } from "sanity-image";
 
-import { dataset, projectId } from "@/lib/sanity.api";
+import { env } from "@maricopa-senior-living/env/client";
 
 const ImageComponent = ({
   image,
@@ -30,8 +30,8 @@ const ImageComponent = ({
       height={height}
       mode={mode}
       className={className}
-      dataset={dataset}
-      projectId={projectId}
+      dataset={env.NEXT_PUBLIC_SANITY_DATASET}
+      projectId={env.NEXT_PUBLIC_SANITY_PROJECT_ID}
       hotspot={image.hotspot}
       title={alt}
       loading={loading}

@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { sanity } from "next-sanity/live/cache-life";
 
 // https://nextjs.org/docs/advanced-features/security-headers
 const ContentSecurityPolicy = `
@@ -52,6 +53,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  cacheComponents: true,
+  cacheLife: { default: sanity },
   modularizeImports: {
     "@heroicons/react/24/outline": {
       transform: "@heroicons/react/24/outline/{{member}}",
@@ -95,4 +98,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

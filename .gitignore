@@ -4,6 +4,7 @@
 node_modules
 .pnp
 .pnp.js
+.pnpm-store
 
 # Local env files
 .env
@@ -20,6 +21,7 @@ coverage
 
 # Vercel
 .vercel
+next-env.d.ts
 
 # Build Outputs
 .next/

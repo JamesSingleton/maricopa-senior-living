@@ -1,24 +1,19 @@
-import { sanityFetch } from "@maricopa-senior-living/sanity/live";
+import {
+  getDynamicFetchOptions,
+  sanityFetch,
+  type DynamicFetchOptions,
+} from "@maricopa-senior-living/sanity/live";
+import { queryHomePageData } from "@maricopa-senior-living/sanity/queries";
 import type { Metadata, ResolvingMetadata } from "next";
+import { draftMode } from "next/headers";
+import { Suspense } from "react";
 
 import { CustomPortableText } from "@/components/CustomPortableText";
 import ImageComponent from "@/components/ImageComponent";
 import { baseUrl } from "@/lib/constants";
-import { queryHomePageData } from "@maricopa-senior-living/sanity/queries";
-
-type Props = {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-};
-
-async function fetchHomePageData() {
-  return await sanityFetch({
-    query: queryHomePageData,
-  });
-}
 
 export async function generateMetadata(
-  { params, searchParams }: Props,
+  _props: unknown,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const previousOpenGraph = (await parent)?.openGraph;
@@ -41,7 +36,32 @@ export async function generateMetadata(
 }
 
 export default async function Home() {
-  const { data: homePageData } = await fetchHomePageData();
+  const { isEnabled: isDraftMode } = await draftMode();
+
+  if (isDraftMode) {
+    return (
+      <Suspense fallback={<HomeFallback />}>
+        <DynamicHome />
+      </Suspense>
+    );
+  }
+
+  return <CachedHome perspective="published" stega={false} />;
+}
+
+async function DynamicHome() {
+  const { perspective, stega } = await getDynamicFetchOptions();
+  return <CachedHome perspective={perspective} stega={stega} />;
+}
+
+async function CachedHome({ perspective, stega }: DynamicFetchOptions) {
+  "use cache";
+  const { data: homePageData } = await sanityFetch({
+    query: queryHomePageData,
+    perspective,
+    stega,
+  });
+
   return (
     <div className="rounded-md bg-white px-8 py-8 shadow-lg lg:px-4 lg:py-4">
       <figure>
@@ -58,6 +78,19 @@ export default async function Home() {
       </figure>
       <div className="prose prose-indigo mx-auto pt-8 lg:pt-4">
         <CustomPortableText value={homePageData?.content ?? []} />
+      </div>
+    </div>
+  );
+}
+
+function HomeFallback() {
+  return (
+    <div className="rounded-md bg-white px-8 py-8 shadow-lg lg:px-4 lg:py-4" aria-busy>
+      <div className="aspect-[3/2] animate-pulse rounded-md bg-zinc-200" />
+      <div className="mt-8 space-y-4">
+        <div className="h-4 animate-pulse rounded bg-zinc-200" />
+        <div className="h-4 animate-pulse rounded bg-zinc-200" />
+        <div className="h-4 w-2/3 animate-pulse rounded bg-zinc-200" />
       </div>
     </div>
   );
