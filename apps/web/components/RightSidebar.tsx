@@ -1,49 +1,52 @@
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { CurrencyDollarIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
-import { sanityFetch } from "@maricopa-senior-living/sanity/live";
-import Link from "next/link";
-
-import DateComponent from "@/components/Date";
-import SearchBar from "@/components/SearchBar";
+import {
+  getDynamicFetchOptions,
+  sanityFetch,
+  type DynamicFetchOptions,
+} from "@maricopa-senior-living/sanity/live";
 import {
   highlightedCategories,
   highlightedTags,
   rightSidebarQuery,
-} from "@/lib/sanity/query";
+} from "@maricopa-senior-living/sanity/queries";
+import Link from "next/link";
+
+import DateComponent from "@/components/Date";
+import SearchBar from "@/components/SearchBar";
 import { CustomPortableText } from "./CustomPortableText";
 import ImageComponent from "./ImageComponent";
 
-async function fetchHighlightedCategories() {
-  return await sanityFetch({
-    query: highlightedCategories,
-  });
-}
-
-async function fetchHighlightedTags() {
-  return await sanityFetch({
-    query: highlightedTags,
-  });
-}
-
-async function fetchRightSidebar() {
-  return await sanityFetch({
-    query: rightSidebarQuery,
-  });
-}
-
-const RightSidebar = async () => {
-  const [
-    { data: highlightedCategories },
-    { data: highlightedTags },
-    { data: rightSidebarData },
-  ] = await Promise.all([
-    fetchHighlightedCategories(),
-    fetchHighlightedTags(),
-    fetchRightSidebar(),
+async function fetchRightSidebarData({ perspective, stega }: DynamicFetchOptions) {
+  "use cache";
+  const [categories, tags, sidebar] = await Promise.all([
+    sanityFetch({ query: highlightedCategories, perspective, stega }),
+    sanityFetch({ query: highlightedTags, perspective, stega }),
+    sanityFetch({ query: rightSidebarQuery, perspective, stega }),
   ]);
 
+  return {
+    highlightedCategories: categories.data,
+    highlightedTags: tags.data,
+    rightSidebarData: sidebar.data,
+  };
+}
+
+export async function DynamicRightSidebar() {
+  const { perspective, stega } = await getDynamicFetchOptions();
+  return <CachedRightSidebar perspective={perspective} stega={stega} />;
+}
+
+export async function CachedRightSidebar({
+  perspective,
+  stega,
+}: DynamicFetchOptions) {
+  "use cache";
+  const { highlightedCategories, highlightedTags, rightSidebarData } =
+    await fetchRightSidebarData({ perspective, stega });
+
   const { whatsNew, seniorCenterNewsletters, nonProfit, newsletter } =
-    rightSidebarData;
+    rightSidebarData ?? {};
 
   return (
     <>
@@ -178,7 +181,7 @@ const RightSidebar = async () => {
       <div className="rounded-md bg-white p-8 shadow-lg">
         <h2 className="mb-8 text-xl font-bold lg:text-2xl">Categories</h2>
         <ul className="space-y-4">
-          {highlightedCategories.map((category: any) => (
+          {highlightedCategories?.map((category: any) => (
             <li key={category._id} className="block">
               <Link
                 href={`/category/${category.slug}`}
@@ -238,6 +241,17 @@ const RightSidebar = async () => {
       </div>
     </>
   );
-};
+}
 
-export default RightSidebar;
+export function RightSidebarFallback() {
+  return (
+    <div className="space-y-8" aria-busy>
+      {Array.from({ length: 3 }).map((_, index) => (
+        <div
+          key={index}
+          className="h-48 animate-pulse rounded-md bg-zinc-200 shadow-lg"
+        />
+      ))}
+    </div>
+  );
+}

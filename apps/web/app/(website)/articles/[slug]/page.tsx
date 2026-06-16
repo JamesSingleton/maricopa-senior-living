@@ -1,5 +1,13 @@
 import { CalendarIcon } from "@heroicons/react/24/outline";
-import { sanityFetch } from "@maricopa-senior-living/sanity/live";
+import {
+  getDynamicFetchOptions,
+  sanityFetch,
+  sanityFetchMetadata,
+  sanityFetchStaticParams,
+  type DynamicFetchOptions,
+} from "@maricopa-senior-living/sanity/live";
+import { queryArticleSlugPageData } from "@maricopa-senior-living/sanity/queries";
+import type { QueryArticleSlugPageDataResult } from "@maricopa-senior-living/sanity/types";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -8,52 +16,28 @@ import BackButton from "@/components/BackButton";
 import { CustomPortableText } from "@/components/CustomPortableText";
 import DateComponent from "@/components/Date";
 import ImageComponent from "@/components/ImageComponent";
-import { client } from "@/lib/sanity/client";
-import {
-  queryArticlePaths,
-  queryArticleSlugPageData,
-} from "@/lib/sanity/query";
-import { getPostBySlug } from "@/lib/sanity.fetch";
-
-async function fetchArticleSlugPageData(slug: string) {
-  return await sanityFetch({
-    query: queryArticleSlugPageData,
-    params: { slug },
-  });
-}
-
-async function fetchArticlePaths() {
-  try {
-    const slugs = await client.fetch(queryArticlePaths);
-
-    if (!Array.isArray(slugs) || slugs.length === 0) {
-      return [];
-    }
-    return slugs.map((slug) => ({
-      slug,
-    }));
-  } catch (error) {
-    console.error("Error fetching article paths:", error);
-    return [];
-  }
-}
+import { queryRecentArticleSlugs } from "@maricopa-senior-living/sanity/queries";
 
 export async function generateStaticParams() {
-  const paths = await fetchArticlePaths();
-
-  return paths;
+  const { data } = await sanityFetchStaticParams({ query: queryRecentArticleSlugs });
+  return data ?? [];
 }
 
-// Allow dynamic params for paths not generated at build time
-export const dynamicParams = true;
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const [{ slug }, { perspective }] = await Promise.all([
+    params,
+    getDynamicFetchOptions(),
+  ]);
+  const { data: post } = await sanityFetchMetadata({
+    query: queryArticleSlugPageData,
+    params: { slug },
+    perspective,
+  });
 
   if (!post) {
     return {};
@@ -66,7 +50,7 @@ export async function generateMetadata({
       title: `${post.title}`,
       description: `${post.excerpt}`,
       type: "article",
-      tags: post.tags.map((tag) => tag.title),
+      tags: post.tags?.map((tag) => tag.title),
       publishedTime: post.publishedAt,
       modifiedTime: post._updatedAt,
     },
@@ -78,8 +62,29 @@ export default async function ArticlePage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params;
-  const { data: post } = await fetchArticleSlugPageData(slug);
+  const [{ slug }, { perspective, stega }] = await Promise.all([
+    params,
+    getDynamicFetchOptions(),
+  ]);
+
+  return (
+    <CachedArticlePage slug={slug} perspective={perspective} stega={stega} />
+  );
+}
+
+async function CachedArticlePage({
+  slug,
+  perspective,
+  stega,
+}: { slug: string } & DynamicFetchOptions) {
+  "use cache";
+  const { data } = await sanityFetch({
+    query: queryArticleSlugPageData,
+    params: { slug },
+    perspective,
+    stega,
+  });
+  const post = data as QueryArticleSlugPageDataResult;
 
   if (!post) {
     notFound();
@@ -126,19 +131,17 @@ export default async function ArticlePage({
             <div className="mt-8 md:mt-14">
               <h2 className="text-xl font-semibold">Tags</h2>
               <ul className="not-prose flex list-none items-center space-x-4 pl-0">
-                {post.tags.map(
-                  (tag: { _id: string; title: string; slug: string }) => (
-                    <li key={tag._id}>
-                      <Link
-                        href={`/tag/${tag.slug}`}
-                        prefetch={false}
-                        className="rounded bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
-                      >
-                        {tag.title}
-                      </Link>
-                    </li>
-                  ),
-                )}
+                {post.tags.map((tag) => (
+                  <li key={tag._id}>
+                    <Link
+                      href={`/tag/${tag.slug}`}
+                      prefetch={false}
+                      className="rounded bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
+                    >
+                      {tag.title}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
           )}

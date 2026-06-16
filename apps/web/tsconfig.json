@@ -1,7 +1,6 @@
 {
   "extends": "@maricopa-senior-living/typescript-config/nextjs.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
       "@maricopa-senior-living/ui/*": ["../../packages/ui/src/*"],

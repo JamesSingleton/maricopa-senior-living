@@ -11,20 +11,25 @@
     "@sanity/asset-utils": "^2.3.0",
     "@sanity/client": "catalog:",
     "@sanity/image-url": "^2.1.1",
-    "next-sanity": "^12.3.0",
+    "next-sanity": "catalog:",
+    "sanity": "catalog:",
     "sanity-image": "^1.1.0"
+  },
+  "peerDependencies": {
+    "next": ">=16.2.0"
   },
   "devDependencies": {
     "@maricopa-senior-living/typescript-config": "workspace:*",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
+    "next": "^16.2.9",
     "typescript": "catalog:"
   },
   "exports": {
     "./client": "./src/client.ts",
-    "./query": "./src/query.ts",
+    "./queries": "./src/queries.ts",
     "./live": "./src/live.ts",
     "./image": "./src/image.ts",
-    "./types": "./src/sanity.types.ts"
+    "./types": "./src/types.ts"
   }
 }

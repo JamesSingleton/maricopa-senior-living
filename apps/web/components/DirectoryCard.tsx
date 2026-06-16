@@ -1,9 +1,8 @@
 import { PaperClipIcon } from "@heroicons/react/20/solid";
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { getFileAsset } from "@sanity/asset-utils";
+import { env } from "@maricopa-senior-living/env/client";
 import Link from "next/link";
 
-import { dataset, projectId } from "@/lib/sanity.api";
 import BusinessHours from "./BusinessHours";
 import { CustomPortableText } from "./CustomPortableText";
 
@@ -49,7 +48,7 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
                 <a
                   href={directoryItem.website}
                   target="_blank"
-                  className="max-w-lg overflow-hidden break-words text-indigo-600 hover:text-indigo-500"
+                  className="max-w-lg overflow-hidden wrap-break-word text-indigo-600 hover:text-indigo-500"
                   rel="noreferrer noopener"
                 >
                   {directoryItem.website}
@@ -104,8 +103,8 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
                 <ul className="divide-y divide-zinc-100 rounded-md border border-zinc-200">
                   {directoryItem.attachments.map((attachment: any) => {
                     const attachmentAsset = getFileAsset(attachment, {
-                      dataset,
-                      projectId,
+                      dataset: env.NEXT_PUBLIC_SANITY_DATASET,
+                      projectId: env.NEXT_PUBLIC_SANITY_PROJECT_ID,
                     });
                     return (
                       <li

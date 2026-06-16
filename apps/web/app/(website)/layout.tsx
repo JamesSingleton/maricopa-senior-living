@@ -1,16 +1,32 @@
 import "@/app/globals.css";
-import { SanityLive } from "@maricopa-senior-living/sanity/live";
+import {
+  getDynamicFetchOptions,
+  SanityLive,
+  sanityFetch,
+  type DynamicFetchOptions,
+} from "@maricopa-senior-living/sanity/live";
 import type { Metadata } from "next";
+import { draftMode } from "next/headers";
 import Script from "next/script";
+import { VisualEditing } from "next-sanity/visual-editing";
 import PlausibleProvider from "next-plausible";
 import { Suspense } from "react";
 
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import RightSidebar from "@/components/RightSidebar";
+import {
+  CachedRightSidebar,
+  DynamicRightSidebar,
+  RightSidebarFallback,
+} from "@/components/RightSidebar";
 import ScrollToTop from "@/components/ScrollToTop";
 import { baseUrl } from "@/lib/constants";
-import { getNavigation } from "@/lib/sanity.fetch";
+import { queryNavigation } from "@maricopa-senior-living/sanity/queries";
+
+type NavigationData = {
+  headerPrimary?: any[];
+  footer?: any[];
+} | null;
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -27,44 +43,91 @@ export const metadata: Metadata = {
   },
 };
 
+async function fetchNavigation({ perspective, stega }: DynamicFetchOptions) {
+  "use cache";
+  const { data } = await sanityFetch({
+    query: queryNavigation,
+    perspective,
+    stega,
+  });
+  return data as NavigationData;
+}
+
+async function DynamicHeader() {
+  const { perspective, stega } = await getDynamicFetchOptions();
+  return <CachedHeader perspective={perspective} stega={stega} />;
+}
+
+async function CachedHeader({ perspective, stega }: DynamicFetchOptions) {
+  "use cache";
+  const navigation = await fetchNavigation({ perspective, stega });
+  return <Header menu={navigation?.headerPrimary ?? []} />;
+}
+
+async function DynamicFooter() {
+  const { perspective, stega } = await getDynamicFetchOptions();
+  return <CachedFooter perspective={perspective} stega={stega} />;
+}
+
+async function CachedFooter({ perspective, stega }: DynamicFetchOptions) {
+  "use cache";
+  const navigation = await fetchNavigation({ perspective, stega });
+  return <Footer menu={navigation?.footer ?? []} />;
+}
+
+function HeaderFallback() {
+  return <div className="h-20 animate-pulse bg-zinc-100" aria-busy />;
+}
+
+function FooterFallback() {
+  return <div className="h-32 animate-pulse bg-zinc-100" aria-busy />;
+}
+
 export default async function IndexLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const navigation = await getNavigation();
+  const { isEnabled: isDraftMode } = await draftMode();
 
   return (
-    <PlausibleProvider
-      domain="maricopaseniorliving.org"
-      trackFileDownloads
-      trackOutboundLinks
-    >
+    <PlausibleProvider src="https://plausible.io/js/pa-_c-PnIRRG3vdbjzqvT4GH.js">
       <Script
         src="https://cdn.userway.org/widget.js"
         data-account="qeA6uoRyx5"
         data-position="2"
       />
-      <Suspense
-        fallback={
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div className="h-32 w-32 animate-spin rounded-full border-t-2 border-b-2 border-zinc-900" />
-          </div>
-        }
-      >
-        <Header menu={navigation.headerPrimary} />
+      <Suspense fallback={<HeaderFallback />}>
+        {isDraftMode ? (
+          <DynamicHeader />
+        ) : (
+          <CachedHeader perspective="published" stega={false} />
+        )}
       </Suspense>
       <main className="py-8 md:py-10 lg:py-14 xl:py-16">
         <div className="container grid grid-cols-12 gap-8">
           <div className="col-span-12 lg:col-span-8">{children}</div>
           <div className="col-span-12 space-y-8 lg:col-span-4">
-            <RightSidebar />
+            {isDraftMode ? (
+              <Suspense fallback={<RightSidebarFallback />}>
+                <DynamicRightSidebar />
+              </Suspense>
+            ) : (
+              <CachedRightSidebar perspective="published" stega={false} />
+            )}
           </div>
         </div>
       </main>
-      <Footer menu={navigation.footer} />
+      {isDraftMode ? (
+        <Suspense fallback={<FooterFallback />}>
+          <DynamicFooter />
+        </Suspense>
+      ) : (
+        <CachedFooter perspective="published" stega={false} />
+      )}
       <ScrollToTop />
-      <SanityLive />
+      <SanityLive includeDrafts={isDraftMode} />
+      {isDraftMode && <VisualEditing />}
     </PlausibleProvider>
   );
 }

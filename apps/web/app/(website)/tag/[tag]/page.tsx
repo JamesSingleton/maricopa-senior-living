@@ -1,27 +1,45 @@
+import {
+  getDynamicFetchOptions,
+  sanityFetch,
+  sanityFetchMetadata,
+  sanityFetchStaticParams,
+  type DynamicFetchOptions,
+} from "@maricopa-senior-living/sanity/live";
 import type { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
+import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 import ArticleCard from "@/components/ArticleCard";
 import { CustomPortableText } from "@/components/CustomPortableText";
 import DirectoryCard from "@/components/DirectoryCard";
 import { baseUrl } from "@/lib/constants";
-import { getTagBySlug, getTags } from "@/lib/sanity.fetch";
+import type { GroupItem } from "@/types/common";
+import {
+  queryTagBySlug,
+  queryTagPaths,
+} from "@maricopa-senior-living/sanity/queries";
 
-// export async function generateStaticParams() {
-//   const tags = await getTags()
-
-//   return tags.map((tag) => ({
-//     tag: tag.slug,
-//   }))
-// }
+export async function generateStaticParams() {
+  const { data } = await sanityFetchStaticParams({ query: queryTagPaths });
+  return data ?? [];
+}
 
 export async function generateMetadata(
   { params }: { params: Promise<{ tag: string }> },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const { tag: tagParam } = await params;
-  const tag = await getTagBySlug(tagParam);
+  const [{ tag: tagParam }, { perspective }] = await Promise.all([
+    params,
+    getDynamicFetchOptions(),
+  ]);
+  const { data } = await sanityFetchMetadata({
+    query: queryTagBySlug,
+    params: { slug: tagParam },
+    perspective,
+  });
+  const tag = data as GroupItem | null;
   const previousOpenGraph = (await parent)?.openGraph;
 
   if (!tag) return {};
@@ -43,35 +61,75 @@ export default async function TagsPage({
 }: {
   params: Promise<{ tag: string }>;
 }) {
-  const { tag: tagParam } = await params;
-  const tag = await getTagBySlug(tagParam);
+  const { isEnabled: isDraftMode } = await draftMode();
 
-  if (!tag) return notFound();
+  if (isDraftMode) {
+    return (
+      <Suspense fallback={<TagFallback />}>
+        <DynamicTagPage params={params} />
+      </Suspense>
+    );
+  }
+
+  const { tag } = await params;
+  return <CachedTagPage tag={tag} perspective="published" stega={false} />;
+}
+
+async function DynamicTagPage({
+  params,
+}: {
+  params: Promise<{ tag: string }>;
+}) {
+  const [{ tag }, { perspective, stega }] = await Promise.all([
+    params,
+    getDynamicFetchOptions(),
+  ]);
+
+  return (
+    <CachedTagPage tag={tag} perspective={perspective} stega={stega} />
+  );
+}
+
+async function CachedTagPage({
+  tag,
+  perspective,
+  stega,
+}: { tag: string } & DynamicFetchOptions) {
+  "use cache";
+  const { data } = await sanityFetch({
+    query: queryTagBySlug,
+    params: { slug: tag },
+    perspective,
+    stega,
+  });
+  const tagData = data as GroupItem | null;
+
+  if (!tagData) return notFound();
 
   return (
     <div>
       <h1 className="inline-block align-middle text-4xl font-semibold capitalize sm:text-5xl md:text-6xl">
-        {tag.title}
+        {tagData.title}
       </h1>
       <CustomPortableText
-        value={tag.description}
+        value={tagData.description}
         paragraphClasses="prose prose-lg prose-indigo text-sm font-medium text-zinc-500 sm:text-base md:text-lg lg:max-w-none pt-4"
       />
       <section className="space-y-8 pt-4">
-        {tag.services &&
-          tag.services.length > 0 &&
-          tag.services.map((service: any) => (
+        {tagData.services &&
+          tagData.services.length > 0 &&
+          tagData.services.map((service: any) => (
             <DirectoryCard key={service._id} directoryItem={service} />
           ))}
-        {tag.posts &&
-          tag.posts.length > 0 &&
-          tag.posts.map((post: any) => (
+        {tagData.posts &&
+          tagData.posts.length > 0 &&
+          tagData.posts.map((post: any) => (
             <ArticleCard key={post._id} post={post} />
           ))}
-        {tag.services &&
-          tag.services.length === 0 &&
-          tag.posts &&
-          tag.posts.length === 0 && (
+        {tagData.services &&
+          tagData.services.length === 0 &&
+          tagData.posts &&
+          tagData.posts.length === 0 && (
             <div className="flex flex-col items-center justify-center">
               <Image
                 src="/images/empty-state.png"
@@ -85,6 +143,19 @@ export default async function TagsPage({
             </div>
           )}
       </section>
+    </div>
+  );
+}
+
+function TagFallback() {
+  return (
+    <div aria-busy>
+      <div className="h-12 w-2/3 animate-pulse rounded bg-zinc-200" />
+      <div className="mt-8 space-y-8">
+        {Array.from({ length: 3 }).map((_, index) => (
+          <div key={index} className="h-32 animate-pulse rounded bg-zinc-200" />
+        ))}
+      </div>
     </div>
   );
 }
