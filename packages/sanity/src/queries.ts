@@ -102,9 +102,9 @@ const blogCardFragment = /* groq */ `
  * Helps with TypeScript inference for image objects
  */
 export const queryImageType = defineQuery(`
-  *[_type == "page" && defined(image)][0]{
+  *[_type == "post" && defined(mainImage)][0]{
     ${imageFragment}
-  }.image
+  }.mainImage
 `);
 
 const pageBuilderFragment = /* groq */ `
@@ -510,4 +510,3 @@ export const queryPageBySlug = defineQuery(`
     },
   }
 `);
-

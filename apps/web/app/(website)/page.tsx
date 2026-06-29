@@ -1,7 +1,7 @@
 import {
+  type DynamicFetchOptions,
   getDynamicFetchOptions,
   sanityFetch,
-  type DynamicFetchOptions,
 } from "@maricopa-senior-living/sanity/live";
 import { queryHomePageData } from "@maricopa-senior-living/sanity/queries";
 import type { Metadata, ResolvingMetadata } from "next";
@@ -85,7 +85,10 @@ async function CachedHome({ perspective, stega }: DynamicFetchOptions) {
 
 function HomeFallback() {
   return (
-    <div className="rounded-md bg-white px-8 py-8 shadow-lg lg:px-4 lg:py-4" aria-busy>
+    <div
+      className="rounded-md bg-white px-8 py-8 shadow-lg lg:px-4 lg:py-4"
+      aria-busy
+    >
       <div className="aspect-[3/2] animate-pulse rounded-md bg-zinc-200" />
       <div className="mt-8 space-y-4">
         <div className="h-4 animate-pulse rounded bg-zinc-200" />

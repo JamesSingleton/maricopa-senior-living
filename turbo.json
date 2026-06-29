@@ -10,6 +10,9 @@
     "NODE_ENV"
   ],
   "tasks": {
+    "transit": {
+      "dependsOn": ["^transit"]
+    },
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
@@ -23,11 +26,18 @@
         "SANITY_AUTH_TOKEN"
       ]
     },
-    "lint": {
-      "dependsOn": ["^lint"]
+    "clean": {
+      "cache": false
     },
-    "check-types": {
-      "dependsOn": ["^check-types"]
+    "lint": {
+      "dependsOn": ["transit"]
+    },
+    "lint:fix": {
+      "dependsOn": ["transit"],
+      "cache": false
+    },
+    "check:types": {
+      "dependsOn": ["transit"]
     },
     "dev": {
       "cache": false,

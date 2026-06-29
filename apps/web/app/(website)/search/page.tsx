@@ -1,13 +1,13 @@
 import {
+  type DynamicFetchOptions,
   getDynamicFetchOptions,
   sanityFetch,
-  type DynamicFetchOptions,
 } from "@maricopa-senior-living/sanity/live";
+import { querySearch } from "@maricopa-senior-living/sanity/queries";
 import { Suspense } from "react";
 
 import ArticleCard from "@/components/ArticleCard";
 import DirectoryCard from "@/components/DirectoryCard";
-import { querySearch } from "@maricopa-senior-living/sanity/queries";
 
 export default function Page({
   searchParams,
@@ -31,9 +31,7 @@ async function DynamicSearch({
     getDynamicFetchOptions(),
   ]);
 
-  return (
-    <CachedSearch query={q} perspective={perspective} stega={stega} />
-  );
+  return <CachedSearch query={q} perspective={perspective} stega={stega} />;
 }
 
 async function CachedSearch({
@@ -62,9 +60,7 @@ async function CachedSearch({
               return <ArticleCard key={result._id} post={result} />;
             }
             if (result._type === "service") {
-              return (
-                <DirectoryCard key={result._id} directoryItem={result} />
-              );
+              return <DirectoryCard key={result._id} directoryItem={result} />;
             }
             return null;
           })}

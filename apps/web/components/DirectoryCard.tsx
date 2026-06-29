@@ -1,6 +1,6 @@
 import { PaperClipIcon } from "@heroicons/react/20/solid";
-import { getFileAsset } from "@sanity/asset-utils";
 import { env } from "@maricopa-senior-living/env/client";
+import { getFileAsset } from "@sanity/asset-utils";
 import Link from "next/link";
 
 import BusinessHours from "./BusinessHours";
