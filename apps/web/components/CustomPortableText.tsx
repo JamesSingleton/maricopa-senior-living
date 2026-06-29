@@ -1,4 +1,5 @@
 import { ArrowDownTrayIcon } from "@heroicons/react/20/solid";
+import { urlFor } from "@maricopa-senior-living/sanity/client";
 import {
   PortableText,
   type PortableTextComponents,
@@ -7,8 +8,6 @@ import {
 import { getImageDimensions } from "@sanity/asset-utils";
 import Image from "next/image";
 import type { PortableTextBlock } from "sanity";
-
-import { urlFor } from "@maricopa-senior-living/sanity/client";
 
 const ImageComponent = ({ value }: { value: any }) => {
   const { width, height } = getImageDimensions(value);

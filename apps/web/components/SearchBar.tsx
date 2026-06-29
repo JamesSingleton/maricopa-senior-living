@@ -8,7 +8,7 @@ const SearchBar = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     const input = inputRef.current;
-    if (input && input.value) {
+    if (input?.value) {
       window.location.href = `/search?q=${input.value}`;
     }
   };

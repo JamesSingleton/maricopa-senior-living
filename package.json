@@ -7,17 +7,20 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "turbo build",
+    "build": "turbo run build",
     "clean": "git clean -xdf node_modules",
-    "clean:workspaces": "turbo clean",
-    "dev": "turbo dev --parallel",
+    "clean:workspaces": "turbo run clean",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
     "format": "biome format --write .",
-    "lint": "turbo lint"
+    "check:format": "biome check .",
+    "check:types": "turbo run check:types"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.0",
+    "@biomejs/biome": "^2.5.1",
     "@maricopa-senior-living/typescript-config": "workspace:*",
-    "turbo": "^2.9.18",
+    "turbo": "^2.10.0",
     "typescript": "catalog:"
   }
 }

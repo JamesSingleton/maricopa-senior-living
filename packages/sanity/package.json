@@ -4,7 +4,11 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "check-types": "tsc --noEmit"
+    "clean": "rm -rf .turbo node_modules",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "check:types": "tsc --noEmit"
   },
   "dependencies": {
     "@maricopa-senior-living/env": "workspace:*",

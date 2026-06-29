@@ -29,7 +29,7 @@ export type GroupItem = TitleAndSlug & {
   services?: Service[];
 };
 
-export type CategoryPage = TitleAndSlug & {
+export type CategoryPageProps = TitleAndSlug & {
   description: PortableTextBlock[];
   excerpt: string;
   combinedList: (Post | Service)[];

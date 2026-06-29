@@ -1,13 +1,17 @@
 import {
+  type DynamicFetchOptions,
   getDynamicFetchOptions,
   sanityFetch,
   sanityFetchMetadata,
   sanityFetchStaticParams,
-  type DynamicFetchOptions,
 } from "@maricopa-senior-living/sanity/live";
+import {
+  queryTagBySlug,
+  queryTagPaths,
+} from "@maricopa-senior-living/sanity/queries";
 import type { Metadata, ResolvingMetadata } from "next";
-import Image from "next/image";
 import { draftMode } from "next/headers";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
@@ -16,10 +20,6 @@ import { CustomPortableText } from "@/components/CustomPortableText";
 import DirectoryCard from "@/components/DirectoryCard";
 import { baseUrl } from "@/lib/constants";
 import type { GroupItem } from "@/types/common";
-import {
-  queryTagBySlug,
-  queryTagPaths,
-} from "@maricopa-senior-living/sanity/queries";
 
 export async function generateStaticParams() {
   const { data } = await sanityFetchStaticParams({ query: queryTagPaths });
@@ -85,9 +85,7 @@ async function DynamicTagPage({
     getDynamicFetchOptions(),
   ]);
 
-  return (
-    <CachedTagPage tag={tag} perspective={perspective} stega={stega} />
-  );
+  return <CachedTagPage tag={tag} perspective={perspective} stega={stega} />;
 }
 
 async function CachedTagPage({

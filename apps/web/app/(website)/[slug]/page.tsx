@@ -1,17 +1,19 @@
 import {
+  type DynamicFetchOptions,
   getDynamicFetchOptions,
   sanityFetch,
   sanityFetchStaticParams,
-  type DynamicFetchOptions,
 } from "@maricopa-senior-living/sanity/live";
+import {
+  queryAllPageSlugs,
+  queryPageBySlug,
+} from "@maricopa-senior-living/sanity/queries";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-
 import type { PortableTextBlock } from "sanity";
 
 import { CustomPortableText } from "@/components/CustomPortableText";
-import { queryAllPageSlugs, queryPageBySlug } from "@maricopa-senior-living/sanity/queries";
 
 type PageData = {
   title: string;
@@ -42,19 +44,13 @@ export default async function Page({
   return <CachedPage slug={slug} perspective="published" stega={false} />;
 }
 
-async function DynamicPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+async function DynamicPage({ params }: { params: Promise<{ slug: string }> }) {
   const [{ slug }, { perspective, stega }] = await Promise.all([
     params,
     getDynamicFetchOptions(),
   ]);
 
-  return (
-    <CachedPage slug={slug} perspective={perspective} stega={stega} />
-  );
+  return <CachedPage slug={slug} perspective={perspective} stega={stega} />;
 }
 
 async function CachedPage({

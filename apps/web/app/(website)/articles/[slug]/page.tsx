@@ -1,12 +1,15 @@
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import {
+  type DynamicFetchOptions,
   getDynamicFetchOptions,
   sanityFetch,
   sanityFetchMetadata,
   sanityFetchStaticParams,
-  type DynamicFetchOptions,
 } from "@maricopa-senior-living/sanity/live";
-import { queryArticleSlugPageData } from "@maricopa-senior-living/sanity/queries";
+import {
+  queryArticleSlugPageData,
+  queryRecentArticleSlugs,
+} from "@maricopa-senior-living/sanity/queries";
 import type { QueryArticleSlugPageDataResult } from "@maricopa-senior-living/sanity/types";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -16,13 +19,13 @@ import BackButton from "@/components/BackButton";
 import { CustomPortableText } from "@/components/CustomPortableText";
 import DateComponent from "@/components/Date";
 import ImageComponent from "@/components/ImageComponent";
-import { queryRecentArticleSlugs } from "@maricopa-senior-living/sanity/queries";
 
 export async function generateStaticParams() {
-  const { data } = await sanityFetchStaticParams({ query: queryRecentArticleSlugs });
+  const { data } = await sanityFetchStaticParams({
+    query: queryRecentArticleSlugs,
+  });
   return data ?? [];
 }
-
 
 export async function generateMetadata({
   params,

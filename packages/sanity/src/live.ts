@@ -1,11 +1,11 @@
 import { env } from "@maricopa-senior-living/env/server";
+import { cookies, draftMode } from "next/headers";
+import type { QueryParams } from "next-sanity";
 import {
   defineLive,
-  resolvePerspectiveFromCookies,
   type LivePerspective,
+  resolvePerspectiveFromCookies,
 } from "next-sanity/live";
-import { type QueryParams } from "next-sanity";
-import { cookies, draftMode } from "next/headers";
 
 import { client } from "./client";
 
@@ -34,13 +34,7 @@ export async function getDynamicFetchOptions(): Promise<DynamicFetchOptions> {
 
 export async function sanityFetchStaticParams<
   const QueryString extends string,
->({
-  query,
-  params = {},
-}: {
-  query: QueryString;
-  params?: QueryParams;
-}) {
+>({ query, params = {} }: { query: QueryString; params?: QueryParams }) {
   "use cache";
   const { data } = await sanityFetch({
     query,
@@ -61,6 +55,11 @@ export async function sanityFetchMetadata<const QueryString extends string>({
   perspective: LivePerspective;
 }) {
   "use cache";
-  const { data } = await sanityFetch({ query, params, perspective, stega: false });
+  const { data } = await sanityFetch({
+    query,
+    params,
+    perspective,
+    stega: false,
+  });
   return { data };
 }

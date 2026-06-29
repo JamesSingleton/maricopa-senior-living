@@ -1,8 +1,7 @@
 "use client";
 
-import { SanityImage } from "sanity-image";
-
 import { env } from "@maricopa-senior-living/env/client";
+import { SanityImage } from "sanity-image";
 
 const ImageComponent = ({
   image,

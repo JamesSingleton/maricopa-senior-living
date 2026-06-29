@@ -1,29 +1,28 @@
 import { env } from "@maricopa-senior-living/env/client";
+import type { ImageCrop, ImageHotspot } from "sanity";
 import type { WrapperProps } from "sanity-image";
 
-import type { QueryImageTypeResult } from "./sanity.types";
+import type { QueryImageTypeResult } from "./types";
 
-type SanityImageData = NonNullable<QueryImageTypeResult>;
+type SanityImageHotspot = Pick<ImageHotspot, "x" | "y">;
+type SanityImageCrop = Pick<ImageCrop, "top" | "bottom" | "left" | "right">;
 
-// Types
-type ImageHotspot = {
-  readonly x: number;
-  readonly y: number;
-};
-
-type ImageCrop = {
-  readonly top: number;
-  readonly bottom: number;
-  readonly left: number;
-  readonly right: number;
-};
+type SanityImageData = [NonNullable<QueryImageTypeResult>] extends [never]
+  ? {
+      readonly id: string;
+      readonly alt: string;
+      readonly preview?: string | null;
+      readonly hotspot?: SanityImageHotspot | null;
+      readonly crop?: SanityImageCrop | null;
+    }
+  : NonNullable<QueryImageTypeResult>;
 
 type ProcessedImageData = {
   readonly id: string;
   readonly alt: string;
   readonly preview?: string;
-  readonly hotspot?: ImageHotspot;
-  readonly crop?: ImageCrop;
+  readonly hotspot?: SanityImageHotspot;
+  readonly crop?: SanityImageCrop;
 };
 
 export type SanityImageProps = {
@@ -39,7 +38,7 @@ function isValidNumber(value: unknown): value is number {
   return typeof value === "number" && !Number.isNaN(value);
 }
 
-function isValidHotspot(hotspot: unknown): hotspot is ImageHotspot {
+function isValidHotspot(hotspot: unknown): hotspot is SanityImageHotspot {
   if (!hotspot || typeof hotspot !== "object") {
     return false;
   }
@@ -47,7 +46,7 @@ function isValidHotspot(hotspot: unknown): hotspot is ImageHotspot {
   return isValidNumber(h.x) && isValidNumber(h.y);
 }
 
-function isValidCrop(crop: unknown): crop is ImageCrop {
+function isValidCrop(crop: unknown): crop is SanityImageCrop {
   if (!crop || typeof crop !== "object") {
     return false;
   }
@@ -61,7 +60,9 @@ function isValidCrop(crop: unknown): crop is ImageCrop {
 }
 
 // Pure functions for data processing
-function extractHotspot(image: SanityImageData): ImageHotspot | undefined {
+function extractHotspot(
+  image: SanityImageData,
+): SanityImageHotspot | undefined {
   if (!isValidHotspot(image?.hotspot)) {
     return;
   }
@@ -71,7 +72,7 @@ function extractHotspot(image: SanityImageData): ImageHotspot | undefined {
   };
 }
 
-function extractCrop(image: SanityImageData): ImageCrop | undefined {
+function extractCrop(image: SanityImageData): SanityImageCrop | undefined {
   if (!isValidCrop(image?.crop)) {
     return;
   }

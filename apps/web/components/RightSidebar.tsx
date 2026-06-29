@@ -1,9 +1,9 @@
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { CurrencyDollarIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
 import {
+  type DynamicFetchOptions,
   getDynamicFetchOptions,
   sanityFetch,
-  type DynamicFetchOptions,
 } from "@maricopa-senior-living/sanity/live";
 import {
   highlightedCategories,
@@ -17,7 +17,10 @@ import SearchBar from "@/components/SearchBar";
 import { CustomPortableText } from "./CustomPortableText";
 import ImageComponent from "./ImageComponent";
 
-async function fetchRightSidebarData({ perspective, stega }: DynamicFetchOptions) {
+async function fetchRightSidebarData({
+  perspective,
+  stega,
+}: DynamicFetchOptions) {
   "use cache";
   const [categories, tags, sidebar] = await Promise.all([
     sanityFetch({ query: highlightedCategories, perspective, stega }),

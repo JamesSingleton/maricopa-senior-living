@@ -1,15 +1,16 @@
 import "@/app/globals.css";
 import {
+  type DynamicFetchOptions,
   getDynamicFetchOptions,
   SanityLive,
   sanityFetch,
-  type DynamicFetchOptions,
 } from "@maricopa-senior-living/sanity/live";
+import { queryNavigation } from "@maricopa-senior-living/sanity/queries";
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import Script from "next/script";
-import { VisualEditing } from "next-sanity/visual-editing";
 import PlausibleProvider from "next-plausible";
+import { VisualEditing } from "next-sanity/visual-editing";
 import { Suspense } from "react";
 
 import Footer from "@/components/Footer";
@@ -21,7 +22,6 @@ import {
 } from "@/components/RightSidebar";
 import ScrollToTop from "@/components/ScrollToTop";
 import { baseUrl } from "@/lib/constants";
-import { queryNavigation } from "@maricopa-senior-living/sanity/queries";
 
 type NavigationData = {
   headerPrimary?: any[];

@@ -1,10 +1,14 @@
 import {
+  type DynamicFetchOptions,
   getDynamicFetchOptions,
   sanityFetch,
   sanityFetchMetadata,
   sanityFetchStaticParams,
-  type DynamicFetchOptions,
 } from "@maricopa-senior-living/sanity/live";
+import {
+  queryCategoryBySlug,
+  queryCategoryPaths,
+} from "@maricopa-senior-living/sanity/queries";
 import type { Metadata, ResolvingMetadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
@@ -14,11 +18,7 @@ import ArticleCard from "@/components/ArticleCard";
 import { CustomPortableText } from "@/components/CustomPortableText";
 import DirectoryCard from "@/components/DirectoryCard";
 import { baseUrl } from "@/lib/constants";
-import type { CategoryPage } from "@/types/common";
-import {
-  queryCategoryBySlug,
-  queryCategoryPaths,
-} from "@maricopa-senior-living/sanity/queries";
+import type { CategoryPageProps } from "@/types/common";
 
 export async function generateStaticParams() {
   const { data } = await sanityFetchStaticParams({ query: queryCategoryPaths });
@@ -42,7 +42,7 @@ export async function generateMetadata(
     params: { slug: categoryParam },
     perspective,
   });
-  const category = data as CategoryPage | null;
+  const category = data as CategoryPageProps | null;
   const previousOpenGraph = (await parent)?.openGraph;
 
   if (!category) {
@@ -117,7 +117,7 @@ async function CachedCategoryPage({
     perspective,
     stega,
   });
-  const categoryData = data as CategoryPage | null;
+  const categoryData = data as CategoryPageProps | null;
 
   if (!categoryData) {
     notFound();
