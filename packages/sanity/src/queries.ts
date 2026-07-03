@@ -238,12 +238,45 @@ const authorFields = /* groq */ `
   "slug": slug.current,
 `;
 
+const bodyExcerptFragment = /* groq */ `
+  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "..."
+`;
+
+const rightSidebarAuthorFields = /* groq */ `
+  name,
+  "image": {
+    "asset": image.asset->{
+      _id,
+      _type,
+      metadata,
+      url
+    }
+  }
+`;
+
+const rightSidebarPostListFields = /* groq */ `
+  _id,
+  title,
+  "slug": slug.current,
+  publishedAt,
+  ${bodyExcerptFragment}
+`;
+
+/** Category slugs for the right sidebar — verify in Sanity Studio if a section is empty. */
+const RIGHT_SIDEBAR_WHATS_NEW_CATEGORY_SLUG = "whats-new";
+const RIGHT_SIDEBAR_SENIOR_CENTER_CATEGORY_SLUG =
+  "city-of-maricopa-community-senior-center";
+const RIGHT_SIDEBAR_NEWSLETTER_CATEGORY_SLUG =
+  "keeping-you-informed-still-newsletter";
+const RIGHT_SIDEBAR_NONPROFIT_CATEGORY_SLUG =
+  "maricopa-senior-living-an-arizona-501-c3-nonprofit";
+
 const postFields = /* groq */ `
   _id,
   _updatedAt,
   _type,
   title,
-  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
+  ${bodyExcerptFragment},
   "slug": slug.current,
   "author": author->{
     ${authorFields}
@@ -303,34 +336,35 @@ export const queryArticlePaths = defineQuery(`
   *[_type == "post" && defined(slug.current)].slug.current
 `);
 
-export const rightSidebarQuery = defineQuery(`{
-  "whatsNew": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What's New!"]._id)][0]{
-    _id,
-    title,
-    "slug": slug.current,
+export const rightSidebarQuery = defineQuery(/* groq */ `{
+  "whatsNew": *[
+    _type == "post"
+    && isArchived != true
+    && references(*[_type == "category" && slug.current == "${RIGHT_SIDEBAR_WHATS_NEW_CATEGORY_SLUG}"][0]._id)
+  ] | order(publishedAt desc)[0]{
+    ${rightSidebarPostListFields},
     "author": author->{
-      ${authorFields}
-    },
-    publishedAt,
-    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
+      ${rightSidebarAuthorFields}
+    }
   },
-  "seniorCenterNewsletters": *[(_type == "post" && isArchived != true && references(*[_type == "category" && title == "City of Maricopa Community / Senior Center"]._id))][0..1] | order(publishedAt desc){
-    _id,
+  "seniorCenterNewsletters": *[
+    _type == "post"
+    && isArchived != true
+    && references(*[_type == "category" && slug.current == "${RIGHT_SIDEBAR_SENIOR_CENTER_CATEGORY_SLUG}"][0]._id)
+  ] | order(publishedAt desc)[0...2]{
+    ${rightSidebarPostListFields}
+  },
+  "nonProfit": *[_type == "category" && slug.current == "${RIGHT_SIDEBAR_NONPROFIT_CATEGORY_SLUG}"][0]{
     title,
-    "slug": slug.current,
-    publishedAt,
-    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
+    description,
+    "slug": slug.current
   },
-  "nonProfit": *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{
-    ...,
-    "slug": slug.current,
-  },
-  "newsletter": *[_type == "post" && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"]._id)] | order(publishedAt desc)[0]{
-    _id,
-    title,
-    "slug": slug.current,
-    publishedAt,
-    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
+  "newsletter": *[
+    _type == "post"
+    && isArchived != true
+    && references(*[_type == "category" && slug.current == "${RIGHT_SIDEBAR_NEWSLETTER_CATEGORY_SLUG}"][0]._id)
+  ] | order(publishedAt desc)[0]{
+    ${rightSidebarPostListFields}
   }
 }`);
 
@@ -480,7 +514,19 @@ export const queryNavigation = defineQuery(`
           "slug": slug.current
         }
       },
-      children
+      children[]{
+        _key,
+        link{
+          url,
+          text,
+          reference->{
+            _id,
+            _type,
+            title,
+            "slug": slug.current
+          }
+        }
+      }
     },
     "footer": footer[]{
       _key,

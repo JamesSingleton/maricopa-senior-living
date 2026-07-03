@@ -1,69 +1,102 @@
-import { PaperClipIcon } from "@heroicons/react/20/solid";
 import { env } from "@maricopa-senior-living/env/client";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@maricopa-senior-living/ui/components/card";
+import { cn } from "@maricopa-senior-living/ui/lib/utils";
 import { getFileAsset } from "@sanity/asset-utils";
+import { ExternalLinkIcon, PaperclipIcon } from "lucide-react";
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 import BusinessHours from "./BusinessHours";
 import { CustomPortableText } from "./CustomPortableText";
 
-function convertBytes(bytes: number): string {
-  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
-  if (bytes === 0) {
-    return "0 Bytes";
-  }
-  const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  return parseFloat((bytes / 1024 ** i).toFixed(2)) + " " + sizes[i];
+const interactiveLinkClassName =
+  "text-primary underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
+
+function ExternalLink({
+  href,
+  ariaLabel,
+  children,
+  className,
+}: {
+  href: string;
+  ariaLabel: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer noopener"
+      aria-label={ariaLabel}
+      className={cn(
+        "inline-flex items-center gap-1",
+        interactiveLinkClassName,
+        className,
+      )}
+    >
+      {children}
+      <ExternalLinkIcon className="size-4 shrink-0" aria-hidden="true" />
+    </a>
+  );
 }
 
 const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
   return (
-    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-      <div className="prose px-4 py-6 sm:px-6">
-        <h2 className="text-2xl font-semibold leading-7 text-zinc-900">
-          {directoryItem.title}
-        </h2>
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          <h2 className="font-heading text-2xl font-semibold leading-snug">
+            {directoryItem.title}
+          </h2>
+        </CardTitle>
         {directoryItem.description && (
-          <CustomPortableText
-            paragraphClasses="mt-1 max-w-2xl text-sm leading-6 text-zinc-500"
-            value={directoryItem.description}
-          />
+          <CardDescription className="prose max-w-2xl text-base leading-6">
+            <CustomPortableText
+              paragraphClasses="text-muted-foreground"
+              value={directoryItem.description}
+            />
+          </CardDescription>
         )}
-      </div>
-      <div className="border-t border-zinc-100">
-        <dl className="divide-y divide-zinc-100">
+      </CardHeader>
+      <CardContent className="border-t pt-0">
+        <dl className="divide-y divide-border">
           {directoryItem.audience && (
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-zinc-900">
-                Audience/Eligibility
-              </dt>
-              <dd className="prose mt-1 text-sm leading-6 text-zinc-700 sm:col-span-2 sm:mt-0">
+            <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4">
+              <dt className="text-sm font-medium">Audience/Eligibility</dt>
+              <dd className="prose mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0">
                 <CustomPortableText value={directoryItem.audience} />
               </dd>
             </div>
           )}
           {directoryItem.website && (
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-zinc-900">Website</dt>
-              <dd className="mt-1 text-sm leading-6 text-zinc-700 sm:col-span-2 sm:mt-0">
-                <a
+            <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4">
+              <dt className="text-sm font-medium">Website</dt>
+              <dd className="mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0">
+                <ExternalLink
                   href={directoryItem.website}
-                  target="_blank"
-                  className="max-w-lg overflow-hidden wrap-break-word text-indigo-600 hover:text-indigo-500"
-                  rel="noreferrer noopener"
+                  ariaLabel={`${directoryItem.title} website (opens in a new tab)`}
+                  className="max-w-lg items-start gap-1.5 wrap-break-word"
                 >
-                  {directoryItem.website}
-                  <span className="sr-only">(opens in a new tab)</span>
-                </a>
+                  <span>{directoryItem.website}</span>
+                </ExternalLink>
               </dd>
             </div>
           )}
           {directoryItem.phone && (
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-zinc-900">Phone</dt>
-              <dd className="mt-1 text-sm leading-6 text-zinc-700 sm:col-span-2 sm:mt-0">
+            <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4">
+              <dt className="text-sm font-medium">Phone</dt>
+              <dd className="mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0">
                 <a
                   href={`tel:${directoryItem.phone}`}
-                  className="text-indigo-600 hover:text-indigo-500"
+                  aria-label={`Call ${directoryItem.phone}`}
+                  className={interactiveLinkClassName}
                 >
                   {directoryItem.phone}
                 </a>
@@ -71,70 +104,73 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
             </div>
           )}
           {directoryItem.address && (
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-zinc-900">Location</dt>
-              <dd className="mt-1 text-sm leading-6 text-zinc-700 sm:col-span-2 sm:mt-0">
-                {directoryItem.address}
+            <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4">
+              <dt className="text-sm font-medium">Location</dt>
+              <dd className="mt-1 text-sm leading-6 text-muted-foreground sm:col-span-2 sm:mt-0">
+                <address className="not-italic">
+                  {directoryItem.address}
+                </address>
               </dd>
             </div>
           )}
           {directoryItem.businessHours && (
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-zinc-900">Hours</dt>
-              <dd className="mt-1 text-sm leading-6 text-zinc-700 sm:col-span-2 sm:mt-0">
+            <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4">
+              <dt className="text-sm font-medium">Hours</dt>
+              <dd className="mt-1 text-sm leading-6 text-muted-foreground sm:col-span-2 sm:mt-0">
                 <BusinessHours hours={directoryItem.businessHours} />
               </dd>
             </div>
           )}
           {directoryItem.notes && (
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-zinc-900">Notes</dt>
-              <dd className="prose mt-1 text-sm leading-6 text-zinc-700 sm:col-span-2 sm:mt-0">
+            <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4">
+              <dt className="text-sm font-medium">Notes</dt>
+              <dd className="prose mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0">
                 <CustomPortableText value={directoryItem.notes} />
               </dd>
             </div>
           )}
           {directoryItem.attachments && (
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium leading-6 text-zinc-900">
-                Attachments
-              </dt>
-              <dd className="mt-2 text-sm text-zinc-900 sm:col-span-2 sm:mt-0">
-                <ul className="divide-y divide-zinc-100 rounded-md border border-zinc-200">
+            <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4">
+              <dt className="text-sm font-medium leading-6">Attachments</dt>
+              <dd className="mt-2 text-sm sm:col-span-2 sm:mt-0">
+                <ul
+                  aria-label={`${directoryItem.title} attachments`}
+                  className="divide-y divide-border rounded-md border border-border"
+                >
                   {directoryItem.attachments.map((attachment: any) => {
                     const attachmentAsset = getFileAsset(attachment, {
                       dataset: env.NEXT_PUBLIC_SANITY_DATASET,
                       projectId: env.NEXT_PUBLIC_SANITY_PROJECT_ID,
                     });
+                    const fileType = attachmentAsset.extension.toUpperCase();
+
                     return (
                       <li
                         key={attachment._key}
-                        className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6"
+                        className="flex items-center justify-between gap-4 py-4 pl-4 pr-5 text-sm leading-6"
                       >
-                        <div className="flex w-0 flex-1 items-center">
-                          <PaperClipIcon
-                            className="h-5 w-5 shrink-0 text-zinc-400"
+                        <div className="flex min-w-0 flex-1 items-center">
+                          <PaperclipIcon
+                            className="size-5 shrink-0 text-muted-foreground"
                             aria-hidden="true"
                           />
                           <div className="ml-4 flex min-w-0 flex-1 gap-2">
                             <span className="truncate font-medium">
                               {attachment.name}
                             </span>
-                            <span className="shrink-0 text-zinc-400">
-                              {attachmentAsset.extension.toUpperCase()}
+                            <span className="shrink-0 text-muted-foreground">
+                              <span className="sr-only">File type: </span>
+                              {fileType}
                             </span>
                           </div>
                         </div>
-                        <div className="ml-4 shrink-0">
-                          <a
-                            href={attachmentAsset.url}
-                            className="font-medium text-indigo-600 hover:text-indigo-500"
-                            target="_blank"
-                            rel="noreferrer noopener"
-                          >
-                            Download
-                          </a>
-                        </div>
+                        <ExternalLink
+                          href={attachmentAsset.url}
+                          ariaLabel={`Download ${attachment.name} (${fileType}, opens in a new tab)`}
+                          className="shrink-0 font-medium"
+                        >
+                          Download
+                        </ExternalLink>
                       </li>
                     );
                   })}
@@ -143,16 +179,20 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
             </div>
           )}
           {directoryItem.tags && (
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium leading-6 text-zinc-900">
-                Tags
-              </dt>
-              <dd className="mt-2 text-sm text-zinc-900 sm:col-span-2 sm:mt-0">
-                <ul className="flex flex-wrap gap-2">
+            <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4">
+              <dt className="text-sm font-medium leading-6">Tags</dt>
+              <dd className="mt-2 text-sm sm:col-span-2 sm:mt-0">
+                <ul
+                  aria-label={`Tags for ${directoryItem.title}`}
+                  className="flex flex-wrap gap-2"
+                >
                   {directoryItem.tags.map((tag: any) => (
                     <li key={`${tag._id}_${directoryItem.title}`}>
                       <Link
-                        className="space-x-4 rounded-sm bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
+                        className={cn(
+                          "inline-flex min-h-6 min-w-6 items-center rounded-sm bg-muted px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white",
+                          interactiveLinkClassName,
+                        )}
                         href={`/tag/${tag.slug}`}
                         prefetch={false}
                       >
@@ -165,8 +205,8 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
             </div>
           )}
         </dl>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

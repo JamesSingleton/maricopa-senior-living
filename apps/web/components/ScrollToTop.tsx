@@ -1,19 +1,21 @@
 "use client";
 
-import { ArrowUpIcon } from "@heroicons/react/24/outline";
-import clsx from "clsx";
+import { Button } from "@maricopa-senior-living/ui/components/button";
+import { cn } from "@maricopa-senior-living/ui/lib/utils";
+import { ArrowUp } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  const toggleVisibility = () => {
-    if (window.pageYOffset > 300) {
-      setIsVisible(true);
-    } else {
-      setIsVisible(false);
-    }
-  };
+  useEffect(() => {
+    const toggleVisibility = () => {
+      setIsVisible(window.scrollY > 300);
+    };
+
+    window.addEventListener("scroll", toggleVisibility, { passive: true });
+    return () => window.removeEventListener("scroll", toggleVisibility);
+  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -22,26 +24,20 @@ const ScrollToTop = () => {
     });
   };
 
-  useEffect(() => {
-    window.addEventListener("scroll", toggleVisibility);
-    return () => {
-      window.removeEventListener("scroll", toggleVisibility);
-    };
-  }, []);
-
   return (
-    <div className="fixed bottom-2 right-2">
-      <button
-        aria-label="Scroll to top"
+    <div className="fixed right-4 bottom-4 z-50">
+      <Button
         type="button"
+        aria-label="Scroll to top"
         onClick={scrollToTop}
-        className={clsx(
-          isVisible ? "opacity-100" : "opacity-0",
-          "inline-flex items-center rounded-full bg-indigo-600 p-3 text-white shadow-xs transition-opacity hover:bg-indigo-700 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2",
+        className={cn(
+          "h-12 gap-2 rounded-full px-5 text-base shadow-md ring-1 ring-foreground/10 transition-opacity [&_svg]:size-5",
+          isVisible ? "opacity-100" : "pointer-events-none opacity-0",
         )}
       >
-        <ArrowUpIcon className="h-6 w-6" aria-hidden="true" />
-      </button>
+        <ArrowUp data-icon="inline-start" aria-hidden="true" />
+        Top
+      </Button>
     </div>
   );
 };

@@ -100,14 +100,15 @@ const navbarColumn = defineField({
   type: "object",
   icon: LayoutPanelLeft,
   title: "Navigation Column",
-  description: "A column of navigation links with an optional title",
+  description:
+    "A column of links inside a mega menu. Prefer adding columns within a Mega Menu item.",
   fields: [
     defineField({
       name: "title",
       type: "string",
       title: "Column Title",
       description:
-        "The heading text displayed above this group of navigation links",
+        "Optional heading above this group of links (e.g. More)",
     }),
     defineField({
       name: "links",
@@ -132,6 +133,44 @@ const navbarColumn = defineField({
   },
 });
 
+const navbarMegaMenu = defineField({
+  name: "navbarMegaMenu",
+  type: "object",
+  icon: LayoutPanelLeft,
+  title: "Mega Menu",
+  description:
+    "A dropdown menu with multiple columns of links (e.g. Features)",
+  fields: [
+    defineField({
+      name: "title",
+      type: "string",
+      title: "Menu Label",
+      description:
+        "Top-level label shown in the navigation bar (e.g. Features)",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "columns",
+      type: "array",
+      title: "Menu Columns",
+      description: "Columns displayed inside the dropdown panel",
+      of: [navbarColumn],
+    }),
+  ],
+  preview: {
+    select: {
+      title: "title",
+      columns: "columns",
+    },
+    prepare({ title, columns = [] }) {
+      return {
+        title: title || "Untitled Mega Menu",
+        subtitle: `${columns.length} column${columns.length === 1 ? "" : "s"}`,
+      };
+    },
+  },
+});
+
 export const navbar = defineType({
   name: "navbar",
   title: "Site Navigation",
@@ -149,12 +188,19 @@ export const navbar = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "megaMenuTitle",
+      type: "string",
+      title: "Legacy Mega Menu Label",
+      description:
+        "Label for dropdown menus built from standalone columns (e.g. Features). Prefer using a Mega Menu item instead.",
+    }),
+    defineField({
       name: "columns",
       type: "array",
       title: "Navigation Structure",
       description:
-        "Build your navigation menu using columns and links. Add either a column of links or individual links.",
-      of: [navbarColumn, navbarLink],
+        "Add mega menus for dropdown sections and navigation links for top-level items.",
+      of: [navbarMegaMenu, navbarLink, navbarColumn],
     }),
     buttonsField,
   ],

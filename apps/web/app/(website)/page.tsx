@@ -63,7 +63,7 @@ async function CachedHome({ perspective, stega }: DynamicFetchOptions) {
   });
 
   return (
-    <div className="rounded-md bg-white px-8 py-8 shadow-lg lg:px-4 lg:py-4">
+    <>
       <figure>
         <ImageComponent
           image={homePageData?.image}
@@ -79,18 +79,15 @@ async function CachedHome({ perspective, stega }: DynamicFetchOptions) {
       <div className="prose prose-indigo mx-auto pt-8 lg:pt-4">
         <CustomPortableText value={homePageData?.content ?? []} />
       </div>
-    </div>
+    </>
   );
 }
 
 function HomeFallback() {
   return (
-    <div
-      className="rounded-md bg-white px-8 py-8 shadow-lg lg:px-4 lg:py-4"
-      aria-busy
-    >
+    <div className="flex flex-col gap-8" aria-busy>
       <div className="aspect-[3/2] animate-pulse rounded-md bg-zinc-200" />
-      <div className="mt-8 space-y-4">
+      <div className="flex flex-col gap-4">
         <div className="h-4 animate-pulse rounded bg-zinc-200" />
         <div className="h-4 animate-pulse rounded bg-zinc-200" />
         <div className="h-4 w-2/3 animate-pulse rounded bg-zinc-200" />

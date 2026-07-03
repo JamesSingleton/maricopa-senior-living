@@ -1,5 +1,3 @@
-import { ChevronRightIcon } from "@heroicons/react/20/solid";
-import { CurrencyDollarIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
 import {
   type DynamicFetchOptions,
   getDynamicFetchOptions,
@@ -10,6 +8,15 @@ import {
   highlightedTags,
   rightSidebarQuery,
 } from "@maricopa-senior-living/sanity/queries";
+import { buttonVariants } from "@maricopa-senior-living/ui/components/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@maricopa-senior-living/ui/components/card";
+import { ChevronRightIcon, CircleDollarSignIcon, MailIcon } from "lucide-react";
 import Link from "next/link";
 
 import DateComponent from "@/components/Date";
@@ -55,34 +62,33 @@ export async function CachedRightSidebar({
     <>
       <SearchBar />
       {nonProfit && (
-        <div className="rounded-md bg-white p-8 shadow-lg">
-          <h2 className="mb-8 text-lg font-bold lg:text-2xl">
-            {nonProfit.title}
-          </h2>
-          <div className="prose prose-lg">
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-bold lg:text-2xl">
+              {nonProfit.title}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
             <CustomPortableText value={nonProfit.description} />
-          </div>
-          <div>
+          </CardContent>
+          <CardFooter>
             <Link
               href={`/category/${nonProfit.slug}`}
               prefetch={false}
-              className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 focus-visible:outline-solid"
+              className={buttonVariants()}
             >
               View More
             </Link>
-          </div>
-        </div>
+          </CardFooter>
+        </Card>
       )}
       {whatsNew && (
-        <div className="rounded-md bg-white p-8 shadow-lg">
-          <h2 className="mb-8 text-lg font-bold lg:text-2xl">
-            What&apos;s New!
-          </h2>
-          <div className="space-y-16">
-            <article
-              key={`${whatsNew._id}_right_sidebar`}
-              className="flex max-w-xl flex-col items-start justify-between"
-            >
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-bold lg:text-2xl">What's New!</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <article>
               <Link href={`/articles/${whatsNew.slug}`} prefetch={false}>
                 <div className="flex items-center gap-x-4 text-xs">
                   <DateComponent
@@ -114,146 +120,169 @@ export async function CachedRightSidebar({
                 </div>
               </Link>
             </article>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       )}
-      <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-lg font-bold lg:text-2xl">
-          Community/Senior Center Calendar
-        </h2>
-        <div className="divide-y divide-zinc-200">
-          {seniorCenterNewsletters?.map((seniorCenterNewsletter: any) => (
-            <article
-              key={seniorCenterNewsletter._id}
-              className="flex max-w-xl flex-col items-start justify-between py-5"
-            >
-              <Link
-                href={`/articles/${seniorCenterNewsletter.slug}`}
-                prefetch={false}
-              >
-                <div className="flex items-center gap-x-4 text-xs">
-                  <DateComponent
-                    dateString={seniorCenterNewsletter.publishedAt}
-                    className="text-zinc-500"
-                  />
-                </div>
-                <div className="group relative">
-                  <h3 className="mt-3 text-lg leading-6 font-semibold text-zinc-900 group-hover:text-zinc-600">
-                    {seniorCenterNewsletter.title}
-                  </h3>
-                  <p className="mt-5 line-clamp-3 text-sm leading-6 text-zinc-600">
-                    {seniorCenterNewsletter.excerpt}
-                  </p>
-                </div>
-              </Link>
-            </article>
-          ))}
-        </div>
-      </div>
-      {newsletter && (
-        <div className="rounded-md bg-white p-8 shadow-lg">
-          <h2 className="mb-8 text-lg font-bold lg:text-2xl">
-            <span className="italic">Keeping you informed...still</span>{" "}
-            Newsletter
-          </h2>
+      <Card>
+        <CardHeader>
+          <CardTitle className="font-bold lg:text-2xl">
+            Community/Senior Center Calendar
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
           <div className="divide-y divide-zinc-200">
-            <article
-              key={newsletter._id}
-              className="flex max-w-xl flex-col items-start justify-between py-5"
-            >
-              <Link href={`/articles/${newsletter.slug}`} prefetch={false}>
-                <div className="flex items-center gap-x-4 text-xs">
-                  <DateComponent
-                    dateString={newsletter.publishedAt}
-                    className="text-zinc-500"
-                  />
-                </div>
-                <div className="group relative">
-                  <h3 className="mt-3 text-lg leading-6 font-semibold text-zinc-900 group-hover:text-zinc-600">
-                    {newsletter.title}
-                  </h3>
-                  <p className="mt-5 line-clamp-3 text-sm leading-6 text-zinc-600">
-                    {newsletter.excerpt}
-                  </p>
-                </div>
-              </Link>
-            </article>
+            {seniorCenterNewsletters?.map((seniorCenterNewsletter: any) => (
+              <article
+                key={seniorCenterNewsletter._id}
+                className="flex max-w-xl flex-col items-start justify-between"
+              >
+                <Link
+                  href={`/articles/${seniorCenterNewsletter.slug}`}
+                  prefetch={false}
+                >
+                  <div className="flex items-center gap-x-4 text-xs">
+                    <DateComponent
+                      dateString={seniorCenterNewsletter.publishedAt}
+                      className="text-zinc-500"
+                    />
+                  </div>
+                  <div className="group relative">
+                    <h3 className="mt-3 text-lg leading-6 font-semibold text-zinc-900 group-hover:text-zinc-600">
+                      {seniorCenterNewsletter.title}
+                    </h3>
+                    <p className="mt-5 line-clamp-3 text-sm leading-6 text-zinc-600">
+                      {seniorCenterNewsletter.excerpt}
+                    </p>
+                  </div>
+                </Link>
+              </article>
+            ))}
           </div>
-        </div>
+        </CardContent>
+      </Card>
+      {newsletter && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-bold lg:text-2xl">
+              <span className="italic">Keeping you informed...still</span>{" "}
+              Newsletter
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="divide-y divide-zinc-200">
+              <article
+                key={newsletter._id}
+                className="flex max-w-xl flex-col items-start justify-between"
+              >
+                <Link href={`/articles/${newsletter.slug}`} prefetch={false}>
+                  <div className="flex items-center gap-x-4 text-xs">
+                    <DateComponent
+                      dateString={newsletter.publishedAt}
+                      className="text-zinc-500"
+                    />
+                  </div>
+                  <div className="group relative">
+                    <h3 className="mt-3 text-lg leading-6 font-semibold text-zinc-900 group-hover:text-zinc-600">
+                      {newsletter.title}
+                    </h3>
+                    <p className="mt-5 line-clamp-3 text-sm leading-6 text-zinc-600">
+                      {newsletter.excerpt}
+                    </p>
+                  </div>
+                </Link>
+              </article>
+            </div>
+          </CardContent>
+        </Card>
       )}
-      <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-xl font-bold lg:text-2xl">Categories</h2>
-        <ul className="space-y-4">
-          {highlightedCategories?.map((category: any) => (
-            <li key={category._id} className="block">
-              <Link
-                href={`/category/${category.slug}`}
-                className="flex justify-between rounded-sm bg-zinc-200 px-5 py-4 transition-all duration-150 hover:bg-red-400 hover:text-white"
-                prefetch={false}
-              >
-                <span className="text-lg font-medium">{`${category.title} (${category.count})`}</span>
-                <ChevronRightIcon className="h-6 w-6" />
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-lg font-bold lg:text-2xl">Tags</h2>
-        <ul className="flex flex-wrap">
-          {highlightedTags?.map((tag: any) => (
-            <li className="mr-2 pb-2" key={tag._id}>
-              <Link
-                title={tag.title}
-                href={`/tag/${tag.slug}`}
-                className="space-x-4 rounded-sm bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
-                prefetch={false}
-              >
-                {tag.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-lg font-bold lg:text-2xl">
-          Support & Feedback
-        </h2>
-        <div className="space-y-4 space-x-4 text-center">
-          <Link
-            href="https://www.paypal.com/donate?hosted_button_id=VDPMC329ZC5ZE"
-            className="inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 focus-visible:outline-solid"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <CurrencyDollarIcon
-              className="-ml-0.5 h-5 w-5"
-              aria-hidden="true"
-            />
-            Donate
-          </Link>
-          <a
-            href="mailto:ron@maricopaseniorliving.org"
-            className="inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 focus-visible:outline-solid"
-          >
-            <EnvelopeIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
-            Email Us!
-          </a>
-          <p>This site is owned and managed by Ron Smith</p>
-        </div>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl font-bold lg:text-2xl">
+            Categories
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-4">
+            {highlightedCategories?.map((category: any) => (
+              <li key={category._id} className="block">
+                <Link
+                  href={`/category/${category.slug}`}
+                  className="flex justify-between rounded-sm bg-zinc-200 px-5 py-4 transition-all duration-150 hover:bg-red-400 hover:text-white"
+                  prefetch={false}
+                >
+                  <span className="text-lg font-medium">{`${category.title} (${category.count})`}</span>
+                  <ChevronRightIcon className="h-6 w-6" />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle className="font-bold lg:text-2xl">Tags</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul className="flex flex-wrap">
+            {highlightedTags?.map((tag: any) => (
+              <li className="mr-2 pb-2" key={tag._id}>
+                <Link
+                  title={tag.title}
+                  href={`/tag/${tag.slug}`}
+                  className="space-x-4 rounded-sm bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
+                  prefetch={false}
+                >
+                  {tag.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle className="font-bold lg:text-2xl">
+            Support & Feedback
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4 space-x-4 text-center">
+            <Link
+              href="https://www.paypal.com/donate?hosted_button_id=VDPMC329ZC5ZE"
+              className={buttonVariants()}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <CircleDollarSignIcon
+                className="-ml-0.5 h-5 w-5"
+                aria-hidden="true"
+              />
+              Donate
+            </Link>
+            <a
+              href="mailto:ron@maricopaseniorliving.org"
+              className={buttonVariants()}
+            >
+              <MailIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
+              Email Us!
+            </a>
+            <p>This site is owned and managed by Ron Smith</p>
+          </div>
+        </CardContent>
+      </Card>
     </>
   );
 }
 
 export function RightSidebarFallback() {
   return (
-    <div className="space-y-8" aria-busy>
+    <div className="flex flex-col gap-8" aria-busy>
       {Array.from({ length: 3 }).map((_, index) => (
-        <div
-          key={index}
-          className="h-48 animate-pulse rounded-md bg-zinc-200 shadow-lg"
-        />
+        <Card key={index}>
+          <CardContent>
+            <div className="h-48 animate-pulse rounded-md bg-zinc-200" />
+          </CardContent>
+        </Card>
       ))}
     </div>
   );

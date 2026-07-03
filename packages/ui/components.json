@@ -7,10 +7,9 @@
     "config": "",
     "css": "src/styles/globals.css",
     "baseColor": "neutral",
-    "cssVariables": true,
-    "prefix": ""
+    "cssVariables": true
   },
-  "iconLibrary": "hugeicons",
+  "iconLibrary": "lucide",
   "aliases": {
     "components": "@maricopa-senior-living/ui/components",
     "utils": "@maricopa-senior-living/ui/lib/utils",
@@ -18,7 +17,7 @@
     "lib": "@maricopa-senior-living/ui/lib",
     "ui": "@maricopa-senior-living/ui/components"
   },
-  "menuColor": "default",
-  "menuAccent": "subtle",
-  "registries": {}
+  "rtl": false,
+  "menuColor": "default-translucent",
+  "menuAccent": "subtle"
 }

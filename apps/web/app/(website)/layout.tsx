@@ -5,7 +5,10 @@ import {
   SanityLive,
   sanityFetch,
 } from "@maricopa-senior-living/sanity/live";
-import { queryNavigation } from "@maricopa-senior-living/sanity/queries";
+import {
+  queryGlobalSeoSettings,
+  queryNavigation,
+} from "@maricopa-senior-living/sanity/queries";
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import Script from "next/script";
@@ -14,19 +17,34 @@ import { VisualEditing } from "next-sanity/visual-editing";
 import { Suspense } from "react";
 
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
 import {
   CachedRightSidebar,
   DynamicRightSidebar,
   RightSidebarFallback,
 } from "@/components/RightSidebar";
 import ScrollToTop from "@/components/ScrollToTop";
+import { SiteHeader } from "@/components/site-header";
 import { baseUrl } from "@/lib/constants";
+import { type HeaderNavItem, resolveHeaderNavItems } from "@/lib/header-nav";
+
+type SiteSettingsData = {
+  siteTitle?: string | null;
+} | null;
 
 type NavigationData = {
-  headerPrimary?: any[];
+  headerPrimary?: HeaderNavItem[];
   footer?: any[];
 } | null;
+
+async function fetchSiteSettings({ perspective, stega }: DynamicFetchOptions) {
+  "use cache";
+  const { data } = await sanityFetch({
+    query: queryGlobalSeoSettings,
+    perspective,
+    stega,
+  });
+  return data as SiteSettingsData;
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -60,8 +78,13 @@ async function DynamicHeader() {
 
 async function CachedHeader({ perspective, stega }: DynamicFetchOptions) {
   "use cache";
-  const navigation = await fetchNavigation({ perspective, stega });
-  return <Header menu={navigation?.headerPrimary ?? []} />;
+  const [navigation, settingsData] = await Promise.all([
+    fetchNavigation({ perspective, stega }),
+    fetchSiteSettings({ perspective, stega }),
+  ]);
+  const navItems = resolveHeaderNavItems(navigation?.headerPrimary);
+
+  return <SiteHeader navItems={navItems} siteTitle={settingsData?.siteTitle} />;
 }
 
 async function DynamicFooter() {

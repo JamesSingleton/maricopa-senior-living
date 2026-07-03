@@ -16,8 +16,6 @@
     "type": "sanity schema extract --enforce-required-fields && sanity typegen generate"
   },
   "dependencies": {
-    "@headlessui/react": "^2.2.10",
-    "@heroicons/react": "^2.2.0",
     "@maricopa-senior-living/env": "workspace:*",
     "@maricopa-senior-living/sanity": "workspace:*",
     "@maricopa-senior-living/ui": "workspace:*",

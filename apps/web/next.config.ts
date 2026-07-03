@@ -55,14 +55,6 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   cacheComponents: true,
   cacheLife: { default: sanity },
-  modularizeImports: {
-    "@heroicons/react/24/outline": {
-      transform: "@heroicons/react/24/outline/{{member}}",
-    },
-    "@heroicons/react/20/solid": {
-      transform: "@heroicons/react/20/solid/{{member}}",
-    },
-  },
   transpilePackages: ["@maricopa-senior-living/ui"],
   images: {
     remotePatterns: [

@@ -1,4 +1,3 @@
-import { CalendarIcon } from "@heroicons/react/24/outline";
 import {
   type DynamicFetchOptions,
   getDynamicFetchOptions,
@@ -11,6 +10,7 @@ import {
   queryRecentArticleSlugs,
 } from "@maricopa-senior-living/sanity/queries";
 import type { QueryArticleSlugPageDataResult } from "@maricopa-senior-living/sanity/types";
+import { CalendarIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -96,7 +96,7 @@ async function CachedArticlePage({
   return (
     <>
       <BackButton />
-      <article className="prose prose-lg prose-indigo mt-4 rounded-md bg-white shadow-sm lg:max-w-none">
+      <article className="prose prose-lg prose-indigo lg:max-w-none">
         <div className="px-4 py-4 sm:px-10 sm:py-10">
           <div className="flex flex-wrap space-x-5 xl:space-x-10">
             <span className="flex items-center space-x-2">

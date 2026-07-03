@@ -1,11 +1,9 @@
+import { cn } from "@maricopa-senior-living/ui/lib/utils";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import "@maricopa-senior-living/ui/globals.css";
 
-const fontSans = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const fontMono = Geist_Mono({
   subsets: ["latin"],
@@ -18,12 +16,17 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased`}
-      >
-        {children}
-      </body>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn(
+        "antialiased",
+        fontMono.variable,
+        "font-sans",
+        geist.variable,
+      )}
+    >
+      <body>{children}</body>
     </html>
   );
 }
