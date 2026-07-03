@@ -1,47 +1,55 @@
 import Link from "next/link";
 
-import type { Post } from "@/types/Post";
-import DateComponent from "./Date";
-import ImageComponent from "./ImageComponent";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@maricopa-senior-living/ui/components/card";
 
-export default function ArticleCard({ post }: { post: Post }) {
+import DateComponent from "@/components/Date";
+
+export interface ArticleCardData {
+  _id: string;
+  title?: string | null;
+  slug?: string | null;
+  excerpt?: string | null;
+  publishedAt?: string | null;
+  contentSource?: string | null;
+  author?: { name?: string | null } | null;
+}
+
+export function ArticleCard({ article }: { article: ArticleCardData }) {
+  if (!article.slug) return null;
+
   return (
-    <article className="flex flex-col rounded-lg shadow-lg hover:shadow-xl">
-      <Link
-        href={`/articles/${post.slug}`}
-        prefetch={false}
-        className="flex flex-col justify-start rounded-lg bg-white p-6"
-      >
-        {post.categories.map((category: any) => (
-          <span
-            key={category.title}
-            className="pb-4 text-sm font-bold uppercase text-blue-700"
-          >
-            {category.title}
-          </span>
-        ))}
-        <h2 className="text-3xl font-bold hover:text-zinc-700">{post.title}</h2>
-        <p className="py-6">{post.excerpt}</p>
-        <div className="flex items-center">
-          <div className="shrink-0">
-            <ImageComponent
-              className="h-10 w-10 rounded-full object-cover"
-              image={post.author.image}
-              alt={post.author.name}
-              width={40}
-              height={40}
-            />
-          </div>
-          <div className="ml-3">
-            <p className="text-sm font-medium text-zinc-900">
-              {post.author.name}
-            </p>
-            <div className="flex space-x-1 text-sm text-zinc-500">
-              <DateComponent dateString={post.publishedAt} />
-            </div>
-          </div>
-        </div>
-      </Link>
-    </article>
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          <Link href={`/articles/${article.slug}`} className="hover:underline">
+            {article.title}
+          </Link>
+        </CardTitle>
+        <CardDescription className="flex flex-wrap gap-2">
+          {article.author?.name ? <span>{article.author.name}</span> : null}
+          {article.publishedAt ? (
+            <DateComponent dateString={article.publishedAt} />
+          ) : null}
+          {article.contentSource === "syndicated" ? (
+            <span className="rounded bg-amber-100 px-2 py-0.5 text-xs text-amber-800">
+              Syndicated
+            </span>
+          ) : null}
+        </CardDescription>
+      </CardHeader>
+      {article.excerpt ? (
+        <CardContent>
+          <p className="text-sm text-muted-foreground line-clamp-3">
+            {article.excerpt}
+          </p>
+        </CardContent>
+      ) : null}
+    </Card>
   );
 }

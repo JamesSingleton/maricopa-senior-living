@@ -1,47 +1,36 @@
 "use client";
 
-import { ArrowUpIcon } from "@heroicons/react/24/outline";
+import { ArrowUp } from "lucide-react";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+
+import { Button } from "@maricopa-senior-living/ui/components/button";
 
 const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  const toggleVisibility = () => {
-    if (window.pageYOffset > 300) {
-      setIsVisible(true);
-    } else {
-      setIsVisible(false);
-    }
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
   useEffect(() => {
-    window.addEventListener("scroll", toggleVisibility);
-    return () => {
-      window.removeEventListener("scroll", toggleVisibility);
+    const toggleVisibility = () => {
+      setIsVisible(window.pageYOffset > 300);
     };
+    window.addEventListener("scroll", toggleVisibility, { passive: true });
+    return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 
   return (
-    <div className="fixed bottom-2 right-2">
-      <button
-        aria-label="Scroll to top"
+    <div className="fixed bottom-4 right-4 z-40">
+      <Button
         type="button"
-        onClick={scrollToTop}
+        size="icon"
+        aria-label="Scroll to top"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         className={clsx(
-          isVisible ? "opacity-100" : "opacity-0",
-          "inline-flex items-center rounded-full bg-indigo-600 p-3 text-white shadow-xs transition-opacity hover:bg-indigo-700 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2",
+          "rounded-full shadow-lg transition-opacity",
+          isVisible ? "opacity-100" : "pointer-events-none opacity-0",
         )}
       >
-        <ArrowUpIcon className="h-6 w-6" aria-hidden="true" />
-      </button>
+        <ArrowUp className="h-5 w-5" aria-hidden />
+      </Button>
     </div>
   );
 };

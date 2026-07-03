@@ -1,4 +1,4 @@
-import { ArrowDownTrayIcon } from "@heroicons/react/20/solid";
+import { Download } from "lucide-react";
 import { urlFor } from "@maricopa-senior-living/sanity/client";
 import {
   PortableText,
@@ -7,7 +7,7 @@ import {
 } from "@portabletext/react";
 import { getImageDimensions } from "@sanity/asset-utils";
 import Image from "next/image";
-import type { PortableTextBlock } from "sanity";
+import type { PortableTextBlock } from "@portabletext/react";
 
 const ImageComponent = ({ value }: { value: any }) => {
   const { width, height } = getImageDimensions(value);
@@ -72,7 +72,7 @@ export function CustomPortableText({
               className="inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white no-underline shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 focus-visible:outline-solid"
               href={`${value.asset.url}?dl=${value.description}`}
             >
-              <ArrowDownTrayIcon
+              <Download
                 className="-ml-0.5 h-5 w-5"
                 aria-hidden="true"
               />

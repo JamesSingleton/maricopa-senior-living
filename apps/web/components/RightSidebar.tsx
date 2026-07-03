@@ -1,37 +1,40 @@
-import { ChevronRightIcon } from "@heroicons/react/20/solid";
-import { CurrencyDollarIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
 import {
   type DynamicFetchOptions,
   getDynamicFetchOptions,
   sanityFetch,
 } from "@maricopa-senior-living/sanity/live";
 import {
-  highlightedCategories,
-  highlightedTags,
-  rightSidebarQuery,
+  queryFeaturedCategories,
+  queryLatestArticle,
+  querySidebarTags,
 } from "@maricopa-senior-living/sanity/queries";
 import Link from "next/link";
 
-import DateComponent from "@/components/Date";
+import { ArticleCard } from "@/components/ArticleCard";
 import SearchBar from "@/components/SearchBar";
-import { CustomPortableText } from "./CustomPortableText";
-import ImageComponent from "./ImageComponent";
+import { LinkButton } from "@/components/LinkButton";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@maricopa-senior-living/ui/components/card";
 
 async function fetchRightSidebarData({
   perspective,
   stega,
 }: DynamicFetchOptions) {
   "use cache";
-  const [categories, tags, sidebar] = await Promise.all([
-    sanityFetch({ query: highlightedCategories, perspective, stega }),
-    sanityFetch({ query: highlightedTags, perspective, stega }),
-    sanityFetch({ query: rightSidebarQuery, perspective, stega }),
+  const [categories, tags, latestArticle] = await Promise.all([
+    sanityFetch({ query: queryFeaturedCategories, perspective, stega }),
+    sanityFetch({ query: querySidebarTags, perspective, stega }),
+    sanityFetch({ query: queryLatestArticle, perspective, stega }),
   ]);
 
   return {
-    highlightedCategories: categories.data,
-    highlightedTags: tags.data,
-    rightSidebarData: sidebar.data,
+    categories: categories.data,
+    tags: tags.data,
+    latestArticle: latestArticle.data,
   };
 }
 
@@ -45,215 +48,103 @@ export async function CachedRightSidebar({
   stega,
 }: DynamicFetchOptions) {
   "use cache";
-  const { highlightedCategories, highlightedTags, rightSidebarData } =
-    await fetchRightSidebarData({ perspective, stega });
-
-  const { whatsNew, seniorCenterNewsletters, nonProfit, newsletter } =
-    rightSidebarData ?? {};
+  const { categories, tags, latestArticle } = await fetchRightSidebarData({
+    perspective,
+    stega,
+  });
 
   return (
-    <>
+    <div className="space-y-6">
       <SearchBar />
-      {nonProfit && (
-        <div className="rounded-md bg-white p-8 shadow-lg">
-          <h2 className="mb-8 text-lg font-bold lg:text-2xl">
-            {nonProfit.title}
-          </h2>
-          <div className="prose prose-lg">
-            <CustomPortableText value={nonProfit.description} />
-          </div>
-          <div>
-            <Link
-              href={`/category/${nonProfit.slug}`}
-              prefetch={false}
-              className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 focus-visible:outline-solid"
+      {latestArticle ? (
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-serif text-lg">Latest news</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ArticleCard article={latestArticle as Parameters<typeof ArticleCard>[0]["article"]} />
+          </CardContent>
+        </Card>
+      ) : null}
+      {(categories as { _id: string; title: string; slug: string; count?: number }[])?.length ? (
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-serif text-lg">Browse by category</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-2">
+              {(categories as { _id: string; title: string; slug: string; count?: number }[]).map(
+                (category) => (
+                  <li key={category._id}>
+                    <Link
+                      href={`/category/${category.slug}`}
+                      className="flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted"
+                      prefetch={false}
+                    >
+                      <span>{category.title}</span>
+                      {category.count != null ? (
+                        <span className="text-muted-foreground">{category.count}</span>
+                      ) : null}
+                    </Link>
+                  </li>
+                ),
+              )}
+            </ul>
+          </CardContent>
+        </Card>
+      ) : null}
+      {(tags as { _id: string; title: string; slug: string }[])?.length ? (
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-serif text-lg">Popular tags</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="flex flex-wrap gap-2">
+              {(tags as { _id: string; title: string; slug: string }[]).map((tag) => (
+                <li key={tag._id}>
+                  <Link
+                    href={`/tags/${tag.slug}`}
+                    className="rounded-full bg-muted px-3 py-1 text-sm hover:bg-primary hover:text-primary-foreground"
+                    prefetch={false}
+                  >
+                    {tag.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      ) : null}
+      <Card>
+        <CardHeader>
+          <CardTitle className="font-serif text-lg">Support this site</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-sm text-muted-foreground">
+            Help keep local senior resources free for the community.
+          </p>
+          <div className="flex flex-col gap-2">
+            <LinkButton
+              href="https://www.paypal.com/donate?hosted_button_id=VDPMC329ZC5ZE"
+              external
             >
-              View More
-            </Link>
+              Donate
+            </LinkButton>
+            <LinkButton href="mailto:ron@maricopaseniorliving.org" variant="outline">
+              Email us
+            </LinkButton>
           </div>
-        </div>
-      )}
-      {whatsNew && (
-        <div className="rounded-md bg-white p-8 shadow-lg">
-          <h2 className="mb-8 text-lg font-bold lg:text-2xl">
-            What&apos;s New!
-          </h2>
-          <div className="space-y-16">
-            <article
-              key={`${whatsNew._id}_right_sidebar`}
-              className="flex max-w-xl flex-col items-start justify-between"
-            >
-              <Link href={`/articles/${whatsNew.slug}`} prefetch={false}>
-                <div className="flex items-center gap-x-4 text-xs">
-                  <DateComponent
-                    dateString={whatsNew.publishedAt}
-                    className="text-zinc-500"
-                  />
-                </div>
-                <div className="group relative">
-                  <h3 className="mt-3 text-lg leading-6 font-semibold text-zinc-900 group-hover:text-zinc-600">
-                    {whatsNew.title}
-                  </h3>
-                  <p className="mt-5 line-clamp-3 text-sm leading-6 text-zinc-600">
-                    {whatsNew.excerpt}
-                  </p>
-                </div>
-                <div className="relative mt-8 flex items-center gap-x-4">
-                  <ImageComponent
-                    image={whatsNew.author.image}
-                    alt={`${whatsNew.author.name} avatar`}
-                    className="h-10 w-10 rounded-full bg-zinc-50"
-                    width={40}
-                    height={40}
-                  />
-                  <div className="text-sm leading-6">
-                    <p className="font-semibold text-zinc-900">
-                      {whatsNew.author.name}
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            </article>
-          </div>
-        </div>
-      )}
-      <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-lg font-bold lg:text-2xl">
-          Community/Senior Center Calendar
-        </h2>
-        <div className="divide-y divide-zinc-200">
-          {seniorCenterNewsletters?.map((seniorCenterNewsletter: any) => (
-            <article
-              key={seniorCenterNewsletter._id}
-              className="flex max-w-xl flex-col items-start justify-between py-5"
-            >
-              <Link
-                href={`/articles/${seniorCenterNewsletter.slug}`}
-                prefetch={false}
-              >
-                <div className="flex items-center gap-x-4 text-xs">
-                  <DateComponent
-                    dateString={seniorCenterNewsletter.publishedAt}
-                    className="text-zinc-500"
-                  />
-                </div>
-                <div className="group relative">
-                  <h3 className="mt-3 text-lg leading-6 font-semibold text-zinc-900 group-hover:text-zinc-600">
-                    {seniorCenterNewsletter.title}
-                  </h3>
-                  <p className="mt-5 line-clamp-3 text-sm leading-6 text-zinc-600">
-                    {seniorCenterNewsletter.excerpt}
-                  </p>
-                </div>
-              </Link>
-            </article>
-          ))}
-        </div>
-      </div>
-      {newsletter && (
-        <div className="rounded-md bg-white p-8 shadow-lg">
-          <h2 className="mb-8 text-lg font-bold lg:text-2xl">
-            <span className="italic">Keeping you informed...still</span>{" "}
-            Newsletter
-          </h2>
-          <div className="divide-y divide-zinc-200">
-            <article
-              key={newsletter._id}
-              className="flex max-w-xl flex-col items-start justify-between py-5"
-            >
-              <Link href={`/articles/${newsletter.slug}`} prefetch={false}>
-                <div className="flex items-center gap-x-4 text-xs">
-                  <DateComponent
-                    dateString={newsletter.publishedAt}
-                    className="text-zinc-500"
-                  />
-                </div>
-                <div className="group relative">
-                  <h3 className="mt-3 text-lg leading-6 font-semibold text-zinc-900 group-hover:text-zinc-600">
-                    {newsletter.title}
-                  </h3>
-                  <p className="mt-5 line-clamp-3 text-sm leading-6 text-zinc-600">
-                    {newsletter.excerpt}
-                  </p>
-                </div>
-              </Link>
-            </article>
-          </div>
-        </div>
-      )}
-      <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-xl font-bold lg:text-2xl">Categories</h2>
-        <ul className="space-y-4">
-          {highlightedCategories?.map((category: any) => (
-            <li key={category._id} className="block">
-              <Link
-                href={`/category/${category.slug}`}
-                className="flex justify-between rounded-sm bg-zinc-200 px-5 py-4 transition-all duration-150 hover:bg-red-400 hover:text-white"
-                prefetch={false}
-              >
-                <span className="text-lg font-medium">{`${category.title} (${category.count})`}</span>
-                <ChevronRightIcon className="h-6 w-6" />
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-lg font-bold lg:text-2xl">Tags</h2>
-        <ul className="flex flex-wrap">
-          {highlightedTags?.map((tag: any) => (
-            <li className="mr-2 pb-2" key={tag._id}>
-              <Link
-                title={tag.title}
-                href={`/tag/${tag.slug}`}
-                className="space-x-4 rounded-sm bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
-                prefetch={false}
-              >
-                {tag.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="rounded-md bg-white p-8 shadow-lg">
-        <h2 className="mb-8 text-lg font-bold lg:text-2xl">
-          Support & Feedback
-        </h2>
-        <div className="space-y-4 space-x-4 text-center">
-          <Link
-            href="https://www.paypal.com/donate?hosted_button_id=VDPMC329ZC5ZE"
-            className="inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 focus-visible:outline-solid"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <CurrencyDollarIcon
-              className="-ml-0.5 h-5 w-5"
-              aria-hidden="true"
-            />
-            Donate
-          </Link>
-          <a
-            href="mailto:ron@maricopaseniorliving.org"
-            className="inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 focus-visible:outline-solid"
-          >
-            <EnvelopeIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
-            Email Us!
-          </a>
-          <p>This site is owned and managed by Ron Smith</p>
-        </div>
-      </div>
-    </>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
 
 export function RightSidebarFallback() {
   return (
-    <div className="space-y-8" aria-busy>
+    <div className="space-y-6" aria-busy>
       {Array.from({ length: 3 }).map((_, index) => (
-        <div
-          key={index}
-          className="h-48 animate-pulse rounded-md bg-zinc-200 shadow-lg"
-        />
+        <div key={index} className="h-40 animate-pulse rounded-xl bg-muted" />
       ))}
     </div>
   );

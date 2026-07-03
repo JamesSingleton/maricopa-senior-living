@@ -1,19 +1,17 @@
 "use client";
 
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+import { Button } from "@maricopa-senior-living/ui/components/button";
 
 export default function BackButton() {
   const router = useRouter();
 
   return (
-    <button
-      type="button"
-      onClick={() => router.back()}
-      className="inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-    >
-      <ArrowLeftIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
-      Go Back
-    </button>
+    <Button type="button" variant="outline" size="sm" onClick={() => router.back()}>
+      <ArrowLeft className="h-4 w-4" aria-hidden />
+      Go back
+    </Button>
   );
 }

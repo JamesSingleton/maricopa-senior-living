@@ -15,6 +15,582 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
+export type SiteFooter = {
+  _id: string;
+  _type: "siteFooter";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  tagline?: string;
+  columns?: Array<{
+    heading: string;
+    links?: Array<
+      {
+        _key: string;
+      } & Link
+    >;
+    _type: "footerColumn";
+    _key: string;
+  }>;
+  copyright?: string;
+};
+
+export type MainNavigation = {
+  _id: string;
+  _type: "mainNavigation";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  items?: Array<{
+    link: Link;
+    children?: Array<
+      {
+        _key: string;
+      } & Link
+    >;
+    _type: "navItem";
+    _key: string;
+  }>;
+};
+
+export type PageReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "page";
+};
+
+export type ArticleReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "article";
+};
+
+export type GuideReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "guide";
+};
+
+export type ResourceReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "resource";
+};
+
+export type CategoryReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "category";
+};
+
+export type TagReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "tag";
+};
+
+export type Link = {
+  _type: "link";
+  label: string;
+  linkType?: "internal" | "external";
+  internalReference?:
+    | PageReference
+    | ArticleReference
+    | GuideReference
+    | ResourceReference
+    | CategoryReference
+    | TagReference;
+  externalUrl?: string;
+  openInNewTab?: boolean;
+};
+
+export type HomePage = {
+  _id: string;
+  _type: "homePage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  pageBuilder?: PageBuilder;
+  seo?: Seo;
+};
+
+export type SanityImageAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
+
+export type SiteSettings = {
+  _id: string;
+  _type: "siteSettings";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  description?: string;
+  logo?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  favicon?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  ogImage?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  contactEmail?: string;
+  contactPhone?: string;
+  seo?: Seo;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x: number;
+  y: number;
+  height: number;
+  width: number;
+};
+
+export type CommunityAlert = {
+  _type: "communityAlert";
+  message: string;
+  severity?: "info" | "warning" | "urgent";
+  link?: Link;
+  expiresAt?: string;
+};
+
+export type SplitImage = {
+  _type: "splitImage";
+  heading?: string;
+  body?: BlockContent;
+  image?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+  };
+  imagePosition?: "left" | "right";
+};
+
+export type FaqBlock = {
+  _type: "faqBlock";
+  heading?: string;
+  items?: Array<{
+    question: string;
+    answer: string;
+    _key: string;
+  }>;
+};
+
+export type CallToAction = {
+  _type: "callToAction";
+  heading: string;
+  body?: string;
+  link: Link;
+};
+
+export type ResourceGrid = {
+  _type: "resourceGrid";
+  heading?: string;
+  category?: CategoryReference;
+  limit?: number;
+};
+
+export type FeaturedGuides = {
+  _type: "featuredGuides";
+  heading?: string;
+  guides?: Array<
+    {
+      _key: string;
+    } & GuideReference
+  >;
+};
+
+export type FeaturedArticles = {
+  _type: "featuredArticles";
+  heading?: string;
+  articles?: Array<
+    {
+      _key: string;
+    } & ArticleReference
+  >;
+};
+
+export type FeaturedCategories = {
+  _type: "featuredCategories";
+  heading?: string;
+  categories?: Array<
+    {
+      _key: string;
+    } & CategoryReference
+  >;
+};
+
+export type FeaturedResources = {
+  _type: "featuredResources";
+  heading?: string;
+  resources?: Array<
+    {
+      _key: string;
+    } & ResourceReference
+  >;
+};
+
+export type RichTextSection = {
+  _type: "richTextSection";
+  heading?: string;
+  body?: BlockContent;
+};
+
+export type HeroBlock = {
+  _type: "heroBlock";
+  heading: string;
+  subheading?: string;
+  image?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+  };
+  cta?: Link;
+};
+
+export type PageBuilder = Array<
+  | ({
+      _key: string;
+    } & HeroBlock)
+  | ({
+      _key: string;
+    } & RichTextSection)
+  | ({
+      _key: string;
+    } & FeaturedResources)
+  | ({
+      _key: string;
+    } & FeaturedCategories)
+  | ({
+      _key: string;
+    } & FeaturedArticles)
+  | ({
+      _key: string;
+    } & FeaturedGuides)
+  | ({
+      _key: string;
+    } & ResourceGrid)
+  | ({
+      _key: string;
+    } & CallToAction)
+  | ({
+      _key: string;
+    } & FaqBlock)
+  | ({
+      _key: string;
+    } & SplitImage)
+  | ({
+      _key: string;
+    } & CommunityAlert)
+>;
+
+export type BusinessHours = Array<
+  {
+    _key: string;
+  } & DayAndTime
+>;
+
+export type HowToStep = {
+  _type: "howToStep";
+  title: string;
+  body?: string;
+};
+
+export type Syndication = {
+  _type: "syndication";
+  originalPublication?: string;
+  originalUrl?: string;
+  originalAuthor?: string;
+  republishedAt?: string;
+  attribution?: string;
+  rightsNote?: string;
+};
+
+export type ContactInfo = {
+  _type: "contactInfo";
+  phone: string;
+  email?: string;
+  website?: string;
+  streetAddress?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+};
+
+export type Tag = {
+  _id: string;
+  _type: "tag";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  slug: Slug;
+  description?: string;
+  synonyms?: Array<string>;
+  seo?: Seo;
+};
+
+export type Slug = {
+  _type: "slug";
+  current: string;
+  source?: string;
+};
+
+export type Resource = {
+  _id: string;
+  _type: "resource";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  slug: Slug;
+  description: string;
+  body?: BlockContent;
+  image?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  contact: ContactInfo;
+  hours?: BusinessHours;
+  category: CategoryReference;
+  tags?: Array<
+    {
+      _key: string;
+    } & TagReference
+  >;
+  lastVerified: string;
+  featured?: boolean;
+  seo?: Seo;
+};
+
+export type SanityFileAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+};
+
+export type BlockContent = Array<
+  | {
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+      listItem?: "bullet" | "number";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }
+  | {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt: string;
+      _type: "image";
+      _key: string;
+    }
+  | {
+      asset?: SanityFileAssetReference;
+      media?: unknown;
+      description: string;
+      _type: "attachment";
+      _key: string;
+    }
+>;
+
+export type AuthorReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "author";
+};
+
+export type Guide = {
+  _id: string;
+  _type: "guide";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  slug: Slug;
+  excerpt?: string;
+  body: BlockContent;
+  steps?: Array<
+    {
+      _key: string;
+    } & HowToStep
+  >;
+  mainImage?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+  };
+  author?: AuthorReference;
+  lastUpdated: string;
+  category?: CategoryReference;
+  tags?: Array<
+    {
+      _key: string;
+    } & TagReference
+  >;
+  featured?: boolean;
+  seo?: Seo;
+};
+
+export type Article = {
+  _id: string;
+  _type: "article";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  slug: Slug;
+  excerpt?: string;
+  body: BlockContent;
+  mainImage?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+  };
+  author?: AuthorReference;
+  publishedAt: string;
+  contentSource?: "original" | "syndicated";
+  syndication?: Syndication;
+  category?: CategoryReference;
+  tags?: Array<
+    {
+      _key: string;
+    } & TagReference
+  >;
+  featured?: boolean;
+  seo?: Seo;
+};
+
+export type Category = {
+  _id: string;
+  _type: "category";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  slug: Slug;
+  description?: BlockContent;
+  parent?: CategoryReference;
+  isFeatured?: boolean;
+  image?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  seo?: Seo;
+};
+
+export type Author = {
+  _id: string;
+  _type: "author";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name: string;
+  slug?: Slug;
+  image?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  bio?: string;
+};
+
+export type Page = {
+  _id: string;
+  _type: "page";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  slug: Slug;
+  pageBuilder?: PageBuilder;
+  seo?: Seo;
+};
+
+export type Seo = {
+  _type: "seo";
+  title?: string;
+  description?: string;
+  image?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  noIndex?: boolean;
+};
+
 export type TimeValue =
   | "00:00"
   | "00:30"
@@ -65,85 +641,6 @@ export type TimeValue =
   | "23:00"
   | "23:30";
 
-export type CategoryReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "category";
-};
-
-export type TagReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "tag";
-};
-
-export type PageReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "page";
-};
-
-export type Link = {
-  _type: "link";
-  reference?: CategoryReference | TagReference | PageReference;
-  text?: string;
-  url?: string;
-};
-
-export type SanityImageAssetReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-};
-
-export type SanityFileAssetReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
-};
-
-export type BlockContent = Array<
-  | {
-      children?: Array<{
-        marks?: Array<string>;
-        text?: string;
-        _type: "span";
-        _key: string;
-      }>;
-      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
-      listItem?: "bullet" | "number";
-      markDefs?: Array<{
-        href?: string;
-        _type: "link";
-        _key: string;
-      }>;
-      level?: number;
-      _type: "block";
-      _key: string;
-    }
-  | {
-      asset: SanityImageAssetReference;
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      alt: string;
-      _type: "image";
-      _key: string;
-    }
-  | {
-      asset: SanityFileAssetReference;
-      media?: unknown;
-      description: string;
-      _type: "attachment";
-      _key: string;
-    }
->;
-
 export type DayAndTime = {
   _type: "dayAndTime";
   day?:
@@ -156,259 +653,6 @@ export type DayAndTime = {
     | "Sunday";
   opensAt?: TimeValue;
   closesAt?: TimeValue;
-};
-
-export type Navigation = {
-  _id: string;
-  _type: "navigation";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  headerPrimary?: Array<{
-    link?: Link;
-    children?: Array<{
-      link?: Link;
-      _type: "item";
-      _key: string;
-    }>;
-    _type: "item";
-    _key: string;
-  }>;
-  footer?: Array<
-    {
-      _key: string;
-    } & Link
-  >;
-};
-
-export type Home = {
-  _id: string;
-  _type: "home";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  image?: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt: string;
-    caption?: string;
-    _type: "image";
-  };
-  content?: BlockContent;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x: number;
-  y: number;
-  height: number;
-  width: number;
-};
-
-export type Category = {
-  _id: string;
-  _type: "category";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  slug: Slug;
-  description: BlockContent;
-  highlight?: boolean;
-};
-
-export type Slug = {
-  _type: "slug";
-  current: string;
-  source?: string;
-};
-
-export type Tag = {
-  _id: string;
-  _type: "tag";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  slug: Slug;
-  description: BlockContent;
-  highlight?: boolean;
-};
-
-export type Service = {
-  _id: string;
-  _type: "service";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  categories: Array<
-    {
-      _key: string;
-    } & CategoryReference
-  >;
-  tags?: Array<
-    {
-      _key: string;
-    } & TagReference
-  >;
-  description?: BlockContent;
-  audience?: BlockContent;
-  website?: string;
-  phone?: string;
-  address?: string;
-  businessHours?: Array<
-    {
-      _key: string;
-    } & DayAndTime
-  >;
-  notes?: BlockContent;
-  attachments?: Array<{
-    asset?: SanityFileAssetReference;
-    media?: unknown;
-    name: string;
-    _type: "file";
-    _key: string;
-  }>;
-};
-
-export type AuthorReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "author";
-};
-
-export type Post = {
-  _id: string;
-  _type: "post";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  slug: Slug;
-  author: AuthorReference;
-  mainImage?: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt: string;
-    _type: "image";
-  };
-  categories: Array<
-    {
-      _key: string;
-    } & CategoryReference
-  >;
-  tags?: Array<
-    {
-      _key: string;
-    } & TagReference
-  >;
-  publishedAt: string;
-  isArchived?: boolean;
-  body: BlockContent;
-};
-
-export type Page = {
-  _id: string;
-  _type: "page";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  slug: Slug;
-  body: BlockContent;
-};
-
-export type Author = {
-  _id: string;
-  _type: "author";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name: string;
-  slug: Slug;
-  image: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  };
-  bio?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal";
-    listItem?: never;
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }>;
-};
-
-export type SanityVideoMetadataPlayback = {
-  _type: "sanity.videoMetadata.playback";
-  policy?: string;
-};
-
-export type SanityVideoMetadata = {
-  _type: "sanity.videoMetadata";
-  duration?: number;
-  framerate?: number;
-  aspectRatio?: number;
-  hasAudio?: boolean;
-  codec?: string;
-  bitrate?: number;
-};
-
-export type SanityVideoAsset = {
-  _id: string;
-  _type: "sanity.videoAsset";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  originalFilename?: string;
-  label?: string;
-  title?: string;
-  description?: string;
-  altText?: string;
-  creditLine?: string;
-  metadata?: SanityVideoMetadata;
-  sha1hash?: string;
-  extension?: string;
-  mimeType?: string;
-  size?: number;
-  assetId?: string;
-  uploadId?: string;
-  path?: string;
-  url?: string;
-};
-
-export type SanityVideo = {
-  _type: "sanity.video";
-  asset?: unknown;
-  media?: unknown;
 };
 
 export type SanityAssistInstructionTask = {
@@ -655,31 +899,50 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
-  | TimeValue
+  | SiteFooter
+  | MainNavigation
+  | PageReference
+  | ArticleReference
+  | GuideReference
+  | ResourceReference
   | CategoryReference
   | TagReference
-  | PageReference
   | Link
+  | HomePage
   | SanityImageAssetReference
-  | SanityFileAssetReference
-  | BlockContent
-  | DayAndTime
-  | Navigation
-  | Home
+  | SiteSettings
   | SanityImageCrop
   | SanityImageHotspot
-  | Category
-  | Slug
+  | CommunityAlert
+  | SplitImage
+  | FaqBlock
+  | CallToAction
+  | ResourceGrid
+  | FeaturedGuides
+  | FeaturedArticles
+  | FeaturedCategories
+  | FeaturedResources
+  | RichTextSection
+  | HeroBlock
+  | PageBuilder
+  | BusinessHours
+  | HowToStep
+  | Syndication
+  | ContactInfo
   | Tag
-  | Service
+  | Slug
+  | Resource
+  | SanityFileAssetReference
+  | BlockContent
   | AuthorReference
-  | Post
-  | Page
+  | Guide
+  | Article
+  | Category
   | Author
-  | SanityVideoMetadataPlayback
-  | SanityVideoMetadata
-  | SanityVideoAsset
-  | SanityVideo
+  | Page
+  | Seo
+  | TimeValue
+  | DayAndTime
   | SanityAssistInstructionTask
   | SanityAssistTaskStatus
   | SanityAssistSchemaTypeAnnotations
@@ -704,1007 +967,937 @@ export type AllSanitySchemaTypes =
   | Geopoint;
 
 // Source: ../../packages/sanity/src/queries.ts
-// Variable: queryImageType
-// Query: *[_type == "post"][0]{      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }  }.mainImage
-export type QueryImageTypeResult = null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: querySlugPageData
-// Query: *[_type == "page" && slug.current == $slug][0]{    ...,    "slug": slug.current,      pageBuilder[]{    ...,    _type,  }  }
-export type QuerySlugPageDataResult = {
-  _id: string;
-  _type: "page";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
+// Variable: querySiteSettings
+// Query: *[_type == "siteSettings" && _id == "siteSettings"][0]{    title,    description,    logo {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },    favicon {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },    ogImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },    contactEmail,    contactPhone,      "seo": {    "title": coalesce(seo.title, title, ""),    "description": coalesce(seo.description, excerpt, description, ""),    "image": coalesce(seo.image, mainImage, image),    "noIndex": coalesce(seo.noIndex, false)  }  }
+export type QuerySiteSettingsResult = {
   title: string;
-  slug: string;
-  body: BlockContent;
-  pageBuilder: null;
-} | null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryNavbarData
-// Query: *[_type == "navbar" && _id == "navbar"][0]{    _id,    columns[]{      _key,      _type == "navbarColumn" => {        "type": "column",        title,        links[]{          _key,          name,          icon,          description,          "openInNewTab": url.openInNewTab,          "href": select(            url.type == "internal" => url.internal->slug.current,            url.type == "external" => url.external,            url.href          )        }      },      _type == "navbarLink" => {        "type": "link",        name,        description,        "openInNewTab": url.openInNewTab,        "href": select(          url.type == "internal" => url.internal->slug.current,          url.type == "external" => url.external,          url.href        )      }    },      buttons[]{    text,    variant,    _key,    _type,    "openInNewTab": url.openInNewTab,    "href": select(      url.type == "internal" => url.internal->slug.current,      url.type == "external" => url.external,      url.href    ),  },  }
-export type QueryNavbarDataResult = null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryGlobalSeoSettings
-// Query: *[_type == "settings"][0]{    _id,    _type,    siteTitle,    logo {        "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }    },    siteDescription,    socialLinks{      linkedin,      facebook,      twitter,      instagram,      youtube    }  }
-export type QueryGlobalSeoSettingsResult = null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryBlogIndexPageData
-// Query: *[_type == "blogIndex"][0]{    ...,    _id,    _type,    title,    description,    "displayFeaturedBlogs" : displayFeaturedBlogs == "yes",    "featuredBlogsCount" : featuredBlogsCount,      pageBuilder[]{    ...,    _type,  },    "slug": slug.current  }
-export type QueryBlogIndexPageDataResult = null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryBlogIndexPageBlogs
-// Query: *[_type == "blog" && (seoHideFromLists != true)] | order(orderRank asc) [$start...$end]{      _type,  _id,  title,  description,  "slug":slug.current,  orderRank,    image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  },  publishedAt,    authors[0]->{    _id,    name,    position,      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }  }  }
-export type QueryBlogIndexPageBlogsResult = Array<never>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryAllBlogDataForSearch
-// Query: *[_type == "blog" && defined(slug.current) && (seoHideFromLists != true)]{      _type,  _id,  title,  description,  "slug":slug.current,  orderRank,    image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  },  publishedAt,    authors[0]->{    _id,    name,    position,      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }  }  }
-export type QueryAllBlogDataForSearchResult = Array<never>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryBlogIndexPageBlogsCount
-// Query: count(*[_type == "blog" && (seoHideFromLists != true)])
-export type QueryBlogIndexPageBlogsCountResult = number;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryBlogSlugPageData
-// Query: *[_type == "blog" && slug.current == $slug][0]{    ...,    "slug": slug.current,      authors[0]->{    _id,    name,    position,      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }  },      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  },      richText[]{    ...,    _type == "block" => {      ...,        markDefs[]{    ...,      ...customLink{    openInNewTab,    "href": select(      type == "internal" => internal->slug.current,      type == "external" => external,      "#"    ),  }  }    },    _type == "image" => {        "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  },      "caption": caption    }  },      pageBuilder[]{    ...,    _type,  }  }
-export type QueryBlogSlugPageDataResult = null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryBlogPaths
-// Query: *[_type == "blog" && defined(slug.current)].slug.current
-export type QueryBlogPathsResult = Array<never>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: highlightedCategories
-// Query: *[_type == "category" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{    _id,    title,    "slug": slug.current,    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])  } | order(title asc, count desc)
-export type HighlightedCategoriesResult = Array<{
-  _id: string;
-  title: string;
-  slug: string;
-  count: number;
-}>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: highlightedTags
-// Query: *[_type == "tag" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{    _id,    title,    "slug": slug.current,    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])  } | order(title asc, count desc)
-export type HighlightedTagsResult = Array<{
-  _id: string;
-  title: string;
-  slug: string;
-  count: number;
-}>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryArticleSlugPageData
-// Query: *[_type == "post" && slug.current == $slug][0]{      _id,  _updatedAt,  _type,  title,  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  "slug": slug.current,  "author": author->{      name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,  },  mainImage,  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  "tags": tags[]->{    _id,    title,    "slug": slug.current,  } {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  },  publishedAt,  "body": body[]{    ...,    _type == "attachment" => {      ...,      asset->    }  },  }
-export type QueryArticleSlugPageDataResult = {
-  _id: string;
-  _updatedAt: string;
-  _type: "post";
-  title: string;
-  excerpt: string;
-  slug: string;
-  author: {
-    name: string;
+  description: string | null;
+  logo: {
+    id: string | null;
+    preview: string | null;
+    alt: string | "untitled";
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      bottom: number;
+      left: number;
+      right: number;
+      top: number;
+    } | null;
+  } | null;
+  favicon: {
+    id: string | null;
+    preview: string | null;
+    alt: string | "untitled";
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      bottom: number;
+      left: number;
+      right: number;
+      top: number;
+    } | null;
+  } | null;
+  ogImage: {
+    id: string | null;
+    preview: string | null;
+    alt: string | "untitled";
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      bottom: number;
+      left: number;
+      right: number;
+      top: number;
+    } | null;
+  } | null;
+  contactEmail: string | null;
+  contactPhone: string | null;
+  seo: {
+    title: string;
+    description: string | "";
     image: {
-      asset: {
-        _id: string;
-        _type: "sanity.imageAsset";
-        metadata: SanityImageMetadata | null;
-        url: string;
-      } | null;
-    };
-    slug: string;
-  };
-  mainImage: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt: string;
-    _type: "image";
-  } | null;
-  categories: Array<{
-    _id: string;
-    title: string;
-    slug: string;
-  }>;
-  tags: Array<{
-    _id: string;
-    title: string;
-    slug: string;
-    rank: 2;
-  }> | null;
-  publishedAt: string;
-  body: Array<
-    | {
-        asset: {
-          _id: string;
-          _type: "sanity.fileAsset";
-          _createdAt: string;
-          _updatedAt: string;
-          _rev: string;
-          originalFilename?: string;
-          label?: string;
-          title?: string;
-          description?: string;
-          altText?: string;
-          sha1hash: string;
-          extension: string;
-          mimeType: string;
-          size: number;
-          assetId: string;
-          uploadId?: string;
-          path: string;
-          url: string;
-          source?: SanityAssetSourceData;
-        };
-        media?: unknown;
-        description: string;
-        _type: "attachment";
-        _key: string;
-      }
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?:
-          | "blockquote"
-          | "h1"
-          | "h2"
-          | "h3"
-          | "h4"
-          | "h5"
-          | "h6"
-          | "normal";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }
-    | {
-        asset: SanityImageAssetReference;
-        media?: unknown;
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        alt: string;
-        _type: "image";
-        _key: string;
-      }
-  >;
-} | null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryArticlePaths
-// Query: *[_type == "post" && defined(slug.current)].slug.current
-export type QueryArticlePathsResult = Array<string>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: rightSidebarQuery
-// Query: {  "whatsNew": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What's New!"]._id)][0]{    _id,    title,    "slug": slug.current,    "author": author->{        name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,    },    publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  },  "seniorCenterNewsletters": *[(_type == "post" && isArchived != true && references(*[_type == "category" && title == "City of Maricopa Community / Senior Center"]._id))][0..1] | order(publishedAt desc){    _id,    title,    "slug": slug.current,    publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  },  "nonProfit": *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{    ...,    "slug": slug.current,  },  "newsletter": *[_type == "post" && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"]._id)] | order(publishedAt desc)[0]{    _id,    title,    "slug": slug.current,    publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  }}
-export type RightSidebarQueryResult = {
-  whatsNew: {
-    _id: string;
-    title: string;
-    slug: string;
-    author: {
-      name: string;
-      image: {
-        asset: {
-          _id: string;
-          _type: "sanity.imageAsset";
-          metadata: SanityImageMetadata | null;
-          url: string;
-        } | null;
-      };
-      slug: string;
-    };
-    publishedAt: string;
-    excerpt: string;
-  } | null;
-  seniorCenterNewsletters: Array<{
-    _id: string;
-    title: string;
-    slug: string;
-    publishedAt: string;
-    excerpt: string;
-  }>;
-  nonProfit: {
-    _id: string;
-    _type: "category";
-    _createdAt: string;
-    _updatedAt: string;
-    _rev: string;
-    title: string;
-    slug: string;
-    description: BlockContent;
-    highlight?: boolean;
-  } | null;
-  newsletter: {
-    _id: string;
-    title: string;
-    slug: string;
-    publishedAt: string;
-    excerpt: string;
-  } | null;
-};
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryHomePageData
-// Query: *[_type == "home"][0]
-export type QueryHomePageDataResult = {
-  _id: string;
-  _type: "home";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  image?: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt: string;
-    caption?: string;
-    _type: "image";
-  };
-  content?: BlockContent;
-} | null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryAllPosts
-// Query: *[_type == "post" && isArchived != true] | order(publishedAt desc){      _id,  _updatedAt,  _type,  title,  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  "slug": slug.current,  "author": author->{      name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,  },  mainImage,  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  "tags": tags[]->{    _id,    title,    "slug": slug.current,  } {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  },  publishedAt,  "body": body[]{    ...,    _type == "attachment" => {      ...,      asset->    }  },  }
-export type QueryAllPostsResult = Array<{
-  _id: string;
-  _updatedAt: string;
-  _type: "post";
-  title: string;
-  excerpt: string;
-  slug: string;
-  author: {
-    name: string;
-    image: {
-      asset: {
-        _id: string;
-        _type: "sanity.imageAsset";
-        metadata: SanityImageMetadata | null;
-        url: string;
-      } | null;
-    };
-    slug: string;
-  };
-  mainImage: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt: string;
-    _type: "image";
-  } | null;
-  categories: Array<{
-    _id: string;
-    title: string;
-    slug: string;
-  }>;
-  tags: Array<{
-    _id: string;
-    title: string;
-    slug: string;
-    rank: 2;
-  }> | null;
-  publishedAt: string;
-  body: Array<
-    | {
-        asset: {
-          _id: string;
-          _type: "sanity.fileAsset";
-          _createdAt: string;
-          _updatedAt: string;
-          _rev: string;
-          originalFilename?: string;
-          label?: string;
-          title?: string;
-          description?: string;
-          altText?: string;
-          sha1hash: string;
-          extension: string;
-          mimeType: string;
-          size: number;
-          assetId: string;
-          uploadId?: string;
-          path: string;
-          url: string;
-          source?: SanityAssetSourceData;
-        };
-        media?: unknown;
-        description: string;
-        _type: "attachment";
-        _key: string;
-      }
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?:
-          | "blockquote"
-          | "h1"
-          | "h2"
-          | "h3"
-          | "h4"
-          | "h5"
-          | "h6"
-          | "normal";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }
-    | {
-        asset: SanityImageAssetReference;
-        media?: unknown;
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        alt: string;
-        _type: "image";
-        _key: string;
-      }
-  >;
-}>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryAllPostSlugs
-// Query: *[_type == "post" && defined(slug.current) && isArchived != true][].slug.current
-export type QueryAllPostSlugsResult = Array<string>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryRecentArticleSlugs
-// Query: *[_type == "post" && defined(slug.current) && isArchived != true] | order(_updatedAt desc) [0...100]{"slug": slug.current}
-export type QueryRecentArticleSlugsResult = Array<{
-  slug: string;
-}>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryAllPageSlugs
-// Query: *[_type == "page" && defined(slug.current)]{"slug": slug.current}
-export type QueryAllPageSlugsResult = Array<{
-  slug: string;
-}>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryPostBySlug
-// Query: *[_type == "post" && slug.current == $slug && isArchived != true]{      _id,  _updatedAt,  _type,  title,  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  "slug": slug.current,  "author": author->{      name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,  },  mainImage,  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  "tags": tags[]->{    _id,    title,    "slug": slug.current,  } {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  },  publishedAt,  "body": body[]{    ...,    _type == "attachment" => {      ...,      asset->    }  },  }[0]
-export type QueryPostBySlugResult = {
-  _id: string;
-  _updatedAt: string;
-  _type: "post";
-  title: string;
-  excerpt: string;
-  slug: string;
-  author: {
-    name: string;
-    image: {
-      asset: {
-        _id: string;
-        _type: "sanity.imageAsset";
-        metadata: SanityImageMetadata | null;
-        url: string;
-      } | null;
-    };
-    slug: string;
-  };
-  mainImage: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt: string;
-    _type: "image";
-  } | null;
-  categories: Array<{
-    _id: string;
-    title: string;
-    slug: string;
-  }>;
-  tags: Array<{
-    _id: string;
-    title: string;
-    slug: string;
-    rank: 2;
-  }> | null;
-  publishedAt: string;
-  body: Array<
-    | {
-        asset: {
-          _id: string;
-          _type: "sanity.fileAsset";
-          _createdAt: string;
-          _updatedAt: string;
-          _rev: string;
-          originalFilename?: string;
-          label?: string;
-          title?: string;
-          description?: string;
-          altText?: string;
-          sha1hash: string;
-          extension: string;
-          mimeType: string;
-          size: number;
-          assetId: string;
-          uploadId?: string;
-          path: string;
-          url: string;
-          source?: SanityAssetSourceData;
-        };
-        media?: unknown;
-        description: string;
-        _type: "attachment";
-        _key: string;
-      }
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?:
-          | "blockquote"
-          | "h1"
-          | "h2"
-          | "h3"
-          | "h4"
-          | "h5"
-          | "h6"
-          | "normal";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }
-    | {
-        asset: SanityImageAssetReference;
-        media?: unknown;
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        alt: string;
-        _type: "image";
-        _key: string;
-      }
-  >;
-} | null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryAllCategories
-// Query: *[_type == "category"][].slug.current
-export type QueryAllCategoriesResult = Array<string>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryCategoryPaths
-// Query: *[_type == "category" && defined(slug.current)]{"category": slug.current}
-export type QueryCategoryPathsResult = Array<{
-  category: string;
-}>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryCategoryBySlug
-// Query: *[_type == "category" && slug.current == $slug]{    title,    "slug": slug.current,    description,    "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",    "combinedList": [      ...(*[_type == "service" && references(^._id)]{        ...,        tags[]->{          _id,          title,          "slug": slug.current,        }      }),      ...(*[_type == "post" && references(^._id) && isArchived != true]{        _id,        _updatedAt,        _type,        publishedAt,        title,        "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",        "slug": slug.current,        "author": author->{            name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,        },        "categories": categories[]->{          _id,          title,          "slug": slug.current,        },        "tags": tags[]->{          _id,          title,          "slug": slug.current,        }      })    ] {      ...,      "rank": select(        count(tags[title == "Local Resources"]) > 0 => 1,        2      )    } | order(rank),  }[0]
-export type QueryCategoryBySlugResult = {
-  title: string;
-  slug: string;
-  description: BlockContent;
-  excerpt: string;
-  combinedList: Array<
-    | {
-        _id: string;
-        _type: "service";
-        _createdAt: string;
-        _updatedAt: string;
-        _rev: string;
-        title: string;
-        categories: Array<
-          {
-            _key: string;
-          } & CategoryReference
-        >;
-        tags: Array<{
-          _id: string;
-          title: string;
-          slug: string;
-        }> | null;
-        description?: BlockContent;
-        audience?: BlockContent;
-        website?: string;
-        phone?: string;
-        address?: string;
-        businessHours?: Array<
-          {
-            _key: string;
-          } & DayAndTime
-        >;
-        notes?: BlockContent;
-        attachments?: Array<{
-          asset?: SanityFileAssetReference;
-          media?: unknown;
-          name: string;
-          _type: "file";
-          _key: string;
-        }>;
-        rank: 1 | 2;
-      }
-    | {
-        _id: string;
-        _updatedAt: string;
-        _type: "post";
-        publishedAt: string;
-        title: string;
-        excerpt: string;
-        slug: string;
-        author: {
-          name: string;
-          image: {
-            asset: {
-              _id: string;
-              _type: "sanity.imageAsset";
-              metadata: SanityImageMetadata | null;
-              url: string;
-            } | null;
-          };
-          slug: string;
-        };
-        categories: Array<{
-          _id: string;
-          title: string;
-          slug: string;
-        }>;
-        tags: Array<{
-          _id: string;
-          title: string;
-          slug: string;
-        }> | null;
-        rank: 1 | 2;
-      }
-  >;
-} | null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryAllTags
-// Query: *[_type == "tag" && defined(slug.current)][].slug.current
-export type QueryAllTagsResult = Array<string>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryTagPaths
-// Query: *[_type == "tag" && defined(slug.current)]{"tag": slug.current}
-export type QueryTagPathsResult = Array<{
-  tag: string;
-}>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryTagBySlug
-// Query: *[_type == "tag" && slug.current == $slug]{    title,    "slug": slug.current,    description,    "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",    "posts": *[_type == "post" && references(^._id) && isArchived != true]{        _id,  _updatedAt,  _type,  title,  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  "slug": slug.current,  "author": author->{      name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,  },  mainImage,  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  "tags": tags[]->{    _id,    title,    "slug": slug.current,  } {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  },  publishedAt,  "body": body[]{    ...,    _type == "attachment" => {      ...,      asset->    }  },    },    "services": *[_type == "service" && references(^._id)]{      ...,      tags[]->{        _id,        title,        "slug": slug.current,      }    },  }[0]
-export type QueryTagBySlugResult = {
-  title: string;
-  slug: string;
-  description: BlockContent;
-  excerpt: string;
-  posts: Array<{
-    _id: string;
-    _updatedAt: string;
-    _type: "post";
-    title: string;
-    excerpt: string;
-    slug: string;
-    author: {
-      name: string;
-      image: {
-        asset: {
-          _id: string;
-          _type: "sanity.imageAsset";
-          metadata: SanityImageMetadata | null;
-          url: string;
-        } | null;
-      };
-      slug: string;
-    };
-    mainImage: {
       asset?: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
-      alt: string;
       _type: "image";
     } | null;
-    categories: Array<{
-      _id: string;
-      title: string;
-      slug: string;
-    }>;
-    tags: Array<{
-      _id: string;
-      title: string;
-      slug: string;
-      rank: 2;
-    }> | null;
-    publishedAt: string;
-    body: Array<
-      | {
-          asset: {
+    noIndex: boolean | false;
+  };
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryHomePage
+// Query: *[_type == "homePage" && _id == "homePage"][0]{    title,      pageBuilder[]{    _key,    _type,    _type == "heroBlock" => {      heading,      subheading,      image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },      cta {   label,  linkType,  openInNewTab,  "href": select(    linkType == "internal" => select(      internalReference->_type == "page" => "/" + internalReference->slug.current,      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,      internalReference->_type == "category" => "/category/" + internalReference->slug.current,      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,      "/"    ),    linkType == "external" => coalesce(externalUrl, "#"),    "#"  ) }    },    _type == "richTextSection" => {      heading,      body[]{ ..., markDefs[]{ ..., _type == "link" => { ..., "href": href } } }    },    _type == "featuredResources" => {      heading,      resources[]->{   _type,  _id,  title,  "slug": slug.current,  description,    image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  contact { phone, email, website, streetAddress, city, state, zip },  lastVerified,  featured,  "category": category->{ _id, title, "slug": slug.current } }    },    _type == "featuredCategories" => {      heading,      categories[]->{ _id, title, "slug": slug.current, description, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } } }    },    _type == "featuredArticles" => {      heading,      articles[]->{   _type,  _id,  title,  "slug": slug.current,  excerpt,  publishedAt,  contentSource,  featured,  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  "author": author->{ _id, name, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } } } }    },    _type == "featuredGuides" => {      heading,      guides[]->{   _type,  _id,  title,  "slug": slug.current,  excerpt,  lastUpdated,  featured,  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  "author": author->{ _id, name, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } } } }    },    _type == "resourceGrid" => {      heading,      limit,      "category": category->{ _id, title, "slug": slug.current },      "resources": *[_type == "resource" && (!defined(^.category._ref) || category._ref == ^.category._ref)] | order(title asc) {          _type,  _id,  title,  "slug": slug.current,  description,    image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  contact { phone, email, website, streetAddress, city, state, zip },  lastVerified,  featured,  "category": category->{ _id, title, "slug": slug.current }      }    },    _type == "callToAction" => {      heading,      body,      link {   label,  linkType,  openInNewTab,  "href": select(    linkType == "internal" => select(      internalReference->_type == "page" => "/" + internalReference->slug.current,      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,      internalReference->_type == "category" => "/category/" + internalReference->slug.current,      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,      "/"    ),    linkType == "external" => coalesce(externalUrl, "#"),    "#"  ) }    },    _type == "faqBlock" => {      heading,      items[]{ question, answer }    },    _type == "splitImage" => {      heading,      body[]{ ..., markDefs[]{ ..., _type == "link" => { ..., "href": href } } },      image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },      imagePosition    },    _type == "communityAlert" => {      message,      severity,      expiresAt,      link {   label,  linkType,  openInNewTab,  "href": select(    linkType == "internal" => select(      internalReference->_type == "page" => "/" + internalReference->slug.current,      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,      internalReference->_type == "category" => "/category/" + internalReference->slug.current,      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,      "/"    ),    linkType == "external" => coalesce(externalUrl, "#"),    "#"  ) }    }  },      "seo": {    "title": coalesce(seo.title, title, ""),    "description": coalesce(seo.description, excerpt, description, ""),    "image": coalesce(seo.image, mainImage, image),    "noIndex": coalesce(seo.noIndex, false)  }  }
+export type QueryHomePageResult = {
+  title: string;
+  pageBuilder: Array<
+    | {
+        _key: string;
+        _type: "callToAction";
+        heading: string;
+        body: string | null;
+        link: {
+          label: string;
+          linkType: "external" | "internal" | null;
+          openInNewTab: boolean | null;
+          href: string | "/" | "#" | null;
+        };
+      }
+    | {
+        _key: string;
+        _type: "communityAlert";
+        message: string;
+        severity: "info" | "urgent" | "warning" | null;
+        expiresAt: string | null;
+        link: {
+          label: string;
+          linkType: "external" | "internal" | null;
+          openInNewTab: boolean | null;
+          href: string | "/" | "#" | null;
+        } | null;
+      }
+    | {
+        _key: string;
+        _type: "faqBlock";
+        heading: string | null;
+        items: Array<{
+          question: string;
+          answer: string;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "featuredArticles";
+        heading: string | null;
+        articles: Array<{
+          _type: "article";
+          _id: string;
+          title: string;
+          slug: string;
+          excerpt: string | null;
+          publishedAt: string;
+          contentSource: "original" | "syndicated" | null;
+          featured: boolean | null;
+          mainImage: {
+            id: string | null;
+            preview: string | null;
+            alt: string;
+            hotspot: {
+              x: number;
+              y: number;
+            } | null;
+            crop: {
+              bottom: number;
+              left: number;
+              right: number;
+              top: number;
+            } | null;
+          } | null;
+          author: {
             _id: string;
-            _type: "sanity.fileAsset";
-            _createdAt: string;
-            _updatedAt: string;
-            _rev: string;
-            originalFilename?: string;
-            label?: string;
-            title?: string;
-            description?: string;
-            altText?: string;
-            sha1hash: string;
-            extension: string;
-            mimeType: string;
-            size: number;
-            assetId: string;
-            uploadId?: string;
-            path: string;
-            url: string;
-            source?: SanityAssetSourceData;
-          };
-          media?: unknown;
+            name: string;
+            image: {
+              id: string | null;
+              preview: string | null;
+              alt: string | "untitled";
+              hotspot: {
+                x: number;
+                y: number;
+              } | null;
+              crop: {
+                bottom: number;
+                left: number;
+                right: number;
+                top: number;
+              } | null;
+            } | null;
+          } | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "featuredCategories";
+        heading: string | null;
+        categories: Array<{
+          _id: string;
+          title: string;
+          slug: string;
+          description: BlockContent | null;
+          image: {
+            id: string | null;
+            preview: string | null;
+            alt: string | "untitled";
+            hotspot: {
+              x: number;
+              y: number;
+            } | null;
+            crop: {
+              bottom: number;
+              left: number;
+              right: number;
+              top: number;
+            } | null;
+          } | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "featuredGuides";
+        heading: string | null;
+        guides: Array<{
+          _type: "guide";
+          _id: string;
+          title: string;
+          slug: string;
+          excerpt: string | null;
+          lastUpdated: string;
+          featured: boolean | null;
+          mainImage: {
+            id: string | null;
+            preview: string | null;
+            alt: string;
+            hotspot: {
+              x: number;
+              y: number;
+            } | null;
+            crop: {
+              bottom: number;
+              left: number;
+              right: number;
+              top: number;
+            } | null;
+          } | null;
+          author: {
+            _id: string;
+            name: string;
+            image: {
+              id: string | null;
+              preview: string | null;
+              alt: string | "untitled";
+              hotspot: {
+                x: number;
+                y: number;
+              } | null;
+              crop: {
+                bottom: number;
+                left: number;
+                right: number;
+                top: number;
+              } | null;
+            } | null;
+          } | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "featuredResources";
+        heading: string | null;
+        resources: Array<{
+          _type: "resource";
+          _id: string;
+          title: string;
+          slug: string;
           description: string;
-          _type: "attachment";
+          image: {
+            id: string | null;
+            preview: string | null;
+            alt: string | "untitled";
+            hotspot: {
+              x: number;
+              y: number;
+            } | null;
+            crop: {
+              bottom: number;
+              left: number;
+              right: number;
+              top: number;
+            } | null;
+          } | null;
+          contact: {
+            phone: string;
+            email: string | null;
+            website: string | null;
+            streetAddress: string | null;
+            city: string | null;
+            state: string | null;
+            zip: string | null;
+          };
+          lastVerified: string;
+          featured: boolean | null;
+          category: {
+            _id: string;
+            title: string;
+            slug: string;
+          };
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "heroBlock";
+        heading: string;
+        subheading: string | null;
+        image: {
+          id: string | null;
+          preview: string | null;
+          alt: string;
+          hotspot: {
+            x: number;
+            y: number;
+          } | null;
+          crop: {
+            bottom: number;
+            left: number;
+            right: number;
+            top: number;
+          } | null;
+        } | null;
+        cta: {
+          label: string;
+          linkType: "external" | "internal" | null;
+          openInNewTab: boolean | null;
+          href: string | "/" | "#" | null;
+        } | null;
+      }
+    | {
+        _key: string;
+        _type: "resourceGrid";
+        heading: string | null;
+        limit: number | null;
+        category: {
+          _id: string;
+          title: string;
+          slug: string;
+        } | null;
+        resources: Array<{
+          _type: "resource";
+          _id: string;
+          title: string;
+          slug: string;
+          description: string;
+          image: {
+            id: string | null;
+            preview: string | null;
+            alt: string | "untitled";
+            hotspot: {
+              x: number;
+              y: number;
+            } | null;
+            crop: {
+              bottom: number;
+              left: number;
+              right: number;
+              top: number;
+            } | null;
+          } | null;
+          contact: {
+            phone: string;
+            email: string | null;
+            website: string | null;
+            streetAddress: string | null;
+            city: string | null;
+            state: string | null;
+            zip: string | null;
+          };
+          lastVerified: string;
+          featured: boolean | null;
+          category: {
+            _id: string;
+            title: string;
+            slug: string;
+          };
+        }>;
+      }
+    | {
+        _key: string;
+        _type: "richTextSection";
+        heading: string | null;
+        body: Array<
+          | {
+              asset?: SanityFileAssetReference;
+              media?: unknown;
+              description: string;
+              _type: "attachment";
+              _key: string;
+              markDefs: null;
+            }
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?:
+                | "blockquote"
+                | "h1"
+                | "h2"
+                | "h3"
+                | "h4"
+                | "h5"
+                | "h6"
+                | "normal";
+              listItem?: "bullet" | "number";
+              markDefs: Array<{
+                href: string | null;
+                _type: "link";
+                _key: string;
+              }> | null;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: SanityImageAssetReference;
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt: string;
+              _type: "image";
+              _key: string;
+              markDefs: null;
+            }
+        > | null;
+      }
+    | {
+        _key: string;
+        _type: "splitImage";
+        heading: string | null;
+        body: Array<
+          | {
+              asset?: SanityFileAssetReference;
+              media?: unknown;
+              description: string;
+              _type: "attachment";
+              _key: string;
+              markDefs: null;
+            }
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?:
+                | "blockquote"
+                | "h1"
+                | "h2"
+                | "h3"
+                | "h4"
+                | "h5"
+                | "h6"
+                | "normal";
+              listItem?: "bullet" | "number";
+              markDefs: Array<{
+                href: string | null;
+                _type: "link";
+                _key: string;
+              }> | null;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: SanityImageAssetReference;
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt: string;
+              _type: "image";
+              _key: string;
+              markDefs: null;
+            }
+        > | null;
+        image: {
+          id: string | null;
+          preview: string | null;
+          alt: string;
+          hotspot: {
+            x: number;
+            y: number;
+          } | null;
+          crop: {
+            bottom: number;
+            left: number;
+            right: number;
+            top: number;
+          } | null;
+        } | null;
+        imagePosition: "left" | "right" | null;
+      }
+  > | null;
+  seo: {
+    title: string;
+    description: string | "";
+    image: {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    } | null;
+    noIndex: boolean | false;
+  };
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryMainNavigation
+// Query: *[_type == "mainNavigation" && _id == "mainNavigation"][0]{    items[]{      _key,      link {   label,  linkType,  openInNewTab,  "href": select(    linkType == "internal" => select(      internalReference->_type == "page" => "/" + internalReference->slug.current,      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,      internalReference->_type == "category" => "/category/" + internalReference->slug.current,      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,      "/"    ),    linkType == "external" => coalesce(externalUrl, "#"),    "#"  ) },      children[]{   label,  linkType,  openInNewTab,  "href": select(    linkType == "internal" => select(      internalReference->_type == "page" => "/" + internalReference->slug.current,      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,      internalReference->_type == "category" => "/category/" + internalReference->slug.current,      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,      "/"    ),    linkType == "external" => coalesce(externalUrl, "#"),    "#"  ) }    }  }
+export type QueryMainNavigationResult = {
+  items: Array<{
+    _key: string;
+    link: {
+      label: string;
+      linkType: "external" | "internal" | null;
+      openInNewTab: boolean | null;
+      href: string | "/" | "#" | null;
+    };
+    children: Array<{
+      label: string;
+      linkType: "external" | "internal" | null;
+      openInNewTab: boolean | null;
+      href: string | "/" | "#" | null;
+    }> | null;
+  }> | null;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: querySiteFooter
+// Query: *[_type == "siteFooter" && _id == "siteFooter"][0]{    tagline,    copyright,    columns[]{      _key,      heading,      links[]{   label,  linkType,  openInNewTab,  "href": select(    linkType == "internal" => select(      internalReference->_type == "page" => "/" + internalReference->slug.current,      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,      internalReference->_type == "category" => "/category/" + internalReference->slug.current,      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,      "/"    ),    linkType == "external" => coalesce(externalUrl, "#"),    "#"  ) }    }  }
+export type QuerySiteFooterResult = {
+  tagline: string | null;
+  copyright: string | null;
+  columns: Array<{
+    _key: string;
+    heading: string;
+    links: Array<{
+      label: string;
+      linkType: "external" | "internal" | null;
+      openInNewTab: boolean | null;
+      href: string | "/" | "#" | null;
+    }> | null;
+  }> | null;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryResourceBySlug
+// Query: *[_type == "resource" && slug.current == $slug][0]{    _id,    _updatedAt,    title,    "slug": slug.current,    description,      body[]{    ...,    _type == "block" => {      ...,      markDefs[]{        ...,        _type == "link" => { ..., "href": href }      }    },    _type == "image" => {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top }, caption },    _type == "attachment" => { ..., "url": asset->url }  },    image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },    contact { phone, email, website, streetAddress, city, state, zip },    hours[]{ day, opensAt, closesAt },    lastVerified,    featured,    "category": category->{ _id, title, "slug": slug.current },    "tags": tags[]->{ _id, title, "slug": slug.current },      "seo": {    "title": coalesce(seo.title, title, ""),    "description": coalesce(seo.description, excerpt, description, ""),    "image": coalesce(seo.image, mainImage, image),    "noIndex": coalesce(seo.noIndex, false)  }  }
+export type QueryResourceBySlugResult = {
+  _id: string;
+  _updatedAt: string;
+  title: string;
+  slug: string;
+  description: string;
+  body: Array<
+    | {
+        asset?: SanityFileAssetReference;
+        media?: unknown;
+        description: string;
+        _type: "attachment";
+        _key: string;
+        url: string | null;
+      }
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
           _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
+        listItem?: "bullet" | "number";
+        markDefs: Array<{
+          href: string | null;
+          _type: "link";
+          _key: string;
+        }> | null;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot: {
+          x: number;
+          y: number;
+        } | null;
+        crop: {
+          bottom: number;
+          left: number;
+          right: number;
+          top: number;
+        } | null;
+        alt: string;
+        _type: "image";
+        _key: string;
+        id: string | null;
+        preview: string | null;
+        caption: null;
+      }
+  > | null;
+  image: {
+    id: string | null;
+    preview: string | null;
+    alt: string | "untitled";
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      bottom: number;
+      left: number;
+      right: number;
+      top: number;
+    } | null;
+  } | null;
+  contact: {
+    phone: string;
+    email: string | null;
+    website: string | null;
+    streetAddress: string | null;
+    city: string | null;
+    state: string | null;
+    zip: string | null;
+  };
+  hours: Array<{
+    day:
+      | "Friday"
+      | "Monday"
+      | "Saturday"
+      | "Sunday"
+      | "Thursday"
+      | "Tuesday"
+      | "Wednesday"
+      | null;
+    opensAt: TimeValue | null;
+    closesAt: TimeValue | null;
+  }> | null;
+  lastVerified: string;
+  featured: boolean | null;
+  category: {
+    _id: string;
+    title: string;
+    slug: string;
+  };
+  tags: Array<{
+    _id: string;
+    title: string;
+    slug: string;
+  }> | null;
+  seo: {
+    title: string;
+    description: string;
+    image:
+      | {
+          asset?: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
         }
       | {
-          children?: Array<{
-            marks?: Array<string>;
-            text?: string;
-            _type: "span";
-            _key: string;
-          }>;
-          style?:
-            | "blockquote"
-            | "h1"
-            | "h2"
-            | "h3"
-            | "h4"
-            | "h5"
-            | "h6"
-            | "normal";
-          listItem?: "bullet" | "number";
-          markDefs?: Array<{
-            href?: string;
-            _type: "link";
-            _key: string;
-          }>;
-          level?: number;
-          _type: "block";
-          _key: string;
+          asset?: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
         }
+      | null;
+    noIndex: boolean | false;
+  };
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryResourcesIndex
+// Query: *[_type == "resource"    && (coalesce($category, "") == "" || category->slug.current == $category)    && (coalesce($tag, "") == "" || $tag in tags[]->slug.current)  ] | order(title asc) [$start...$end]{      _type,  _id,  title,  "slug": slug.current,  description,    image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  contact { phone, email, website, streetAddress, city, state, zip },  lastVerified,  featured,  "category": category->{ _id, title, "slug": slug.current }  }
+export type QueryResourcesIndexResult = Array<{
+  _type: "resource";
+  _id: string;
+  title: string;
+  slug: string;
+  description: string;
+  image: {
+    id: string | null;
+    preview: string | null;
+    alt: string | "untitled";
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      bottom: number;
+      left: number;
+      right: number;
+      top: number;
+    } | null;
+  } | null;
+  contact: {
+    phone: string;
+    email: string | null;
+    website: string | null;
+    streetAddress: string | null;
+    city: string | null;
+    state: string | null;
+    zip: string | null;
+  };
+  lastVerified: string;
+  featured: boolean | null;
+  category: {
+    _id: string;
+    title: string;
+    slug: string;
+  };
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryResourcesCount
+// Query: count(*[_type == "resource"    && (coalesce($category, "") == "" || category->slug.current == $category)    && (coalesce($tag, "") == "" || $tag in tags[]->slug.current)  ])
+export type QueryResourcesCountResult = number;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryResourceSlugs
+// Query: *[_type == "resource" && defined(slug.current)]{ "slug": slug.current }
+export type QueryResourceSlugsResult = Array<{
+  slug: string;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryArticleBySlug
+// Query: *[_type == "article" && slug.current == $slug][0]{    _id,    _updatedAt,    title,    "slug": slug.current,    excerpt,      body[]{    ...,    _type == "block" => {      ...,      markDefs[]{        ...,        _type == "link" => { ..., "href": href }      }    },    _type == "image" => {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top }, caption },    _type == "attachment" => { ..., "url": asset->url }  },    mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },    publishedAt,    contentSource,    syndication {      originalPublication,      originalUrl,      originalAuthor,      republishedAt,      attribution,    },    "author": author->{ _id, name, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } } },    "category": category->{ _id, title, "slug": slug.current },    "tags": tags[]->{ _id, title, "slug": slug.current },      "seo": {    "title": coalesce(seo.title, title, ""),    "description": coalesce(seo.description, excerpt, description, ""),    "image": coalesce(seo.image, mainImage, image),    "noIndex": coalesce(seo.noIndex, false)  }  }
+export type QueryArticleBySlugResult = {
+  _id: string;
+  _updatedAt: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  body: Array<
+    | {
+        asset?: SanityFileAssetReference;
+        media?: unknown;
+        description: string;
+        _type: "attachment";
+        _key: string;
+        url: string | null;
+      }
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
+        listItem?: "bullet" | "number";
+        markDefs: Array<{
+          href: string | null;
+          _type: "link";
+          _key: string;
+        }> | null;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot: {
+          x: number;
+          y: number;
+        } | null;
+        crop: {
+          bottom: number;
+          left: number;
+          right: number;
+          top: number;
+        } | null;
+        alt: string;
+        _type: "image";
+        _key: string;
+        id: string | null;
+        preview: string | null;
+        caption: null;
+      }
+  >;
+  mainImage: {
+    id: string | null;
+    preview: string | null;
+    alt: string;
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      bottom: number;
+      left: number;
+      right: number;
+      top: number;
+    } | null;
+  } | null;
+  publishedAt: string;
+  contentSource: "original" | "syndicated" | null;
+  syndication: {
+    originalPublication: string | null;
+    originalUrl: string | null;
+    originalAuthor: string | null;
+    republishedAt: string | null;
+    attribution: string | null;
+  } | null;
+  author: {
+    _id: string;
+    name: string;
+    image: {
+      id: string | null;
+      preview: string | null;
+      alt: string | "untitled";
+      hotspot: {
+        x: number;
+        y: number;
+      } | null;
+      crop: {
+        bottom: number;
+        left: number;
+        right: number;
+        top: number;
+      } | null;
+    } | null;
+  } | null;
+  category: {
+    _id: string;
+    title: string;
+    slug: string;
+  } | null;
+  tags: Array<{
+    _id: string;
+    title: string;
+    slug: string;
+  }> | null;
+  seo: {
+    title: string;
+    description: string | "";
+    image:
       | {
-          asset: SanityImageAssetReference;
+          asset?: SanityImageAssetReference;
           media?: unknown;
           hotspot?: SanityImageHotspot;
           crop?: SanityImageCrop;
           alt: string;
           _type: "image";
-          _key: string;
-        }
-    >;
-  }>;
-  services: Array<{
-    _id: string;
-    _type: "service";
-    _createdAt: string;
-    _updatedAt: string;
-    _rev: string;
-    title: string;
-    categories: Array<
-      {
-        _key: string;
-      } & CategoryReference
-    >;
-    tags: Array<{
-      _id: string;
-      title: string;
-      slug: string;
-    }> | null;
-    description?: BlockContent;
-    audience?: BlockContent;
-    website?: string;
-    phone?: string;
-    address?: string;
-    businessHours?: Array<
-      {
-        _key: string;
-      } & DayAndTime
-    >;
-    notes?: BlockContent;
-    attachments?: Array<{
-      asset?: SanityFileAssetReference;
-      media?: unknown;
-      name: string;
-      _type: "file";
-      _key: string;
-    }>;
-  }>;
-} | null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: querySearch
-// Query: *[(_type == "post" && isArchived != true && (title match "*" + $searchTerm + "*" || tags[]->title match "*" + $searchTerm + "*" || categories[]->title match "*" + $searchTerm + "*")) ||  (_type == "service" && (title match "*" + $searchTerm + "*" || tags[]->title match "*" + $searchTerm + "*" || categories[]->title match "*" + $searchTerm + "*"))] | score(    boost(title match "*" + $searchTerm + "*", 4)  )| order(_score desc){    ...,    _score,    _type == "post" => {        _id,  _updatedAt,  _type,  title,  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",  "slug": slug.current,  "author": author->{      name,  "image": {    "asset": image.asset->{      _id,      _type,      metadata,      url    }  },  "slug": slug.current,  },  mainImage,  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  "tags": tags[]->{    _id,    title,    "slug": slug.current,  } {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  },  publishedAt,  "body": body[]{    ...,    _type == "attachment" => {      ...,      asset->    }  },    },    _type == "service" => {      ...,      tags[]->{        _id,        title,        "slug": slug.current,      }    },  }
-export type QuerySearchResult = Array<
-  | {
-      _id: string;
-      _type: "post";
-      _createdAt: string;
-      _updatedAt: string;
-      _rev: string;
-      title: string;
-      slug: string;
-      author: {
-        name: string;
-        image: {
-          asset: {
-            _id: string;
-            _type: "sanity.imageAsset";
-            metadata: SanityImageMetadata | null;
-            url: string;
-          } | null;
-        };
-        slug: string;
-      };
-      mainImage: {
-        asset?: SanityImageAssetReference;
-        media?: unknown;
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        alt: string;
-        _type: "image";
-      } | null;
-      categories: Array<{
-        _id: string;
-        title: string;
-        slug: string;
-      }>;
-      tags: Array<{
-        _id: string;
-        title: string;
-        slug: string;
-        rank: 2;
-      }> | null;
-      publishedAt: string;
-      isArchived?: boolean;
-      body: Array<
-        | {
-            asset: {
-              _id: string;
-              _type: "sanity.fileAsset";
-              _createdAt: string;
-              _updatedAt: string;
-              _rev: string;
-              originalFilename?: string;
-              label?: string;
-              title?: string;
-              description?: string;
-              altText?: string;
-              sha1hash: string;
-              extension: string;
-              mimeType: string;
-              size: number;
-              assetId: string;
-              uploadId?: string;
-              path: string;
-              url: string;
-              source?: SanityAssetSourceData;
-            };
-            media?: unknown;
-            description: string;
-            _type: "attachment";
-            _key: string;
-          }
-        | {
-            children?: Array<{
-              marks?: Array<string>;
-              text?: string;
-              _type: "span";
-              _key: string;
-            }>;
-            style?:
-              | "blockquote"
-              | "h1"
-              | "h2"
-              | "h3"
-              | "h4"
-              | "h5"
-              | "h6"
-              | "normal";
-            listItem?: "bullet" | "number";
-            markDefs?: Array<{
-              href?: string;
-              _type: "link";
-              _key: string;
-            }>;
-            level?: number;
-            _type: "block";
-            _key: string;
-          }
-        | {
-            asset: SanityImageAssetReference;
-            media?: unknown;
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            alt: string;
-            _type: "image";
-            _key: string;
-          }
-      >;
-      _score: null;
-      excerpt: string;
-    }
-  | {
-      _id: string;
-      _type: "service";
-      _createdAt: string;
-      _updatedAt: string;
-      _rev: string;
-      title: string;
-      categories: Array<
-        {
-          _key: string;
-        } & CategoryReference
-      >;
-      tags: Array<{
-        _id: string;
-        title: string;
-        slug: string;
-      }> | null;
-      description?: BlockContent;
-      audience?: BlockContent;
-      website?: string;
-      phone?: string;
-      address?: string;
-      businessHours?: Array<
-        {
-          _key: string;
-        } & DayAndTime
-      >;
-      notes?: BlockContent;
-      attachments?: Array<{
-        asset?: SanityFileAssetReference;
-        media?: unknown;
-        name: string;
-        _type: "file";
-        _key: string;
-      }>;
-      _score: null;
-    }
->;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryNavigation
-// Query: *[_type == "navigation"][0]{    "headerPrimary": headerPrimary[]{      _key,      "link": link{        url,        text,        reference->{          _id,          _type,          title,          "slug": slug.current        }      },      children    },    "footer": footer[]{      _key,      url,      text,      reference->{        _id,        _type,        title,        "slug": slug.current      }    },  }
-export type QueryNavigationResult = {
-  headerPrimary: Array<{
-    _key: string;
-    link: {
-      url: string | null;
-      text: string | null;
-      reference:
-        | {
-            _id: string;
-            _type: "category";
-            title: string;
-            slug: string;
-          }
-        | {
-            _id: string;
-            _type: "page";
-            title: string;
-            slug: string;
-          }
-        | {
-            _id: string;
-            _type: "tag";
-            title: string;
-            slug: string;
-          }
-        | null;
-    } | null;
-    children: Array<{
-      link?: Link;
-      _type: "item";
-      _key: string;
-    }> | null;
-  }> | null;
-  footer: Array<{
-    _key: string;
-    url: string | null;
-    text: string | null;
-    reference:
-      | {
-          _id: string;
-          _type: "category";
-          title: string;
-          slug: string;
         }
       | {
-          _id: string;
-          _type: "page";
-          title: string;
-          slug: string;
-        }
-      | {
-          _id: string;
-          _type: "tag";
-          title: string;
-          slug: string;
+          asset?: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
         }
       | null;
-  }> | null;
+    noIndex: boolean | false;
+  };
 } | null;
 
 // Source: ../../packages/sanity/src/queries.ts
-// Variable: queryPageBySlug
-// Query: *[_type == "page" && slug.current == $slug][0]{    title,    "slug": slug.current,    "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",    "body": body[]{      ...,      _type == "attachment" => {        ...,        asset->      }    },  }
-export type QueryPageBySlugResult = {
+// Variable: queryArticlesIndex
+// Query: *[_type == "article"] | order(publishedAt desc) [$start...$end]{      _type,  _id,  title,  "slug": slug.current,  excerpt,  publishedAt,  contentSource,  featured,  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  "author": author->{ _id, name, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } } }  }
+export type QueryArticlesIndexResult = Array<{
+  _type: "article";
+  _id: string;
   title: string;
   slug: string;
-  excerpt: string;
+  excerpt: string | null;
+  publishedAt: string;
+  contentSource: "original" | "syndicated" | null;
+  featured: boolean | null;
+  mainImage: {
+    id: string | null;
+    preview: string | null;
+    alt: string;
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      bottom: number;
+      left: number;
+      right: number;
+      top: number;
+    } | null;
+  } | null;
+  author: {
+    _id: string;
+    name: string;
+    image: {
+      id: string | null;
+      preview: string | null;
+      alt: string | "untitled";
+      hotspot: {
+        x: number;
+        y: number;
+      } | null;
+      crop: {
+        bottom: number;
+        left: number;
+        right: number;
+        top: number;
+      } | null;
+    } | null;
+  } | null;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryArticlesCount
+// Query: count(*[_type == "article"])
+export type QueryArticlesCountResult = number;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryArticleSlugs
+// Query: *[_type == "article" && defined(slug.current)]{ "slug": slug.current }
+export type QueryArticleSlugsResult = Array<{
+  slug: string;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryGuideBySlug
+// Query: *[_type == "guide" && slug.current == $slug][0]{    _id,    _updatedAt,    title,    "slug": slug.current,    excerpt,      body[]{    ...,    _type == "block" => {      ...,      markDefs[]{        ...,        _type == "link" => { ..., "href": href }      }    },    _type == "image" => {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top }, caption },    _type == "attachment" => { ..., "url": asset->url }  },    steps[]{ title, body },    mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },    lastUpdated,    "author": author->{ _id, name, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } } },    "category": category->{ _id, title, "slug": slug.current },    "tags": tags[]->{ _id, title, "slug": slug.current },      "seo": {    "title": coalesce(seo.title, title, ""),    "description": coalesce(seo.description, excerpt, description, ""),    "image": coalesce(seo.image, mainImage, image),    "noIndex": coalesce(seo.noIndex, false)  }  }
+export type QueryGuideBySlugResult = {
+  _id: string;
+  _updatedAt: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
   body: Array<
     | {
-        asset: {
-          _id: string;
-          _type: "sanity.fileAsset";
-          _createdAt: string;
-          _updatedAt: string;
-          _rev: string;
-          originalFilename?: string;
-          label?: string;
-          title?: string;
-          description?: string;
-          altText?: string;
-          sha1hash: string;
-          extension: string;
-          mimeType: string;
-          size: number;
-          assetId: string;
-          uploadId?: string;
-          path: string;
-          url: string;
-          source?: SanityAssetSourceData;
-        };
+        asset?: SanityFileAssetReference;
         media?: unknown;
         description: string;
         _type: "attachment";
         _key: string;
+        url: string | null;
       }
     | {
         children?: Array<{
@@ -1723,61 +1916,1282 @@ export type QueryPageBySlugResult = {
           | "h6"
           | "normal";
         listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
+        markDefs: Array<{
+          href: string | null;
           _type: "link";
           _key: string;
-        }>;
+        }> | null;
         level?: number;
         _type: "block";
         _key: string;
       }
     | {
-        asset: SanityImageAssetReference;
+        asset?: SanityImageAssetReference;
         media?: unknown;
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
+        hotspot: {
+          x: number;
+          y: number;
+        } | null;
+        crop: {
+          bottom: number;
+          left: number;
+          right: number;
+          top: number;
+        } | null;
         alt: string;
         _type: "image";
         _key: string;
+        id: string | null;
+        preview: string | null;
+        caption: null;
       }
   >;
+  steps: Array<{
+    title: string;
+    body: string | null;
+  }> | null;
+  mainImage: {
+    id: string | null;
+    preview: string | null;
+    alt: string;
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      bottom: number;
+      left: number;
+      right: number;
+      top: number;
+    } | null;
+  } | null;
+  lastUpdated: string;
+  author: {
+    _id: string;
+    name: string;
+    image: {
+      id: string | null;
+      preview: string | null;
+      alt: string | "untitled";
+      hotspot: {
+        x: number;
+        y: number;
+      } | null;
+      crop: {
+        bottom: number;
+        left: number;
+        right: number;
+        top: number;
+      } | null;
+    } | null;
+  } | null;
+  category: {
+    _id: string;
+    title: string;
+    slug: string;
+  } | null;
+  tags: Array<{
+    _id: string;
+    title: string;
+    slug: string;
+  }> | null;
+  seo: {
+    title: string;
+    description: string | "";
+    image:
+      | {
+          asset?: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt: string;
+          _type: "image";
+        }
+      | {
+          asset?: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        }
+      | null;
+    noIndex: boolean | false;
+  };
 } | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryGuidesIndex
+// Query: *[_type == "guide"] | order(lastUpdated desc) [$start...$end]{      _type,  _id,  title,  "slug": slug.current,  excerpt,  lastUpdated,  featured,  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  "author": author->{ _id, name, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } } }  }
+export type QueryGuidesIndexResult = Array<{
+  _type: "guide";
+  _id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  lastUpdated: string;
+  featured: boolean | null;
+  mainImage: {
+    id: string | null;
+    preview: string | null;
+    alt: string;
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      bottom: number;
+      left: number;
+      right: number;
+      top: number;
+    } | null;
+  } | null;
+  author: {
+    _id: string;
+    name: string;
+    image: {
+      id: string | null;
+      preview: string | null;
+      alt: string | "untitled";
+      hotspot: {
+        x: number;
+        y: number;
+      } | null;
+      crop: {
+        bottom: number;
+        left: number;
+        right: number;
+        top: number;
+      } | null;
+    } | null;
+  } | null;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryGuidesCount
+// Query: count(*[_type == "guide"])
+export type QueryGuidesCountResult = number;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryGuideSlugs
+// Query: *[_type == "guide" && defined(slug.current)]{ "slug": slug.current }
+export type QueryGuideSlugsResult = Array<{
+  slug: string;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryPageBySlug
+// Query: *[_type == "page" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,      pageBuilder[]{    _key,    _type,    _type == "heroBlock" => {      heading,      subheading,      image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },      cta {   label,  linkType,  openInNewTab,  "href": select(    linkType == "internal" => select(      internalReference->_type == "page" => "/" + internalReference->slug.current,      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,      internalReference->_type == "category" => "/category/" + internalReference->slug.current,      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,      "/"    ),    linkType == "external" => coalesce(externalUrl, "#"),    "#"  ) }    },    _type == "richTextSection" => {      heading,      body[]{ ..., markDefs[]{ ..., _type == "link" => { ..., "href": href } } }    },    _type == "featuredResources" => {      heading,      resources[]->{   _type,  _id,  title,  "slug": slug.current,  description,    image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  contact { phone, email, website, streetAddress, city, state, zip },  lastVerified,  featured,  "category": category->{ _id, title, "slug": slug.current } }    },    _type == "featuredCategories" => {      heading,      categories[]->{ _id, title, "slug": slug.current, description, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } } }    },    _type == "featuredArticles" => {      heading,      articles[]->{   _type,  _id,  title,  "slug": slug.current,  excerpt,  publishedAt,  contentSource,  featured,  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  "author": author->{ _id, name, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } } } }    },    _type == "featuredGuides" => {      heading,      guides[]->{   _type,  _id,  title,  "slug": slug.current,  excerpt,  lastUpdated,  featured,  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  "author": author->{ _id, name, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } } } }    },    _type == "resourceGrid" => {      heading,      limit,      "category": category->{ _id, title, "slug": slug.current },      "resources": *[_type == "resource" && (!defined(^.category._ref) || category._ref == ^.category._ref)] | order(title asc) {          _type,  _id,  title,  "slug": slug.current,  description,    image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  contact { phone, email, website, streetAddress, city, state, zip },  lastVerified,  featured,  "category": category->{ _id, title, "slug": slug.current }      }    },    _type == "callToAction" => {      heading,      body,      link {   label,  linkType,  openInNewTab,  "href": select(    linkType == "internal" => select(      internalReference->_type == "page" => "/" + internalReference->slug.current,      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,      internalReference->_type == "category" => "/category/" + internalReference->slug.current,      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,      "/"    ),    linkType == "external" => coalesce(externalUrl, "#"),    "#"  ) }    },    _type == "faqBlock" => {      heading,      items[]{ question, answer }    },    _type == "splitImage" => {      heading,      body[]{ ..., markDefs[]{ ..., _type == "link" => { ..., "href": href } } },      image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },      imagePosition    },    _type == "communityAlert" => {      message,      severity,      expiresAt,      link {   label,  linkType,  openInNewTab,  "href": select(    linkType == "internal" => select(      internalReference->_type == "page" => "/" + internalReference->slug.current,      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,      internalReference->_type == "category" => "/category/" + internalReference->slug.current,      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,      "/"    ),    linkType == "external" => coalesce(externalUrl, "#"),    "#"  ) }    }  },      "seo": {    "title": coalesce(seo.title, title, ""),    "description": coalesce(seo.description, excerpt, description, ""),    "image": coalesce(seo.image, mainImage, image),    "noIndex": coalesce(seo.noIndex, false)  }  }
+export type QueryPageBySlugResult = {
+  _id: string;
+  title: string;
+  slug: string;
+  pageBuilder: Array<
+    | {
+        _key: string;
+        _type: "callToAction";
+        heading: string;
+        body: string | null;
+        link: {
+          label: string;
+          linkType: "external" | "internal" | null;
+          openInNewTab: boolean | null;
+          href: string | "/" | "#" | null;
+        };
+      }
+    | {
+        _key: string;
+        _type: "communityAlert";
+        message: string;
+        severity: "info" | "urgent" | "warning" | null;
+        expiresAt: string | null;
+        link: {
+          label: string;
+          linkType: "external" | "internal" | null;
+          openInNewTab: boolean | null;
+          href: string | "/" | "#" | null;
+        } | null;
+      }
+    | {
+        _key: string;
+        _type: "faqBlock";
+        heading: string | null;
+        items: Array<{
+          question: string;
+          answer: string;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "featuredArticles";
+        heading: string | null;
+        articles: Array<{
+          _type: "article";
+          _id: string;
+          title: string;
+          slug: string;
+          excerpt: string | null;
+          publishedAt: string;
+          contentSource: "original" | "syndicated" | null;
+          featured: boolean | null;
+          mainImage: {
+            id: string | null;
+            preview: string | null;
+            alt: string;
+            hotspot: {
+              x: number;
+              y: number;
+            } | null;
+            crop: {
+              bottom: number;
+              left: number;
+              right: number;
+              top: number;
+            } | null;
+          } | null;
+          author: {
+            _id: string;
+            name: string;
+            image: {
+              id: string | null;
+              preview: string | null;
+              alt: string | "untitled";
+              hotspot: {
+                x: number;
+                y: number;
+              } | null;
+              crop: {
+                bottom: number;
+                left: number;
+                right: number;
+                top: number;
+              } | null;
+            } | null;
+          } | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "featuredCategories";
+        heading: string | null;
+        categories: Array<{
+          _id: string;
+          title: string;
+          slug: string;
+          description: BlockContent | null;
+          image: {
+            id: string | null;
+            preview: string | null;
+            alt: string | "untitled";
+            hotspot: {
+              x: number;
+              y: number;
+            } | null;
+            crop: {
+              bottom: number;
+              left: number;
+              right: number;
+              top: number;
+            } | null;
+          } | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "featuredGuides";
+        heading: string | null;
+        guides: Array<{
+          _type: "guide";
+          _id: string;
+          title: string;
+          slug: string;
+          excerpt: string | null;
+          lastUpdated: string;
+          featured: boolean | null;
+          mainImage: {
+            id: string | null;
+            preview: string | null;
+            alt: string;
+            hotspot: {
+              x: number;
+              y: number;
+            } | null;
+            crop: {
+              bottom: number;
+              left: number;
+              right: number;
+              top: number;
+            } | null;
+          } | null;
+          author: {
+            _id: string;
+            name: string;
+            image: {
+              id: string | null;
+              preview: string | null;
+              alt: string | "untitled";
+              hotspot: {
+                x: number;
+                y: number;
+              } | null;
+              crop: {
+                bottom: number;
+                left: number;
+                right: number;
+                top: number;
+              } | null;
+            } | null;
+          } | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "featuredResources";
+        heading: string | null;
+        resources: Array<{
+          _type: "resource";
+          _id: string;
+          title: string;
+          slug: string;
+          description: string;
+          image: {
+            id: string | null;
+            preview: string | null;
+            alt: string | "untitled";
+            hotspot: {
+              x: number;
+              y: number;
+            } | null;
+            crop: {
+              bottom: number;
+              left: number;
+              right: number;
+              top: number;
+            } | null;
+          } | null;
+          contact: {
+            phone: string;
+            email: string | null;
+            website: string | null;
+            streetAddress: string | null;
+            city: string | null;
+            state: string | null;
+            zip: string | null;
+          };
+          lastVerified: string;
+          featured: boolean | null;
+          category: {
+            _id: string;
+            title: string;
+            slug: string;
+          };
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "heroBlock";
+        heading: string;
+        subheading: string | null;
+        image: {
+          id: string | null;
+          preview: string | null;
+          alt: string;
+          hotspot: {
+            x: number;
+            y: number;
+          } | null;
+          crop: {
+            bottom: number;
+            left: number;
+            right: number;
+            top: number;
+          } | null;
+        } | null;
+        cta: {
+          label: string;
+          linkType: "external" | "internal" | null;
+          openInNewTab: boolean | null;
+          href: string | "/" | "#" | null;
+        } | null;
+      }
+    | {
+        _key: string;
+        _type: "resourceGrid";
+        heading: string | null;
+        limit: number | null;
+        category: {
+          _id: string;
+          title: string;
+          slug: string;
+        } | null;
+        resources: Array<{
+          _type: "resource";
+          _id: string;
+          title: string;
+          slug: string;
+          description: string;
+          image: {
+            id: string | null;
+            preview: string | null;
+            alt: string | "untitled";
+            hotspot: {
+              x: number;
+              y: number;
+            } | null;
+            crop: {
+              bottom: number;
+              left: number;
+              right: number;
+              top: number;
+            } | null;
+          } | null;
+          contact: {
+            phone: string;
+            email: string | null;
+            website: string | null;
+            streetAddress: string | null;
+            city: string | null;
+            state: string | null;
+            zip: string | null;
+          };
+          lastVerified: string;
+          featured: boolean | null;
+          category: {
+            _id: string;
+            title: string;
+            slug: string;
+          };
+        }>;
+      }
+    | {
+        _key: string;
+        _type: "richTextSection";
+        heading: string | null;
+        body: Array<
+          | {
+              asset?: SanityFileAssetReference;
+              media?: unknown;
+              description: string;
+              _type: "attachment";
+              _key: string;
+              markDefs: null;
+            }
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?:
+                | "blockquote"
+                | "h1"
+                | "h2"
+                | "h3"
+                | "h4"
+                | "h5"
+                | "h6"
+                | "normal";
+              listItem?: "bullet" | "number";
+              markDefs: Array<{
+                href: string | null;
+                _type: "link";
+                _key: string;
+              }> | null;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: SanityImageAssetReference;
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt: string;
+              _type: "image";
+              _key: string;
+              markDefs: null;
+            }
+        > | null;
+      }
+    | {
+        _key: string;
+        _type: "splitImage";
+        heading: string | null;
+        body: Array<
+          | {
+              asset?: SanityFileAssetReference;
+              media?: unknown;
+              description: string;
+              _type: "attachment";
+              _key: string;
+              markDefs: null;
+            }
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?:
+                | "blockquote"
+                | "h1"
+                | "h2"
+                | "h3"
+                | "h4"
+                | "h5"
+                | "h6"
+                | "normal";
+              listItem?: "bullet" | "number";
+              markDefs: Array<{
+                href: string | null;
+                _type: "link";
+                _key: string;
+              }> | null;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: SanityImageAssetReference;
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt: string;
+              _type: "image";
+              _key: string;
+              markDefs: null;
+            }
+        > | null;
+        image: {
+          id: string | null;
+          preview: string | null;
+          alt: string;
+          hotspot: {
+            x: number;
+            y: number;
+          } | null;
+          crop: {
+            bottom: number;
+            left: number;
+            right: number;
+            top: number;
+          } | null;
+        } | null;
+        imagePosition: "left" | "right" | null;
+      }
+  > | null;
+  seo: {
+    title: string;
+    description: string | "";
+    image: {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    } | null;
+    noIndex: boolean | false;
+  };
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryPageSlugs
+// Query: *[_type == "page" && defined(slug.current)]{ "slug": slug.current }
+export type QueryPageSlugsResult = Array<{
+  slug: string;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryCategoryBySlug
+// Query: *[_type == "category" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    description,    "descriptionText": pt::text(description),    isFeatured,    image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },    "parent": parent->{ _id, title, "slug": slug.current },    "seo": {      "title": coalesce(seo.title, title, ""),      "description": coalesce(seo.description, pt::text(description), ""),      "image": coalesce(seo.image, image),      "noIndex": coalesce(seo.noIndex, false)    }  }
+export type QueryCategoryBySlugResult = {
+  _id: string;
+  title: string;
+  slug: string;
+  description: BlockContent | null;
+  descriptionText: string;
+  isFeatured: boolean | null;
+  image: {
+    id: string | null;
+    preview: string | null;
+    alt: string | "untitled";
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      bottom: number;
+      left: number;
+      right: number;
+      top: number;
+    } | null;
+  } | null;
+  parent: {
+    _id: string;
+    title: string;
+    slug: string;
+  } | null;
+  seo: {
+    title: string;
+    description: string;
+    image:
+      | {
+          asset?: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+        }
+      | {
+          asset?: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        }
+      | null;
+    noIndex: boolean | false;
+  };
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryCategoryContent
+// Query: {    "resources": *[_type == "resource" && category->slug.current == $slug] | order(title asc){        _type,  _id,  title,  "slug": slug.current,  description,    image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  contact { phone, email, website, streetAddress, city, state, zip },  lastVerified,  featured,  "category": category->{ _id, title, "slug": slug.current }    },    "articles": *[_type == "article" && category->slug.current == $slug] | order(publishedAt desc){        _type,  _id,  title,  "slug": slug.current,  excerpt,  publishedAt,  contentSource,  featured,  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  "author": author->{ _id, name, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } } }    },    "guides": *[_type == "guide" && category->slug.current == $slug] | order(lastUpdated desc){        _type,  _id,  title,  "slug": slug.current,  excerpt,  lastUpdated,  featured,  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  "author": author->{ _id, name, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } } }    }  }
+export type QueryCategoryContentResult = {
+  resources: Array<{
+    _type: "resource";
+    _id: string;
+    title: string;
+    slug: string;
+    description: string;
+    image: {
+      id: string | null;
+      preview: string | null;
+      alt: string | "untitled";
+      hotspot: {
+        x: number;
+        y: number;
+      } | null;
+      crop: {
+        bottom: number;
+        left: number;
+        right: number;
+        top: number;
+      } | null;
+    } | null;
+    contact: {
+      phone: string;
+      email: string | null;
+      website: string | null;
+      streetAddress: string | null;
+      city: string | null;
+      state: string | null;
+      zip: string | null;
+    };
+    lastVerified: string;
+    featured: boolean | null;
+    category: {
+      _id: string;
+      title: string;
+      slug: string;
+    };
+  }>;
+  articles: Array<{
+    _type: "article";
+    _id: string;
+    title: string;
+    slug: string;
+    excerpt: string | null;
+    publishedAt: string;
+    contentSource: "original" | "syndicated" | null;
+    featured: boolean | null;
+    mainImage: {
+      id: string | null;
+      preview: string | null;
+      alt: string;
+      hotspot: {
+        x: number;
+        y: number;
+      } | null;
+      crop: {
+        bottom: number;
+        left: number;
+        right: number;
+        top: number;
+      } | null;
+    } | null;
+    author: {
+      _id: string;
+      name: string;
+      image: {
+        id: string | null;
+        preview: string | null;
+        alt: string | "untitled";
+        hotspot: {
+          x: number;
+          y: number;
+        } | null;
+        crop: {
+          bottom: number;
+          left: number;
+          right: number;
+          top: number;
+        } | null;
+      } | null;
+    } | null;
+  }>;
+  guides: Array<{
+    _type: "guide";
+    _id: string;
+    title: string;
+    slug: string;
+    excerpt: string | null;
+    lastUpdated: string;
+    featured: boolean | null;
+    mainImage: {
+      id: string | null;
+      preview: string | null;
+      alt: string;
+      hotspot: {
+        x: number;
+        y: number;
+      } | null;
+      crop: {
+        bottom: number;
+        left: number;
+        right: number;
+        top: number;
+      } | null;
+    } | null;
+    author: {
+      _id: string;
+      name: string;
+      image: {
+        id: string | null;
+        preview: string | null;
+        alt: string | "untitled";
+        hotspot: {
+          x: number;
+          y: number;
+        } | null;
+        crop: {
+          bottom: number;
+          left: number;
+          right: number;
+          top: number;
+        } | null;
+      } | null;
+    } | null;
+  }>;
+};
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryCategorySlugs
+// Query: *[_type == "category" && defined(slug.current)]{ "slug": slug.current }
+export type QueryCategorySlugsResult = Array<{
+  slug: string;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryTagBySlug
+// Query: *[_type == "tag" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    description,    synonyms,      "seo": {    "title": coalesce(seo.title, title, ""),    "description": coalesce(seo.description, excerpt, description, ""),    "image": coalesce(seo.image, mainImage, image),    "noIndex": coalesce(seo.noIndex, false)  }  }
+export type QueryTagBySlugResult = {
+  _id: string;
+  title: string;
+  slug: string;
+  description: string | null;
+  synonyms: Array<string> | null;
+  seo: {
+    title: string;
+    description: string | "";
+    image: {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    } | null;
+    noIndex: boolean | false;
+  };
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryTagRefCount
+// Query: count(    *[_type in ["resource", "article", "guide"] && references(*[_type == "tag" && slug.current == $slug]._id)]  )
+export type QueryTagRefCountResult = number;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryTagContent
+// Query: {    "resources": *[_type == "resource" && $slug in tags[]->slug.current] | order(title asc){        _type,  _id,  title,  "slug": slug.current,  description,    image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  contact { phone, email, website, streetAddress, city, state, zip },  lastVerified,  featured,  "category": category->{ _id, title, "slug": slug.current }    },    "articles": *[_type == "article" && $slug in tags[]->slug.current] | order(publishedAt desc){        _type,  _id,  title,  "slug": slug.current,  excerpt,  publishedAt,  contentSource,  featured,  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  "author": author->{ _id, name, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } } }    },    "guides": *[_type == "guide" && $slug in tags[]->slug.current] | order(lastUpdated desc){        _type,  _id,  title,  "slug": slug.current,  excerpt,  lastUpdated,  featured,  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  "author": author->{ _id, name, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } } }    }  }
+export type QueryTagContentResult = {
+  resources: Array<{
+    _type: "resource";
+    _id: string;
+    title: string;
+    slug: string;
+    description: string;
+    image: {
+      id: string | null;
+      preview: string | null;
+      alt: string | "untitled";
+      hotspot: {
+        x: number;
+        y: number;
+      } | null;
+      crop: {
+        bottom: number;
+        left: number;
+        right: number;
+        top: number;
+      } | null;
+    } | null;
+    contact: {
+      phone: string;
+      email: string | null;
+      website: string | null;
+      streetAddress: string | null;
+      city: string | null;
+      state: string | null;
+      zip: string | null;
+    };
+    lastVerified: string;
+    featured: boolean | null;
+    category: {
+      _id: string;
+      title: string;
+      slug: string;
+    };
+  }>;
+  articles: Array<{
+    _type: "article";
+    _id: string;
+    title: string;
+    slug: string;
+    excerpt: string | null;
+    publishedAt: string;
+    contentSource: "original" | "syndicated" | null;
+    featured: boolean | null;
+    mainImage: {
+      id: string | null;
+      preview: string | null;
+      alt: string;
+      hotspot: {
+        x: number;
+        y: number;
+      } | null;
+      crop: {
+        bottom: number;
+        left: number;
+        right: number;
+        top: number;
+      } | null;
+    } | null;
+    author: {
+      _id: string;
+      name: string;
+      image: {
+        id: string | null;
+        preview: string | null;
+        alt: string | "untitled";
+        hotspot: {
+          x: number;
+          y: number;
+        } | null;
+        crop: {
+          bottom: number;
+          left: number;
+          right: number;
+          top: number;
+        } | null;
+      } | null;
+    } | null;
+  }>;
+  guides: Array<{
+    _type: "guide";
+    _id: string;
+    title: string;
+    slug: string;
+    excerpt: string | null;
+    lastUpdated: string;
+    featured: boolean | null;
+    mainImage: {
+      id: string | null;
+      preview: string | null;
+      alt: string;
+      hotspot: {
+        x: number;
+        y: number;
+      } | null;
+      crop: {
+        bottom: number;
+        left: number;
+        right: number;
+        top: number;
+      } | null;
+    } | null;
+    author: {
+      _id: string;
+      name: string;
+      image: {
+        id: string | null;
+        preview: string | null;
+        alt: string | "untitled";
+        hotspot: {
+          x: number;
+          y: number;
+        } | null;
+        crop: {
+          bottom: number;
+          left: number;
+          right: number;
+          top: number;
+        } | null;
+      } | null;
+    } | null;
+  }>;
+};
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryTagSlugs
+// Query: *[_type == "tag" && defined(slug.current)]{    "slug": slug.current,    "refCount": count(*[_type in ["resource", "article", "guide"] && references(^._id)])  }[refCount >= 3]
+export type QueryTagSlugsResult = Array<{
+  slug: string;
+  refCount: number;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryFeaturedCategories
+// Query: *[_type == "category" && isFeatured == true] | order(title asc){    _id,    title,    "slug": slug.current,    description,    image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },    "count": count(*[_type == "resource" && references(^._id)])  }
+export type QueryFeaturedCategoriesResult = Array<{
+  _id: string;
+  title: string;
+  slug: string;
+  description: BlockContent | null;
+  image: {
+    id: string | null;
+    preview: string | null;
+    alt: string | "untitled";
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      bottom: number;
+      left: number;
+      right: number;
+      top: number;
+    } | null;
+  } | null;
+  count: number;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: querySidebarTags
+// Query: *[_type == "tag"] | order(title asc) {    _id,    title,    "slug": slug.current,    "refCount": count(*[_type in ["resource", "article", "guide"] && references(^._id)])  }[refCount >= 3][0...24]
+export type QuerySidebarTagsResult = Array<{
+  _id: string;
+  title: string;
+  slug: string;
+  refCount: number;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryLatestArticle
+// Query: *[_type == "article"] | order(publishedAt desc)[0]{      _type,  _id,  title,  "slug": slug.current,  excerpt,  publishedAt,  contentSource,  featured,  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  "author": author->{ _id, name, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } } }  }
+export type QueryLatestArticleResult = {
+  _type: "article";
+  _id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  publishedAt: string;
+  contentSource: "original" | "syndicated" | null;
+  featured: boolean | null;
+  mainImage: {
+    id: string | null;
+    preview: string | null;
+    alt: string;
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      bottom: number;
+      left: number;
+      right: number;
+      top: number;
+    } | null;
+  } | null;
+  author: {
+    _id: string;
+    name: string;
+    image: {
+      id: string | null;
+      preview: string | null;
+      alt: string | "untitled";
+      hotspot: {
+        x: number;
+        y: number;
+      } | null;
+      crop: {
+        bottom: number;
+        left: number;
+        right: number;
+        top: number;
+      } | null;
+    } | null;
+  } | null;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryAllCategories
+// Query: *[_type == "category"] | order(title asc){    _id,    title,    "slug": slug.current  }
+export type QueryAllCategoriesResult = Array<{
+  _id: string;
+  title: string;
+  slug: string;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryAllTags
+// Query: *[_type == "tag"] | order(title asc){    _id,    title,    "slug": slug.current  }
+export type QueryAllTagsResult = Array<{
+  _id: string;
+  title: string;
+  slug: string;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: querySearch
+// Query: [    ...*[_type == "resource" && (      title match $term + "*" ||      description match $term + "*"    )] | order(title asc) [0...10] {   _type,  _id,  title,  "slug": slug.current,  description,    image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  contact { phone, email, website, streetAddress, city, state, zip },  lastVerified,  featured,  "category": category->{ _id, title, "slug": slug.current } },    ...*[_type == "article" && (      title match $term + "*" ||      excerpt match $term + "*"    )] | order(publishedAt desc) [0...10] {   _type,  _id,  title,  "slug": slug.current,  excerpt,  publishedAt,  contentSource,  featured,  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  "author": author->{ _id, name, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } } } },    ...*[_type == "guide" && (      title match $term + "*" ||      excerpt match $term + "*"    )] | order(lastUpdated desc) [0...10] {   _type,  _id,  title,  "slug": slug.current,  excerpt,  lastUpdated,  featured,  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } },  "author": author->{ _id, name, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, asset->altText, "untitled"),  hotspot { x, y },  crop { bottom, left, right, top } } } }  ]
+export type QuerySearchResult = Array<
+  | {
+      _type: "article";
+      _id: string;
+      title: string;
+      slug: string;
+      excerpt: string | null;
+      publishedAt: string;
+      contentSource: "original" | "syndicated" | null;
+      featured: boolean | null;
+      mainImage: {
+        id: string | null;
+        preview: string | null;
+        alt: string;
+        hotspot: {
+          x: number;
+          y: number;
+        } | null;
+        crop: {
+          bottom: number;
+          left: number;
+          right: number;
+          top: number;
+        } | null;
+      } | null;
+      author: {
+        _id: string;
+        name: string;
+        image: {
+          id: string | null;
+          preview: string | null;
+          alt: string | "untitled";
+          hotspot: {
+            x: number;
+            y: number;
+          } | null;
+          crop: {
+            bottom: number;
+            left: number;
+            right: number;
+            top: number;
+          } | null;
+        } | null;
+      } | null;
+    }
+  | {
+      _type: "guide";
+      _id: string;
+      title: string;
+      slug: string;
+      excerpt: string | null;
+      lastUpdated: string;
+      featured: boolean | null;
+      mainImage: {
+        id: string | null;
+        preview: string | null;
+        alt: string;
+        hotspot: {
+          x: number;
+          y: number;
+        } | null;
+        crop: {
+          bottom: number;
+          left: number;
+          right: number;
+          top: number;
+        } | null;
+      } | null;
+      author: {
+        _id: string;
+        name: string;
+        image: {
+          id: string | null;
+          preview: string | null;
+          alt: string | "untitled";
+          hotspot: {
+            x: number;
+            y: number;
+          } | null;
+          crop: {
+            bottom: number;
+            left: number;
+            right: number;
+            top: number;
+          } | null;
+        } | null;
+      } | null;
+    }
+  | {
+      _type: "resource";
+      _id: string;
+      title: string;
+      slug: string;
+      description: string;
+      image: {
+        id: string | null;
+        preview: string | null;
+        alt: string | "untitled";
+        hotspot: {
+          x: number;
+          y: number;
+        } | null;
+        crop: {
+          bottom: number;
+          left: number;
+          right: number;
+          top: number;
+        } | null;
+      } | null;
+      contact: {
+        phone: string;
+        email: string | null;
+        website: string | null;
+        streetAddress: string | null;
+        city: string | null;
+        state: string | null;
+        zip: string | null;
+      };
+      lastVerified: string;
+      featured: boolean | null;
+      category: {
+        _id: string;
+        title: string;
+        slug: string;
+      };
+    }
+>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: querySitemapEntries
+// Query: {    "resources": *[_type == "resource" && defined(slug.current)]{      "slug": slug.current, _updatedAt    },    "articles": *[_type == "article" && defined(slug.current)]{      "slug": slug.current, _updatedAt    },    "guides": *[_type == "guide" && defined(slug.current)]{      "slug": slug.current, _updatedAt    },    "pages": *[_type == "page" && defined(slug.current)]{      "slug": slug.current, _updatedAt    },    "categories": *[_type == "category" && defined(slug.current)]{      "slug": slug.current, _updatedAt    },    "tags": *[_type == "tag" && defined(slug.current)]{      "slug": slug.current,      _updatedAt,      "refCount": count(*[_type in ["resource", "article", "guide"] && references(^._id)])    }[refCount >= 3]  }
+export type QuerySitemapEntriesResult = {
+  resources: Array<{
+    slug: string;
+    _updatedAt: string;
+  }>;
+  articles: Array<{
+    slug: string;
+    _updatedAt: string;
+  }>;
+  guides: Array<{
+    slug: string;
+    _updatedAt: string;
+  }>;
+  pages: Array<{
+    slug: string;
+    _updatedAt: string;
+  }>;
+  categories: Array<{
+    slug: string;
+    _updatedAt: string;
+  }>;
+  tags: Array<{
+    slug: string;
+    _updatedAt: string;
+    refCount: number;
+  }>;
+};
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryNavigation
+// Query: {    "headerPrimary": *[_type == "mainNavigation" && _id == "mainNavigation"][0].items[]{      _key,      link {   label,  linkType,  openInNewTab,  "href": select(    linkType == "internal" => select(      internalReference->_type == "page" => "/" + internalReference->slug.current,      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,      internalReference->_type == "category" => "/category/" + internalReference->slug.current,      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,      "/"    ),    linkType == "external" => coalesce(externalUrl, "#"),    "#"  ) },      children[]{   label,  linkType,  openInNewTab,  "href": select(    linkType == "internal" => select(      internalReference->_type == "page" => "/" + internalReference->slug.current,      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,      internalReference->_type == "category" => "/category/" + internalReference->slug.current,      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,      "/"    ),    linkType == "external" => coalesce(externalUrl, "#"),    "#"  ) }    },    "footer": *[_type == "siteFooter" && _id == "siteFooter"][0].columns[]{      _key,      heading,      links[]{   label,  linkType,  openInNewTab,  "href": select(    linkType == "internal" => select(      internalReference->_type == "page" => "/" + internalReference->slug.current,      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,      internalReference->_type == "category" => "/category/" + internalReference->slug.current,      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,      "/"    ),    linkType == "external" => coalesce(externalUrl, "#"),    "#"  ) }    }  }
+export type QueryNavigationResult = {
+  headerPrimary: Array<{
+    _key: string;
+    link: {
+      label: string;
+      linkType: "external" | "internal" | null;
+      openInNewTab: boolean | null;
+      href: string | "/" | "#" | null;
+    };
+    children: Array<{
+      label: string;
+      linkType: "external" | "internal" | null;
+      openInNewTab: boolean | null;
+      href: string | "/" | "#" | null;
+    }> | null;
+  }> | null;
+  footer: Array<{
+    _key: string;
+    heading: string;
+    links: Array<{
+      label: string;
+      linkType: "external" | "internal" | null;
+      openInNewTab: boolean | null;
+      href: string | "/" | "#" | null;
+    }> | null;
+  }> | null;
+};
 
 // Query TypeMap
 import "@sanity/client";
-
 declare module "@sanity/client" {
   interface SanityQueries {
-    '\n  *[_type == "post"][0]{\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n  }.mainImage\n': QueryImageTypeResult;
-    '\n  *[_type == "page" && slug.current == $slug][0]{\n    ...,\n    "slug": slug.current,\n    \n  pageBuilder[]{\n    ...,\n    _type,\n\n  }\n\n  }\n  ': QuerySlugPageDataResult;
-    '\n  *[_type == "navbar" && _id == "navbar"][0]{\n    _id,\n    columns[]{\n      _key,\n      _type == "navbarColumn" => {\n        "type": "column",\n        title,\n        links[]{\n          _key,\n          name,\n          icon,\n          description,\n          "openInNewTab": url.openInNewTab,\n          "href": select(\n            url.type == "internal" => url.internal->slug.current,\n            url.type == "external" => url.external,\n            url.href\n          )\n        }\n      },\n      _type == "navbarLink" => {\n        "type": "link",\n        name,\n        description,\n        "openInNewTab": url.openInNewTab,\n        "href": select(\n          url.type == "internal" => url.internal->slug.current,\n          url.type == "external" => url.external,\n          url.href\n        )\n      }\n    },\n    \n  buttons[]{\n    text,\n    variant,\n    _key,\n    _type,\n    "openInNewTab": url.openInNewTab,\n    "href": select(\n      url.type == "internal" => url.internal->slug.current,\n      url.type == "external" => url.external,\n      url.href\n    ),\n  }\n,\n  }\n': QueryNavbarDataResult;
-    '\n  *[_type == "settings"][0]{\n    _id,\n    _type,\n    siteTitle,\n    logo {\n      \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n    },\n    siteDescription,\n    socialLinks{\n      linkedin,\n      facebook,\n      twitter,\n      instagram,\n      youtube\n    }\n  }\n': QueryGlobalSeoSettingsResult;
-    '\n  *[_type == "blogIndex"][0]{\n    ...,\n    _id,\n    _type,\n    title,\n    description,\n    "displayFeaturedBlogs" : displayFeaturedBlogs == "yes",\n    "featuredBlogsCount" : featuredBlogsCount,\n    \n  pageBuilder[]{\n    ...,\n    _type,\n\n  }\n,\n    "slug": slug.current\n  }\n': QueryBlogIndexPageDataResult;
-    '\n  *[_type == "blog" && (seoHideFromLists != true)] | order(orderRank asc) [$start...$end]{\n    \n  _type,\n  _id,\n  title,\n  description,\n  "slug":slug.current,\n  orderRank,\n  \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n,\n  publishedAt,\n  \n  authors[0]->{\n    _id,\n    name,\n    position,\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n  }\n\n\n  }\n': QueryBlogIndexPageBlogsResult;
-    '\n  *[_type == "blog" && defined(slug.current) && (seoHideFromLists != true)]{\n    \n  _type,\n  _id,\n  title,\n  description,\n  "slug":slug.current,\n  orderRank,\n  \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n,\n  publishedAt,\n  \n  authors[0]->{\n    _id,\n    name,\n    position,\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n  }\n\n\n  }\n': QueryAllBlogDataForSearchResult;
-    '\n  count(*[_type == "blog" && (seoHideFromLists != true)])\n': QueryBlogIndexPageBlogsCountResult;
-    '\n  *[_type == "blog" && slug.current == $slug][0]{\n    ...,\n    "slug": slug.current,\n    \n  authors[0]->{\n    _id,\n    name,\n    position,\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n  }\n,\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n,\n    \n  richText[]{\n    ...,\n    _type == "block" => {\n      ...,\n      \n  markDefs[]{\n    ...,\n    \n  ...customLink{\n    openInNewTab,\n    "href": select(\n      type == "internal" => internal->slug.current,\n      type == "external" => external,\n      "#"\n    ),\n  }\n\n  }\n\n    },\n    _type == "image" => {\n      \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n      "caption": caption\n    }\n  }\n,\n    \n  pageBuilder[]{\n    ...,\n    _type,\n\n  }\n\n  }\n': QueryBlogSlugPageDataResult;
-    '\n  *[_type == "blog" && defined(slug.current)].slug.current\n': QueryBlogPathsResult;
-    '\n  *[_type == "category" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{\n    _id,\n    title,\n    "slug": slug.current,\n    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])\n  } | order(title asc, count desc)\n': HighlightedCategoriesResult;
-    '\n  *[_type == "tag" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{\n    _id,\n    title,\n    "slug": slug.current,\n    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])\n  } | order(title asc, count desc)\n': HighlightedTagsResult;
-    '\n  *[_type == "post" && slug.current == $slug][0]{\n    \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n  }\n': QueryArticleSlugPageDataResult;
-    '\n  *[_type == "post" && defined(slug.current)].slug.current\n': QueryArticlePathsResult;
-    '{\n  "whatsNew": *[_type == "post" && isArchived != true && references(*[_type == "category" && title == "What\'s New!"]._id)][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    "author": author->{\n      \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n    },\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  },\n  "seniorCenterNewsletters": *[(_type == "post" && isArchived != true && references(*[_type == "category" && title == "City of Maricopa Community / Senior Center"]._id))][0..1] | order(publishedAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  },\n  "nonProfit": *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{\n    ...,\n    "slug": slug.current,\n  },\n  "newsletter": *[_type == "post" && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"]._id)] | order(publishedAt desc)[0]{\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  }\n}': RightSidebarQueryResult;
-    '\n  *[_type == "home"][0]\n': QueryHomePageDataResult;
-    '\n  *[_type == "post" && isArchived != true] | order(publishedAt desc){\n    \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n  }\n': QueryAllPostsResult;
-    '\n  *[_type == "post" && defined(slug.current) && isArchived != true][].slug.current\n': QueryAllPostSlugsResult;
-    '\n  *[_type == "post" && defined(slug.current) && isArchived != true] | order(_updatedAt desc) [0...100]{"slug": slug.current}\n': QueryRecentArticleSlugsResult;
-    '\n  *[_type == "page" && defined(slug.current)]{"slug": slug.current}\n': QueryAllPageSlugsResult;
-    '\n  *[_type == "post" && slug.current == $slug && isArchived != true]{\n    \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n  }[0]\n': QueryPostBySlugResult;
-    '\n  *[_type == "category"][].slug.current\n': QueryAllCategoriesResult;
-    '\n  *[_type == "category" && defined(slug.current)]{"category": slug.current}\n': QueryCategoryPathsResult;
-    '\n  *[_type == "category" && slug.current == $slug]{\n    title,\n    "slug": slug.current,\n    description,\n    "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",\n    "combinedList": [\n      ...(*[_type == "service" && references(^._id)]{\n        ...,\n        tags[]->{\n          _id,\n          title,\n          "slug": slug.current,\n        }\n      }),\n      ...(*[_type == "post" && references(^._id) && isArchived != true]{\n        _id,\n        _updatedAt,\n        _type,\n        publishedAt,\n        title,\n        "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n        "slug": slug.current,\n        "author": author->{\n          \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n        },\n        "categories": categories[]->{\n          _id,\n          title,\n          "slug": slug.current,\n        },\n        "tags": tags[]->{\n          _id,\n          title,\n          "slug": slug.current,\n        }\n      })\n    ] {\n      ...,\n      "rank": select(\n        count(tags[title == "Local Resources"]) > 0 => 1,\n        2\n      )\n    } | order(rank),\n  }[0]\n': QueryCategoryBySlugResult;
-    '\n  *[_type == "tag" && defined(slug.current)][].slug.current\n': QueryAllTagsResult;
-    '\n  *[_type == "tag" && defined(slug.current)]{"tag": slug.current}\n': QueryTagPathsResult;
-    '\n  *[_type == "tag" && slug.current == $slug]{\n    title,\n    "slug": slug.current,\n    description,\n    "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",\n    "posts": *[_type == "post" && references(^._id) && isArchived != true]{\n      \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n    },\n    "services": *[_type == "service" && references(^._id)]{\n      ...,\n      tags[]->{\n        _id,\n        title,\n        "slug": slug.current,\n      }\n    },\n  }[0]\n': QueryTagBySlugResult;
-    '\n  *[(_type == "post" && isArchived != true && (title match "*" + $searchTerm + "*" || tags[]->title match "*" + $searchTerm + "*" || categories[]->title match "*" + $searchTerm + "*")) ||\n  (_type == "service" && (title match "*" + $searchTerm + "*" || tags[]->title match "*" + $searchTerm + "*" || categories[]->title match "*" + $searchTerm + "*"))] | score(\n    boost(title match "*" + $searchTerm + "*", 4)\n  )| order(_score desc){\n    ...,\n    _score,\n    _type == "post" => {\n      \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  "image": {\n    "asset": image.asset->{\n      _id,\n      _type,\n      metadata,\n      url\n    }\n  },\n  "slug": slug.current,\n\n  },\n  mainImage,\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    ...,\n    _type == "attachment" => {\n      ...,\n      asset->\n    }\n  },\n\n    },\n    _type == "service" => {\n      ...,\n      tags[]->{\n        _id,\n        title,\n        "slug": slug.current,\n      }\n    },\n  }\n': QuerySearchResult;
-    '\n  *[_type == "navigation"][0]{\n    "headerPrimary": headerPrimary[]{\n      _key,\n      "link": link{\n        url,\n        text,\n        reference->{\n          _id,\n          _type,\n          title,\n          "slug": slug.current\n        }\n      },\n      children\n    },\n    "footer": footer[]{\n      _key,\n      url,\n      text,\n      reference->{\n        _id,\n        _type,\n        title,\n        "slug": slug.current\n      }\n    },\n  }\n': QueryNavigationResult;
-    '\n  *[_type == "page" && slug.current == $slug][0]{\n    title,\n    "slug": slug.current,\n    "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",\n    "body": body[]{\n      ...,\n      _type == "attachment" => {\n        ...,\n        asset->\n      }\n    },\n  }\n': QueryPageBySlugResult;
+    '\n  *[_type == "siteSettings" && _id == "siteSettings"][0]{\n    title,\n    description,\n    logo { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n    favicon { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n    ogImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n    contactEmail,\n    contactPhone,\n    \n  "seo": {\n    "title": coalesce(seo.title, title, ""),\n    "description": coalesce(seo.description, excerpt, description, ""),\n    "image": coalesce(seo.image, mainImage, image),\n    "noIndex": coalesce(seo.noIndex, false)\n  }\n\n  }\n': QuerySiteSettingsResult;
+    '\n  *[_type == "homePage" && _id == "homePage"][0]{\n    title,\n    \n  pageBuilder[]{\n    _key,\n    _type,\n    _type == "heroBlock" => {\n      heading,\n      subheading,\n      image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n      cta { \n  label,\n  linkType,\n  openInNewTab,\n  "href": select(\n    linkType == "internal" => select(\n      internalReference->_type == "page" => "/" + internalReference->slug.current,\n      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,\n      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,\n      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,\n      internalReference->_type == "category" => "/category/" + internalReference->slug.current,\n      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,\n      "/"\n    ),\n    linkType == "external" => coalesce(externalUrl, "#"),\n    "#"\n  )\n }\n    },\n    _type == "richTextSection" => {\n      heading,\n      body[]{ ..., markDefs[]{ ..., _type == "link" => { ..., "href": href } } }\n    },\n    _type == "featuredResources" => {\n      heading,\n      resources[]->{ \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  description,\n  \n  image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n }\n,\n  contact { phone, email, website, streetAddress, city, state, zip },\n  lastVerified,\n  featured,\n  "category": category->{ _id, title, "slug": slug.current }\n }\n    },\n    _type == "featuredCategories" => {\n      heading,\n      categories[]->{ _id, title, "slug": slug.current, description, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n } }\n    },\n    _type == "featuredArticles" => {\n      heading,\n      articles[]->{ \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  publishedAt,\n  contentSource,\n  featured,\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n  "author": author->{ _id, name, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n } }\n }\n    },\n    _type == "featuredGuides" => {\n      heading,\n      guides[]->{ \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  lastUpdated,\n  featured,\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n  "author": author->{ _id, name, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n } }\n }\n    },\n    _type == "resourceGrid" => {\n      heading,\n      limit,\n      "category": category->{ _id, title, "slug": slug.current },\n      "resources": *[_type == "resource" && (!defined(^.category._ref) || category._ref == ^.category._ref)] | order(title asc) {\n        \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  description,\n  \n  image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n }\n,\n  contact { phone, email, website, streetAddress, city, state, zip },\n  lastVerified,\n  featured,\n  "category": category->{ _id, title, "slug": slug.current }\n\n      }\n    },\n    _type == "callToAction" => {\n      heading,\n      body,\n      link { \n  label,\n  linkType,\n  openInNewTab,\n  "href": select(\n    linkType == "internal" => select(\n      internalReference->_type == "page" => "/" + internalReference->slug.current,\n      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,\n      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,\n      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,\n      internalReference->_type == "category" => "/category/" + internalReference->slug.current,\n      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,\n      "/"\n    ),\n    linkType == "external" => coalesce(externalUrl, "#"),\n    "#"\n  )\n }\n    },\n    _type == "faqBlock" => {\n      heading,\n      items[]{ question, answer }\n    },\n    _type == "splitImage" => {\n      heading,\n      body[]{ ..., markDefs[]{ ..., _type == "link" => { ..., "href": href } } },\n      image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n      imagePosition\n    },\n    _type == "communityAlert" => {\n      message,\n      severity,\n      expiresAt,\n      link { \n  label,\n  linkType,\n  openInNewTab,\n  "href": select(\n    linkType == "internal" => select(\n      internalReference->_type == "page" => "/" + internalReference->slug.current,\n      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,\n      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,\n      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,\n      internalReference->_type == "category" => "/category/" + internalReference->slug.current,\n      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,\n      "/"\n    ),\n    linkType == "external" => coalesce(externalUrl, "#"),\n    "#"\n  )\n }\n    }\n  }\n,\n    \n  "seo": {\n    "title": coalesce(seo.title, title, ""),\n    "description": coalesce(seo.description, excerpt, description, ""),\n    "image": coalesce(seo.image, mainImage, image),\n    "noIndex": coalesce(seo.noIndex, false)\n  }\n\n  }\n': QueryHomePageResult;
+    '\n  *[_type == "mainNavigation" && _id == "mainNavigation"][0]{\n    items[]{\n      _key,\n      link { \n  label,\n  linkType,\n  openInNewTab,\n  "href": select(\n    linkType == "internal" => select(\n      internalReference->_type == "page" => "/" + internalReference->slug.current,\n      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,\n      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,\n      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,\n      internalReference->_type == "category" => "/category/" + internalReference->slug.current,\n      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,\n      "/"\n    ),\n    linkType == "external" => coalesce(externalUrl, "#"),\n    "#"\n  )\n },\n      children[]{ \n  label,\n  linkType,\n  openInNewTab,\n  "href": select(\n    linkType == "internal" => select(\n      internalReference->_type == "page" => "/" + internalReference->slug.current,\n      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,\n      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,\n      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,\n      internalReference->_type == "category" => "/category/" + internalReference->slug.current,\n      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,\n      "/"\n    ),\n    linkType == "external" => coalesce(externalUrl, "#"),\n    "#"\n  )\n }\n    }\n  }\n': QueryMainNavigationResult;
+    '\n  *[_type == "siteFooter" && _id == "siteFooter"][0]{\n    tagline,\n    copyright,\n    columns[]{\n      _key,\n      heading,\n      links[]{ \n  label,\n  linkType,\n  openInNewTab,\n  "href": select(\n    linkType == "internal" => select(\n      internalReference->_type == "page" => "/" + internalReference->slug.current,\n      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,\n      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,\n      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,\n      internalReference->_type == "category" => "/category/" + internalReference->slug.current,\n      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,\n      "/"\n    ),\n    linkType == "external" => coalesce(externalUrl, "#"),\n    "#"\n  )\n }\n    }\n  }\n': QuerySiteFooterResult;
+    '\n  *[_type == "resource" && slug.current == $slug][0]{\n    _id,\n    _updatedAt,\n    title,\n    "slug": slug.current,\n    description,\n    \n  body[]{\n    ...,\n    _type == "block" => {\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => { ..., "href": href }\n      }\n    },\n    _type == "image" => { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n, caption },\n    _type == "attachment" => { ..., "url": asset->url }\n  }\n,\n    image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n    contact { phone, email, website, streetAddress, city, state, zip },\n    hours[]{ day, opensAt, closesAt },\n    lastVerified,\n    featured,\n    "category": category->{ _id, title, "slug": slug.current },\n    "tags": tags[]->{ _id, title, "slug": slug.current },\n    \n  "seo": {\n    "title": coalesce(seo.title, title, ""),\n    "description": coalesce(seo.description, excerpt, description, ""),\n    "image": coalesce(seo.image, mainImage, image),\n    "noIndex": coalesce(seo.noIndex, false)\n  }\n\n  }\n': QueryResourceBySlugResult;
+    '\n  *[_type == "resource"\n    && (coalesce($category, "") == "" || category->slug.current == $category)\n    && (coalesce($tag, "") == "" || $tag in tags[]->slug.current)\n  ] | order(title asc) [$start...$end]{\n    \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  description,\n  \n  image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n }\n,\n  contact { phone, email, website, streetAddress, city, state, zip },\n  lastVerified,\n  featured,\n  "category": category->{ _id, title, "slug": slug.current }\n\n  }\n': QueryResourcesIndexResult;
+    '\n  count(*[_type == "resource"\n    && (coalesce($category, "") == "" || category->slug.current == $category)\n    && (coalesce($tag, "") == "" || $tag in tags[]->slug.current)\n  ])\n': QueryResourcesCountResult;
+    '\n  *[_type == "resource" && defined(slug.current)]{ "slug": slug.current }\n': QueryResourceSlugsResult;
+    '\n  *[_type == "article" && slug.current == $slug][0]{\n    _id,\n    _updatedAt,\n    title,\n    "slug": slug.current,\n    excerpt,\n    \n  body[]{\n    ...,\n    _type == "block" => {\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => { ..., "href": href }\n      }\n    },\n    _type == "image" => { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n, caption },\n    _type == "attachment" => { ..., "url": asset->url }\n  }\n,\n    mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n    publishedAt,\n    contentSource,\n    syndication {\n      originalPublication,\n      originalUrl,\n      originalAuthor,\n      republishedAt,\n      attribution,\n    },\n    "author": author->{ _id, name, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n } },\n    "category": category->{ _id, title, "slug": slug.current },\n    "tags": tags[]->{ _id, title, "slug": slug.current },\n    \n  "seo": {\n    "title": coalesce(seo.title, title, ""),\n    "description": coalesce(seo.description, excerpt, description, ""),\n    "image": coalesce(seo.image, mainImage, image),\n    "noIndex": coalesce(seo.noIndex, false)\n  }\n\n  }\n': QueryArticleBySlugResult;
+    '\n  *[_type == "article"] | order(publishedAt desc) [$start...$end]{\n    \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  publishedAt,\n  contentSource,\n  featured,\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n  "author": author->{ _id, name, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n } }\n\n  }\n': QueryArticlesIndexResult;
+    '\n  count(*[_type == "article"])\n': QueryArticlesCountResult;
+    '\n  *[_type == "article" && defined(slug.current)]{ "slug": slug.current }\n': QueryArticleSlugsResult;
+    '\n  *[_type == "guide" && slug.current == $slug][0]{\n    _id,\n    _updatedAt,\n    title,\n    "slug": slug.current,\n    excerpt,\n    \n  body[]{\n    ...,\n    _type == "block" => {\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => { ..., "href": href }\n      }\n    },\n    _type == "image" => { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n, caption },\n    _type == "attachment" => { ..., "url": asset->url }\n  }\n,\n    steps[]{ title, body },\n    mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n    lastUpdated,\n    "author": author->{ _id, name, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n } },\n    "category": category->{ _id, title, "slug": slug.current },\n    "tags": tags[]->{ _id, title, "slug": slug.current },\n    \n  "seo": {\n    "title": coalesce(seo.title, title, ""),\n    "description": coalesce(seo.description, excerpt, description, ""),\n    "image": coalesce(seo.image, mainImage, image),\n    "noIndex": coalesce(seo.noIndex, false)\n  }\n\n  }\n': QueryGuideBySlugResult;
+    '\n  *[_type == "guide"] | order(lastUpdated desc) [$start...$end]{\n    \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  lastUpdated,\n  featured,\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n  "author": author->{ _id, name, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n } }\n\n  }\n': QueryGuidesIndexResult;
+    '\n  count(*[_type == "guide"])\n': QueryGuidesCountResult;
+    '\n  *[_type == "guide" && defined(slug.current)]{ "slug": slug.current }\n': QueryGuideSlugsResult;
+    '\n  *[_type == "page" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    \n  pageBuilder[]{\n    _key,\n    _type,\n    _type == "heroBlock" => {\n      heading,\n      subheading,\n      image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n      cta { \n  label,\n  linkType,\n  openInNewTab,\n  "href": select(\n    linkType == "internal" => select(\n      internalReference->_type == "page" => "/" + internalReference->slug.current,\n      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,\n      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,\n      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,\n      internalReference->_type == "category" => "/category/" + internalReference->slug.current,\n      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,\n      "/"\n    ),\n    linkType == "external" => coalesce(externalUrl, "#"),\n    "#"\n  )\n }\n    },\n    _type == "richTextSection" => {\n      heading,\n      body[]{ ..., markDefs[]{ ..., _type == "link" => { ..., "href": href } } }\n    },\n    _type == "featuredResources" => {\n      heading,\n      resources[]->{ \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  description,\n  \n  image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n }\n,\n  contact { phone, email, website, streetAddress, city, state, zip },\n  lastVerified,\n  featured,\n  "category": category->{ _id, title, "slug": slug.current }\n }\n    },\n    _type == "featuredCategories" => {\n      heading,\n      categories[]->{ _id, title, "slug": slug.current, description, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n } }\n    },\n    _type == "featuredArticles" => {\n      heading,\n      articles[]->{ \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  publishedAt,\n  contentSource,\n  featured,\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n  "author": author->{ _id, name, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n } }\n }\n    },\n    _type == "featuredGuides" => {\n      heading,\n      guides[]->{ \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  lastUpdated,\n  featured,\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n  "author": author->{ _id, name, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n } }\n }\n    },\n    _type == "resourceGrid" => {\n      heading,\n      limit,\n      "category": category->{ _id, title, "slug": slug.current },\n      "resources": *[_type == "resource" && (!defined(^.category._ref) || category._ref == ^.category._ref)] | order(title asc) {\n        \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  description,\n  \n  image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n }\n,\n  contact { phone, email, website, streetAddress, city, state, zip },\n  lastVerified,\n  featured,\n  "category": category->{ _id, title, "slug": slug.current }\n\n      }\n    },\n    _type == "callToAction" => {\n      heading,\n      body,\n      link { \n  label,\n  linkType,\n  openInNewTab,\n  "href": select(\n    linkType == "internal" => select(\n      internalReference->_type == "page" => "/" + internalReference->slug.current,\n      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,\n      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,\n      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,\n      internalReference->_type == "category" => "/category/" + internalReference->slug.current,\n      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,\n      "/"\n    ),\n    linkType == "external" => coalesce(externalUrl, "#"),\n    "#"\n  )\n }\n    },\n    _type == "faqBlock" => {\n      heading,\n      items[]{ question, answer }\n    },\n    _type == "splitImage" => {\n      heading,\n      body[]{ ..., markDefs[]{ ..., _type == "link" => { ..., "href": href } } },\n      image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n      imagePosition\n    },\n    _type == "communityAlert" => {\n      message,\n      severity,\n      expiresAt,\n      link { \n  label,\n  linkType,\n  openInNewTab,\n  "href": select(\n    linkType == "internal" => select(\n      internalReference->_type == "page" => "/" + internalReference->slug.current,\n      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,\n      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,\n      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,\n      internalReference->_type == "category" => "/category/" + internalReference->slug.current,\n      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,\n      "/"\n    ),\n    linkType == "external" => coalesce(externalUrl, "#"),\n    "#"\n  )\n }\n    }\n  }\n,\n    \n  "seo": {\n    "title": coalesce(seo.title, title, ""),\n    "description": coalesce(seo.description, excerpt, description, ""),\n    "image": coalesce(seo.image, mainImage, image),\n    "noIndex": coalesce(seo.noIndex, false)\n  }\n\n  }\n': QueryPageBySlugResult;
+    '\n  *[_type == "page" && defined(slug.current)]{ "slug": slug.current }\n': QueryPageSlugsResult;
+    '\n  *[_type == "category" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    "descriptionText": pt::text(description),\n    isFeatured,\n    image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n    "parent": parent->{ _id, title, "slug": slug.current },\n    "seo": {\n      "title": coalesce(seo.title, title, ""),\n      "description": coalesce(seo.description, pt::text(description), ""),\n      "image": coalesce(seo.image, image),\n      "noIndex": coalesce(seo.noIndex, false)\n    }\n  }\n': QueryCategoryBySlugResult;
+    '\n  {\n    "resources": *[_type == "resource" && category->slug.current == $slug] | order(title asc){\n      \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  description,\n  \n  image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n }\n,\n  contact { phone, email, website, streetAddress, city, state, zip },\n  lastVerified,\n  featured,\n  "category": category->{ _id, title, "slug": slug.current }\n\n    },\n    "articles": *[_type == "article" && category->slug.current == $slug] | order(publishedAt desc){\n      \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  publishedAt,\n  contentSource,\n  featured,\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n  "author": author->{ _id, name, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n } }\n\n    },\n    "guides": *[_type == "guide" && category->slug.current == $slug] | order(lastUpdated desc){\n      \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  lastUpdated,\n  featured,\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n  "author": author->{ _id, name, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n } }\n\n    }\n  }\n': QueryCategoryContentResult;
+    '\n  *[_type == "category" && defined(slug.current)]{ "slug": slug.current }\n': QueryCategorySlugsResult;
+    '\n  *[_type == "tag" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    synonyms,\n    \n  "seo": {\n    "title": coalesce(seo.title, title, ""),\n    "description": coalesce(seo.description, excerpt, description, ""),\n    "image": coalesce(seo.image, mainImage, image),\n    "noIndex": coalesce(seo.noIndex, false)\n  }\n\n  }\n': QueryTagBySlugResult;
+    '\n  count(\n    *[_type in ["resource", "article", "guide"] && references(*[_type == "tag" && slug.current == $slug]._id)]\n  )\n': QueryTagRefCountResult;
+    '\n  {\n    "resources": *[_type == "resource" && $slug in tags[]->slug.current] | order(title asc){\n      \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  description,\n  \n  image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n }\n,\n  contact { phone, email, website, streetAddress, city, state, zip },\n  lastVerified,\n  featured,\n  "category": category->{ _id, title, "slug": slug.current }\n\n    },\n    "articles": *[_type == "article" && $slug in tags[]->slug.current] | order(publishedAt desc){\n      \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  publishedAt,\n  contentSource,\n  featured,\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n  "author": author->{ _id, name, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n } }\n\n    },\n    "guides": *[_type == "guide" && $slug in tags[]->slug.current] | order(lastUpdated desc){\n      \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  lastUpdated,\n  featured,\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n  "author": author->{ _id, name, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n } }\n\n    }\n  }\n': QueryTagContentResult;
+    '\n  *[_type == "tag" && defined(slug.current)]{\n    "slug": slug.current,\n    "refCount": count(*[_type in ["resource", "article", "guide"] && references(^._id)])\n  }[refCount >= 3]\n': QueryTagSlugsResult;
+    '\n  *[_type == "category" && isFeatured == true] | order(title asc){\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n    "count": count(*[_type == "resource" && references(^._id)])\n  }\n': QueryFeaturedCategoriesResult;
+    '\n  *[_type == "tag"] | order(title asc) {\n    _id,\n    title,\n    "slug": slug.current,\n    "refCount": count(*[_type in ["resource", "article", "guide"] && references(^._id)])\n  }[refCount >= 3][0...24]\n': QuerySidebarTagsResult;
+    '\n  *[_type == "article"] | order(publishedAt desc)[0]{\n    \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  publishedAt,\n  contentSource,\n  featured,\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n  "author": author->{ _id, name, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n } }\n\n  }\n': QueryLatestArticleResult;
+    '\n  *[_type == "category"] | order(title asc){\n    _id,\n    title,\n    "slug": slug.current\n  }\n': QueryAllCategoriesResult;
+    '\n  *[_type == "tag"] | order(title asc){\n    _id,\n    title,\n    "slug": slug.current\n  }\n': QueryAllTagsResult;
+    '\n  [\n    ...*[_type == "resource" && (\n      title match $term + "*" ||\n      description match $term + "*"\n    )] | order(title asc) [0...10] { \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  description,\n  \n  image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n }\n,\n  contact { phone, email, website, streetAddress, city, state, zip },\n  lastVerified,\n  featured,\n  "category": category->{ _id, title, "slug": slug.current }\n },\n    ...*[_type == "article" && (\n      title match $term + "*" ||\n      excerpt match $term + "*"\n    )] | order(publishedAt desc) [0...10] { \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  publishedAt,\n  contentSource,\n  featured,\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n  "author": author->{ _id, name, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n } }\n },\n    ...*[_type == "guide" && (\n      title match $term + "*" ||\n      excerpt match $term + "*"\n    )] | order(lastUpdated desc) [0...10] { \n  _type,\n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  lastUpdated,\n  featured,\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n },\n  "author": author->{ _id, name, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, asset->altText, "untitled"),\n  hotspot { x, y },\n  crop { bottom, left, right, top }\n } }\n }\n  ]\n': QuerySearchResult;
+    '\n  {\n    "resources": *[_type == "resource" && defined(slug.current)]{\n      "slug": slug.current, _updatedAt\n    },\n    "articles": *[_type == "article" && defined(slug.current)]{\n      "slug": slug.current, _updatedAt\n    },\n    "guides": *[_type == "guide" && defined(slug.current)]{\n      "slug": slug.current, _updatedAt\n    },\n    "pages": *[_type == "page" && defined(slug.current)]{\n      "slug": slug.current, _updatedAt\n    },\n    "categories": *[_type == "category" && defined(slug.current)]{\n      "slug": slug.current, _updatedAt\n    },\n    "tags": *[_type == "tag" && defined(slug.current)]{\n      "slug": slug.current,\n      _updatedAt,\n      "refCount": count(*[_type in ["resource", "article", "guide"] && references(^._id)])\n    }[refCount >= 3]\n  }\n': QuerySitemapEntriesResult;
+    '\n  {\n    "headerPrimary": *[_type == "mainNavigation" && _id == "mainNavigation"][0].items[]{\n      _key,\n      link { \n  label,\n  linkType,\n  openInNewTab,\n  "href": select(\n    linkType == "internal" => select(\n      internalReference->_type == "page" => "/" + internalReference->slug.current,\n      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,\n      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,\n      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,\n      internalReference->_type == "category" => "/category/" + internalReference->slug.current,\n      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,\n      "/"\n    ),\n    linkType == "external" => coalesce(externalUrl, "#"),\n    "#"\n  )\n },\n      children[]{ \n  label,\n  linkType,\n  openInNewTab,\n  "href": select(\n    linkType == "internal" => select(\n      internalReference->_type == "page" => "/" + internalReference->slug.current,\n      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,\n      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,\n      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,\n      internalReference->_type == "category" => "/category/" + internalReference->slug.current,\n      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,\n      "/"\n    ),\n    linkType == "external" => coalesce(externalUrl, "#"),\n    "#"\n  )\n }\n    },\n    "footer": *[_type == "siteFooter" && _id == "siteFooter"][0].columns[]{\n      _key,\n      heading,\n      links[]{ \n  label,\n  linkType,\n  openInNewTab,\n  "href": select(\n    linkType == "internal" => select(\n      internalReference->_type == "page" => "/" + internalReference->slug.current,\n      internalReference->_type == "article" => "/articles/" + internalReference->slug.current,\n      internalReference->_type == "guide" => "/guides/" + internalReference->slug.current,\n      internalReference->_type == "resource" => "/resources/" + internalReference->slug.current,\n      internalReference->_type == "category" => "/category/" + internalReference->slug.current,\n      internalReference->_type == "tag" => "/tags/" + internalReference->slug.current,\n      "/"\n    ),\n    linkType == "external" => coalesce(externalUrl, "#"),\n    "#"\n  )\n }\n    }\n  }\n': QueryNavigationResult;
   }
 }

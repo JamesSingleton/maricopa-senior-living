@@ -1,41 +1,46 @@
+import { DocumentIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
-
-import { createSlug, isUnique } from "../../utils/slug";
+import { isReservedPageSlug, isUniqueSlug } from "../../utils/validation";
+import { pageBuilderField } from "../objects/page-builder";
+import { seoField } from "../objects/seo";
 
 export const page = defineType({
   name: "page",
-  type: "document",
   title: "Page",
-  description: "Pages are used for static content like Disclaimers and About.",
+  type: "document",
+  icon: DocumentIcon,
+  description: "Flexible content pages built with the page builder (e.g. About, Contact).",
   fields: [
     defineField({
       name: "title",
-      type: "string",
       title: "Title",
+      type: "string",
       validation: (rule) => rule.required(),
     }),
     defineField({
       name: "slug",
-      type: "slug",
       title: "Slug",
-      validation: (rule) => rule.required(),
-      options: {
-        source: "title",
-        slugify: createSlug,
-        maxLength: 96,
-        isUnique: isUnique,
-      },
+      type: "slug",
+      options: { source: "title", maxLength: 96 },
+      validation: (rule) =>
+        rule
+          .required()
+          .custom(async (slug, context) => {
+            if (!slug?.current) return "Slug is required";
+            if (isReservedPageSlug(slug.current)) {
+              return `"${slug.current}" is a reserved path — choose a different slug`;
+            }
+            const unique = await isUniqueSlug(slug.current, context);
+            return unique || "Slug is already in use";
+          }),
     }),
-    defineField({
-      name: "body",
-      type: "blockContent",
-      title: "Body",
-      validation: (rule) => rule.required(),
-    }),
+    pageBuilderField,
+    seoField,
   ],
   preview: {
-    select: {
-      title: "title",
+    select: { title: "title", slug: "slug.current" },
+    prepare({ title, slug }) {
+      return { title, subtitle: slug ? `/${slug}` : undefined };
     },
   },
 });

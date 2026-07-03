@@ -32,6 +32,7 @@
   "exports": {
     "./client": "./src/client.ts",
     "./queries": "./src/queries.ts",
+    "./metadata": "./src/metadata.ts",
     "./live": "./src/live.ts",
     "./image": "./src/image.ts",
     "./types": "./src/types.ts"

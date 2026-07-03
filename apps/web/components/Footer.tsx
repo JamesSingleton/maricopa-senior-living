@@ -1,57 +1,64 @@
-import Link from "next/link";
+import { CmsLink, type CmsLinkData } from "@/components/CmsLink";
 
-interface FooterProps {
+export interface FooterColumn {
   _key: string;
-  url: string;
-  text: string;
-  reference: {
-    _id: string;
-    _type: string;
-    slug: string;
-    title: string;
-  };
+  heading?: string | null;
+  links?: CmsLinkData[] | null;
 }
 
-export default function Footer({ menu }: { menu: FooterProps[] }) {
+export default function Footer({
+  columns = [],
+  tagline,
+  copyright,
+  siteTitle = "Maricopa Senior Resource Hub",
+}: {
+  columns?: FooterColumn[];
+  tagline?: string | null;
+  copyright?: string | null;
+  siteTitle?: string;
+}) {
   return (
-    <footer className="bg-white">
-      <div className="mx-auto max-w-7xl overflow-hidden px-6 py-10 sm:py-12 lg:px-8">
-        <nav
-          className="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12"
-          aria-label="Footer"
-        >
-          {menu.map((item) => (
-            <div key={item._key} className="pb-6">
-              {item.reference ? (
-                <Link
-                  href={`/${item.reference.slug}`}
-                  className="text-base leading-6 text-zinc-600 hover:text-zinc-900"
-                  prefetch={false}
-                >
-                  {item.reference.title}
-                </Link>
-              ) : (
-                <a
-                  href={item.url}
-                  className="text-base leading-6 text-zinc-600 hover:text-zinc-900"
-                >
-                  {item.text}
-                </a>
-              )}
-            </div>
-          ))}
-        </nav>
-        <p className="mt-10 text-center text-sm leading-5 text-zinc-500">
-          &copy; {new Date().getFullYear()} Maricopa Senior Living. All rights
-          reserved.{" "}
-          <a
-            className="text-indigo-600 hover:text-indigo-700"
-            target="_blank"
-            rel="noopener"
-            href="https://www.jamessingleton.me"
+    <footer className="border-t border-border bg-muted/30">
+      <div className="container py-12">
+        <div className="mb-8 max-w-md">
+          <p className="font-serif text-lg font-semibold text-foreground">
+            {siteTitle}
+          </p>
+          {tagline ? (
+            <p className="mt-2 text-sm text-muted-foreground">{tagline}</p>
+          ) : null}
+        </div>
+        {columns.length > 0 ? (
+          <nav
+            className="grid gap-8 sm:grid-cols-2 md:grid-cols-3"
+            aria-label="Footer"
           >
-            Built and maintained by James Singleton
-          </a>
+            {columns.map((column) => (
+              <div key={column._key}>
+                {column.heading ? (
+                  <h2 className="text-sm font-semibold uppercase tracking-wide text-foreground">
+                    {column.heading}
+                  </h2>
+                ) : null}
+                <ul className="mt-3 space-y-2">
+                  {column.links?.map((link, i) =>
+                    link?.href ? (
+                      <li key={`${column._key}-${i}`}>
+                        <CmsLink
+                          link={link}
+                          className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                        />
+                      </li>
+                    ) : null,
+                  )}
+                </ul>
+              </div>
+            ))}
+          </nav>
+        ) : null}
+        <p className="mt-10 border-t border-border pt-6 text-center text-sm text-muted-foreground">
+          {copyright ??
+            `© ${new Date().getFullYear()} ${siteTitle}. All rights reserved.`}
         </p>
       </div>
     </footer>

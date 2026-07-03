@@ -1,11 +1,12 @@
+import { UserIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
-
-import { createSlug, isUnique } from "../../utils/slug";
 
 export const author = defineType({
   name: "author",
   title: "Author",
   type: "document",
+  icon: UserIcon,
+  description: "People who write articles and guides for the site.",
   fields: [
     defineField({
       name: "name",
@@ -17,41 +18,22 @@ export const author = defineType({
       name: "slug",
       title: "Slug",
       type: "slug",
-      options: {
-        source: "name",
-        slugify: createSlug,
-        maxLength: 96,
-        isUnique,
-      },
-      validation: (rule) => rule.required(),
+      options: { source: "name", maxLength: 96 },
     }),
     defineField({
       name: "image",
-      title: "Image",
+      title: "Photo",
       type: "image",
-      options: {
-        hotspot: true,
-      },
-      validation: (rule) => rule.required(),
+      options: { hotspot: true },
     }),
     defineField({
       name: "bio",
       title: "Bio",
-      type: "array",
-      of: [
-        {
-          title: "Block",
-          type: "block",
-          styles: [{ title: "Normal", value: "normal" }],
-          lists: [],
-        },
-      ],
+      type: "text",
+      rows: 4,
     }),
   ],
   preview: {
-    select: {
-      title: "name",
-      media: "image",
-    },
+    select: { title: "name", media: "image" },
   },
 });
