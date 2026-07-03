@@ -26,7 +26,7 @@
     "@maricopa-senior-living/typescript-config": "workspace:*",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
-    "next": "^16.2.9",
+    "next": "^16.2.10",
     "typescript": "catalog:"
   },
   "exports": {
