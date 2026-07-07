@@ -1,4 +1,4 @@
-import { TagIcon } from "@sanity/icons";
+import { TagIcon } from "@sanity/icons/Tag";
 import { defineField, defineType } from "sanity";
 
 import { createSlug, isUnique } from "../../utils/slug";

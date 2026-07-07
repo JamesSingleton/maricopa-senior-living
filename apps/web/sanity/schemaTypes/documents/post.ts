@@ -8,6 +8,8 @@ export const post = defineType({
     defineField({
       name: "title",
       title: "Title",
+      description:
+        "The title of the post, this is your h1, do not add an h1 in the body of the post",
       type: "string",
       validation: (rule) => rule.required(),
     }),

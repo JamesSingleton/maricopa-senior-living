@@ -136,11 +136,7 @@ export function MobileNav({ siteTitle, items, className }: MobileNavProps) {
           </SheetTitle>
           <SheetClose
             render={
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label="Close menu"
-              />
+              <Button variant="ghost" size="icon" aria-label="Close menu" />
             }
           >
             <X />

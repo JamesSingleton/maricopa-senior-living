@@ -1,4 +1,5 @@
-import { ImageIcon, LinkIcon } from "@sanity/icons";
+import { ImageIcon } from "@sanity/icons/Image";
+import { LinkIcon } from "@sanity/icons/Link";
 import { defineArrayMember, defineField, defineType } from "sanity";
 
 const richTextMembers = [

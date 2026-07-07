@@ -141,8 +141,7 @@ export function resolveNavbarHref(
     href.startsWith("https://") ||
     Boolean(openInNewTab);
 
-  const resolvedHref =
-    isExternal || href.startsWith("/") ? href : `/${href}`;
+  const resolvedHref = isExternal || href.startsWith("/") ? href : `/${href}`;
 
   return {
     href: resolvedHref,

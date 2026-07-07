@@ -107,8 +107,7 @@ const navbarColumn = defineField({
       name: "title",
       type: "string",
       title: "Column Title",
-      description:
-        "Optional heading above this group of links (e.g. More)",
+      description: "Optional heading above this group of links (e.g. More)",
     }),
     defineField({
       name: "links",
@@ -138,8 +137,7 @@ const navbarMegaMenu = defineField({
   type: "object",
   icon: LayoutPanelLeft,
   title: "Mega Menu",
-  description:
-    "A dropdown menu with multiple columns of links (e.g. Features)",
+  description: "A dropdown menu with multiple columns of links (e.g. Features)",
   fields: [
     defineField({
       name: "title",

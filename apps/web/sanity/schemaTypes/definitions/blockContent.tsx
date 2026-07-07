@@ -1,4 +1,5 @@
-import { DocumentPdfIcon, ImageIcon } from "@sanity/icons";
+import { DocumentPdfIcon } from "@sanity/icons/DocumentPdf";
+import { ImageIcon } from "@sanity/icons/Image";
 import type { JSXElementConstructor, ReactElement, ReactPortal } from "react";
 import { defineArrayMember, defineField, defineType } from "sanity";
 
