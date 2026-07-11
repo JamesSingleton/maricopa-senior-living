@@ -1,25 +1,20 @@
-import { urlFor } from "@maricopa-senior-living/sanity/client";
 import {
   PortableText,
   type PortableTextComponents,
   type PortableTextMarkComponentProps,
 } from "@portabletext/react";
-import { getImageDimensions } from "@sanity/asset-utils";
 import { DownloadIcon } from "lucide-react";
-import Image from "next/image";
 import type { PortableTextBlock } from "sanity";
 
-const ImageComponent = ({ value }: { value: any }) => {
-  const { width, height } = getImageDimensions(value);
-  return (
-    <Image
-      src={urlFor(value).fit("min").auto("format").url()}
-      alt={value.alt || " "}
-      width={width}
-      height={height}
-    />
-  );
-};
+import { SanityImage, type SanityImageProps } from "./sanity-image";
+
+function PortableTextImage({
+  value,
+}: {
+  value: NonNullable<SanityImageProps["image"]>;
+}) {
+  return <SanityImage image={value} className="rounded-md" />;
+}
 
 export function CustomPortableText({
   paragraphClasses,
@@ -53,7 +48,7 @@ export function CustomPortableText({
       },
     },
     types: {
-      image: ImageComponent,
+      image: PortableTextImage,
       attachment: ({ value }: { value: any }) => {
         return (
           <p className="flex flex-col items-center justify-between space-y-4 md:flex-row">

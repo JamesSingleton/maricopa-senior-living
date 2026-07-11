@@ -18,7 +18,7 @@ import { notFound } from "next/navigation";
 import BackButton from "@/components/BackButton";
 import { CustomPortableText } from "@/components/CustomPortableText";
 import DateComponent from "@/components/Date";
-import ImageComponent from "@/components/ImageComponent";
+import { SanityImage } from "@/components/sanity-image";
 
 export async function generateStaticParams() {
   const { data } = await sanityFetchStaticParams({
@@ -100,7 +100,7 @@ async function CachedArticlePage({
         <div className="px-4 py-4 sm:px-10 sm:py-10">
           <div className="flex flex-wrap space-x-5 xl:space-x-10">
             <span className="flex items-center space-x-2">
-              <ImageComponent
+              <SanityImage
                 image={post.author.image}
                 alt={`Avatar of ${post.author.name}`}
                 width={24}
@@ -120,9 +120,8 @@ async function CachedArticlePage({
           </h1>
           {post.mainImage && (
             <div className="flex items-center justify-center">
-              <ImageComponent
+              <SanityImage
                 image={post.mainImage}
-                alt={post.mainImage.alt}
                 width={1024}
                 height={768}
                 className="rounded-md"

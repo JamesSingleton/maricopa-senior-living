@@ -22,7 +22,7 @@ import Link from "next/link";
 import DateComponent from "@/components/Date";
 import SearchBar from "@/components/SearchBar";
 import { CustomPortableText } from "./CustomPortableText";
-import ImageComponent from "./ImageComponent";
+import { SanityImage } from "./sanity-image";
 
 async function fetchRightSidebarData({
   perspective,
@@ -105,7 +105,7 @@ export async function CachedRightSidebar({
                   </p>
                 </div>
                 <div className="relative mt-8 flex items-center gap-x-4">
-                  <ImageComponent
+                  <SanityImage
                     image={whatsNew.author.image}
                     alt={`${whatsNew.author.name} avatar`}
                     className="h-10 w-10 rounded-full bg-zinc-50"

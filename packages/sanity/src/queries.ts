@@ -75,6 +75,21 @@ const richTextFragment = /* groq */ `
   }
 `;
 
+const blockContentFragment = /* groq */ `
+  ...,
+  _type == "block" => {
+    ...
+  },
+  _type == "image" => {
+    ${imageFields},
+    "caption": caption
+  },
+  _type == "attachment" => {
+    ...,
+    asset->
+  }
+`;
+
 const blogAuthorFragment = /* groq */ `
   authors[0]->{
     _id,
@@ -102,9 +117,9 @@ const blogCardFragment = /* groq */ `
  * Helps with TypeScript inference for image objects
  */
 export const queryImageType = defineQuery(`
-  *[_type == "post" && defined(mainImage)][0]{
-    ${imageFragment}
-  }.mainImage
+  *[_type == "post" && defined(mainImage)][0].mainImage{
+    ${imageFields}
+  }
 `);
 
 const pageBuilderFragment = /* groq */ `
@@ -227,14 +242,7 @@ const COUNT_FOR_SIDEBAR = /* groq */ `count(*[_type == "post" && references(^._i
 
 const authorFields = /* groq */ `
   name,
-  "image": {
-    "asset": image.asset->{
-      _id,
-      _type,
-      metadata,
-      url
-    }
-  },
+  ${imageFragment},
   "slug": slug.current,
 `;
 
@@ -244,14 +252,7 @@ const bodyExcerptFragment = /* groq */ `
 
 const rightSidebarAuthorFields = /* groq */ `
   name,
-  "image": {
-    "asset": image.asset->{
-      _id,
-      _type,
-      metadata,
-      url
-    }
-  }
+  ${imageFragment}
 `;
 
 const rightSidebarPostListFields = /* groq */ `
@@ -281,7 +282,9 @@ const postFields = /* groq */ `
   "author": author->{
     ${authorFields}
   },
-  mainImage,
+  mainImage {
+    ${imageFields}
+  },
   "categories": categories[]->{
     _id,
     title,
@@ -300,11 +303,7 @@ const postFields = /* groq */ `
   },
   publishedAt,
   "body": body[]{
-    ...,
-    _type == "attachment" => {
-      ...,
-      asset->
-    }
+    ${blockContentFragment}
   },
 `;
 
@@ -356,7 +355,9 @@ export const rightSidebarQuery = defineQuery(/* groq */ `{
   },
   "nonProfit": *[_type == "category" && slug.current == "${RIGHT_SIDEBAR_NONPROFIT_CATEGORY_SLUG}"][0]{
     title,
-    description,
+    "description": description[]{
+      ${blockContentFragment}
+    },
     "slug": slug.current
   },
   "newsletter": *[
@@ -369,7 +370,25 @@ export const rightSidebarQuery = defineQuery(/* groq */ `{
 }`);
 
 export const queryHomePageData = defineQuery(`
-  *[_type == "home"][0]
+  *[_type == "home"][0]{
+    _id,
+    _type,
+    image {
+      ${imageFields},
+      "caption": caption
+    },
+    "content": content[]{
+      ...,
+      _type == "image" => {
+        ${imageFields},
+        "caption": caption
+      },
+      _type == "attachment" => {
+        ...,
+        asset->
+      }
+    }
+  }
 `);
 
 export const queryAllPosts = defineQuery(`
@@ -408,7 +427,9 @@ export const queryCategoryBySlug = defineQuery(`
   *[_type == "category" && slug.current == $slug]{
     title,
     "slug": slug.current,
-    description,
+    "description": description[]{
+      ${blockContentFragment}
+    },
     "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",
     "combinedList": [
       ...(*[_type == "service" && references(^._id)]{
@@ -463,7 +484,9 @@ export const queryTagBySlug = defineQuery(`
   *[_type == "tag" && slug.current == $slug]{
     title,
     "slug": slug.current,
-    description,
+    "description": description[]{
+      ${blockContentFragment}
+    },
     "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",
     "posts": *[_type == "post" && references(^._id) && isArchived != true]{
       ${postFields}

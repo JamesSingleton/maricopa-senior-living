@@ -8,7 +8,7 @@ import Link from "next/link";
 
 import type { Post } from "@/types/Post";
 import DateComponent from "./Date";
-import ImageComponent from "./ImageComponent";
+import { SanityImage } from "./sanity-image";
 
 const articleLinkClassName =
   "block rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
@@ -43,7 +43,7 @@ export default function ArticleCard({ post }: { post: Post }) {
               {post.excerpt}
             </CardDescription>
             <div className="flex items-center gap-3">
-              <ImageComponent
+              <SanityImage
                 className="size-10 rounded-full object-cover"
                 image={post.author.image}
                 alt={post.author.name}

@@ -2,9 +2,9 @@
   "name": "maricopa-senior-living",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@10.32.1",
+  "packageManager": "pnpm@11.11.0",
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   },
   "scripts": {
     "build": "turbo run build",
@@ -18,7 +18,7 @@
     "check:types": "turbo run check:types"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.2",
+    "@biomejs/biome": "^2.5.3",
     "@maricopa-senior-living/typescript-config": "workspace:*",
     "turbo": "^2.10.4",
     "typescript": "catalog:"

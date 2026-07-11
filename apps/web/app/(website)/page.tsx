@@ -9,7 +9,7 @@ import { draftMode } from "next/headers";
 import { Suspense } from "react";
 
 import { CustomPortableText } from "@/components/CustomPortableText";
-import ImageComponent from "@/components/ImageComponent";
+import { SanityImage } from "@/components/sanity-image";
 import { baseUrl } from "@/lib/constants";
 
 export async function generateMetadata(
@@ -65,9 +65,8 @@ async function CachedHome({ perspective, stega }: DynamicFetchOptions) {
   return (
     <>
       <figure>
-        <ImageComponent
+        <SanityImage
           image={homePageData?.image}
-          alt={homePageData?.image?.alt}
           width={1024}
           height={686}
           loading="eager"

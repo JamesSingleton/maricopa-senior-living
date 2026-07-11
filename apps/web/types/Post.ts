@@ -1,3 +1,4 @@
+import type { SanityImageData } from "@maricopa-senior-living/sanity/image";
 import type { PortableTextBlock } from "sanity";
 
 export type Post = {
@@ -8,17 +9,10 @@ export type Post = {
   slug: string;
   author: {
     name: string;
-    image?: string;
+    image?: SanityImageData | null;
     slug: string;
   };
-  mainImage?: {
-    asset: {
-      _ref: string;
-      _type: string;
-    };
-    _type: string;
-    alt: string;
-  };
+  mainImage?: SanityImageData | null;
   categories: {
     _id: string;
     title: string;
