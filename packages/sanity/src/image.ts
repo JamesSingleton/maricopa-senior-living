@@ -7,7 +7,9 @@ import type { QueryImageTypeResult } from "./types";
 type SanityImageHotspot = Pick<ImageHotspot, "x" | "y">;
 type SanityImageCrop = Pick<ImageCrop, "top" | "bottom" | "left" | "right">;
 
-export type SanityImageData = [NonNullable<QueryImageTypeResult>] extends [never]
+export type SanityImageData = [NonNullable<QueryImageTypeResult>] extends [
+  never,
+]
   ? {
       readonly id: string;
       readonly alt: string;

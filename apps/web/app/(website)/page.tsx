@@ -2,8 +2,12 @@ import {
   type DynamicFetchOptions,
   getDynamicFetchOptions,
   sanityFetch,
+  sanityFetchMetadata,
 } from "@maricopa-senior-living/sanity/live";
-import { queryHomePageData } from "@maricopa-senior-living/sanity/queries";
+import {
+  queryGlobalSeoSettings,
+  queryHomePageData,
+} from "@maricopa-senior-living/sanity/queries";
 import type { Metadata, ResolvingMetadata } from "next";
 import { draftMode } from "next/headers";
 import { Suspense } from "react";
@@ -16,17 +20,32 @@ export async function generateMetadata(
   _props: unknown,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
+  const { perspective } = await getDynamicFetchOptions();
+  const { data } = await sanityFetchMetadata({
+    query: queryGlobalSeoSettings,
+    perspective,
+  });
+  const settings = data as {
+    siteTitle?: string | null;
+    siteDescription?: string | null;
+  } | null;
   const previousOpenGraph = (await parent)?.openGraph;
+  const title =
+    settings?.siteTitle ?? "Maricopa Senior Living - Aging Well Your Way!";
+  const description =
+    settings?.siteDescription ??
+    "Your go to source for senior living in Maricopa, AZ";
+
   return {
-    title: "Maricopa Senior Living - Aging Well Your Way!",
-    description: "Your go to source for senior living in Maricopa, AZ",
+    title,
+    description,
     openGraph: {
       ...previousOpenGraph,
-      title: "Maricopa Senior Living - Aging Well Your Way!",
-      description: "Your go to source for senior living in Maricopa, AZ",
+      title,
+      description,
       locale: "en_US",
       url: baseUrl,
-      siteName: "Maricopa Senior Living",
+      siteName: settings?.siteTitle ?? "Maricopa Senior Living",
       type: "website",
     },
     alternates: {

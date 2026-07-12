@@ -12,8 +12,10 @@ import {
 import type { QueryArticleSlugPageDataResult } from "@maricopa-senior-living/sanity/types";
 import { CalendarIcon } from "lucide-react";
 import type { Metadata } from "next";
+import { draftMode } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 import BackButton from "@/components/BackButton";
 import { CustomPortableText } from "@/components/CustomPortableText";
@@ -61,6 +63,27 @@ export async function generateMetadata({
 }
 
 export default async function ArticlePage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { isEnabled: isDraftMode } = await draftMode();
+
+  if (isDraftMode) {
+    return (
+      <Suspense fallback={<ArticleFallback />}>
+        <DynamicArticlePage params={params} />
+      </Suspense>
+    );
+  }
+
+  const { slug } = await params;
+  return (
+    <CachedArticlePage slug={slug} perspective="published" stega={false} />
+  );
+}
+
+async function DynamicArticlePage({
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -150,5 +173,20 @@ async function CachedArticlePage({
         </div>
       </article>
     </>
+  );
+}
+
+function ArticleFallback() {
+  return (
+    <div aria-busy>
+      <div className="h-8 w-24 animate-pulse rounded bg-zinc-200" />
+      <div className="mt-6 space-y-4">
+        <div className="h-10 w-3/4 animate-pulse rounded bg-zinc-200" />
+        <div className="aspect-[4/3] animate-pulse rounded-md bg-zinc-200" />
+        <div className="h-4 animate-pulse rounded bg-zinc-200" />
+        <div className="h-4 animate-pulse rounded bg-zinc-200" />
+        <div className="h-4 w-5/6 animate-pulse rounded bg-zinc-200" />
+      </div>
+    </div>
   );
 }

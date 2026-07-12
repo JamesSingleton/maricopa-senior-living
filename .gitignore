@@ -23,6 +23,9 @@ coverage
 .vercel
 next-env.d.ts
 
+# Sanity Blueprints local config
+.sanity/
+
 # Build Outputs
 .next/
 out/

@@ -2,27 +2,63 @@ import {
   type DynamicFetchOptions,
   getDynamicFetchOptions,
   sanityFetch,
+  sanityFetchMetadata,
   sanityFetchStaticParams,
 } from "@maricopa-senior-living/sanity/live";
 import {
   queryAllPageSlugs,
   queryPageBySlug,
 } from "@maricopa-senior-living/sanity/queries";
+import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import type { PortableTextBlock } from "sanity";
 
 import { CustomPortableText } from "@/components/CustomPortableText";
+import { baseUrl } from "@/lib/constants";
 
 type PageData = {
   title: string;
+  slug?: string | null;
+  excerpt?: string | null;
   body: PortableTextBlock[];
 } | null;
 
 export async function generateStaticParams() {
   const { data } = await sanityFetchStaticParams({ query: queryAllPageSlugs });
   return data ?? [];
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const [{ slug }, { perspective }] = await Promise.all([
+    params,
+    getDynamicFetchOptions(),
+  ]);
+  const { data } = await sanityFetchMetadata({
+    query: queryPageBySlug,
+    params: { slug },
+    perspective,
+  });
+  const pageData = data as PageData;
+
+  if (!pageData) {
+    return {};
+  }
+
+  return {
+    title: pageData.title,
+    description: pageData.excerpt ?? undefined,
+    openGraph: {
+      title: pageData.title,
+      description: pageData.excerpt ?? undefined,
+      url: `${baseUrl}/${pageData.slug ?? slug}`,
+    },
+  };
 }
 
 export default async function Page({

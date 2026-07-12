@@ -11,7 +11,6 @@ export const client = createClient({
   perspective: "published",
   stega: {
     studioUrl: env.NEXT_PUBLIC_SANITY_STUDIO_URL,
-    enabled: env.NEXT_PUBLIC_VERCEL_ENV === "preview",
   },
 });
 

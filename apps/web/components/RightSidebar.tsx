@@ -24,43 +24,39 @@ import SearchBar from "@/components/SearchBar";
 import { CustomPortableText } from "./CustomPortableText";
 import { SanityImage } from "./sanity-image";
 
-async function fetchRightSidebarData({
-  perspective,
-  stega,
-}: DynamicFetchOptions) {
-  "use cache";
-  const [categories, tags, sidebar] = await Promise.all([
-    sanityFetch({ query: highlightedCategories, perspective, stega }),
-    sanityFetch({ query: highlightedTags, perspective, stega }),
-    sanityFetch({ query: rightSidebarQuery, perspective, stega }),
-  ]);
-
-  return {
-    highlightedCategories: categories.data,
-    highlightedTags: tags.data,
-    rightSidebarData: sidebar.data,
-  };
-}
-
 export async function DynamicRightSidebar() {
   const { perspective, stega } = await getDynamicFetchOptions();
   return <CachedRightSidebar perspective={perspective} stega={stega} />;
 }
 
+/** Composes independently cached sidebar regions to limit invalidation fan-out. */
 export async function CachedRightSidebar({
   perspective,
   stega,
 }: DynamicFetchOptions) {
+  return (
+    <>
+      <SearchBar />
+      <CachedSidebarFeed perspective={perspective} stega={stega} />
+      <CachedSidebarTaxonomy perspective={perspective} stega={stega} />
+      <SupportFeedbackCard />
+    </>
+  );
+}
+
+async function CachedSidebarFeed({ perspective, stega }: DynamicFetchOptions) {
   "use cache";
-  const { highlightedCategories, highlightedTags, rightSidebarData } =
-    await fetchRightSidebarData({ perspective, stega });
+  const { data: rightSidebarData } = await sanityFetch({
+    query: rightSidebarQuery,
+    perspective,
+    stega,
+  });
 
   const { whatsNew, seniorCenterNewsletters, nonProfit, newsletter } =
     rightSidebarData ?? {};
 
   return (
     <>
-      <SearchBar />
       {nonProfit && (
         <Card>
           <CardHeader>
@@ -195,6 +191,25 @@ export async function CachedRightSidebar({
           </CardContent>
         </Card>
       )}
+    </>
+  );
+}
+
+async function CachedSidebarTaxonomy({
+  perspective,
+  stega,
+}: DynamicFetchOptions) {
+  "use cache";
+  const [categoriesResult, tagsResult] = await Promise.all([
+    sanityFetch({ query: highlightedCategories, perspective, stega }),
+    sanityFetch({ query: highlightedTags, perspective, stega }),
+  ]);
+
+  const categories = categoriesResult.data;
+  const tags = tagsResult.data;
+
+  return (
+    <>
       <Card>
         <CardHeader>
           <CardTitle className="text-xl font-bold lg:text-2xl">
@@ -203,7 +218,7 @@ export async function CachedRightSidebar({
         </CardHeader>
         <CardContent>
           <ul className="space-y-4">
-            {highlightedCategories?.map((category: any) => (
+            {categories?.map((category: any) => (
               <li key={category._id} className="block">
                 <Link
                   href={`/category/${category.slug}`}
@@ -224,7 +239,7 @@ export async function CachedRightSidebar({
         </CardHeader>
         <CardContent>
           <ul className="flex flex-wrap">
-            {highlightedTags?.map((tag: any) => (
+            {tags?.map((tag: any) => (
               <li className="mr-2 pb-2" key={tag._id}>
                 <Link
                   title={tag.title}
@@ -239,38 +254,43 @@ export async function CachedRightSidebar({
           </ul>
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle className="font-bold lg:text-2xl">
-            Support & Feedback
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4 space-x-4 text-center">
-            <Link
-              href="https://www.paypal.com/donate?hosted_button_id=VDPMC329ZC5ZE"
-              className={buttonVariants()}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <CircleDollarSignIcon
-                className="-ml-0.5 h-5 w-5"
-                aria-hidden="true"
-              />
-              Donate
-            </Link>
-            <a
-              href="mailto:ron@maricopaseniorliving.org"
-              className={buttonVariants()}
-            >
-              <MailIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
-              Email Us!
-            </a>
-            <p>This site is owned and managed by Ron Smith</p>
-          </div>
-        </CardContent>
-      </Card>
     </>
+  );
+}
+
+function SupportFeedbackCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="font-bold lg:text-2xl">
+          Support & Feedback
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4 space-x-4 text-center">
+          <Link
+            href="https://www.paypal.com/donate?hosted_button_id=VDPMC329ZC5ZE"
+            className={buttonVariants()}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <CircleDollarSignIcon
+              className="-ml-0.5 h-5 w-5"
+              aria-hidden="true"
+            />
+            Donate
+          </Link>
+          <a
+            href="mailto:ron@maricopaseniorliving.org"
+            className={buttonVariants()}
+          >
+            <MailIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
+            Email Us!
+          </a>
+          <p>This site is owned and managed by Ron Smith</p>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 

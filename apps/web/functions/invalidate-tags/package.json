@@ -1,0 +1,8 @@
+{
+  "name": "invalidate-tags",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@sanity/functions": "^1.4.0"
+  }
+}

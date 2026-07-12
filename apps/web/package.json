@@ -13,7 +13,9 @@
     "check:types": "tsc --noEmit",
     "deploy:schema": "sanity schema deploy --manifest-dir public/admin/static",
     "deploy": "sanity deploy",
-    "type": "sanity schema extract --enforce-required-fields && sanity typegen generate"
+    "type": "sanity schema extract --enforce-required-fields && sanity typegen generate",
+    "blueprints:deploy": "npx sanity@latest blueprints deploy",
+    "blueprints:plan": "npx sanity@latest blueprints plan"
   },
   "dependencies": {
     "@maricopa-senior-living/env": "workspace:*",
@@ -46,6 +48,8 @@
   },
   "devDependencies": {
     "@maricopa-senior-living/typescript-config": "workspace:*",
+    "@sanity/blueprints": "^0.21.0",
+    "@sanity/functions": "^1.4.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/postcss": "^4.3.2",

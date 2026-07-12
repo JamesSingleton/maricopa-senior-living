@@ -2214,6 +2214,7 @@ export type QueryPageBySlugResult = {
 
 // Query TypeMap
 import "@sanity/client";
+
 declare module "@sanity/client" {
   interface SanityQueries {
     '\n  *[_type == "post" && defined(mainImage)][0].mainImage{\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n': QueryImageTypeResult;

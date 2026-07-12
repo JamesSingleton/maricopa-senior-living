@@ -18,7 +18,7 @@ import {
 import { cn } from "@maricopa-senior-living/ui/lib/utils";
 import { ChevronDown, Menu, X } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import {
@@ -104,12 +104,12 @@ function MobileNavLink({
 
 export function MobileNav({ siteTitle, items, className }: MobileNavProps) {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const [open, setOpen] = useState(false);
 
+  // Close on route change (pathname only — useSearchParams blocks the static shell).
   useEffect(() => {
     setOpen(false);
-  }, [pathname, searchParams]);
+  }, [pathname]);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>

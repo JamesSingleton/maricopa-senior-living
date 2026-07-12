@@ -16,6 +16,7 @@ import PlausibleProvider from "next-plausible";
 import { VisualEditing } from "next-sanity/visual-editing";
 import { Suspense } from "react";
 
+import { DisableDraftMode } from "@/components/DisableDraftMode";
 import Footer from "@/components/Footer";
 import {
   CachedRightSidebar,
@@ -120,13 +121,13 @@ export default async function IndexLayout({
         data-account="qeA6uoRyx5"
         data-position="2"
       />
-      <Suspense fallback={<HeaderFallback />}>
-        {isDraftMode ? (
+      {isDraftMode ? (
+        <Suspense fallback={<HeaderFallback />}>
           <DynamicHeader />
-        ) : (
-          <CachedHeader perspective="published" stega={false} />
-        )}
-      </Suspense>
+        </Suspense>
+      ) : (
+        <CachedHeader perspective="published" stega={false} />
+      )}
       <main className="py-8 md:py-10 lg:py-14 xl:py-16">
         <div className="container grid grid-cols-12 gap-8">
           <div className="col-span-12 lg:col-span-8">{children}</div>
@@ -149,8 +150,18 @@ export default async function IndexLayout({
         <CachedFooter perspective="published" stega={false} />
       )}
       <ScrollToTop />
-      <SanityLive includeDrafts={isDraftMode} />
-      {isDraftMode && <VisualEditing />}
+      <SanityLive
+        includeDrafts={isDraftMode}
+        waitFor={
+          process.env.VERCEL_ENV === "production" ? "function" : undefined
+        }
+      />
+      {isDraftMode && (
+        <>
+          <VisualEditing />
+          <DisableDraftMode />
+        </>
+      )}
     </PlausibleProvider>
   );
 }

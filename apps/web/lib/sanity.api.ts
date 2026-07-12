@@ -13,7 +13,9 @@ export const dataset = assertValue(
 export const apiVersion =
   process.env.NEXT_PUBLIC_SANITY_API_VERSION || "2023-06-21";
 
-export const webhookSecret = process.env.SANITY_WEBHOOK_SECRET;
+/** Shared secret for `/api/expire-tags` (and legacy webhook configs). */
+export const webhookSecret =
+  process.env.SANITY_REVALIDATE_SECRET ?? process.env.SANITY_WEBHOOK_SECRET;
 
 function assertValue<T>(v: T | undefined, errorMessage: string): T {
   if (v === undefined) {
