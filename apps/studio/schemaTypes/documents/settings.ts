@@ -1,101 +1,87 @@
-import { CogIcon } from "lucide-react";
+import { CogIcon } from "@sanity/icons/Cog";
 import { defineField, defineType } from "sanity";
-
-const socialLinks = defineField({
-  name: "socialLinks",
-  title: "Social Media Links",
-  description: "Add links to your social media profiles",
-  type: "object",
-  options: {},
-  fields: [
-    defineField({
-      name: "linkedin",
-      title: "LinkedIn URL",
-      description: "Full URL to your LinkedIn profile/company page",
-      type: "string",
-    }),
-    defineField({
-      name: "facebook",
-      title: "Facebook URL",
-      description: "Full URL to your Facebook profile/page",
-      type: "string",
-    }),
-    defineField({
-      name: "twitter",
-      title: "Twitter/X URL",
-      description: "Full URL to your Twitter/X profile",
-      type: "string",
-    }),
-    defineField({
-      name: "instagram",
-      title: "Instagram URL",
-      description: "Full URL to your Instagram profile",
-      type: "string",
-    }),
-    defineField({
-      name: "youtube",
-      title: "YouTube URL",
-      description: "Full URL to your YouTube channel",
-      type: "string",
-    }),
-  ],
-});
 
 export const settings = defineType({
   name: "settings",
+  title: "Site settings",
   type: "document",
-  title: "Settings",
-  description: "Global settings and configuration for your website",
   icon: CogIcon,
+  groups: [
+    { name: "site", title: "Site", default: true },
+    { name: "contact", title: "Contact" },
+    { name: "seo", title: "Default SEO" },
+  ],
   fields: [
     defineField({
-      name: "label",
-      type: "string",
-      initialValue: "Settings",
-      title: "Label",
-      description: "Label used to identify settings in the CMS",
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
       name: "siteTitle",
+      title: "Site title",
       type: "string",
-      title: "Site Title",
-      description:
-        "The main title of your website, used in browser tabs and SEO",
+      group: "site",
       validation: (rule) => rule.required(),
     }),
     defineField({
       name: "siteDescription",
+      title: "Site description",
       type: "text",
-      title: "Site Description",
-      description: "A brief description of your website for SEO purposes",
-      validation: (rule) => rule.required().min(50).max(160),
+      rows: 3,
+      group: "site",
     }),
     defineField({
       name: "logo",
+      title: "Logo",
       type: "image",
-      title: "Site Logo",
-      description: "Upload your website logo",
-      options: {
-        hotspot: true,
-      },
+      group: "site",
+      options: { hotspot: true },
+      fields: [
+        defineField({
+          name: "alt",
+          title: "Alternative text",
+          type: "string",
+        }),
+      ],
     }),
     defineField({
-      name: "contactEmail",
+      name: "footerBlurb",
+      title: "Footer blurb",
+      type: "text",
+      rows: 3,
+      group: "site",
+      description: "Short text shown in the site footer.",
+    }),
+    defineField({
+      name: "phone",
+      title: "Phone",
       type: "string",
-      title: "Contact Email",
-      description: "Primary contact email address for your website",
+      group: "contact",
+    }),
+    defineField({
+      name: "email",
+      title: "Email",
+      type: "string",
+      group: "contact",
       validation: (rule) => rule.email(),
     }),
-    socialLinks,
+    defineField({
+      name: "address",
+      title: "Address",
+      type: "text",
+      rows: 3,
+      group: "contact",
+    }),
+    defineField({
+      name: "seo",
+      title: "Default SEO",
+      type: "seo",
+      group: "seo",
+      description: "Fallback metadata when a page does not set its own SEO.",
+    }),
   ],
   preview: {
-    select: {
-      title: "label",
+    prepare() {
+      return {
+        title: "Site settings",
+        media: CogIcon,
+      };
     },
-    prepare: ({ title }) => ({
-      title: title || "Untitled Settings",
-      media: CogIcon,
-    }),
   },
 });

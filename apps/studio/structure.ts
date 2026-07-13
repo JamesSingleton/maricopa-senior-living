@@ -1,114 +1,72 @@
-import {
-  BookMarked,
-  CogIcon,
-  File,
-  FileText,
-  type LucideIcon,
-  PanelBottomIcon,
-  PanelsTopLeftIcon,
-  PanelTopIcon,
-  Settings2,
-  TagIcon,
-  TagsIcon,
-  User,
-} from "lucide-react";
-import type {
-  StructureBuilder,
-  StructureResolverContext,
-} from "sanity/structure";
+import { CaseIcon } from "@sanity/icons/Case";
+import { CogIcon } from "@sanity/icons/Cog";
+import { DocumentIcon } from "@sanity/icons/Document";
+import { DocumentTextIcon } from "@sanity/icons/DocumentText";
+import { HomeIcon } from "@sanity/icons/Home";
+import { MenuIcon } from "@sanity/icons/Menu";
+import { TagIcon } from "@sanity/icons/Tag";
+import { TagsIcon } from "@sanity/icons/Tags";
+import { UserIcon } from "@sanity/icons/User";
+import type { StructureResolver } from "sanity/structure";
 
-import type { SchemaType, SingletonType } from "./schemaTypes";
-import { getTitleCase } from "./utils/helper";
+import { createSingleton } from "./utils/singleton";
 
-type Base<T = SchemaType> = {
-  id?: string;
-  type: T;
-  preview?: boolean;
-  title?: string;
-  icon?: LucideIcon;
-};
-
-type CreateSingleton = {
-  S: StructureBuilder;
-} & Base<SingletonType>;
-
-type CreateList = {
-  S: StructureBuilder;
-} & Base;
-
-const createSingleton = ({ S, type, title, icon }: CreateSingleton) => {
-  const newTitle = title ?? getTitleCase(type);
-  return S.listItem()
-    .title(newTitle)
-    .icon(icon ?? File)
-    .child(S.document().schemaType(type).documentId(type));
-};
-
-const createList = ({ S, type, icon, title, id }: CreateList) => {
-  const newTitle = title ?? getTitleCase(type);
-  return S.documentTypeListItem(type)
-    .id(id ?? type)
-    .title(newTitle)
-    .icon(icon ?? File);
-};
-
-export const structure = (
-  S: StructureBuilder,
-  context: StructureResolverContext,
-) => {
-  return S.list()
+export const structure: StructureResolver = (S) =>
+  S.list()
     .title("Content")
     .items([
-      // createSingleton({ S, type: 'homePage', icon: HomeIcon }),
-      S.divider(),
-      // createHierarchicalPageStructure(S, context),
-      // createSlugBasedStructure(S, "page"),
-      // createSlugBasedStructure(S, 'page'),
-      // createIndexListWithOrderableItems({
-      //   S,
-      //   index: { type: 'blogIndex', icon: BookMarked },
-      //   list: { type: 'blog', title: 'Blogs', icon: FileText },
-      //   context,
-      // }),
-      // createList({
-      //   S,
-      //   type: 'faq',
-      //   title: 'FAQs',
-      //   icon: MessageCircle,
-      // }),
-      createList({ S, type: "author", title: "Authors", icon: User }),
-      createList({ S, type: "category", title: "Categories", icon: TagIcon }),
-      createList({ S, type: "page", title: "Pages", icon: PanelsTopLeftIcon }),
-      createList({ S, type: "post", title: "Posts", icon: FileText }),
-      createList({ S, type: "service", title: "Services", icon: BookMarked }),
-      createList({ S, type: "tag", title: "Tags", icon: TagsIcon }),
-      S.divider(),
+      S.divider().title("Website"),
+      createSingleton(S, "homePage", "Home", HomeIcon),
+      S.documentTypeListItem("page").title("Pages").icon(DocumentIcon),
+
+      S.divider().title("Resource hub"),
       S.listItem()
-        .title("Site Configuration")
-        .icon(Settings2)
+        .title("Resources")
+        .icon(CaseIcon)
         .child(
           S.list()
-            .title("Site Configuration")
+            .title("Resources")
             .items([
-              createSingleton({
-                S,
-                type: "navbar",
-                title: "Navigation",
-                icon: PanelTopIcon,
-              }),
-              createSingleton({
-                S,
-                type: "footer",
-                title: "Footer",
-                icon: PanelBottomIcon,
-              }),
-              createSingleton({
-                S,
-                type: "settings",
-                title: "Global Settings",
-                icon: CogIcon,
-              }),
+              S.listItem()
+                .title("All Resources")
+                .icon(CaseIcon)
+                .child(
+                  S.documentTypeList("resource")
+                    .title("All Resources")
+                    .defaultOrdering([{ field: "title", direction: "asc" }]),
+                ),
+              S.listItem()
+                .title("Directory Listings")
+                .icon(CaseIcon)
+                .child(
+                  S.documentList()
+                    .title("Directory Listings")
+                    .filter('_type == "resource" && kind == $kind')
+                    .params({ kind: "directory" })
+                    .defaultOrdering([{ field: "title", direction: "asc" }]),
+                ),
+              S.listItem()
+                .title("Guides & Toolkits")
+                .icon(DocumentTextIcon)
+                .child(
+                  S.documentList()
+                    .title("Guides & Toolkits")
+                    .filter('_type == "resource" && kind == $kind')
+                    .params({ kind: "guide" })
+                    .defaultOrdering([{ field: "title", direction: "asc" }]),
+                ),
             ]),
         ),
+      S.documentTypeListItem("article")
+        .title("Articles")
+        .icon(DocumentTextIcon),
+
+      S.divider().title("Taxonomy"),
+      S.documentTypeListItem("category").title("Categories").icon(TagIcon),
+      S.documentTypeListItem("tag").title("Tags").icon(TagsIcon),
+      S.documentTypeListItem("author").title("Authors").icon(UserIcon),
+
+      S.divider().title("Configuration"),
+      createSingleton(S, "navigation", "Navigation", MenuIcon),
+      createSingleton(S, "settings", "Site Settings", CogIcon),
     ]);
-};

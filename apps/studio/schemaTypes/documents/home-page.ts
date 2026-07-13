@@ -1,13 +1,11 @@
-import { DocumentIcon } from "@sanity/icons/Document";
+import { HomeIcon } from "@sanity/icons/Home";
 import { defineField, defineType } from "sanity";
 
-import { createSlug, isUnique } from "../../utils/slug";
-
-export const page = defineType({
-  name: "page",
-  title: "Page",
+export const homePage = defineType({
+  name: "homePage",
+  title: "Home",
   type: "document",
-  icon: DocumentIcon,
+  icon: HomeIcon,
   groups: [
     { name: "content", title: "Content", default: true },
     { name: "seo", title: "SEO" },
@@ -18,19 +16,7 @@ export const page = defineType({
       title: "Title",
       type: "string",
       group: "content",
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: "slug",
-      title: "Slug",
-      type: "slug",
-      group: "content",
-      options: {
-        source: "title",
-        slugify: createSlug,
-        maxLength: 96,
-        isUnique,
-      },
+      initialValue: "Home",
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -49,7 +35,13 @@ export const page = defineType({
   preview: {
     select: {
       title: "title",
-      subtitle: "slug.current",
+    },
+    prepare({ title }) {
+      return {
+        title: title || "Home",
+        subtitle: "Homepage",
+        media: HomeIcon,
+      };
     },
   },
 });

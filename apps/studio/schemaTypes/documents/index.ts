@@ -1,21 +1,23 @@
+import { article } from "./article";
 import { author } from "./author";
 import { category } from "./category";
-import { footer } from "./footer";
-import { navbar } from "./navbar";
+import { homePage } from "./home-page";
+import { navigation } from "./navigation";
 import { page } from "./page";
-import { post } from "./post";
-import { service } from "./service";
+import { resource } from "./resource";
 import { settings } from "./settings";
 import { tag } from "./tag";
 
-export const singletons = [settings, footer, navbar];
-
 export const documents = [
-  author,
-  category,
+  homePage,
   page,
-  post,
-  service,
+  resource,
+  article,
+  category,
   tag,
-  ...singletons,
+  author,
+  settings,
+  navigation,
 ];
+
+export const singletons = [homePage, settings, navigation];

@@ -1,19 +1,27 @@
-import { TagIcon } from "@sanity/icons/Tag";
+import { TagsIcon } from "@sanity/icons/Tags";
 import { defineField, defineType } from "sanity";
 
 import { createSlug, isUnique } from "../../utils/slug";
+import {
+  uniqueTitleAcrossTaxonomy,
+  uniqueTitleWithinType,
+} from "../../utils/uniqueness";
 
 export const tag = defineType({
   name: "tag",
   title: "Tag",
   type: "document",
-  icon: TagIcon,
+  icon: TagsIcon,
   fields: [
     defineField({
       name: "title",
       title: "Title",
       type: "string",
-      validation: (rule) => rule.required(),
+      validation: (rule) =>
+        rule
+          .required()
+          .custom(uniqueTitleWithinType("tag"))
+          .custom(uniqueTitleAcrossTaxonomy("category")),
     }),
     defineField({
       name: "slug",
@@ -23,25 +31,14 @@ export const tag = defineType({
         source: "title",
         slugify: createSlug,
         maxLength: 96,
-        isUnique: isUnique,
+        isUnique,
       },
       validation: (rule) => rule.required(),
     }),
-    defineField({
-      name: "description",
-      title: "Description",
-      type: "blockContent",
-      description:
-        "This will get displayed under the title on the tag page as well as the page's description (what shows up on Google Search Results).",
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: "highlight",
-      title: "Highlight",
-      type: "boolean",
-      description:
-        "If checked, this category will be highlighted on the right sidebar.",
-      initialValue: false,
-    }),
   ],
+  preview: {
+    select: {
+      title: "title",
+    },
+  },
 });

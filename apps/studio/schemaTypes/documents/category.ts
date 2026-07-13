@@ -1,17 +1,27 @@
+import { TagIcon } from "@sanity/icons/Tag";
 import { defineField, defineType } from "sanity";
 
 import { createSlug, isUnique } from "../../utils/slug";
+import {
+  uniqueTitleAcrossTaxonomy,
+  uniqueTitleWithinType,
+} from "../../utils/uniqueness";
 
 export const category = defineType({
   name: "category",
   title: "Category",
   type: "document",
+  icon: TagIcon,
   fields: [
     defineField({
       name: "title",
       title: "Title",
       type: "string",
-      validation: (rule) => rule.required(),
+      validation: (rule) =>
+        rule
+          .required()
+          .custom(uniqueTitleWithinType("category"))
+          .custom(uniqueTitleAcrossTaxonomy("tag")),
     }),
     defineField({
       name: "slug",
@@ -21,26 +31,27 @@ export const category = defineType({
         source: "title",
         slugify: createSlug,
         maxLength: 96,
-        isUnique: isUnique,
+        isUnique,
       },
       validation: (rule) => rule.required(),
     }),
     defineField({
       name: "description",
       title: "Description",
-      type: "blockContent",
-      description:
-        "This will get displayed under the title on the category page as well as the page's description (what shows up on Google Search Results).",
-
-      validation: (rule) => rule.required(),
+      type: "text",
+      rows: 3,
+      description: "Short description shown on category listing pages.",
     }),
     defineField({
-      name: "highlight",
-      title: "Highlight",
-      type: "boolean",
-      description:
-        "If checked, this category will be highlighted on the right sidebar.",
-      initialValue: false,
+      name: "seo",
+      title: "SEO",
+      type: "seo",
     }),
   ],
+  preview: {
+    select: {
+      title: "title",
+      subtitle: "description",
+    },
+  },
 });

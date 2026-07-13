@@ -1,3 +1,4 @@
+import { UserIcon } from "@sanity/icons/User";
 import { defineField, defineType } from "sanity";
 
 import { createSlug, isUnique } from "../../utils/slug";
@@ -6,6 +7,7 @@ export const author = defineType({
   name: "author",
   title: "Author",
   type: "document",
+  icon: UserIcon,
   fields: [
     defineField({
       name: "name",
@@ -29,23 +31,19 @@ export const author = defineType({
       name: "image",
       title: "Image",
       type: "image",
-      options: {
-        hotspot: true,
-      },
-      validation: (rule) => rule.required(),
+      options: { hotspot: true },
+      fields: [
+        defineField({
+          name: "alt",
+          title: "Alternative text",
+          type: "string",
+        }),
+      ],
     }),
     defineField({
       name: "bio",
       title: "Bio",
-      type: "array",
-      of: [
-        {
-          title: "Block",
-          type: "block",
-          styles: [{ title: "Normal", value: "normal" }],
-          lists: [],
-        },
-      ],
+      type: "portableText",
     }),
   ],
   preview: {

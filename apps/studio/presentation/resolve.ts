@@ -5,7 +5,7 @@ import {
 
 export const presentationResolve: PresentationPluginOptions["resolve"] = {
   locations: {
-    home: defineLocations({
+    homePage: defineLocations({
       select: { title: "title" },
       resolve: () => ({
         locations: [{ title: "Home", href: "/" }],
@@ -22,7 +22,18 @@ export const presentationResolve: PresentationPluginOptions["resolve"] = {
         ],
       }),
     }),
-    post: defineLocations({
+    resource: defineLocations({
+      select: { title: "title", slug: "slug.current" },
+      resolve: (doc) => ({
+        locations: [
+          {
+            title: doc?.title || "Untitled",
+            href: doc?.slug ? `/resources/${doc.slug}` : "/resources",
+          },
+        ],
+      }),
+    }),
+    article: defineLocations({
       select: { title: "title", slug: "slug.current" },
       resolve: (doc) => ({
         locations: [
@@ -39,7 +50,7 @@ export const presentationResolve: PresentationPluginOptions["resolve"] = {
         locations: [
           {
             title: doc?.title || "Untitled",
-            href: doc?.slug ? `/category/${doc.slug}` : "/",
+            href: doc?.slug ? `/categories/${doc.slug}` : "/categories",
           },
         ],
       }),
@@ -50,7 +61,7 @@ export const presentationResolve: PresentationPluginOptions["resolve"] = {
         locations: [
           {
             title: doc?.title || "Untitled",
-            href: doc?.slug ? `/tag/${doc.slug}` : "/",
+            href: doc?.slug ? `/tags/${doc.slug}` : "/tags",
           },
         ],
       }),
