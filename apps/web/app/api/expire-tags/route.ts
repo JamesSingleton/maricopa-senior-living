@@ -1,61 +1,56 @@
 import { revalidateTag } from "next/cache";
-import { type NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 import { webhookSecret } from "@/lib/sanity.api";
 
 type ExpireTagsBody = {
+  secret?: string;
   syncTags?: string[];
   tags?: string[];
 };
 
-function normalizeCacheTag(tag: string): string {
-  return tag.startsWith("sanity:") ? tag : `sanity:${tag}`;
-}
-
-function authorize(request: NextRequest): boolean {
-  if (!webhookSecret) {
-    return false;
-  }
-
-  const headerSecret =
-    request.headers.get("x-sanity-revalidate-secret") ??
-    request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
-
-  return headerSecret === webhookSecret;
-}
-
 export async function POST(request: NextRequest) {
-  try {
-    if (!authorize(request)) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
-
-    const body = (await request.json()) as ExpireTagsBody;
-    const incoming = body.syncTags ?? body.tags ?? [];
-
-    if (!Array.isArray(incoming) || incoming.length === 0) {
-      return NextResponse.json(
-        { message: "Bad Request: syncTags required" },
-        { status: 400 },
-      );
-    }
-
-    const tags = [
-      ...new Set(
-        incoming.filter(
-          (tag): tag is string => typeof tag === "string" && tag.length > 0,
-        ),
-      ),
-    ].map(normalizeCacheTag);
-
-    for (const tag of tags) {
-      revalidateTag(tag, "max");
-    }
-
-    return NextResponse.json({ revalidated: tags.length, tags });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
-    console.error("[expire-tags]", message);
-    return NextResponse.json({ message }, { status: 500 });
+  if (!webhookSecret) {
+    console.error(
+      "SANITY_REVALIDATE_SECRET (or SANITY_WEBHOOK_SECRET) is required",
+    );
+    return Response.json({ error: "Unexpected error" }, { status: 500 });
   }
+
+  let secret: string | null =
+    request.headers.get("x-sanity-revalidate-secret") ??
+    request.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ??
+    null;
+  let tags: string[] = [];
+
+  try {
+    const body = (await request.json()) as ExpireTagsBody;
+    if (!secret && body.secret) secret = body.secret;
+    if (Array.isArray(body.tags)) tags = body.tags;
+    else if (Array.isArray(body.syncTags)) tags = body.syncTags;
+  } catch {
+    // no valid JSON body
+  }
+
+  if (secret !== webhookSecret) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  if (tags.length === 0) {
+    return Response.json({ error: "No tags provided" }, { status: 400 });
+  }
+
+  console.info("Expiring tags from expirator service", tags);
+
+  for (const tag of tags) {
+    if (typeof tag !== "string" || tag.length === 0) continue;
+    const cacheKey = tag.startsWith("sanity:") ? tag : `sanity:${tag}`;
+    // Hard-expire so waitFor="function" Live events only fire after cache is busted.
+    revalidateTag(cacheKey, { expire: 0 });
+  }
+
+  return Response.json({
+    service: process.env.VERCEL_PROJECT_PRODUCTION_URL,
+    tags,
+  });
 }

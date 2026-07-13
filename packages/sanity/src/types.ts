@@ -779,22 +779,20 @@ export type QueryBlogPathsResult = Array<never>;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: highlightedCategories
-// Query: *[_type == "category" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{    _id,    title,    "slug": slug.current,    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])  } | order(title asc, count desc)
+// Query: *[_type == "category" && highlight == true]{    _id,    title,    "slug": slug.current  } | order(title asc)
 export type HighlightedCategoriesResult = Array<{
   _id: string;
   title: string;
   slug: string;
-  count: number;
 }>;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: highlightedTags
-// Query: *[_type == "tag" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{    _id,    title,    "slug": slug.current,    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])  } | order(title asc, count desc)
+// Query: *[_type == "tag" && highlight == true]{    _id,    title,    "slug": slug.current  } | order(title asc)
 export type HighlightedTagsResult = Array<{
   _id: string;
   title: string;
   slug: string;
-  count: number;
 }>;
 
 // Source: ../../packages/sanity/src/queries.ts
@@ -936,21 +934,67 @@ export type QueryArticleSlugPageDataResult = {
 export type QueryArticlePathsResult = Array<string>;
 
 // Source: ../../packages/sanity/src/queries.ts
-// Variable: rightSidebarQuery
-// Query: {  "whatsNew": *[    _type == "post"    && isArchived != true    && references(*[_type == "category" && slug.current == "whats-new"][0]._id)  ] | order(publishedAt desc)[0]{      _id,  title,  "slug": slug.current,  publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",    "author": author->{        name,    image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }    }  },  "seniorCenterNewsletters": *[    _type == "post"    && isArchived != true    && references(*[_type == "category" && slug.current == "city-of-maricopa-community-senior-center"][0]._id)  ] | order(publishedAt desc)[0...2]{      _id,  title,  "slug": slug.current,  publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "..."  },  "nonProfit": *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{    title,    "description": description[]{        ...,  _type == "block" => {    ...  },  _type == "image" => {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  },    "caption": caption  },  _type == "attachment" => {    ...,    asset->  }    },    "slug": slug.current  },  "newsletter": *[    _type == "post"    && isArchived != true    && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"][0]._id)  ] | order(publishedAt desc)[0]{      _id,  title,  "slug": slug.current,  publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "..."  }}
-export type RightSidebarQueryResult = {
-  whatsNew: {
-    _id: string;
-    title: string;
-    slug: string;
-    publishedAt: string;
-    excerpt: string;
-    author: {
-      name: string;
-      image: {
-        id: string | null;
-        preview: string | null;
-        alt: string | "untitled";
+// Variable: rightSidebarNonProfitQuery
+// Query: *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{    title,    "description": description[]{        ...,  _type == "block" => {    ...  },  _type == "image" => {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  },    "caption": caption  },  _type == "attachment" => {    ...,    asset->  }    },    "slug": slug.current  }
+export type RightSidebarNonProfitQueryResult = {
+  title: string;
+  description: Array<
+    | {
+        asset: {
+          _id: string;
+          _type: "sanity.fileAsset";
+          _createdAt: string;
+          _updatedAt: string;
+          _rev: string;
+          originalFilename?: string;
+          label?: string;
+          title?: string;
+          description?: string;
+          altText?: string;
+          sha1hash: string;
+          extension: string;
+          mimeType: string;
+          size: number;
+          assetId: string;
+          uploadId?: string;
+          path: string;
+          url: string;
+          source?: SanityAssetSourceData;
+        };
+        media?: unknown;
+        description: string;
+        _type: "attachment";
+        _key: string;
+      }
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset: SanityImageAssetReference;
+        media?: unknown;
         hotspot: {
           x: number;
           y: number;
@@ -961,103 +1005,67 @@ export type RightSidebarQueryResult = {
           right: number;
           top: number;
         } | null;
-      };
+        alt: string;
+        _type: "image";
+        _key: string;
+        id: string;
+        preview: string | null;
+        caption: null;
+      }
+  >;
+  slug: string;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: rightSidebarWhatsNewQuery
+// Query: *[    _type == "post"    && isArchived != true    && references(*[_type == "category" && slug.current == "whats-new"][0]._id)  ] | order(publishedAt desc)[0]{      _id,  title,  "slug": slug.current,  publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",    "author": author->{        name,    image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }    }  }
+export type RightSidebarWhatsNewQueryResult = {
+  _id: string;
+  title: string;
+  slug: string;
+  publishedAt: string;
+  excerpt: string;
+  author: {
+    name: string;
+    image: {
+      id: string | null;
+      preview: string | null;
+      alt: string | "untitled";
+      hotspot: {
+        x: number;
+        y: number;
+      } | null;
+      crop: {
+        bottom: number;
+        left: number;
+        right: number;
+        top: number;
+      } | null;
     };
-  } | null;
-  seniorCenterNewsletters: Array<{
-    _id: string;
-    title: string;
-    slug: string;
-    publishedAt: string;
-    excerpt: string;
-  }>;
-  nonProfit: {
-    title: string;
-    description: Array<
-      | {
-          asset: {
-            _id: string;
-            _type: "sanity.fileAsset";
-            _createdAt: string;
-            _updatedAt: string;
-            _rev: string;
-            originalFilename?: string;
-            label?: string;
-            title?: string;
-            description?: string;
-            altText?: string;
-            sha1hash: string;
-            extension: string;
-            mimeType: string;
-            size: number;
-            assetId: string;
-            uploadId?: string;
-            path: string;
-            url: string;
-            source?: SanityAssetSourceData;
-          };
-          media?: unknown;
-          description: string;
-          _type: "attachment";
-          _key: string;
-        }
-      | {
-          children?: Array<{
-            marks?: Array<string>;
-            text?: string;
-            _type: "span";
-            _key: string;
-          }>;
-          style?:
-            | "blockquote"
-            | "h1"
-            | "h2"
-            | "h3"
-            | "h4"
-            | "h5"
-            | "h6"
-            | "normal";
-          listItem?: "bullet" | "number";
-          markDefs?: Array<{
-            href?: string;
-            _type: "link";
-            _key: string;
-          }>;
-          level?: number;
-          _type: "block";
-          _key: string;
-        }
-      | {
-          asset: SanityImageAssetReference;
-          media?: unknown;
-          hotspot: {
-            x: number;
-            y: number;
-          } | null;
-          crop: {
-            bottom: number;
-            left: number;
-            right: number;
-            top: number;
-          } | null;
-          alt: string;
-          _type: "image";
-          _key: string;
-          id: string;
-          preview: string | null;
-          caption: null;
-        }
-    >;
-    slug: string;
-  } | null;
-  newsletter: {
-    _id: string;
-    title: string;
-    slug: string;
-    publishedAt: string;
-    excerpt: string;
-  } | null;
-};
+  };
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: rightSidebarSeniorCenterQuery
+// Query: *[    _type == "post"    && isArchived != true    && references(*[_type == "category" && slug.current == "city-of-maricopa-community-senior-center"][0]._id)  ] | order(publishedAt desc)[0...2]{      _id,  title,  "slug": slug.current,  publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "..."  }
+export type RightSidebarSeniorCenterQueryResult = Array<{
+  _id: string;
+  title: string;
+  slug: string;
+  publishedAt: string;
+  excerpt: string;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: rightSidebarNewsletterQuery
+// Query: *[    _type == "post"    && isArchived != true    && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"][0]._id)  ] | order(publishedAt desc)[0]{      _id,  title,  "slug": slug.current,  publishedAt,    "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "..."  }
+export type RightSidebarNewsletterQueryResult = {
+  _id: string;
+  title: string;
+  slug: string;
+  publishedAt: string;
+  excerpt: string;
+} | null;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryHomePageData
@@ -2227,11 +2235,14 @@ declare module "@sanity/client" {
     '\n  count(*[_type == "blog" && (seoHideFromLists != true)])\n': QueryBlogIndexPageBlogsCountResult;
     '\n  *[_type == "blog" && slug.current == $slug][0]{\n    ...,\n    "slug": slug.current,\n    \n  authors[0]->{\n    _id,\n    name,\n    position,\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n  }\n,\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n,\n    \n  richText[]{\n    ...,\n    _type == "block" => {\n      ...,\n      \n  markDefs[]{\n    ...,\n    \n  ...customLink{\n    openInNewTab,\n    "href": select(\n      type == "internal" => internal->slug.current,\n      type == "external" => external,\n      "#"\n    ),\n  }\n\n  }\n\n    },\n    _type == "image" => {\n      \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n      "caption": caption\n    }\n  }\n,\n    \n  pageBuilder[]{\n    ...,\n    _type,\n\n  }\n\n  }\n': QueryBlogSlugPageDataResult;
     '\n  *[_type == "blog" && defined(slug.current)].slug.current\n': QueryBlogPathsResult;
-    '\n  *[_type == "category" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{\n    _id,\n    title,\n    "slug": slug.current,\n    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])\n  } | order(title asc, count desc)\n': HighlightedCategoriesResult;
-    '\n  *[_type == "tag" && count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)]) > 0 && highlight == true]{\n    _id,\n    title,\n    "slug": slug.current,\n    "count": count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])\n  } | order(title asc, count desc)\n': HighlightedTagsResult;
+    '\n  *[_type == "category" && highlight == true]{\n    _id,\n    title,\n    "slug": slug.current\n  } | order(title asc)\n': HighlightedCategoriesResult;
+    '\n  *[_type == "tag" && highlight == true]{\n    _id,\n    title,\n    "slug": slug.current\n  } | order(title asc)\n': HighlightedTagsResult;
     '\n  *[_type == "post" && slug.current == $slug][0]{\n    \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  \n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "..."\n,\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n,\n  "slug": slug.current,\n\n  },\n  mainImage {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    \n  ...,\n  _type == "block" => {\n    ...\n  },\n  _type == "image" => {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n    "caption": caption\n  },\n  _type == "attachment" => {\n    ...,\n    asset->\n  }\n\n  },\n\n  }\n': QueryArticleSlugPageDataResult;
     '\n  *[_type == "post" && defined(slug.current)].slug.current\n': QueryArticlePathsResult;
-    '{\n  "whatsNew": *[\n    _type == "post"\n    && isArchived != true\n    && references(*[_type == "category" && slug.current == "whats-new"][0]._id)\n  ] | order(publishedAt desc)[0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  publishedAt,\n  \n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "..."\n\n,\n    "author": author->{\n      \n  name,\n  \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n\n    }\n  },\n  "seniorCenterNewsletters": *[\n    _type == "post"\n    && isArchived != true\n    && references(*[_type == "category" && slug.current == "city-of-maricopa-community-senior-center"][0]._id)\n  ] | order(publishedAt desc)[0...2]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  publishedAt,\n  \n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "..."\n\n\n  },\n  "nonProfit": *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{\n    title,\n    "description": description[]{\n      \n  ...,\n  _type == "block" => {\n    ...\n  },\n  _type == "image" => {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n    "caption": caption\n  },\n  _type == "attachment" => {\n    ...,\n    asset->\n  }\n\n    },\n    "slug": slug.current\n  },\n  "newsletter": *[\n    _type == "post"\n    && isArchived != true\n    && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"][0]._id)\n  ] | order(publishedAt desc)[0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  publishedAt,\n  \n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "..."\n\n\n  }\n}': RightSidebarQueryResult;
+    '\n  *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{\n    title,\n    "description": description[]{\n      \n  ...,\n  _type == "block" => {\n    ...\n  },\n  _type == "image" => {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n    "caption": caption\n  },\n  _type == "attachment" => {\n    ...,\n    asset->\n  }\n\n    },\n    "slug": slug.current\n  }\n': RightSidebarNonProfitQueryResult;
+    '\n  *[\n    _type == "post"\n    && isArchived != true\n    && references(*[_type == "category" && slug.current == "whats-new"][0]._id)\n  ] | order(publishedAt desc)[0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  publishedAt,\n  \n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "..."\n\n,\n    "author": author->{\n      \n  name,\n  \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n\n    }\n  }\n': RightSidebarWhatsNewQueryResult;
+    '\n  *[\n    _type == "post"\n    && isArchived != true\n    && references(*[_type == "category" && slug.current == "city-of-maricopa-community-senior-center"][0]._id)\n  ] | order(publishedAt desc)[0...2]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  publishedAt,\n  \n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "..."\n\n\n  }\n': RightSidebarSeniorCenterQueryResult;
+    '\n  *[\n    _type == "post"\n    && isArchived != true\n    && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"][0]._id)\n  ] | order(publishedAt desc)[0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  publishedAt,\n  \n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "..."\n\n\n  }\n': RightSidebarNewsletterQueryResult;
     '\n  *[_type == "home"][0]{\n    _id,\n    _type,\n    image {\n      \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n      "caption": caption\n    },\n    "content": content[]{\n      ...,\n      _type == "image" => {\n        \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n        "caption": caption\n      },\n      _type == "attachment" => {\n        ...,\n        asset->\n      }\n    }\n  }\n': QueryHomePageDataResult;
     '\n  *[_type == "post" && isArchived != true] | order(publishedAt desc){\n    \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  \n  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "..."\n,\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n,\n  "slug": slug.current,\n\n  },\n  mainImage {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    \n  ...,\n  _type == "block" => {\n    ...\n  },\n  _type == "image" => {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n    "caption": caption\n  },\n  _type == "attachment" => {\n    ...,\n    asset->\n  }\n\n  },\n\n  }\n': QueryAllPostsResult;
     '\n  *[_type == "post" && defined(slug.current) && isArchived != true][].slug.current\n': QueryAllPostSlugsResult;

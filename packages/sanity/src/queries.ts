@@ -238,8 +238,6 @@ export const queryBlogPaths = defineQuery(`
   *[_type == "blog" && defined(slug.current)].slug.current
 `);
 
-const COUNT_FOR_SIDEBAR = /* groq */ `count(*[_type == "post" && references(^._id) && isArchived != true]) + count(*[_type == "service" && references(^._id)])`;
-
 const authorFields = /* groq */ `
   name,
   ${imageFragment},
@@ -307,22 +305,21 @@ const postFields = /* groq */ `
   },
 `;
 
+/** Highlighted taxonomies only — no live counts (those tag every referencing post). */
 export const highlightedCategories = defineQuery(`
-  *[_type == "category" && ${COUNT_FOR_SIDEBAR} > 0 && highlight == true]{
+  *[_type == "category" && highlight == true]{
     _id,
     title,
-    "slug": slug.current,
-    "count": ${COUNT_FOR_SIDEBAR}
-  } | order(title asc, count desc)
+    "slug": slug.current
+  } | order(title asc)
 `);
 
 export const highlightedTags = defineQuery(`
-  *[_type == "tag" && ${COUNT_FOR_SIDEBAR} > 0 && highlight == true]{
+  *[_type == "tag" && highlight == true]{
     _id,
     title,
-    "slug": slug.current,
-    "count": ${COUNT_FOR_SIDEBAR}
-  } | order(title asc, count desc)
+    "slug": slug.current
+  } | order(title asc)
 `);
 
 export const queryArticleSlugPageData = defineQuery(`
@@ -335,8 +332,19 @@ export const queryArticlePaths = defineQuery(`
   *[_type == "post" && defined(slug.current)].slug.current
 `);
 
-export const rightSidebarQuery = defineQuery(/* groq */ `{
-  "whatsNew": *[
+/** Per-widget sidebar queries so each cache entry only carries its own sync tags. */
+export const rightSidebarNonProfitQuery = defineQuery(/* groq */ `
+  *[_type == "category" && slug.current == "${RIGHT_SIDEBAR_NONPROFIT_CATEGORY_SLUG}"][0]{
+    title,
+    "description": description[]{
+      ${blockContentFragment}
+    },
+    "slug": slug.current
+  }
+`);
+
+export const rightSidebarWhatsNewQuery = defineQuery(/* groq */ `
+  *[
     _type == "post"
     && isArchived != true
     && references(*[_type == "category" && slug.current == "${RIGHT_SIDEBAR_WHATS_NEW_CATEGORY_SLUG}"][0]._id)
@@ -345,29 +353,28 @@ export const rightSidebarQuery = defineQuery(/* groq */ `{
     "author": author->{
       ${rightSidebarAuthorFields}
     }
-  },
-  "seniorCenterNewsletters": *[
+  }
+`);
+
+export const rightSidebarSeniorCenterQuery = defineQuery(/* groq */ `
+  *[
     _type == "post"
     && isArchived != true
     && references(*[_type == "category" && slug.current == "${RIGHT_SIDEBAR_SENIOR_CENTER_CATEGORY_SLUG}"][0]._id)
   ] | order(publishedAt desc)[0...2]{
     ${rightSidebarPostListFields}
-  },
-  "nonProfit": *[_type == "category" && slug.current == "${RIGHT_SIDEBAR_NONPROFIT_CATEGORY_SLUG}"][0]{
-    title,
-    "description": description[]{
-      ${blockContentFragment}
-    },
-    "slug": slug.current
-  },
-  "newsletter": *[
+  }
+`);
+
+export const rightSidebarNewsletterQuery = defineQuery(/* groq */ `
+  *[
     _type == "post"
     && isArchived != true
     && references(*[_type == "category" && slug.current == "${RIGHT_SIDEBAR_NEWSLETTER_CATEGORY_SLUG}"][0]._id)
   ] | order(publishedAt desc)[0]{
     ${rightSidebarPostListFields}
   }
-}`);
+`);
 
 export const queryHomePageData = defineQuery(`
   *[_type == "home"][0]{
