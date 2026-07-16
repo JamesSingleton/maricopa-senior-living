@@ -13,7 +13,17 @@ function PortableTextImage({
 }: {
   value: NonNullable<SanityImageProps["image"]>;
 }) {
-  return <SanityImage image={value} className="rounded-md" />;
+  // High width/quality for retina srcSet. Use max-w-full (not w-full) so
+  // small source assets are not stretched beyond their intrinsic size.
+  return (
+    <SanityImage
+      image={value}
+      width={1920}
+      className="h-auto max-w-full rounded-md"
+      sizes="(min-width: 1024px) 66vw, 100vw"
+      queryParams={{ q: 85 }}
+    />
+  );
 }
 
 export function CustomPortableText({
