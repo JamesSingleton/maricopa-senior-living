@@ -14,7 +14,7 @@
     "check:types": "tsc --noEmit"
   },
   "dependencies": {
-    "@sanity/assist": "^6.1.12",
+    "@sanity/assist": "^6.1.13",
     "@sanity/client": "catalog:",
     "@sanity/functions": "^1.4.0",
     "@sanity/icons": "^5.1.0",
@@ -24,7 +24,7 @@
     "react": "catalog:",
     "react-dom": "catalog:",
     "sanity": "catalog:",
-    "sanity-plugin-media": "^6.0.1",
+    "sanity-plugin-media": "^6.0.2",
     "slugify": "^1.6.9",
     "styled-components": "^6.4.3"
   },
