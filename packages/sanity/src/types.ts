@@ -65,86 +65,39 @@ export type TimeValue =
   | "23:00"
   | "23:30";
 
+export type CategoryReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "category";
+};
+
+export type TagReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "tag";
+};
+
+export type PageReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "page";
+};
+
+export type Link = {
+  _type: "link";
+  reference?: CategoryReference | TagReference | PageReference;
+  text?: string;
+  url?: string;
+};
+
 export type SanityImageAssetReference = {
   _ref: string;
   _type: "reference";
   _weak?: boolean;
   [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-};
-
-export type RichText = Array<
-  | {
-      children?: Array<{
-        marks?: Array<string>;
-        text?: string;
-        _type: "span";
-        _key: string;
-      }>;
-      style?: "normal" | "h2" | "h3" | "h4" | "h5" | "h6" | "inline";
-      listItem?: "number" | "bullet";
-      markDefs?: Array<{
-        customLink?: CustomUrl;
-        _type: "customLink";
-        _key: string;
-      }>;
-      level?: number;
-      _type: "block";
-      _key: string;
-    }
-  | {
-      asset?: SanityImageAssetReference;
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      caption?: string;
-      _type: "image";
-      _key: string;
-    }
->;
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x: number;
-  y: number;
-  height: number;
-  width: number;
-};
-
-export type CustomUrl = {
-  _type: "customUrl";
-  type: "internal" | "external";
-  openInNewTab?: boolean;
-  external?: string;
-  href?: string;
-};
-
-export type DayAndTime = {
-  _type: "dayAndTime";
-  day?:
-    | "Monday"
-    | "Tuesday"
-    | "Wednesday"
-    | "Thursday"
-    | "Friday"
-    | "Saturday"
-    | "Sunday";
-  opensAt?: TimeValue;
-  closesAt?: TimeValue;
-};
-
-export type Button = {
-  _type: "button";
-  variant?: "default" | "secondary" | "outline" | "link";
-  text?: string;
-  url?: CustomUrl;
 };
 
 export type SanityFileAssetReference = {
@@ -174,7 +127,7 @@ export type BlockContent = Array<
       _key: string;
     }
   | {
-      asset?: SanityImageAssetReference;
+      asset: SanityImageAssetReference;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -183,7 +136,7 @@ export type BlockContent = Array<
       _key: string;
     }
   | {
-      asset?: SanityFileAssetReference;
+      asset: SanityFileAssetReference;
       media?: unknown;
       description: string;
       _type: "attachment";
@@ -191,108 +144,80 @@ export type BlockContent = Array<
     }
 >;
 
-export type Navbar = {
-  _id: string;
-  _type: "navbar";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  label: string;
-  megaMenuTitle?: string;
-  columns?: Array<
-    | {
-        title: string;
-        columns?: Array<{
-          title?: string;
-          links: Array<{
-            name?: string;
-            description?: string;
-            url?: CustomUrl;
-            _type: "navbarColumnLink";
-            _key: string;
-          }>;
-          _type: "navbarColumn";
-          _key: string;
-        }>;
-        _type: "navbarMegaMenu";
-        _key: string;
-      }
-    | {
-        name?: string;
-        url?: CustomUrl;
-        _type: "navbarLink";
-        _key: string;
-      }
-    | {
-        title?: string;
-        links: Array<{
-          name?: string;
-          description?: string;
-          url?: CustomUrl;
-          _type: "navbarColumnLink";
-          _key: string;
-        }>;
-        _type: "navbarColumn";
-        _key: string;
-      }
-  >;
-  buttons?: Array<
-    {
-      _key: string;
-    } & Button
-  >;
+export type DayAndTime = {
+  _type: "dayAndTime";
+  day?:
+    | "Monday"
+    | "Tuesday"
+    | "Wednesday"
+    | "Thursday"
+    | "Friday"
+    | "Saturday"
+    | "Sunday";
+  opensAt?: TimeValue;
+  closesAt?: TimeValue;
 };
 
-export type Footer = {
+export type Navigation = {
   _id: string;
-  _type: "footer";
+  _type: "navigation";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  label: string;
-  subtitle?: string;
-  columns?: Array<{
-    title?: string;
-    links?: Array<{
-      name?: string;
-      url?: CustomUrl;
-      _type: "footerColumnLink";
+  headerPrimary?: Array<{
+    link?: Link;
+    children?: Array<{
+      link?: Link;
+      _type: "item";
       _key: string;
     }>;
-    _type: "footerColumn";
+    _type: "item";
     _key: string;
   }>;
+  footer?: Array<
+    {
+      _key: string;
+    } & Link
+  >;
 };
 
-export type Settings = {
+export type Home = {
   _id: string;
-  _type: "settings";
+  _type: "home";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  label: string;
-  siteTitle: string;
-  siteDescription: string;
-  logo?: {
+  image?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
+    alt: string;
+    caption?: string;
     _type: "image";
   };
-  contactEmail?: string;
-  socialLinks?: {
-    linkedin?: string;
-    facebook?: string;
-    twitter?: string;
-    instagram?: string;
-    youtube?: string;
-  };
+  content?: BlockContent;
 };
 
-export type Tag = {
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x: number;
+  y: number;
+  height: number;
+  width: number;
+};
+
+export type Category = {
   _id: string;
-  _type: "tag";
+  _type: "category";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -308,18 +233,16 @@ export type Slug = {
   source?: string;
 };
 
-export type CategoryReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "category";
-};
-
-export type TagReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "tag";
+export type Tag = {
+  _id: string;
+  _type: "tag";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  slug: Slug;
+  description: BlockContent;
+  highlight?: boolean;
 };
 
 export type Service = {
@@ -409,18 +332,6 @@ export type Page = {
   body: BlockContent;
 };
 
-export type Category = {
-  _id: string;
-  _type: "category";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  slug: Slug;
-  description: BlockContent;
-  highlight?: boolean;
-};
-
 export type Author = {
   _id: string;
   _type: "author";
@@ -454,6 +365,50 @@ export type Author = {
     _type: "block";
     _key: string;
   }>;
+};
+
+export type SanityVideoMetadataPlayback = {
+  _type: "sanity.videoMetadata.playback";
+  policy?: string;
+};
+
+export type SanityVideoMetadata = {
+  _type: "sanity.videoMetadata";
+  duration?: number;
+  framerate?: number;
+  aspectRatio?: number;
+  hasAudio?: boolean;
+  codec?: string;
+  bitrate?: number;
+};
+
+export type SanityVideoAsset = {
+  _id: string;
+  _type: "sanity.videoAsset";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  originalFilename?: string;
+  label?: string;
+  title?: string;
+  description?: string;
+  altText?: string;
+  creditLine?: string;
+  metadata?: SanityVideoMetadata;
+  sha1hash?: string;
+  extension?: string;
+  mimeType?: string;
+  size?: number;
+  assetId?: string;
+  uploadId?: string;
+  path?: string;
+  url?: string;
+};
+
+export type SanityVideo = {
+  _type: "sanity.video";
+  asset?: unknown;
+  media?: unknown;
 };
 
 export type SanityAssistInstructionTask = {
@@ -701,28 +656,30 @@ export type Geopoint = {
 
 export type AllSanitySchemaTypes =
   | TimeValue
-  | SanityImageAssetReference
-  | RichText
-  | SanityImageCrop
-  | SanityImageHotspot
-  | CustomUrl
-  | DayAndTime
-  | Button
-  | SanityFileAssetReference
-  | BlockContent
-  | Navbar
-  | Footer
-  | Settings
-  | Tag
-  | Slug
   | CategoryReference
   | TagReference
+  | PageReference
+  | Link
+  | SanityImageAssetReference
+  | SanityFileAssetReference
+  | BlockContent
+  | DayAndTime
+  | Navigation
+  | Home
+  | SanityImageCrop
+  | SanityImageHotspot
+  | Category
+  | Slug
+  | Tag
   | Service
   | AuthorReference
   | Post
   | Page
-  | Category
   | Author
+  | SanityVideoMetadataPlayback
+  | SanityVideoMetadata
+  | SanityVideoAsset
+  | SanityVideo
   | SanityAssistInstructionTask
   | SanityAssistTaskStatus
   | SanityAssistSchemaTypeAnnotations
@@ -783,75 +740,12 @@ export type QuerySlugPageDataResult = {
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryNavbarData
 // Query: *[_type == "navbar" && _id == "navbar"][0]{    _id,    columns[]{      _key,      _type == "navbarColumn" => {        "type": "column",        title,        links[]{          _key,          name,          icon,          description,          "openInNewTab": url.openInNewTab,          "href": select(            url.type == "internal" => url.internal->slug.current,            url.type == "external" => url.external,            url.href          )        }      },      _type == "navbarLink" => {        "type": "link",        name,        description,        "openInNewTab": url.openInNewTab,        "href": select(          url.type == "internal" => url.internal->slug.current,          url.type == "external" => url.external,          url.href        )      }    },      buttons[]{    text,    variant,    _key,    _type,    "openInNewTab": url.openInNewTab,    "href": select(      url.type == "internal" => url.internal->slug.current,      url.type == "external" => url.external,      url.href    ),  },  }
-export type QueryNavbarDataResult = {
-  _id: "navbar";
-  columns: Array<
-    | {
-        _key: string;
-        type: "link";
-        name: string | null;
-        description: null;
-        openInNewTab: boolean | null;
-        href: null | string;
-      }
-    | {
-        _key: string;
-        type: "column";
-        title: string | null;
-        links: Array<{
-          _key: string;
-          name: string | null;
-          icon: null;
-          description: string | null;
-          openInNewTab: boolean | null;
-          href: null | string;
-        }>;
-      }
-    | {
-        _key: string;
-      }
-  > | null;
-  buttons: Array<{
-    text: string | null;
-    variant: "default" | "link" | "outline" | "secondary" | null;
-    _key: string;
-    _type: "button";
-    openInNewTab: boolean | null;
-    href: null | string;
-  }> | null;
-} | null;
+export type QueryNavbarDataResult = null;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryGlobalSeoSettings
 // Query: *[_type == "settings"][0]{    _id,    _type,    siteTitle,    logo {        "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }    },    siteDescription,    socialLinks{      linkedin,      facebook,      twitter,      instagram,      youtube    }  }
-export type QueryGlobalSeoSettingsResult = {
-  _id: string;
-  _type: "settings";
-  siteTitle: string;
-  logo: {
-    id: string | null;
-    preview: string | null;
-    alt: string | "untitled";
-    hotspot: {
-      x: number;
-      y: number;
-    } | null;
-    crop: {
-      bottom: number;
-      left: number;
-      right: number;
-      top: number;
-    } | null;
-  } | null;
-  siteDescription: string;
-  socialLinks: {
-    linkedin: string | null;
-    facebook: string | null;
-    twitter: string | null;
-    instagram: string | null;
-    youtube: string | null;
-  } | null;
-} | null;
+export type QueryGlobalSeoSettingsResult = null;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryBlogIndexPageData
@@ -979,7 +873,7 @@ export type QueryArticleSlugPageDataResult = {
           path: string;
           url: string;
           source?: SanityAssetSourceData;
-        } | null;
+        };
         media?: unknown;
         description: string;
         _type: "attachment";
@@ -993,7 +887,14 @@ export type QueryArticleSlugPageDataResult = {
           _key: string;
         }>;
         style?:
-          "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
         listItem?: "bullet" | "number";
         markDefs?: Array<{
           href?: string;
@@ -1005,7 +906,7 @@ export type QueryArticleSlugPageDataResult = {
         _key: string;
       }
     | {
-        asset?: SanityImageAssetReference;
+        asset: SanityImageAssetReference;
         media?: unknown;
         hotspot: {
           x: number;
@@ -1020,7 +921,7 @@ export type QueryArticleSlugPageDataResult = {
         alt: string;
         _type: "image";
         _key: string;
-        id: string | null;
+        id: string;
         preview: string | null;
         caption: null;
       }
@@ -1059,7 +960,7 @@ export type RightSidebarNonProfitQueryResult = {
           path: string;
           url: string;
           source?: SanityAssetSourceData;
-        } | null;
+        };
         media?: unknown;
         description: string;
         _type: "attachment";
@@ -1073,7 +974,14 @@ export type RightSidebarNonProfitQueryResult = {
           _key: string;
         }>;
         style?:
-          "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
         listItem?: "bullet" | "number";
         markDefs?: Array<{
           href?: string;
@@ -1085,7 +993,7 @@ export type RightSidebarNonProfitQueryResult = {
         _key: string;
       }
     | {
-        asset?: SanityImageAssetReference;
+        asset: SanityImageAssetReference;
         media?: unknown;
         hotspot: {
           x: number;
@@ -1100,7 +1008,7 @@ export type RightSidebarNonProfitQueryResult = {
         alt: string;
         _type: "image";
         _key: string;
-        id: string | null;
+        id: string;
         preview: string | null;
         caption: null;
       }
@@ -1162,7 +1070,101 @@ export type RightSidebarNewsletterQueryResult = {
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryHomePageData
 // Query: *[_type == "home"][0]{    _id,    _type,    image {        "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  },      "caption": caption    },    "content": content[]{      ...,      _type == "image" => {          "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  },        "caption": caption      },      _type == "attachment" => {        ...,        asset->      }    }  }
-export type QueryHomePageDataResult = null;
+export type QueryHomePageDataResult = {
+  _id: string;
+  _type: "home";
+  image: {
+    id: string | null;
+    preview: string | null;
+    alt: string;
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      bottom: number;
+      left: number;
+      right: number;
+      top: number;
+    } | null;
+    caption: string | null;
+  } | null;
+  content: Array<
+    | {
+        asset: {
+          _id: string;
+          _type: "sanity.fileAsset";
+          _createdAt: string;
+          _updatedAt: string;
+          _rev: string;
+          originalFilename?: string;
+          label?: string;
+          title?: string;
+          description?: string;
+          altText?: string;
+          sha1hash: string;
+          extension: string;
+          mimeType: string;
+          size: number;
+          assetId: string;
+          uploadId?: string;
+          path: string;
+          url: string;
+          source?: SanityAssetSourceData;
+        };
+        media?: unknown;
+        description: string;
+        _type: "attachment";
+        _key: string;
+      }
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset: SanityImageAssetReference;
+        media?: unknown;
+        hotspot: {
+          x: number;
+          y: number;
+        } | null;
+        crop: {
+          bottom: number;
+          left: number;
+          right: number;
+          top: number;
+        } | null;
+        alt: string;
+        _type: "image";
+        _key: string;
+        id: string;
+        preview: string | null;
+        caption: null;
+      }
+  > | null;
+} | null;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryAllPosts
@@ -1242,7 +1244,7 @@ export type QueryAllPostsResult = Array<{
           path: string;
           url: string;
           source?: SanityAssetSourceData;
-        } | null;
+        };
         media?: unknown;
         description: string;
         _type: "attachment";
@@ -1256,7 +1258,14 @@ export type QueryAllPostsResult = Array<{
           _key: string;
         }>;
         style?:
-          "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
         listItem?: "bullet" | "number";
         markDefs?: Array<{
           href?: string;
@@ -1268,7 +1277,7 @@ export type QueryAllPostsResult = Array<{
         _key: string;
       }
     | {
-        asset?: SanityImageAssetReference;
+        asset: SanityImageAssetReference;
         media?: unknown;
         hotspot: {
           x: number;
@@ -1283,7 +1292,7 @@ export type QueryAllPostsResult = Array<{
         alt: string;
         _type: "image";
         _key: string;
-        id: string | null;
+        id: string;
         preview: string | null;
         caption: null;
       }
@@ -1387,7 +1396,7 @@ export type QueryPostBySlugResult = {
           path: string;
           url: string;
           source?: SanityAssetSourceData;
-        } | null;
+        };
         media?: unknown;
         description: string;
         _type: "attachment";
@@ -1401,7 +1410,14 @@ export type QueryPostBySlugResult = {
           _key: string;
         }>;
         style?:
-          "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
         listItem?: "bullet" | "number";
         markDefs?: Array<{
           href?: string;
@@ -1413,7 +1429,7 @@ export type QueryPostBySlugResult = {
         _key: string;
       }
     | {
-        asset?: SanityImageAssetReference;
+        asset: SanityImageAssetReference;
         media?: unknown;
         hotspot: {
           x: number;
@@ -1428,7 +1444,7 @@ export type QueryPostBySlugResult = {
         alt: string;
         _type: "image";
         _key: string;
-        id: string | null;
+        id: string;
         preview: string | null;
         caption: null;
       }
@@ -1475,7 +1491,7 @@ export type QueryCategoryBySlugResult = {
           path: string;
           url: string;
           source?: SanityAssetSourceData;
-        } | null;
+        };
         media?: unknown;
         description: string;
         _type: "attachment";
@@ -1489,7 +1505,14 @@ export type QueryCategoryBySlugResult = {
           _key: string;
         }>;
         style?:
-          "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
         listItem?: "bullet" | "number";
         markDefs?: Array<{
           href?: string;
@@ -1501,7 +1524,7 @@ export type QueryCategoryBySlugResult = {
         _key: string;
       }
     | {
-        asset?: SanityImageAssetReference;
+        asset: SanityImageAssetReference;
         media?: unknown;
         hotspot: {
           x: number;
@@ -1516,7 +1539,7 @@ export type QueryCategoryBySlugResult = {
         alt: string;
         _type: "image";
         _key: string;
-        id: string | null;
+        id: string;
         preview: string | null;
         caption: null;
       }
@@ -1642,7 +1665,7 @@ export type QueryTagBySlugResult = {
           path: string;
           url: string;
           source?: SanityAssetSourceData;
-        } | null;
+        };
         media?: unknown;
         description: string;
         _type: "attachment";
@@ -1656,7 +1679,14 @@ export type QueryTagBySlugResult = {
           _key: string;
         }>;
         style?:
-          "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
         listItem?: "bullet" | "number";
         markDefs?: Array<{
           href?: string;
@@ -1668,7 +1698,7 @@ export type QueryTagBySlugResult = {
         _key: string;
       }
     | {
-        asset?: SanityImageAssetReference;
+        asset: SanityImageAssetReference;
         media?: unknown;
         hotspot: {
           x: number;
@@ -1683,7 +1713,7 @@ export type QueryTagBySlugResult = {
         alt: string;
         _type: "image";
         _key: string;
-        id: string | null;
+        id: string;
         preview: string | null;
         caption: null;
       }
@@ -1764,7 +1794,7 @@ export type QueryTagBySlugResult = {
             path: string;
             url: string;
             source?: SanityAssetSourceData;
-          } | null;
+          };
           media?: unknown;
           description: string;
           _type: "attachment";
@@ -1778,7 +1808,14 @@ export type QueryTagBySlugResult = {
             _key: string;
           }>;
           style?:
-            "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+            | "blockquote"
+            | "h1"
+            | "h2"
+            | "h3"
+            | "h4"
+            | "h5"
+            | "h6"
+            | "normal";
           listItem?: "bullet" | "number";
           markDefs?: Array<{
             href?: string;
@@ -1790,7 +1827,7 @@ export type QueryTagBySlugResult = {
           _key: string;
         }
       | {
-          asset?: SanityImageAssetReference;
+          asset: SanityImageAssetReference;
           media?: unknown;
           hotspot: {
             x: number;
@@ -1805,7 +1842,7 @@ export type QueryTagBySlugResult = {
           alt: string;
           _type: "image";
           _key: string;
-          id: string | null;
+          id: string;
           preview: string | null;
           caption: null;
         }
@@ -1930,7 +1967,7 @@ export type QuerySearchResult = Array<
               path: string;
               url: string;
               source?: SanityAssetSourceData;
-            } | null;
+            };
             media?: unknown;
             description: string;
             _type: "attachment";
@@ -1944,7 +1981,14 @@ export type QuerySearchResult = Array<
               _key: string;
             }>;
             style?:
-              "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+              | "blockquote"
+              | "h1"
+              | "h2"
+              | "h3"
+              | "h4"
+              | "h5"
+              | "h6"
+              | "normal";
             listItem?: "bullet" | "number";
             markDefs?: Array<{
               href?: string;
@@ -1956,7 +2000,7 @@ export type QuerySearchResult = Array<
             _key: string;
           }
         | {
-            asset?: SanityImageAssetReference;
+            asset: SanityImageAssetReference;
             media?: unknown;
             hotspot: {
               x: number;
@@ -1971,7 +2015,7 @@ export type QuerySearchResult = Array<
             alt: string;
             _type: "image";
             _key: string;
-            id: string | null;
+            id: string;
             preview: string | null;
             caption: null;
           }
@@ -2021,7 +2065,87 @@ export type QuerySearchResult = Array<
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryNavigation
 // Query: *[_type == "navigation"][0]{    "headerPrimary": headerPrimary[]{      _key,      "link": link{        url,        text,        reference->{          _id,          _type,          title,          "slug": slug.current        }      },      children[]{        _key,        link{          url,          text,          reference->{            _id,            _type,            title,            "slug": slug.current          }        }      }    },    "footer": footer[]{      _key,      url,      text,      reference->{        _id,        _type,        title,        "slug": slug.current      }    },  }
-export type QueryNavigationResult = null;
+export type QueryNavigationResult = {
+  headerPrimary: Array<{
+    _key: string;
+    link: {
+      url: string | null;
+      text: string | null;
+      reference:
+        | {
+            _id: string;
+            _type: "category";
+            title: string;
+            slug: string;
+          }
+        | {
+            _id: string;
+            _type: "page";
+            title: string;
+            slug: string;
+          }
+        | {
+            _id: string;
+            _type: "tag";
+            title: string;
+            slug: string;
+          }
+        | null;
+    } | null;
+    children: Array<{
+      _key: string;
+      link: {
+        url: string | null;
+        text: string | null;
+        reference:
+          | {
+              _id: string;
+              _type: "category";
+              title: string;
+              slug: string;
+            }
+          | {
+              _id: string;
+              _type: "page";
+              title: string;
+              slug: string;
+            }
+          | {
+              _id: string;
+              _type: "tag";
+              title: string;
+              slug: string;
+            }
+          | null;
+      } | null;
+    }> | null;
+  }> | null;
+  footer: Array<{
+    _key: string;
+    url: string | null;
+    text: string | null;
+    reference:
+      | {
+          _id: string;
+          _type: "category";
+          title: string;
+          slug: string;
+        }
+      | {
+          _id: string;
+          _type: "page";
+          title: string;
+          slug: string;
+        }
+      | {
+          _id: string;
+          _type: "tag";
+          title: string;
+          slug: string;
+        }
+      | null;
+  }> | null;
+} | null;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryPageBySlug
@@ -2052,7 +2176,7 @@ export type QueryPageBySlugResult = {
           path: string;
           url: string;
           source?: SanityAssetSourceData;
-        } | null;
+        };
         media?: unknown;
         description: string;
         _type: "attachment";
@@ -2066,7 +2190,14 @@ export type QueryPageBySlugResult = {
           _key: string;
         }>;
         style?:
-          "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
         listItem?: "bullet" | "number";
         markDefs?: Array<{
           href?: string;
@@ -2078,7 +2209,7 @@ export type QueryPageBySlugResult = {
         _key: string;
       }
     | {
-        asset?: SanityImageAssetReference;
+        asset: SanityImageAssetReference;
         media?: unknown;
         hotspot?: SanityImageHotspot;
         crop?: SanityImageCrop;
@@ -2091,6 +2222,7 @@ export type QueryPageBySlugResult = {
 
 // Query TypeMap
 import "@sanity/client";
+
 declare module "@sanity/client" {
   interface SanityQueries {
     '\n  *[_type == "post" && defined(mainImage)][0].mainImage{\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n': QueryImageTypeResult;
