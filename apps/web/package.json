@@ -42,14 +42,14 @@
     "react-dom": "catalog:",
     "sanity": "catalog:",
     "sanity-image": "^1.1.0",
-    "sanity-plugin-media": "^6.0.7",
+    "sanity-plugin-media": "^6.0.9",
     "styled-components": "^6.4.4",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@maricopa-senior-living/typescript-config": "workspace:*",
-    "@sanity/blueprints": "^0.23.0",
-    "@sanity/functions": "^1.4.0",
+    "@sanity/blueprints": "^0.23.1",
+    "@sanity/functions": "^1.5.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/postcss": "^4.3.3",
@@ -58,7 +58,7 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@types/styled-components": "^5.1.36",
-    "postcss": "^8.5.23",
+    "postcss": "^8.5.25",
     "tailwindcss": "^4.3.3",
     "typescript": "catalog:"
   }

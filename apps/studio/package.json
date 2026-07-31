@@ -16,20 +16,20 @@
   "dependencies": {
     "@sanity/assist": "^6.1.17",
     "@sanity/client": "catalog:",
-    "@sanity/functions": "^1.4.0",
+    "@sanity/functions": "^1.5.0",
     "@sanity/icons": "^5.2.1",
-    "@sanity/ui": "^3.4.5",
+    "@sanity/ui": "^3.5.1",
     "@sanity/vision": "catalog:",
-    "lucide-react": "^1.27.0",
+    "lucide-react": "^1.28.0",
     "react": "catalog:",
     "react-dom": "catalog:",
     "sanity": "catalog:",
-    "sanity-plugin-media": "^6.0.7",
+    "sanity-plugin-media": "^6.0.9",
     "slugify": "^1.6.9",
     "styled-components": "^6.4.4"
   },
   "devDependencies": {
-    "@sanity/blueprints": "^0.23.0",
+    "@sanity/blueprints": "^0.23.1",
     "@types/node": "catalog:",
     "@types/react": "catalog:"
   }
