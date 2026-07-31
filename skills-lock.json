@@ -23,7 +23,7 @@
       "source": "sanity-io/agent-toolkit",
       "sourceType": "github",
       "skillPath": "skills/sanity-best-practices/SKILL.md",
-      "computedHash": "189a17cf67bae9ae1087d47e78156952d19312db02a6a75a7dc1f2da30cf1174"
+      "computedHash": "0d771d6e44b0812c28c9d8beeb9ab19bd6da15a0913df4e611ccea1baa23b6a8"
     },
     "sanity-live-cache-components": {
       "source": "sanity-io/next-sanity",
@@ -41,7 +41,7 @@
       "source": "shadcn/ui",
       "sourceType": "github",
       "skillPath": "skills/shadcn/SKILL.md",
-      "computedHash": "d81caa0f86aabab65b25e302d454f23a3328760386ed9078345584c0d5c8058e"
+      "computedHash": "c1a68ee06a668aced9ab2b5fbdea5f989864123794eb2e056b339a072dbb7f10"
     },
     "vercel-composition-patterns": {
       "source": "vercel-labs/agent-skills",
