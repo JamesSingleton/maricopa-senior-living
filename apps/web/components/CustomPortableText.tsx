@@ -1,10 +1,10 @@
 import {
   PortableText,
-  type PortableTextComponentProps,
   type PortableTextComponents,
   type PortableTextMarkComponentProps,
 } from "@portabletext/react";
 import { DownloadIcon } from "lucide-react";
+import type { ReactNode } from "react";
 import type { PortableTextBlock } from "sanity";
 
 import { SanityImage, type SanityImageProps } from "./sanity-image";
@@ -36,7 +36,9 @@ export function CustomPortableText({
 }) {
   const components: PortableTextComponents = {
     block: {
-      normal: ({ children }: PortableTextComponentProps<PortableTextBlock>) => {
+      // Avoid annotating with sanity's PortableTextBlock — its `_key` is
+      // optional and is not assignable to @portabletext/react's block props.
+      normal: ({ children }: { children?: ReactNode }) => {
         return <p className={paragraphClasses}>{children}</p>;
       },
     },
