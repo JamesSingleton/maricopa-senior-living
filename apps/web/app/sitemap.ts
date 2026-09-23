@@ -1,4 +1,4 @@
-import { sanityFetchMetadata } from "@maricopa-senior-living/sanity/live";
+import { cachedSanityMetadata } from "@maricopa-senior-living/sanity/live";
 import {
   queryAllPageSlugs,
   queryArticlePaths,
@@ -16,19 +16,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { data: categoryPaths },
     { data: tagPaths },
   ] = await Promise.all([
-    sanityFetchMetadata({
+    cachedSanityMetadata({
       query: queryAllPageSlugs,
       perspective: "published",
     }),
-    sanityFetchMetadata({
+    cachedSanityMetadata({
       query: queryArticlePaths,
       perspective: "published",
     }),
-    sanityFetchMetadata({
+    cachedSanityMetadata({
       query: queryCategoryPaths,
       perspective: "published",
     }),
-    sanityFetchMetadata({
+    cachedSanityMetadata({
       query: queryTagPaths,
       perspective: "published",
     }),

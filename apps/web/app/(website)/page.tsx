@@ -1,8 +1,8 @@
 import {
+  cachedSanity,
+  cachedSanityMetadata,
   type DynamicFetchOptions,
   getDynamicFetchOptions,
-  sanityFetch,
-  sanityFetchMetadata,
 } from "@maricopa-senior-living/sanity/live";
 import {
   queryGlobalSeoSettings,
@@ -11,17 +11,30 @@ import {
 import type { Metadata, ResolvingMetadata } from "next";
 import { draftMode } from "next/headers";
 import { Suspense } from "react";
+import type { PortableTextBlock } from "sanity";
 
 import { CustomPortableText } from "@/components/CustomPortableText";
-import { SanityImage } from "@/components/sanity-image";
+import {
+  SanityImage,
+  type SanityImageData,
+} from "@/components/sanity-image";
 import { baseUrl } from "@/lib/constants";
+
+/**
+ * TypeGen currently resolves this query to `null` (no extracted `home` schema).
+ * Keep a local shape aligned with `queryHomePageData` until typegen is fixed.
+ */
+type HomePageData = {
+  image?: (SanityImageData & { caption?: string | null }) | null;
+  content?: PortableTextBlock[] | null;
+} | null;
 
 export async function generateMetadata(
   _props: unknown,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { perspective } = await getDynamicFetchOptions();
-  const { data } = await sanityFetchMetadata({
+  const { data } = await cachedSanityMetadata({
     query: queryGlobalSeoSettings,
     perspective,
   });
@@ -74,12 +87,12 @@ async function DynamicHome() {
 }
 
 async function CachedHome({ perspective, stega }: DynamicFetchOptions) {
-  "use cache";
-  const { data: homePageData } = await sanityFetch({
+  const { data } = await cachedSanity({
     query: queryHomePageData,
     perspective,
     stega,
   });
+  const homePageData = data as HomePageData;
 
   return (
     <>

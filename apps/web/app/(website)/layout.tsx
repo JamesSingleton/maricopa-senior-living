@@ -1,9 +1,9 @@
 import "@/app/globals.css";
 import {
+  cachedSanity,
   type DynamicFetchOptions,
   getDynamicFetchOptions,
   SanityLive,
-  sanityFetch,
 } from "@maricopa-senior-living/sanity/live";
 import {
   queryGlobalSeoSettings,
@@ -37,16 +37,6 @@ type NavigationData = {
   footer?: any[];
 } | null;
 
-async function fetchSiteSettings({ perspective, stega }: DynamicFetchOptions) {
-  "use cache";
-  const { data } = await sanityFetch({
-    query: queryGlobalSeoSettings,
-    perspective,
-    stega,
-  });
-  return data as SiteSettingsData;
-}
-
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
@@ -62,30 +52,29 @@ export const metadata: Metadata = {
   },
 };
 
-async function fetchNavigation({ perspective, stega }: DynamicFetchOptions) {
-  "use cache";
-  const { data } = await sanityFetch({
-    query: queryNavigation,
-    perspective,
-    stega,
-  });
-  return data as NavigationData;
-}
-
 async function DynamicHeader() {
   const { perspective, stega } = await getDynamicFetchOptions();
   return <CachedHeader perspective={perspective} stega={stega} />;
 }
 
 async function CachedHeader({ perspective, stega }: DynamicFetchOptions) {
-  "use cache";
-  const [navigation, settingsData] = await Promise.all([
-    fetchNavigation({ perspective, stega }),
-    fetchSiteSettings({ perspective, stega }),
+  const [{ data: navigation }, { data: settingsData }] = await Promise.all([
+    cachedSanity({
+      query: queryNavigation,
+      perspective,
+      stega,
+    }),
+    cachedSanity({
+      query: queryGlobalSeoSettings,
+      perspective,
+      stega,
+    }),
   ]);
-  const navItems = resolveHeaderNavItems(navigation?.headerPrimary);
+  const nav = navigation as NavigationData;
+  const settings = settingsData as SiteSettingsData;
+  const navItems = resolveHeaderNavItems(nav?.headerPrimary);
 
-  return <SiteHeader navItems={navItems} siteTitle={settingsData?.siteTitle} />;
+  return <SiteHeader navItems={navItems} siteTitle={settings?.siteTitle} />;
 }
 
 async function DynamicFooter() {
@@ -94,8 +83,12 @@ async function DynamicFooter() {
 }
 
 async function CachedFooter({ perspective, stega }: DynamicFetchOptions) {
-  "use cache";
-  const navigation = await fetchNavigation({ perspective, stega });
+  const { data } = await cachedSanity({
+    query: queryNavigation,
+    perspective,
+    stega,
+  });
+  const navigation = data as NavigationData;
   return <Footer menu={navigation?.footer ?? []} />;
 }
 

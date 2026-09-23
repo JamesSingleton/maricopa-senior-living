@@ -1,9 +1,9 @@
 import {
+  cachedSanity,
+  cachedSanityMetadata,
+  cachedSanityStaticParams,
   type DynamicFetchOptions,
   getDynamicFetchOptions,
-  sanityFetch,
-  sanityFetchMetadata,
-  sanityFetchStaticParams,
 } from "@maricopa-senior-living/sanity/live";
 import {
   queryCategoryBySlug,
@@ -21,7 +21,9 @@ import { baseUrl } from "@/lib/constants";
 import type { CategoryPageProps } from "@/types/common";
 
 export async function generateStaticParams() {
-  const { data } = await sanityFetchStaticParams({ query: queryCategoryPaths });
+  const { data } = await cachedSanityStaticParams({
+    query: queryCategoryPaths,
+  });
   return data ?? [];
 }
 
@@ -37,7 +39,7 @@ export async function generateMetadata(
     params,
     getDynamicFetchOptions(),
   ]);
-  const { data } = await sanityFetchMetadata({
+  const { data } = await cachedSanityMetadata({
     query: queryCategoryBySlug,
     params: { slug: categoryParam },
     perspective,
@@ -110,8 +112,7 @@ async function CachedCategoryPage({
   perspective,
   stega,
 }: { category: string } & DynamicFetchOptions) {
-  "use cache";
-  const { data } = await sanityFetch({
+  const { data } = await cachedSanity({
     query: queryCategoryBySlug,
     params: { slug: category },
     perspective,

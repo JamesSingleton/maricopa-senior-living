@@ -42,8 +42,7 @@ export default function Footer({ menu }: { menu: FooterProps[] }) {
           ))}
         </nav>
         <p className="mt-10 text-center text-sm leading-5 text-zinc-500">
-          &copy; {new Date().getFullYear()} Maricopa Senior Living. All rights
-          reserved.{" "}
+          &copy; <CopyrightYear /> Maricopa Senior Living. All rights reserved.{" "}
           <a
             className="text-indigo-600 hover:text-indigo-700"
             target="_blank"
@@ -56,4 +55,9 @@ export default function Footer({ menu }: { menu: FooterProps[] }) {
       </div>
     </footer>
   );
+}
+
+async function CopyrightYear() {
+  "use cache";
+  return new Date().getFullYear();
 }
