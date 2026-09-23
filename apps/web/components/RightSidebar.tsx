@@ -1,7 +1,7 @@
 import {
+  cachedSanity,
   type DynamicFetchOptions,
   getDynamicFetchOptions,
-  sanityFetch,
 } from "@maricopa-senior-living/sanity/live";
 import {
   highlightedCategories,
@@ -32,7 +32,11 @@ export async function DynamicRightSidebar() {
   return <CachedRightSidebar perspective={perspective} stega={stega} />;
 }
 
-/** Composes independently cached sidebar regions to limit invalidation fan-out. */
+/**
+ * Composes sidebar regions that each call `cachedSanity` with their own query.
+ * Separate query keys keep invalidation fan-out narrow; the shared boundary
+ * still dedupes identical fetches across the tree.
+ */
 export async function CachedRightSidebar({
   perspective,
   stega,
@@ -55,8 +59,7 @@ async function CachedSidebarNonProfit({
   perspective,
   stega,
 }: DynamicFetchOptions) {
-  "use cache";
-  const { data: nonProfit } = await sanityFetch({
+  const { data: nonProfit } = await cachedSanity({
     query: rightSidebarNonProfitQuery,
     perspective,
     stega,
@@ -91,8 +94,7 @@ async function CachedSidebarWhatsNew({
   perspective,
   stega,
 }: DynamicFetchOptions) {
-  "use cache";
-  const { data: whatsNew } = await sanityFetch({
+  const { data: whatsNew } = await cachedSanity({
     query: rightSidebarWhatsNewQuery,
     perspective,
     stega,
@@ -147,8 +149,7 @@ async function CachedSidebarSeniorCenter({
   perspective,
   stega,
 }: DynamicFetchOptions) {
-  "use cache";
-  const { data: seniorCenterNewsletters } = await sanityFetch({
+  const { data: seniorCenterNewsletters } = await cachedSanity({
     query: rightSidebarSeniorCenterQuery,
     perspective,
     stega,
@@ -199,8 +200,7 @@ async function CachedSidebarNewsletter({
   perspective,
   stega,
 }: DynamicFetchOptions) {
-  "use cache";
-  const { data: newsletter } = await sanityFetch({
+  const { data: newsletter } = await cachedSanity({
     query: rightSidebarNewsletterQuery,
     perspective,
     stega,
@@ -246,8 +246,7 @@ async function CachedSidebarCategories({
   perspective,
   stega,
 }: DynamicFetchOptions) {
-  "use cache";
-  const { data: categories } = await sanityFetch({
+  const { data: categories } = await cachedSanity({
     query: highlightedCategories,
     perspective,
     stega,
@@ -281,8 +280,7 @@ async function CachedSidebarCategories({
 }
 
 async function CachedSidebarTags({ perspective, stega }: DynamicFetchOptions) {
-  "use cache";
-  const { data: tags } = await sanityFetch({
+  const { data: tags } = await cachedSanity({
     query: highlightedTags,
     perspective,
     stega,

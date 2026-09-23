@@ -1,7 +1,7 @@
 import {
+  cachedSanity,
   type DynamicFetchOptions,
   getDynamicFetchOptions,
-  sanityFetch,
 } from "@maricopa-senior-living/sanity/live";
 import { querySearch } from "@maricopa-senior-living/sanity/queries";
 import { Suspense } from "react";
@@ -9,6 +9,10 @@ import { Suspense } from "react";
 import ArticleCard from "@/components/ArticleCard";
 import DirectoryCard from "@/components/DirectoryCard";
 
+/**
+ * Search always uses Suspense — `searchParams` is a dynamic API input, so we
+ * cannot branch on draftMode for a published-only static shell.
+ */
 export default function Page({
   searchParams,
 }: {
@@ -39,8 +43,7 @@ async function CachedSearch({
   perspective,
   stega,
 }: { query: string } & DynamicFetchOptions) {
-  "use cache";
-  const { data: results } = await sanityFetch({
+  const { data: results } = await cachedSanity({
     query: querySearch,
     params: { searchTerm: query },
     perspective,
