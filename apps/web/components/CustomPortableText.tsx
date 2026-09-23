@@ -1,5 +1,6 @@
 import {
   PortableText,
+  type PortableTextComponentProps,
   type PortableTextComponents,
   type PortableTextMarkComponentProps,
 } from "@portabletext/react";
@@ -35,7 +36,7 @@ export function CustomPortableText({
 }) {
   const components: PortableTextComponents = {
     block: {
-      normal: ({ children }) => {
+      normal: ({ children }: PortableTextComponentProps<PortableTextBlock>) => {
         return <p className={paragraphClasses}>{children}</p>;
       },
     },
@@ -47,13 +48,13 @@ export function CustomPortableText({
           </a>
         );
       },
-      highlight: ({ children }) => {
+      highlight: ({ children }: PortableTextMarkComponentProps) => {
         return <mark>{children}</mark>;
       },
-      sup: ({ children }) => {
+      sup: ({ children }: PortableTextMarkComponentProps) => {
         return <sup>{children}</sup>;
       },
-      sub: ({ children }) => {
+      sub: ({ children }: PortableTextMarkComponentProps) => {
         return <sub>{children}</sub>;
       },
     },
