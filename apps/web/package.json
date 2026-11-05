@@ -21,27 +21,27 @@
     "@maricopa-senior-living/env": "workspace:*",
     "@maricopa-senior-living/sanity": "workspace:*",
     "@maricopa-senior-living/ui": "workspace:*",
-    "@portabletext/react": "^7.0.1",
+    "@portabletext/react": "^8.0.1",
     "lucide-react": "catalog:",
-    "next": "^16.3.5",
+    "next": "^16.4.5",
     "next-plausible": "^4.0.0",
     "next-sanity": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "sanity": "catalog:",
-    "sanity-image": "^1.2.0"
+    "sanity-image": "^1.3.0"
   },
   "devDependencies": {
     "@maricopa-senior-living/typescript-config": "workspace:*",
-    "@sanity/blueprints": "^0.23.6",
-    "@sanity/functions": "^1.8.0",
-    "@tailwindcss/postcss": "^4.3.3",
+    "@sanity/blueprints": "^0.33.0",
+    "@sanity/functions": "^1.11.0",
+    "@tailwindcss/postcss": "^4.3.4",
     "@tailwindcss/typography": "^0.5.20",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "postcss": "^8.5.28",
-    "tailwindcss": "^4.3.3",
+    "postcss": "^8.5.32",
+    "tailwindcss": "^4.3.4",
     "typescript": "catalog:"
   }
 }
