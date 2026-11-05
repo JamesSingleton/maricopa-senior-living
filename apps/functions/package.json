@@ -1,0 +1,21 @@
+{
+  "name": "@maricopa-senior-living/functions",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "plan": "sanity blueprints plan",
+    "deploy": "sanity blueprints deploy",
+    "dev": "sanity functions dev",
+    "check:types": "tsc --noEmit",
+    "lint": "biome check ."
+  },
+  "devDependencies": {
+    "@maricopa-senior-living/typescript-config": "workspace:*",
+    "@sanity/blueprints": "^0.33.0",
+    "@sanity/client": "catalog:",
+    "@sanity/functions": "^1.11.0",
+    "@types/node": "catalog:",
+    "sanity": "catalog:",
+    "typescript": "catalog:"
+  }
+}

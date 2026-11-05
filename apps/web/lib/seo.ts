@@ -1,3 +1,5 @@
+import { cachedSanityMetadata } from "@maricopa-senior-living/sanity/live";
+import { querySettings } from "@maricopa-senior-living/sanity/queries";
 import type { Metadata } from "next";
 
 import { imageUrl } from "./structured-data";
@@ -13,7 +15,11 @@ export type SeoFields = {
  * Metadata with the Studio's optional "Search & sharing" overrides first,
  * then the document's own title, summary and picture.
  */
-export function seoMetadata({
+/**
+ * Next replaces (not merges) the layout's openGraph, so the site's default
+ * share picture from Settings is applied here when a page has none.
+ */
+export async function seoMetadata({
   seo,
   title,
   description,
@@ -31,10 +37,20 @@ export function seoMetadata({
   type?: "website" | "article";
   publishedTime?: string | null;
   modifiedTime?: string | null;
-}): Metadata {
+}): Promise<Metadata> {
+  const { data: settings } = await cachedSanityMetadata({
+    query: querySettings,
+    perspective: "published",
+  });
   const finalTitle = seo?.title || title || undefined;
   const finalDescription = seo?.description || description || undefined;
-  const image = imageUrl(seo?.imageId || imageId, 1200);
+  const image = imageUrl(
+    seo?.imageId ||
+      imageId ||
+      settings?.shareImageId ||
+      settings?.heroImage?.id,
+    1200,
+  );
   return {
     title: finalTitle,
     description: finalDescription,

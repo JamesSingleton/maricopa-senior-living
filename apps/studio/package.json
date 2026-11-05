@@ -11,13 +11,10 @@
     "deploy:schema": "sanity schema deploy",
     "deploy": "sanity deploy",
     "type": "sanity schema extract --enforce-required-fields && sanity typegen generate",
-    "check:types": "tsc --noEmit",
-    "blueprints:plan": "sanity blueprints plan",
-    "blueprints:deploy": "sanity blueprints deploy"
+    "check:types": "tsc --noEmit"
   },
   "dependencies": {
     "@sanity/client": "catalog:",
-    "@sanity/functions": "^1.11.0",
     "@sanity/icons": "^5.2.3",
     "@sanity/ui": "^4.4.10",
     "@sanity/vision": "catalog:",
@@ -28,7 +25,6 @@
     "styled-components": "^6.6.0"
   },
   "devDependencies": {
-    "@sanity/blueprints": "^0.33.0",
     "@types/node": "catalog:",
     "@types/react": "catalog:"
   }
