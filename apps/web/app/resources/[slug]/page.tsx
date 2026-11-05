@@ -7,6 +7,7 @@ import {
   queryResource,
   queryResourcePaths,
 } from "@maricopa-senior-living/sanity/queries";
+import { FileText } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -168,7 +169,8 @@ async function ResourcePageContent({ params }: { params: Params }) {
                     file.file?.url ? (
                       <li key={file._key}>
                         <a href={file.file.url} className="btn btn-secondary">
-                          📄 {file.title ?? "Open the file"} (
+                          <FileText className="size-5" aria-hidden="true" />
+                          {file.title ?? "Open the file"} (
                           {(file.file.extension ?? "file").toUpperCase()})
                         </a>
                       </li>

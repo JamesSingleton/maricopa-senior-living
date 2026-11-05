@@ -17,6 +17,7 @@ import {
 import {
   ArrowRight,
   ArrowUpRight,
+  FileText,
   HeartHandshake,
   MapPin,
   Phone,
@@ -626,7 +627,7 @@ function FileBlock({ block }: Props) {
   return (
     <Section heading={block.heading} intro={block.intro}>
       <a href={block.file.url} className="btn">
-        <span aria-hidden="true">📄</span>{" "}
+        <FileText className="size-5" aria-hidden="true" />
         {block.buttonLabel ?? "View the file"}
         <span className="font-normal">
           {" "}

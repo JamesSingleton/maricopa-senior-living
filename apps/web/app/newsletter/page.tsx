@@ -3,6 +3,7 @@ import {
   queryNewsletterList,
   querySettings,
 } from "@maricopa-senior-living/sanity/queries";
+import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -54,30 +55,42 @@ export default async function NewsletterIndex() {
               <p className="mt-4 flex flex-wrap gap-3">
                 <Link href={`/newsletter/${latest.month}`} className="btn">
                   Read the {monthLabel(latest.month)} issue
+                  <span className="btn-arrow">
+                    <ArrowRight className="size-5" aria-hidden="true" />
+                  </span>
                 </Link>
               </p>
             </section>
           ) : null}
           {older.length ? (
-            <section className="mt-10" aria-labelledby="past">
+            <section className="mt-12" aria-labelledby="past">
               <h2 id="past">Past issues</h2>
-              <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                {older.map((edition) => (
-                  <li key={edition.month}>
-                    <Link
-                      href={`/newsletter/${edition.month}`}
-                      className="card card-link block"
-                    >
-                      <span className="card-title">
-                        {monthLabel(edition.month ?? "")}
-                      </span>
-                      {!edition.hasSections && edition.uploadedPdf ? (
-                        <span className="block text-base muted">PDF</span>
-                      ) : null}
-                    </Link>
-                  </li>
+              <div className="mt-6 flex flex-col gap-6">
+                {[
+                  ...new Set(older.map((e) => String(e.month).slice(0, 4))),
+                ].map((year) => (
+                  <div key={year} className="card">
+                    <h3 className="text-xl">{year}</h3>
+                    <ul className="mt-4 flex flex-wrap gap-2">
+                      {older
+                        .filter((e) => String(e.month).startsWith(year))
+                        .map((edition) => (
+                          <li key={edition.month}>
+                            <Link
+                              href={`/newsletter/${edition.month}`}
+                              className="btn btn-secondary btn-sm"
+                            >
+                              {monthLabel(edition.month ?? "").replace(
+                                ` ${year}`,
+                                "",
+                              )}
+                            </Link>
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </section>
           ) : null}
         </div>

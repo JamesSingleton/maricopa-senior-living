@@ -3,6 +3,7 @@ import {
   type PortableTextBlock,
   type PortableTextComponents,
 } from "@portabletext/react";
+import { FileText } from "lucide-react";
 import Link from "next/link";
 
 import { expandOccurrences } from "@/lib/events";
@@ -80,7 +81,7 @@ const components: PortableTextComponents = {
       value?.file?.url ? (
         <p>
           <a href={value.file.url} className="btn btn-secondary">
-            <span aria-hidden="true">📄</span>
+            <FileText className="size-5" aria-hidden="true" />
             {value.title ?? "Open the file"}
             <span className="font-normal">
               ({(value.file.extension ?? "file").toUpperCase()}

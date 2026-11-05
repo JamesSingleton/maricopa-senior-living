@@ -52,7 +52,9 @@ export default async function AboutIndex() {
                 >
                   <span className="card-title block">{page.title}</span>
                   {page.description ? (
-                    <span className="mt-2 block">{page.description}</span>
+                    <span className="muted mt-2 line-clamp-3 block">
+                      {page.description}
+                    </span>
                   ) : null}
                 </Link>
               </li>

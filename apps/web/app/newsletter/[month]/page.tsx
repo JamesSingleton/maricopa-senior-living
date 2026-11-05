@@ -3,6 +3,7 @@ import {
   cachedSanityStaticParams,
 } from "@maricopa-senior-living/sanity/live";
 import { queryNewsletterList } from "@maricopa-senior-living/sanity/queries";
+import { ArrowRight, FileText, Printer } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -77,29 +78,47 @@ async function NewsletterMonthPageContent({ params }: { params: Params }) {
             { label: monthLabel(month), href: `/newsletter/${month}` },
           ]}
         >
-          <p className="no-print mt-5 flex flex-wrap gap-3">
-            {built ? (
+          {built ? (
+            <p className="no-print mt-6 flex flex-wrap gap-3">
               <Link href={`/newsletter/${month}/print`} className="btn">
+                <Printer className="size-5" aria-hidden="true" />
                 Print or save as PDF
               </Link>
-            ) : null}
-            {edition.uploadedPdf?.url ? (
-              <a
-                href={edition.uploadedPdf.url}
-                className={built ? "btn btn-secondary" : "btn"}
-              >
-                📄 Open the PDF{size(edition.uploadedPdf.size)}
-              </a>
-            ) : null}
-          </p>
+              {edition.uploadedPdf?.url ? (
+                <a href={edition.uploadedPdf.url} className="btn btn-secondary">
+                  <FileText className="size-5" aria-hidden="true" />
+                  Open the original PDF{size(edition.uploadedPdf.size)}
+                </a>
+              ) : null}
+            </p>
+          ) : null}
         </PageHeader>
         <div className="container-page py-8">
           {built ? (
             <NewsletterEdition month={month} data={data} />
           ) : (
-            <p className="text-lg">
-              This issue is available as a PDF. Use the button above to open it.
-            </p>
+            <div className="card flex flex-col gap-5 p-8 sm:flex-row sm:items-center">
+              <span className="icon-circle">
+                <FileText className="size-6" aria-hidden="true" />
+              </span>
+              <div className="grow">
+                <h2 className="text-xl">
+                  The {monthLabel(month)} issue is a PDF
+                </h2>
+                <p className="muted mt-1">
+                  It opens in your browser, where you can read, print or save
+                  it.
+                </p>
+              </div>
+              {edition.uploadedPdf?.url ? (
+                <a href={edition.uploadedPdf.url} className="btn shrink-0">
+                  Open the PDF{size(edition.uploadedPdf.size)}
+                  <span className="btn-arrow">
+                    <ArrowRight className="size-5" aria-hidden="true" />
+                  </span>
+                </a>
+              ) : null}
+            </div>
           )}
         </div>
       </>

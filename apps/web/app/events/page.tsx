@@ -121,9 +121,21 @@ async function MonthView({ searchParams }: { searchParams: SearchParams }) {
           ))}
         </div>
       ) : (
-        <div className="card mt-6">
-          <p className="text-lg">
-            No events are listed for {monthLabel(month)} yet. Check back soon.
+        <div className="card mt-8 flex flex-col gap-4 p-8">
+          <h3 className="text-xl">
+            No events are listed for {monthLabel(month)} yet.
+          </h3>
+          <p className="muted">
+            New events are added through the month. The newsletter and What's
+            New also list what's coming up around town.
+          </p>
+          <p className="flex flex-wrap gap-3">
+            <Link href="/whats-new" className="btn btn-secondary">
+              What's New this month
+            </Link>
+            <Link href="/newsletter" className="btn btn-secondary">
+              The newsletter
+            </Link>
           </p>
         </div>
       )}

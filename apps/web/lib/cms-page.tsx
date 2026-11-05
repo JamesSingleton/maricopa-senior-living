@@ -55,7 +55,7 @@ export function renderCmsPage(slug: string, section: "general" | "about") {
             }
           />
         )}
-        <div className="py-2">
+        <div className="[&>section:first-child]:pt-6">
           <PageBuilder
             blocks={page.sections}
             perspective={perspective}
