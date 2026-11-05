@@ -136,6 +136,11 @@ export function resolveNavbarHref(
     return { href: "#", isExternal: false, openInNewTab: false };
   }
 
+  // Phone and email links: no new tab and no leading slash.
+  if (/^(tel|mailto):/i.test(href)) {
+    return { href, isExternal: false, openInNewTab: false };
+  }
+
   const isExternal =
     href.startsWith("http://") ||
     href.startsWith("https://") ||

@@ -52,12 +52,12 @@ export async function generateMetadata(
   }
 
   return {
-    title: `${category.title}`,
-    description: `${category.excerpt}`,
+    title: category.title ?? undefined,
+    description: category.excerpt ?? undefined,
     openGraph: {
       ...previousOpenGraph,
-      title: `${category.title}`,
-      description: `${category.excerpt}`,
+      title: category.title ?? undefined,
+      description: category.excerpt ?? undefined,
       url: `${baseUrl}/category/${category.slug}`,
     },
   };
@@ -126,13 +126,13 @@ async function CachedCategoryPage({
 
   return (
     <>
-      <h1 className="inline-block align-middle text-4xl font-semibold capitalize sm:text-5xl md:text-6xl">
+      <h1 className="inline-block align-middle text-4xl font-semibold sm:text-5xl md:text-6xl">
         {categoryData.title}
       </h1>
       {categoryData.description && (
         <CustomPortableText
           value={categoryData.description}
-          paragraphClasses="prose prose-lg prose-indigo text-sm font-medium text-zinc-500 sm:text-base md:text-lg lg:max-w-none pt-4"
+          paragraphClasses="prose prose-lg prose-indigo text-lg text-zinc-800 lg:max-w-none pt-4"
         />
       )}
       <section className="space-y-8 pt-4">

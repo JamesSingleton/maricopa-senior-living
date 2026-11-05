@@ -7,8 +7,7 @@ const imageFields = /* groq */ `
     alt,
     asset->altText,
     caption,
-    asset->originalFilename,
-    "untitled"
+    ""
   ),
   hotspot {
     x,
@@ -244,8 +243,64 @@ const authorFields = /* groq */ `
   "slug": slug.current,
 `;
 
+/**
+ * First 160 characters of the plain text; "…" only when actually cut.
+ * Written out per field because TypeGen can't evaluate helper functions.
+ */
+const bodyExcerpt = /* groq */ `select(
+    length(pt::text(body)) > 160 =>
+      array::join(string::split(pt::text(body), "")[0...160], "") + "…",
+    pt::text(body)
+  )`;
+
+const descriptionExcerpt = /* groq */ `select(
+    length(pt::text(description)) > 160 =>
+      array::join(string::split(pt::text(description), "")[0...160], "") + "…",
+    pt::text(description)
+  )`;
+
 const bodyExcerptFragment = /* groq */ `
-  "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "..."
+  "excerpt": ${bodyExcerpt}
+`;
+
+/** Post fields for cards and lists — no body, so long lists stay small. */
+const postCardFields = /* groq */ `
+  _id,
+  _updatedAt,
+  _type,
+  title,
+  ${bodyExcerptFragment},
+  "slug": slug.current,
+  "author": author->{
+    name,
+    ${imageFragment}
+  },
+  "categories": categories[]->{
+    _id,
+    title,
+    "slug": slug.current,
+  },
+  publishedAt
+`;
+
+/** Service fields DirectoryCard renders. */
+const serviceCardFields = /* groq */ `
+  _id,
+  _type,
+  title,
+  description,
+  audience,
+  website,
+  phone,
+  address,
+  businessHours,
+  notes,
+  attachments,
+  "tags": tags[]->{
+    _id,
+    title,
+    "slug": slug.current,
+  }
 `;
 
 const rightSidebarAuthorFields = /* groq */ `
@@ -323,13 +378,16 @@ export const highlightedTags = defineQuery(`
 `);
 
 export const queryArticleSlugPageData = defineQuery(`
-  *[_type == "post" && slug.current == $slug][0]{
+  *[_type == "post" && slug.current == $slug && isArchived != true][0]{
     ${postFields}
   }
 `);
 
 export const queryArticlePaths = defineQuery(`
-  *[_type == "post" && defined(slug.current)].slug.current
+  *[_type == "post" && defined(slug.current) && isArchived != true]{
+    "slug": slug.current,
+    _updatedAt
+  }
 `);
 
 /** Per-widget sidebar queries so each cache entry only carries its own sync tags. */
@@ -430,6 +488,10 @@ export const queryCategoryPaths = defineQuery(`
   *[_type == "category" && defined(slug.current)]{"category": slug.current}
 `);
 
+/**
+ * Services tagged "Local Resources" are listed first. Posts carry their tags
+ * only so the same ranking applies to them.
+ */
 export const queryCategoryBySlug = defineQuery(`
   *[_type == "category" && slug.current == $slug]{
     title,
@@ -437,37 +499,14 @@ export const queryCategoryBySlug = defineQuery(`
     "description": description[]{
       ${blockContentFragment}
     },
-    "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",
+    "excerpt": ${descriptionExcerpt},
     "combinedList": [
       ...(*[_type == "service" && references(^._id)]{
-        ...,
-        tags[]->{
-          _id,
-          title,
-          "slug": slug.current,
-        }
+        ${serviceCardFields}
       }),
       ...(*[_type == "post" && references(^._id) && isArchived != true]{
-        _id,
-        _updatedAt,
-        _type,
-        publishedAt,
-        title,
-        "excerpt": array::join(string::split((pt::text(body)), "")[0..160], "") + "...",
-        "slug": slug.current,
-        "author": author->{
-          ${authorFields}
-        },
-        "categories": categories[]->{
-          _id,
-          title,
-          "slug": slug.current,
-        },
-        "tags": tags[]->{
-          _id,
-          title,
-          "slug": slug.current,
-        }
+        ${postCardFields},
+        "tags": tags[]->{ title }
       })
     ] {
       ...,
@@ -475,7 +514,7 @@ export const queryCategoryBySlug = defineQuery(`
         count(tags[title == "Local Resources"]) > 0 => 1,
         2
       )
-    } | order(rank),
+    } | order(rank, title asc),
   }[0]
 `);
 
@@ -494,39 +533,68 @@ export const queryTagBySlug = defineQuery(`
     "description": description[]{
       ${blockContentFragment}
     },
-    "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",
-    "posts": *[_type == "post" && references(^._id) && isArchived != true]{
-      ${postFields}
+    "excerpt": ${descriptionExcerpt},
+    "posts": *[_type == "post" && references(^._id) && isArchived != true] | order(publishedAt desc){
+      ${postCardFields}
     },
-    "services": *[_type == "service" && references(^._id)]{
-      ...,
-      tags[]->{
-        _id,
-        title,
-        "slug": slug.current,
-      }
+    "services": *[_type == "service" && references(^._id)] | order(title asc){
+      ${serviceCardFields}
     },
   }[0]
 `);
 
+/**
+ * Site search over posts and resources: titles, body/description text, and
+ * tag/category names. Prefix matching (`term*`) — GROQ ignores a leading `*`.
+ * Callers must skip empty terms, which would match every document.
+ * `score()` cannot dereference, so tags/categories filter but do not rank.
+ */
 export const querySearch = defineQuery(`
-  *[(_type == "post" && isArchived != true && (title match "*" + $searchTerm + "*" || tags[]->title match "*" + $searchTerm + "*" || categories[]->title match "*" + $searchTerm + "*")) ||
-  (_type == "service" && (title match "*" + $searchTerm + "*" || tags[]->title match "*" + $searchTerm + "*" || categories[]->title match "*" + $searchTerm + "*"))] | score(
-    boost(title match "*" + $searchTerm + "*", 4)
-  )| order(_score desc){
-    ...,
-    _score,
+  *[
+    (
+      (_type == "post" && isArchived != true) || _type == "service"
+    ) && (
+      title match $searchTerm + "*"
+      || pt::text(body) match $searchTerm + "*"
+      || pt::text(description) match $searchTerm + "*"
+      || tags[]->title match $searchTerm + "*"
+      || categories[]->title match $searchTerm + "*"
+    )
+  ]
+  | score(
+      boost(title match $searchTerm + "*", 4),
+      pt::text(description) match $searchTerm + "*",
+      pt::text(body) match $searchTerm + "*"
+    )
+  | order(_score desc, _updatedAt desc)[0...50]{
     _type == "post" => {
-      ${postFields}
+      ${postCardFields}
     },
     _type == "service" => {
-      ...,
-      tags[]->{
-        _id,
-        title,
-        "slug": slug.current,
-      }
+      ${serviceCardFields}
+    }
+  }
+`);
+
+/** Every public URL with its last edit, for sitemap.xml. Empty taxonomies are skipped. */
+export const querySitemap = defineQuery(`
+  {
+    "pages": *[_type == "page" && defined(slug.current)]{
+      "slug": slug.current,
+      _updatedAt
     },
+    "articles": *[_type == "post" && defined(slug.current) && isArchived != true]{
+      "slug": slug.current,
+      _updatedAt
+    },
+    "categories": *[_type == "category" && defined(slug.current) && count(*[references(^._id)]) > 0]{
+      "slug": slug.current,
+      _updatedAt
+    },
+    "tags": *[_type == "tag" && defined(slug.current) && count(*[references(^._id)]) > 0]{
+      "slug": slug.current,
+      _updatedAt
+    }
   }
 `);
 
@@ -576,7 +644,7 @@ export const queryPageBySlug = defineQuery(`
   *[_type == "page" && slug.current == $slug][0]{
     title,
     "slug": slug.current,
-    "excerpt": array::join(string::split((pt::text(description)), "")[0..160], "") + "...",
+    "excerpt": ${descriptionExcerpt},
     "body": body[]{
       ...,
       _type == "attachment" => {

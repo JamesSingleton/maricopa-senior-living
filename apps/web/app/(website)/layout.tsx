@@ -16,6 +16,7 @@ import PlausibleProvider from "next-plausible";
 import { VisualEditing } from "next-sanity/visual-editing";
 import { Suspense } from "react";
 
+import { PageVisitTracker } from "@/components/BackButton";
 import { DisableDraftMode } from "@/components/DisableDraftMode";
 import Footer from "@/components/Footer";
 import {
@@ -24,6 +25,7 @@ import {
   RightSidebarFallback,
 } from "@/components/RightSidebar";
 import ScrollToTop from "@/components/ScrollToTop";
+import SearchBar from "@/components/SearchBar";
 import { SiteHeader } from "@/components/site-header";
 import { baseUrl } from "@/lib/constants";
 import { type HeaderNavItem, resolveHeaderNavItems } from "@/lib/header-nav";
@@ -123,6 +125,10 @@ export default async function IndexLayout({
       )}
       <main className="py-8 md:py-10 lg:py-14 xl:py-16">
         <div className="container grid grid-cols-12 gap-8">
+          {/* On phones the sidebar stacks below the page, so search goes on top. */}
+          <div className="col-span-12 lg:hidden">
+            <SearchBar id="search-mobile" />
+          </div>
           <div className="col-span-12 lg:col-span-8">{children}</div>
           <div className="col-span-12 space-y-8 lg:col-span-4">
             {isDraftMode ? (
@@ -143,6 +149,7 @@ export default async function IndexLayout({
         <CachedFooter perspective="published" stega={false} />
       )}
       <ScrollToTop />
+      <PageVisitTracker />
       <SanityLive
         includeDrafts={isDraftMode}
         waitFor={

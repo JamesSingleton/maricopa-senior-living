@@ -9,6 +9,15 @@ import type { PortableTextBlock } from "sanity";
 
 import { SanityImage, type SanityImageProps } from "./sanity-image";
 
+/** Links back to this site, including the old www/apex domains. */
+function isOwnSite(href: string) {
+  try {
+    return /(^|\.)maricopaseniorliving\.org$/i.test(new URL(href).hostname);
+  } catch {
+    return false;
+  }
+}
+
 function PortableTextImage({
   value,
 }: {
@@ -44,10 +53,18 @@ export function CustomPortableText({
     },
     marks: {
       link: ({ value, children }: PortableTextMarkComponentProps) => {
-        return (
-          <a href={value?.href} rel="noreferrer noopener" target="_blank">
+        const href: string | undefined = value?.href?.trim();
+        if (!href) return <>{children}</>;
+        // Only other websites open a new tab; phone, email and on-site links
+        // stay in the same tab so the back button keeps working.
+        const isOtherSite = /^https?:\/\//i.test(href) && !isOwnSite(href);
+        return isOtherSite ? (
+          <a href={href} rel="noreferrer noopener" target="_blank">
             {children}
+            <span className="sr-only"> (opens in a new tab)</span>
           </a>
+        ) : (
+          <a href={href}>{children}</a>
         );
       },
       highlight: ({ children }: PortableTextMarkComponentProps) => {
@@ -63,25 +80,28 @@ export function CustomPortableText({
     types: {
       image: PortableTextImage,
       attachment: ({ value }: { value: any }) => {
+        const url: string | undefined = value?.asset?.url;
+        // A block saved without a file would otherwise crash the page.
+        if (!url) return null;
+        const label: string =
+          value.description || value.asset?.originalFilename || "Attachment";
         return (
           <p className="flex flex-col items-center justify-between space-y-4 md:flex-row">
             {value.asset.extension === "pdf" ? (
-              <a
-                href={value.asset.url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {value.description}
+              <a href={url} target="_blank" rel="noopener noreferrer">
+                {label}
+                <span className="sr-only"> (PDF, opens in a new tab)</span>
               </a>
             ) : (
-              <span className="font-medium">{value.description}</span>
+              <span className="font-medium">{label}</span>
             )}
             <a
               className="inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white no-underline shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 focus-visible:outline-solid"
-              href={`${value.asset.url}?dl=${value.description}`}
+              href={`${url}?dl=${encodeURIComponent(value.asset?.originalFilename || label)}`}
             >
               <DownloadIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
               Download
+              <span className="sr-only"> {label}</span>
             </a>
           </p>
         );

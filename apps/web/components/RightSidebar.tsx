@@ -43,7 +43,9 @@ export async function CachedRightSidebar({
 }: DynamicFetchOptions) {
   return (
     <>
-      <SearchBar />
+      <div className="hidden lg:block">
+        <SearchBar id="search-sidebar" />
+      </div>
       <CachedSidebarNonProfit perspective={perspective} stega={stega} />
       <CachedSidebarWhatsNew perspective={perspective} stega={stega} />
       <CachedSidebarSeniorCenter perspective={perspective} stega={stega} />
@@ -110,17 +112,17 @@ async function CachedSidebarWhatsNew({
       <CardContent>
         <article>
           <Link href={`/articles/${whatsNew.slug}`} prefetch={false}>
-            <div className="flex items-center gap-x-4 text-xs">
+            <div className="flex items-center gap-x-4 text-sm">
               <DateComponent
                 dateString={whatsNew.publishedAt}
-                className="text-zinc-500"
+                className="text-zinc-600"
               />
             </div>
             <div className="group relative">
               <h3 className="mt-3 text-lg leading-6 font-semibold text-zinc-900 group-hover:text-zinc-600">
                 {whatsNew.title}
               </h3>
-              <p className="mt-5 line-clamp-3 text-sm leading-6 text-zinc-600">
+              <p className="mt-5 line-clamp-3 text-base leading-7 text-zinc-700">
                 {whatsNew.excerpt}
               </p>
             </div>
@@ -132,7 +134,7 @@ async function CachedSidebarWhatsNew({
                 width={40}
                 height={40}
               />
-              <div className="text-sm leading-6">
+              <div className="text-base leading-7">
                 <p className="font-semibold text-zinc-900">
                   {whatsNew.author.name}
                 </p>
@@ -173,17 +175,17 @@ async function CachedSidebarSeniorCenter({
                 href={`/articles/${seniorCenterNewsletter.slug}`}
                 prefetch={false}
               >
-                <div className="flex items-center gap-x-4 text-xs">
+                <div className="flex items-center gap-x-4 text-sm">
                   <DateComponent
                     dateString={seniorCenterNewsletter.publishedAt}
-                    className="text-zinc-500"
+                    className="text-zinc-600"
                   />
                 </div>
                 <div className="group relative">
                   <h3 className="mt-3 text-lg leading-6 font-semibold text-zinc-900 group-hover:text-zinc-600">
                     {seniorCenterNewsletter.title}
                   </h3>
-                  <p className="mt-5 line-clamp-3 text-sm leading-6 text-zinc-600">
+                  <p className="mt-5 line-clamp-3 text-base leading-7 text-zinc-700">
                     {seniorCenterNewsletter.excerpt}
                   </p>
                 </div>
@@ -220,17 +222,17 @@ async function CachedSidebarNewsletter({
         <div className="divide-y divide-zinc-200">
           <article className="flex max-w-xl flex-col items-start justify-between">
             <Link href={`/articles/${newsletter.slug}`} prefetch={false}>
-              <div className="flex items-center gap-x-4 text-xs">
+              <div className="flex items-center gap-x-4 text-sm">
                 <DateComponent
                   dateString={newsletter.publishedAt}
-                  className="text-zinc-500"
+                  className="text-zinc-600"
                 />
               </div>
               <div className="group relative">
                 <h3 className="mt-3 text-lg leading-6 font-semibold text-zinc-900 group-hover:text-zinc-600">
                   {newsletter.title}
                 </h3>
-                <p className="mt-5 line-clamp-3 text-sm leading-6 text-zinc-600">
+                <p className="mt-5 line-clamp-3 text-base leading-7 text-zinc-700">
                   {newsletter.excerpt}
                 </p>
               </div>

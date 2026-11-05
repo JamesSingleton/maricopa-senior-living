@@ -108,11 +108,11 @@ async function CachedPage({
 
   return (
     <>
-      <h1 className="inline-block align-middle text-4xl font-semibold capitalize sm:text-5xl md:text-6xl">
+      <h1 className="inline-block align-middle text-4xl font-semibold sm:text-5xl md:text-6xl">
         {pageData.title}
       </h1>
-      <section className="prose prose-lg prose-indigo pt-4 text-sm font-medium text-zinc-500 sm:text-base md:text-lg lg:max-w-none">
-        <CustomPortableText value={pageData.body} />
+      <section className="prose prose-lg prose-indigo pt-4 text-lg text-zinc-800 lg:max-w-none">
+        {pageData.body ? <CustomPortableText value={pageData.body} /> : null}
       </section>
     </>
   );

@@ -26,23 +26,34 @@ export function getHeaderNavLabel(link: HeaderNavLink) {
   return link.text ?? link.reference?.title ?? "Link";
 }
 
+/** Public URL prefix for each linkable document type. */
+const REFERENCE_PATHS: Record<string, string> = {
+  page: "",
+  post: "/articles",
+  category: "/category",
+  tag: "/tag",
+};
+
 export function resolveHeaderNavHref(link: HeaderNavLink) {
   if (link.reference?.slug) {
-    const prefix =
-      link.reference._type === "page" ? "" : `/${link.reference._type}`;
+    const prefix = REFERENCE_PATHS[link.reference._type] ?? "";
+    const slug = link.reference.slug.replace(/^\//, "");
 
     return {
-      href: `${prefix}/${link.reference.slug}`,
+      href: `${prefix}/${slug}`,
       isExternal: false,
       openInNewTab: false,
     };
   }
 
   if (link.url) {
+    // Only other websites open in a new tab; site paths, phone and email
+    // links stay in place.
+    const isExternal = /^https?:\/\//i.test(link.url);
     return {
       href: link.url,
-      isExternal: true,
-      openInNewTab: true,
+      isExternal,
+      openInNewTab: isExternal,
     };
   }
 
@@ -54,7 +65,7 @@ export function resolveHeaderNavHref(link: HeaderNavLink) {
 }
 
 export function isHeaderNavDropdown(item: HeaderNavItem) {
-  return !item.link.reference;
+  return Boolean(item.children?.length);
 }
 
 export function splitHeaderNavChildrenIntoColumns(

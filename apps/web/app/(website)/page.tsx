@@ -14,10 +14,7 @@ import { Suspense } from "react";
 import type { PortableTextBlock } from "sanity";
 
 import { CustomPortableText } from "@/components/CustomPortableText";
-import {
-  SanityImage,
-  type SanityImageData,
-} from "@/components/sanity-image";
+import { SanityImage, type SanityImageData } from "@/components/sanity-image";
 import { baseUrl } from "@/lib/constants";
 
 /**
@@ -103,7 +100,7 @@ async function CachedHome({ perspective, stega }: DynamicFetchOptions) {
           height={686}
           loading="eager"
         />
-        <figcaption className="mt-4 text-left text-sm text-zinc-500 italic">
+        <figcaption className="mt-4 text-left text-base text-zinc-600 italic">
           {homePageData?.image?.caption}
         </figcaption>
       </figure>

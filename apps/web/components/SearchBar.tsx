@@ -9,26 +9,36 @@ import {
 import { Input } from "@maricopa-senior-living/ui/components/input";
 import { SearchIcon } from "lucide-react";
 
-export default function SearchBar() {
+/** `id` must be unique per page — the layout can render two search boxes. */
+export default function SearchBar({
+  id = "search",
+  defaultValue,
+}: {
+  id?: string;
+  defaultValue?: string;
+}) {
   return (
     <Card>
       <CardContent>
         <form action="/search" method="get" role="search">
           <FieldGroup>
             <Field>
-              <FieldLabel htmlFor="search" className="sr-only">
-                Search
+              <FieldLabel htmlFor={id} className="text-base">
+                Search resources and articles
               </FieldLabel>
               <ButtonGroup className="w-full">
                 <Input
-                  id="search"
+                  id={id}
                   name="q"
                   type="search"
-                  placeholder="Search"
+                  placeholder="Meals, rides…"
+                  defaultValue={defaultValue}
+                  className="h-12 text-lg"
                   required
                 />
-                <Button type="submit" variant="outline" aria-label="Search">
-                  <SearchIcon />
+                <Button type="submit" className="h-12 px-5 text-base">
+                  <SearchIcon aria-hidden="true" />
+                  Search
                 </Button>
               </ButtonGroup>
             </Field>
