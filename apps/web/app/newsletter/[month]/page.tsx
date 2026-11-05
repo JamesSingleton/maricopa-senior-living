@@ -1,4 +1,7 @@
-import { cachedSanityStaticParams } from "@maricopa-senior-living/sanity/live";
+import {
+  cachedNow,
+  cachedSanityStaticParams,
+} from "@maricopa-senior-living/sanity/live";
 import { queryNewsletterList } from "@maricopa-senior-living/sanity/queries";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -10,7 +13,7 @@ import {
   NewsletterEdition,
 } from "@/components/newsletter-edition";
 import { PageHeader } from "@/components/page-header";
-import { isMonthKey, monthLabel } from "@/lib/dates";
+import { isMonthKey, monthKey, monthLabel } from "@/lib/dates";
 import { draftAware, Loading } from "@/lib/draft";
 
 type Params = Promise<{ month: string }>;
@@ -58,6 +61,12 @@ async function NewsletterMonthPageContent({ params }: { params: Params }) {
     const data = await loadEdition(month, options);
     const { edition } = data;
     if (!edition) notFound();
+    // Ron may publish next month early; visitors only see it once it starts.
+    if (
+      options.perspective === "published" &&
+      month > monthKey(await cachedNow())
+    )
+      notFound();
     const built = (edition.sections?.length ?? 0) > 0;
     return (
       <>

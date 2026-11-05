@@ -1,4 +1,5 @@
 import {
+  cachedNow,
   cachedSanity,
   cachedSanityStaticParams,
 } from "@maricopa-senior-living/sanity/live";
@@ -13,7 +14,7 @@ import { Suspense } from "react";
 
 import { PageHeader } from "@/components/page-header";
 import { RichText } from "@/components/rich-text";
-import { isMonthKey, monthLabel, shiftMonth } from "@/lib/dates";
+import { isMonthKey, monthKey, monthLabel, shiftMonth } from "@/lib/dates";
 import { draftAware, Loading } from "@/lib/draft";
 
 type Params = Promise<{ month: string }>;
@@ -69,6 +70,9 @@ async function MonthPageContent({ params }: { params: Params }) {
       }),
     ]);
     if (!update) notFound();
+    // Ron may publish next month early; visitors only see it once it starts.
+    if (perspective === "published" && month > monthKey(await cachedNow()))
+      notFound();
     const available = new Set<string>(
       (months ?? []).map((m) => String(m.month)),
     );
