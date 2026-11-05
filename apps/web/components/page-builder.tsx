@@ -11,8 +11,17 @@ import {
   queryNewsletterList,
   queryResourcesByTopicSlug,
   querySettings,
+  queryStats,
   queryTopics,
 } from "@maricopa-senior-living/sanity/queries";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  HeartHandshake,
+  MapPin,
+  Phone,
+  Search,
+} from "lucide-react";
 import Link from "next/link";
 
 import { monthKey, monthLabel } from "@/lib/dates";
@@ -35,20 +44,40 @@ type Props = DynamicFetchOptions & { block: Block };
 function Section({
   heading,
   intro,
+  eyebrow,
   children,
   id,
+  action,
 }: {
   heading?: string | null;
   intro?: string | null;
+  eyebrow?: string | null;
   children: React.ReactNode;
   id?: string;
+  action?: React.ReactNode;
 }) {
   return (
-    <section className="container-page py-8" id={id}>
-      {heading ? <h2>{heading}</h2> : null}
-      {intro ? <p className="mt-2 measure text-lg">{intro}</p> : null}
-      <div className={heading || intro ? "mt-5" : ""}>{children}</div>
+    <section className="container-page section" id={id}>
+      {heading || intro || eyebrow ? (
+        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+          <div className="measure">
+            {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
+            {heading ? <h2 className="mt-2">{heading}</h2> : null}
+            {intro ? <p className="lead muted mt-3">{intro}</p> : null}
+          </div>
+          {action}
+        </div>
+      ) : null}
+      {children}
     </section>
+  );
+}
+
+function Arrow() {
+  return (
+    <span className="btn-arrow">
+      <ArrowRight className="size-5" aria-hidden="true" />
+    </span>
   );
 }
 
@@ -71,44 +100,60 @@ function LinkButton({
     >
       {link.label}
       <span className="sr-only"> (opens in a new tab)</span>
+      <Arrow />
     </a>
   ) : (
     <Link href={target.href} className={className}>
       {link.label}
+      <Arrow />
     </Link>
   );
 }
 
-function HeroBlock({ block }: Props) {
+async function HeroBlock({ block, perspective, stega }: Props) {
   const image = block.image as SanityImageData | undefined;
+  const { data: stats } = await cachedSanity({
+    query: queryStats,
+    perspective,
+    stega,
+  });
   return (
-    <section className="bg-[var(--msl-sky)]">
-      <div className="container-page grid items-center gap-8 py-10 lg:grid-cols-[1.1fr_1fr] lg:py-14">
+    <section className="relative overflow-hidden bg-gradient-to-b from-[var(--msl-cream-2)] to-[var(--msl-cream)]">
+      <div className="container-page grid items-center gap-10 py-12 lg:grid-cols-[1.1fr_1fr] lg:py-20">
         <div>
-          <h1>{block.heading}</h1>
-          {block.text ? <p className="mt-3 text-xl">{block.text}</p> : null}
+          <p className="eyebrow">Maricopa, Arizona</p>
+          <h1 className="mt-3">{block.heading}</h1>
+          {block.text ? (
+            <p className="lead muted mt-4 measure">{block.text}</p>
+          ) : null}
           {block.showSearch !== false ? (
-            <form action="/search" method="get" role="search" className="mt-6">
-              <label htmlFor="hero-search" className="label text-lg">
+            <form
+              action="/search"
+              method="get"
+              role="search"
+              className="mt-8 max-w-xl"
+            >
+              <label htmlFor="hero-search" className="label">
                 What are you looking for?
               </label>
-              <div className="flex flex-col gap-2 sm:flex-row">
+              <div className="flex flex-col gap-2 rounded-[2rem] border-2 border-[var(--msl-line-strong)] bg-white p-1.5 sm:flex-row sm:items-center">
                 <input
                   id="hero-search"
                   name="q"
                   type="search"
                   required
-                  className="input"
-                  placeholder="For example: meals, rides, Medicare"
+                  className="input border-0"
+                  placeholder="Meals, rides, Medicare…"
                 />
-                <button type="submit" className="btn shrink-0">
+                <button type="submit" className="btn btn-yellow shrink-0">
+                  <Search className="size-5" aria-hidden="true" />
                   Search
                 </button>
               </div>
             </form>
           ) : null}
           {block.buttons?.length ? (
-            <div className="mt-5 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap gap-3">
               {block.buttons.map(
                 (link: LinkValue & { _key: string }, index: number) => (
                   <LinkButton
@@ -120,15 +165,40 @@ function HeroBlock({ block }: Props) {
               )}
             </div>
           ) : null}
+          <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-base font-semibold">
+            <li className="eyebrow text-[var(--msl-ink)]">Places to call</li>
+            <li className="eyebrow text-[var(--msl-ink)]">Events calendar</li>
+            <li className="eyebrow text-[var(--msl-ink)]">
+              Monthly newsletter
+            </li>
+          </ul>
         </div>
-        {image?.id ? (
-          <SanityImage
-            image={image}
-            width={1024}
-            loading="eager"
-            className="h-auto w-full rounded-[var(--msl-radius)] border-4 border-[var(--msl-surface)] shadow-md"
-          />
-        ) : null}
+        <div className="relative">
+          {image?.id ? (
+            <SanityImage
+              image={image}
+              width={900}
+              height={680}
+              loading="eager"
+              className="aspect-[4/3] h-auto w-full rounded-[var(--msl-radius-lg)] object-cover shadow-lg"
+            />
+          ) : (
+            <div className="aspect-[4/3] w-full rounded-[var(--msl-radius-lg)] bg-[var(--msl-sage)]" />
+          )}
+          <div className="card absolute -bottom-6 left-4 right-4 flex items-center gap-4 p-4 sm:left-8 sm:right-auto sm:max-w-sm">
+            <span className="icon-circle">
+              <MapPin className="size-6" aria-hidden="true" />
+            </span>
+            <p className="text-base">
+              <strong className="block text-lg">
+                {stats?.resources ?? 0} local places to call
+              </strong>
+              <span className="muted">
+                in {stats?.topics ?? 0} topics, from meals to Medicare
+              </span>
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -142,22 +212,34 @@ async function TopicsBlock({ block, perspective, stega }: Props) {
   });
   return (
     <Section
+      eyebrow="Find help"
       heading={block.heading ?? "What do you need help with?"}
       intro={block.intro}
+      action={
+        <Link href="/resources" className="btn btn-secondary">
+          See all resources
+          <Arrow />
+        </Link>
+      }
     >
-      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {(topics ?? []).map((topic) => (
           <li key={topic._id}>
             <Link
               href={`/topics/${topic.slug}`}
-              className="card card-link flex h-full items-start gap-4"
+              className="card card-link flex h-full flex-col gap-4"
             >
-              <TopicIcon name={topic.icon} />
-              <span>
-                <span className="card-title block">{topic.title}</span>
-                <span className="mt-1 block text-base muted">
-                  {topic.description}
-                </span>
+              <div className="flex items-start justify-between gap-3">
+                <TopicIcon name={topic.icon} />
+                <ArrowUpRight
+                  className="size-6 text-[var(--msl-ink-soft)]"
+                  aria-hidden="true"
+                />
+              </div>
+              <span className="card-title">{topic.title}</span>
+              <span className="muted text-base">{topic.description}</span>
+              <span className="pill mt-auto self-start">
+                {topic.resourceCount} places to call
               </span>
             </Link>
           </li>
@@ -177,21 +259,24 @@ async function WhatsNewBlock({ block, perspective, stega }: Props) {
   });
   if (!update) return null;
   return (
-    <Section heading={block.heading ?? "This month in Maricopa"}>
-      <div className="card bg-[var(--msl-sage)]">
-        <p className="eyebrow">
-          What's New — {monthLabel(update.month ?? month)}
-        </p>
-        {update.intro ? (
-          <p className="mt-2 measure text-lg">{update.intro}</p>
-        ) : null}
-        <p className="mt-4">
-          <Link href={`/whats-new/${update.month}`} className="btn">
-            {block.buttonLabel ?? "Read this month's What's New"}
-          </Link>
-        </p>
+    <section className="container-page section">
+      <div className="band-sage grid gap-6 rounded-[var(--msl-radius-lg)] p-8 md:grid-cols-[1fr_auto] md:items-center md:p-12">
+        <div className="measure">
+          <p className="eyebrow">
+            What's New — {monthLabel(update.month ?? month)}
+          </p>
+          <h2 className="mt-2">{block.heading ?? "This month in Maricopa"}</h2>
+          {update.intro ? <p className="lead mt-3">{update.intro}</p> : null}
+        </div>
+        <Link
+          href={`/whats-new/${update.month}`}
+          className="btn self-start md:self-center"
+        >
+          {block.buttonLabel ?? "Read this month's What's New"}
+          <Arrow />
+        </Link>
       </div>
-    </Section>
+    </section>
   );
 }
 
@@ -214,26 +299,36 @@ async function EventListBlock({ block, perspective, stega }: Props) {
     block.limit ?? 5,
   );
   return (
-    <Section heading={block.heading ?? "Coming up"} intro={block.intro}>
-      {occurrences.length ? (
-        <ul className="flex flex-col gap-3">
-          {occurrences.map((occurrence) => (
-            <li key={occurrence.key}>
-              <EventRow occurrence={occurrence} />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="text-lg">
-          No events are listed for the next two months yet.
-        </p>
-      )}
-      <p className="mt-5">
-        <Link href="/events" className="btn btn-secondary">
-          See the full events calendar
-        </Link>
-      </p>
-    </Section>
+    <section className="band-dark">
+      <div className="container-page section">
+        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+          <div className="measure">
+            <p className="eyebrow">Events</p>
+            <h2 className="mt-2">{block.heading ?? "Coming up"}</h2>
+            {block.intro ? (
+              <p className="lead muted mt-3">{block.intro}</p>
+            ) : null}
+          </div>
+          <Link href="/events" className="btn btn-yellow">
+            Full events calendar
+            <Arrow />
+          </Link>
+        </div>
+        {occurrences.length ? (
+          <ul className="grid gap-4 md:grid-cols-2">
+            {occurrences.map((occurrence) => (
+              <li key={occurrence.key}>
+                <EventRow occurrence={occurrence} dark />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="lead muted">
+            No events are listed for the next two months yet. Check back soon.
+          </p>
+        )}
+      </div>
+    </section>
   );
 }
 
@@ -329,8 +424,11 @@ async function LinkListBlock({ block, perspective, stega }: Props) {
 
 function QuickContactsBlock({ block }: Props) {
   return (
-    <Section heading={block.heading ?? "Important phone numbers"}>
-      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <Section
+      eyebrow="Phone numbers"
+      heading={block.heading ?? "Important phone numbers"}
+    >
+      <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {(block.contacts ?? []).map(
           (contact: {
             _key: string;
@@ -339,16 +437,25 @@ function QuickContactsBlock({ block }: Props) {
             number?: { number?: string };
           }) =>
             contact.number?.number ? (
-              <li key={contact._key} className="card">
-                <p className="font-bold text-lg">{contact.name}</p>
-                {contact.note ? (
-                  <p className="text-base muted">{contact.note}</p>
-                ) : null}
+              <li key={contact._key} className="card flex flex-col gap-3">
+                <div className="flex items-center gap-3">
+                  <span className="icon-circle">
+                    <Phone className="size-6" aria-hidden="true" />
+                  </span>
+                  <div>
+                    <p className="text-lg font-semibold leading-snug">
+                      {contact.name}
+                    </p>
+                    {contact.note ? (
+                      <p className="muted text-base">{contact.note}</p>
+                    ) : null}
+                  </div>
+                </div>
                 <a
                   href={telHref(contact.number.number)}
-                  className="btn btn-call mt-3 w-full"
+                  className="btn btn-call mt-auto w-full"
                 >
-                  <span aria-hidden="true">📞</span> {contact.number.number}
+                  Call {contact.number.number}
                 </a>
               </li>
             ) : null,
@@ -369,8 +476,12 @@ async function ContactBlock({ block, perspective, stega }: Props) {
   const email = useSite ? settings?.contactEmail : block.email;
   const address = useSite ? settings?.mailingAddress : block.address;
   return (
-    <Section heading={block.heading ?? "Contact us"} intro={block.intro}>
-      <div className="card flex flex-col gap-3">
+    <Section
+      eyebrow="Contact"
+      heading={block.heading ?? "Contact us"}
+      intro={block.intro}
+    >
+      <div className="card flex flex-col gap-4 md:flex-row md:items-center md:gap-10">
         {phone ? (
           <a href={telHref(phone)} className="btn btn-call self-start">
             Call {phone}
@@ -397,19 +508,29 @@ async function DonateBlock({ block, perspective, stega }: Props) {
   });
   if (!settings?.donateUrl) return null;
   return (
-    <section className="bg-[var(--msl-sand)]">
-      <div className="container-page flex flex-col gap-4 py-10 md:flex-row md:items-center md:justify-between">
-        <div className="measure">
-          <h2>{block.heading ?? "Support Maricopa Senior Living"}</h2>
-          {block.text ? <p className="mt-2 text-lg">{block.text}</p> : null}
+    <section className="container-page section">
+      <div className="card card-soft flex flex-col gap-6 p-8 md:flex-row md:items-center md:justify-between md:p-12">
+        <div className="flex items-start gap-5">
+          <span className="icon-circle hidden sm:grid">
+            <HeartHandshake className="size-6" aria-hidden="true" />
+          </span>
+          <div className="measure">
+            <p className="eyebrow">Support our work</p>
+            <h2 className="mt-2">
+              {block.heading ?? "Support Maricopa Senior Living"}
+            </h2>
+            {block.text ? <p className="lead mt-3">{block.text}</p> : null}
+          </div>
         </div>
         <a
           href={settings.donateUrl}
-          className="btn shrink-0"
+          className="btn btn-yellow shrink-0"
           rel="noopener noreferrer"
           target="_blank"
         >
-          Donate<span className="sr-only"> (opens PayPal in a new tab)</span>
+          Donate
+          <span className="sr-only"> (opens PayPal in a new tab)</span>
+          <Arrow />
         </a>
       </div>
     </section>
@@ -429,23 +550,29 @@ async function NewsletterSignupBlock({ block, perspective, stega }: Props) {
   ]);
   const latest = block.showLatest !== false ? editions?.[0] : null;
   return (
-    <Section
-      heading={block.heading ?? settings?.newsletterTitle ?? "Newsletter"}
-    >
-      <div className="card flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <section className="container-page section">
+      <div className="band-dark grid gap-6 rounded-[var(--msl-radius-lg)] p-8 md:grid-cols-[1fr_auto] md:items-center md:p-12">
         <div className="measure">
-          {block.text ? <p className="text-lg">{block.text}</p> : null}
+          <p className="eyebrow">Monthly newsletter</p>
+          <h2 className="mt-2">
+            {block.heading ?? settings?.newsletterTitle ?? "Newsletter"}
+          </h2>
+          {block.text ? <p className="lead mt-3">{block.text}</p> : null}
           {settings?.subscribeInstructions ? (
-            <p className="mt-2">{settings.subscribeInstructions}</p>
+            <p className="muted mt-3">{settings.subscribeInstructions}</p>
           ) : null}
         </div>
         {latest?.month ? (
-          <Link href={`/newsletter/${latest.month}`} className="btn shrink-0">
+          <Link
+            href={`/newsletter/${latest.month}`}
+            className="btn btn-yellow self-start md:self-center"
+          >
             Read the {monthLabel(latest.month)} issue
+            <Arrow />
           </Link>
         ) : null}
       </div>
-    </Section>
+    </section>
   );
 }
 

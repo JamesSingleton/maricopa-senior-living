@@ -2384,6 +2384,15 @@ export type QueryHomeResult =
   | null;
 
 // Source: ../../packages/sanity/src/queries.ts
+// Variable: queryStats
+// Query: {    "resources": count(*[_type == "resource"]),    "topics": count(*[_type == "topic"]),    "links": count(*[_type == "helpfulLink"])  }
+export type QueryStatsResult = {
+  resources: number;
+  topics: number;
+  links: number;
+};
+
+// Source: ../../packages/sanity/src/queries.ts
 // Variable: queryTopics
 // Query: *[_type == "topic"] | order(order asc){    _id,    title,    "slug": slug.current,    description,    icon,    "resourceCount": count(*[_type == "resource" && references(^._id)])  }
 export type QueryTopicsResult = Array<{
@@ -3151,7 +3160,11 @@ export type QueryPageResult = {
                 allDay: boolean | null;
                 repeat: {
                   frequency:
-                    "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
+                    | "monthlyDate"
+                    | "monthlyWeekday"
+                    | "none"
+                    | "weekly"
+                    | null;
                   until: string | null;
                   skipDates: Array<string> | null;
                 } | null;
@@ -4020,7 +4033,11 @@ export type QueryArticleResult = {
           allDay: boolean | null;
           repeat: {
             frequency:
-              "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
+              | "monthlyDate"
+              | "monthlyWeekday"
+              | "none"
+              | "weekly"
+              | null;
             until: string | null;
             skipDates: Array<string> | null;
           } | null;
@@ -4494,7 +4511,11 @@ export type QueryEventResult = {
           allDay: boolean | null;
           repeat: {
             frequency:
-              "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
+              | "monthlyDate"
+              | "monthlyWeekday"
+              | "none"
+              | "weekly"
+              | null;
             until: string | null;
             skipDates: Array<string> | null;
           } | null;
@@ -4768,7 +4789,11 @@ export type QueryMonthlyUpdateResult = {
           allDay: boolean | null;
           repeat: {
             frequency:
-              "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
+              | "monthlyDate"
+              | "monthlyWeekday"
+              | "none"
+              | "weekly"
+              | null;
             until: string | null;
             skipDates: Array<string> | null;
           } | null;
@@ -5164,7 +5189,11 @@ export type QueryNewsletterResult = {
                 allDay: boolean | null;
                 repeat: {
                   frequency:
-                    "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
+                    | "monthlyDate"
+                    | "monthlyWeekday"
+                    | "none"
+                    | "weekly"
+                    | null;
                   until: string | null;
                   skipDates: Array<string> | null;
                 } | null;
@@ -5413,7 +5442,11 @@ export type QueryNewsletterResult = {
                 allDay: boolean | null;
                 repeat: {
                   frequency:
-                    "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
+                    | "monthlyDate"
+                    | "monthlyWeekday"
+                    | "none"
+                    | "weekly"
+                    | null;
                   until: string | null;
                   skipDates: Array<string> | null;
                 } | null;
@@ -5965,6 +5998,7 @@ declare global {
     '\n  *[_id == "settings"][0]{\n    siteTitle,\n    tagline,\n    description,\n    heroImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    contactEmail,\n    contactPhone { label, number },\n    mailingAddress,\n    donateUrl,\n    nonprofitStatement,\n    newsletterTitle,\n    newsletterDedication,\n    subscribeInstructions\n  }\n': QuerySettingsResult;
     '\n  *[_id == "navigation"][0]{\n    main[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n },\n    footer[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n }\n  }\n': QueryNavigationResult;
     '\n  *[_id == "home"][0]{\n    sections[]{ \n  ...,\n  _key,\n  _type,\n  _type == "heroBlock" => { image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }, buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n  _type == "textBlock" => { body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } },\n  _type == "imageBlock" => { images[]{ _key, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n  _type == "buttonsBlock" => { buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n  _type == "calloutBlock" => { link{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n  _type == "resourceListBlock" => {\n    "topicSlug": topic->slug.current,\n    "topicTitle": topic->title,\n    "picked": resources[]->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n }\n  },\n  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "linkListBlock" => {\n    "topicId": topic._ref,\n    "topicSlug": topic->slug.current,\n    "picked": links[]->{ \n  _id,\n  title,\n  url,\n  source,\n  summary,\n  publishedAt\n }\n  },\n  _type == "faqBlock" => { items[]{ _key, question, answer } },\n  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } }\n }\n  }\n': QueryHomeResult;
+    '\n  {\n    "resources": count(*[_type == "resource"]),\n    "topics": count(*[_type == "topic"]),\n    "links": count(*[_type == "helpfulLink"])\n  }\n': QueryStatsResult;
     '\n  *[_type == "topic"] | order(order asc){\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    icon,\n    "resourceCount": count(*[_type == "resource" && references(^._id)])\n  }\n': QueryTopicsResult;
     '\n  *[_type == "page" && slug.current == $slug && section == $section][0]{\n    _id,\n    title,\n    description,\n    section,\n    "slug": slug.current,\n    sections[]{ \n  ...,\n  _key,\n  _type,\n  _type == "heroBlock" => { image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }, buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n  _type == "textBlock" => { body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } },\n  _type == "imageBlock" => { images[]{ _key, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n  _type == "buttonsBlock" => { buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n  _type == "calloutBlock" => { link{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n  _type == "resourceListBlock" => {\n    "topicSlug": topic->slug.current,\n    "topicTitle": topic->title,\n    "picked": resources[]->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n }\n  },\n  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "linkListBlock" => {\n    "topicId": topic._ref,\n    "topicSlug": topic->slug.current,\n    "picked": links[]->{ \n  _id,\n  title,\n  url,\n  source,\n  summary,\n  publishedAt\n }\n  },\n  _type == "faqBlock" => { items[]{ _key, question, answer } },\n  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } }\n }\n  }\n': QueryPageResult;
     '\n  *[_type == "page" && section == "about"] | order(title asc){\n    _id, title, "slug": slug.current, description\n  }\n': QueryAboutPagesResult;

@@ -1,3 +1,4 @@
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export type Crumb = { label: string; href: string };
@@ -17,18 +18,18 @@ export function PageHeader({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="border-b-2 border-[var(--msl-line)] bg-[var(--msl-sky)]">
-      <div className="container-page py-8">
+    <div className="bg-gradient-to-b from-[var(--msl-cream-2)] to-[var(--msl-cream)]">
+      <div className="container-page pb-10 pt-8 md:pb-14 md:pt-10">
         {crumbs.length ? (
-          <nav aria-label="You are here" className="no-print mb-3 text-base">
-            <ol className="flex flex-wrap gap-x-2">
+          <nav aria-label="You are here" className="no-print mb-6 text-base">
+            <ol className="flex flex-wrap gap-x-2 gap-y-1">
               <li>
                 <Link href="/">Home</Link>
               </li>
               {crumbs.map((crumb) => (
                 <li
                   key={crumb.href}
-                  className="before:mr-2 before:content-['›']"
+                  className="before:mr-2 before:text-[var(--msl-ink-soft)] before:content-['/']"
                 >
                   <Link href={crumb.href}>{crumb.label}</Link>
                 </li>
@@ -36,9 +37,9 @@ export function PageHeader({
             </ol>
           </nav>
         ) : null}
-        {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
-        <h1>{title}</h1>
-        {intro ? <p className="mt-3 measure text-xl">{intro}</p> : null}
+        {eyebrow ? <p className="eyebrow mb-3">{eyebrow}</p> : null}
+        <h1 className="max-w-4xl">{title}</h1>
+        {intro ? <p className="lead muted mt-4 measure">{intro}</p> : null}
         {children}
       </div>
     </div>
@@ -59,19 +60,21 @@ export function Pager({
   return (
     <nav
       aria-label="More pages"
-      className="mt-8 flex flex-wrap items-center gap-4"
+      className="mt-10 flex flex-wrap items-center justify-center gap-4"
     >
       {page > 1 ? (
         <Link href={hrefFor(page - 1)} className="btn btn-secondary">
-          ← Previous page
+          <ArrowLeft className="size-5" aria-hidden="true" />
+          Previous page
         </Link>
       ) : null}
-      <p className="text-lg">
+      <p className="text-lg font-semibold">
         Page {page} of {totalPages}
       </p>
       {page < totalPages ? (
         <Link href={hrefFor(page + 1)} className="btn btn-secondary">
-          Next page →
+          Next page
+          <ArrowRight className="size-5" aria-hidden="true" />
         </Link>
       ) : null}
     </nav>

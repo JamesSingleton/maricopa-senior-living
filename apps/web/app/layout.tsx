@@ -3,7 +3,7 @@ import "./site.css";
 
 import { SanityLive } from "@maricopa-senior-living/sanity/live";
 import type { Metadata, Viewport } from "next";
-import { Atkinson_Hyperlegible_Next, Literata } from "next/font/google";
+import { Onest } from "next/font/google";
 import { draftMode } from "next/headers";
 import PlausibleProvider from "next-plausible";
 import { VisualEditing } from "next-sanity/visual-editing";
@@ -13,16 +13,11 @@ import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { baseUrl } from "@/lib/constants";
 import { draftAware } from "@/lib/draft";
 
-const body = Atkinson_Hyperlegible_Next({
+// Onest: open, high x-height sans with metrics Next knows (no fallback
+// warning), used for headings and text alike.
+const sans = Onest({
   subsets: ["latin"],
-  variable: "--font-body",
-  display: "swap",
-});
-
-const heading = Literata({
-  subsets: ["latin"],
-  weight: ["500", "600"],
-  variable: "--font-heading",
+  variable: "--font-sans",
   display: "swap",
 });
 
@@ -42,7 +37,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#fbf8f2",
+  themeColor: "#1e2a23",
 };
 
 export default async function RootLayout({
@@ -52,7 +47,7 @@ export default async function RootLayout({
 }) {
   const { isEnabled: isDraftMode } = await draftMode();
   return (
-    <html lang="en" className={`${body.variable} ${heading.variable}`}>
+    <html lang="en" className={sans.variable}>
       <body className="flex min-h-dvh flex-col">
         <PlausibleProvider src="https://plausible.io/js/pa-_c-PnIRRG3vdbjzqvT4GH.js">
           <a href="#main" className="skip-link">

@@ -164,6 +164,15 @@ export const queryHome = defineQuery(`
   }
 `);
 
+/** Numbers for the home page hero. */
+export const queryStats = defineQuery(`
+  {
+    "resources": count(*[_type == "resource"]),
+    "topics": count(*[_type == "topic"]),
+    "links": count(*[_type == "helpfulLink"])
+  }
+`);
+
 export const queryTopics = defineQuery(`
   *[_type == "topic"] | order(order asc){
     _id,

@@ -1,56 +1,65 @@
 /*
- * Maricopa Senior Living — design tokens and base styles.
+ * Maricopa Senior Living — design system.
  *
- * Built for older readers: 20px body text, 1.6 line height, high-contrast
- * colors (all text pairs ≥ 7:1 or 4.5:1 for large text), underlined links,
- * big tap targets (≥ 48px) and a strong focus ring. Colors come from the
- * wild-horses photo: desert sand, sage, sky and a deep terracotta.
+ * Direction: deep green + warm cream + one bright yellow accent, Onest type,
+ * generous rounded cards, pill buttons and dark "feature" bands.
+ * Built for older readers: 19–20px body text, contrast ≥ 7:1 for body text
+ * (yellow is only ever a background behind dark text), tap targets ≥ 52px,
+ * and a strong two-tone focus ring.
  */
 
 :root {
-  --msl-bg: #fbf8f2;
-  --msl-surface: #ffffff;
-  --msl-sand: #f1e6d4;
-  --msl-sand-strong: #e3cfae;
-  --msl-sky: #e6eef1;
-  --msl-sage: #e4eadc;
-  --msl-ink: #1d2327;
-  --msl-ink-soft: #3d464c;
-  --msl-line: #cbbfa9;
-  --msl-primary: #8a3416; /* terracotta, 8.0:1 on white */
-  --msl-primary-hover: #6e280f;
-  --msl-primary-ink: #ffffff;
-  --msl-link: #174f8c; /* familiar link blue, 8.3:1 on white */
-  --msl-link-visited: #5b2f86;
-  --msl-green: #2f5a32;
-  --msl-warning-bg: #fff2d6;
-  --msl-warning-line: #b26b00;
-  --msl-focus: #e07a1f;
-  --msl-radius: 10px;
-  --msl-max: 1180px;
-  --msl-measure: 68ch;
+  --msl-cream: #fffeee;
+  --msl-cream-2: #f6f4dc;
+  --msl-paper: #ffffff;
+  --msl-green: #1e2a23; /* ink + dark bands */
+  --msl-green-2: #2b3b31;
+  --msl-green-3: #3d5244;
+  --msl-sage: #e7ecd9;
+  --msl-yellow: #ffff48;
+  --msl-yellow-2: #f2f23a;
+  --msl-ink: #1e2a23;
+  --msl-ink-soft: #46554b; /* 7.6:1 on cream */
+  --msl-line: #e3e2c8;
+  --msl-line-strong: #7a8270; /* control borders: 4:1, passes WCAG 1.4.11 */
+  --msl-link: #1e2a23;
+  --msl-call: #1a5c31; /* green "Call" buttons, 8:1 with white */
+  --msl-warning-bg: #fff6c7;
+  --msl-warning-line: #9a6b00;
+  --msl-radius-sm: 14px;
+  --msl-radius: 24px;
+  --msl-radius-lg: 32px;
+  --msl-shadow: 0 1px 2px rgb(30 42 35 / 0.06), 0 8px 24px rgb(30 42 35 / 0.06);
+  --msl-max: 1240px;
+  --msl-measure: 66ch;
 
-  /* Map onto the shadcn tokens used by packages/ui components. */
-  --background: var(--msl-bg);
+  /* shadcn tokens used by packages/ui components */
+  --background: var(--msl-cream);
   --foreground: var(--msl-ink);
-  --primary: var(--msl-primary);
-  --primary-foreground: var(--msl-primary-ink);
+  --primary: var(--msl-green);
+  --primary-foreground: #ffffff;
   --muted-foreground: var(--msl-ink-soft);
   --border: var(--msl-line);
-  --ring: var(--msl-focus);
+  --ring: var(--msl-green);
 }
 
 @layer base {
   html {
-    font-size: 125%; /* 20px base; everything else scales from it */
+    font-size: 118.75%; /* 19px base */
     -webkit-text-size-adjust: 100%;
     scroll-padding-top: 1rem;
   }
 
+  @media (min-width: 64rem) {
+    html {
+      font-size: 125%; /* 20px on larger screens */
+    }
+  }
+
   body {
-    background: var(--msl-bg);
+    background: var(--msl-cream);
     color: var(--msl-ink);
-    font-family: var(--font-body), system-ui, sans-serif;
+    font-family: var(--font-sans), system-ui, sans-serif;
     line-height: 1.6;
   }
 
@@ -58,46 +67,50 @@
   h2,
   h3,
   .font-heading {
-    font-family: var(--font-heading), Georgia, serif;
-    line-height: 1.2;
-    color: var(--msl-ink);
+    font-family: var(--font-sans), system-ui, sans-serif;
+    color: inherit;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
     text-wrap: balance;
   }
 
   h1 {
-    font-size: clamp(2rem, 1.4rem + 2.6vw, 2.9rem);
+    font-size: clamp(2.1rem, 1.3rem + 3vw, 3.4rem);
     font-weight: 600;
   }
 
   h2 {
-    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+    font-size: clamp(1.55rem, 1.2rem + 1.4vw, 2.2rem);
     font-weight: 600;
   }
 
   h3 {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     font-weight: 600;
   }
 
   a {
     color: var(--msl-link);
     text-decoration: underline;
-    text-underline-offset: 0.18em;
     text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.2em;
   }
 
   a:hover {
-    text-decoration-thickness: 0.15em;
+    text-decoration-thickness: 0.16em;
   }
 
+  /* Two-tone ring: visible on cream and on the dark green bands. */
   :focus-visible {
-    outline: 4px solid var(--msl-focus);
+    outline: 3px solid var(--msl-green);
     outline-offset: 3px;
-    border-radius: 4px;
+    box-shadow: 0 0 0 6px var(--msl-yellow);
+    border-radius: 10px;
   }
 
   ::selection {
-    background: var(--msl-sand-strong);
+    background: var(--msl-yellow);
+    color: var(--msl-green);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -112,7 +125,7 @@
 }
 
 @layer components {
-  /* ---- Layout ------------------------------------------------------------ */
+  /* ---- Layout ---------------------------------------------------------- */
 
   .container-page {
     width: 100%;
@@ -131,19 +144,72 @@
     max-width: var(--msl-measure);
   }
 
+  .section {
+    padding-block: 3.5rem;
+  }
+
+  .band-dark {
+    background: var(--msl-green);
+    color: #fff;
+  }
+
+  .band-dark a:not(.btn) {
+    color: #fff;
+  }
+
+  .band-dark .muted {
+    color: #d6dccf;
+  }
+
+  .band-dark .eyebrow {
+    color: var(--msl-yellow);
+  }
+
+  .band-sage {
+    background: var(--msl-sage);
+  }
+
   .skip-link {
     position: absolute;
     left: 1rem;
     top: -10rem;
     z-index: 100;
-    background: var(--msl-ink);
-    color: #fff;
+    background: var(--msl-yellow);
+    color: var(--msl-green);
+    font-weight: 700;
     padding: 0.75rem 1.25rem;
-    border-radius: var(--msl-radius);
+    border-radius: 999px;
   }
 
   .skip-link:focus {
     top: 1rem;
+  }
+
+  /* ---- Type helpers ---------------------------------------------------- */
+
+  /* "✦ About us" style label */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--msl-ink-soft);
+  }
+
+  .eyebrow::before {
+    content: "✦";
+    font-size: 0.8em;
+  }
+
+  .muted {
+    color: var(--msl-ink-soft);
+  }
+
+  .lead {
+    font-size: 1.15rem;
+    line-height: 1.55;
   }
 
   /* ---- Buttons ----------------------------------------------------------- */
@@ -152,107 +218,211 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    min-height: 3rem; /* 60px */
-    padding: 0.6rem 1.25rem;
-    border-radius: var(--msl-radius);
-    border: 2px solid var(--msl-primary);
-    background: var(--msl-primary);
-    color: var(--msl-primary-ink);
-    font-weight: 700;
+    gap: 0.75rem;
+    min-height: 3.1rem;
+    padding: 0.45rem 1.35rem;
+    border-radius: 999px;
+    border: 2px solid var(--msl-green);
+    background: var(--msl-green);
+    color: #fff;
+    font-weight: 600;
     font-size: 1rem;
     line-height: 1.2;
     text-decoration: none;
     cursor: pointer;
+    transition:
+      background-color 0.15s,
+      color 0.15s;
   }
 
   .btn:hover {
-    background: var(--msl-primary-hover);
-    border-color: var(--msl-primary-hover);
+    background: var(--msl-green-2);
     text-decoration: none;
   }
 
+  /* With an arrow circle at the end. */
+  .btn:has(.btn-arrow) {
+    padding-right: 0.45rem;
+  }
+
+  .btn-arrow {
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 999px;
+    background: var(--msl-yellow);
+    color: var(--msl-green);
+    flex-shrink: 0;
+  }
+
+  .btn-sm {
+    min-height: 2.75rem; /* 52px+ at 19px base */
+    padding-inline: 1rem;
+    font-size: 0.95rem;
+  }
+
   .btn-secondary {
-    background: var(--msl-surface);
-    color: var(--msl-primary);
+    background: var(--msl-paper);
+    color: var(--msl-green);
+    border-color: var(--msl-line-strong);
   }
 
   .btn-secondary:hover {
-    background: var(--msl-sand);
-    color: var(--msl-primary-hover);
-  }
-
-  .btn-call {
-    background: var(--msl-green);
+    background: var(--msl-cream-2);
     border-color: var(--msl-green);
   }
 
+  .btn-secondary .btn-arrow {
+    background: var(--msl-green);
+    color: #fff;
+  }
+
+  /* On light backgrounds the yellow alone is too close to cream, so the
+     button gets a green outline (14:1); on dark bands yellow stands out. */
+  .btn-yellow {
+    background: var(--msl-yellow);
+    border-color: var(--msl-green);
+    color: var(--msl-green);
+  }
+
+  .band-dark .btn-yellow {
+    border-color: var(--msl-yellow);
+  }
+
+  .btn-yellow:hover {
+    background: var(--msl-yellow-2);
+  }
+
+  .btn-yellow .btn-arrow {
+    background: var(--msl-green);
+    color: var(--msl-yellow);
+  }
+
+  .btn-call {
+    white-space: nowrap;
+    background: var(--msl-call);
+    border-color: var(--msl-call);
+  }
+
   .btn-call:hover {
-    background: #23452a;
-    border-color: #23452a;
+    background: #154a28;
+    border-color: #154a28;
   }
 
   /* ---- Cards ------------------------------------------------------------- */
 
   .card {
-    background: var(--msl-surface);
-    border: 2px solid var(--msl-line);
+    background: var(--msl-paper);
+    border: 1px solid var(--msl-line);
     border-radius: var(--msl-radius);
-    padding: 1.25rem;
+    padding: 1.5rem;
+    box-shadow: var(--msl-shadow);
+  }
+
+  .card-soft {
+    background: var(--msl-cream-2);
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  .card-dark {
+    background: var(--msl-green-2);
+    border-color: var(--msl-green-3);
+    color: #fff;
+    box-shadow: none;
   }
 
   .card-link {
     display: block;
     text-decoration: none;
     color: inherit;
+    transition: border-color 0.15s;
   }
 
   .card-link:hover {
-    border-color: var(--msl-primary);
+    border-color: var(--msl-green);
     text-decoration: none;
   }
 
   .card-title {
-    font-family: var(--font-heading), Georgia, serif;
     font-size: 1.2rem;
     font-weight: 600;
     line-height: 1.3;
-    color: var(--msl-link);
+    letter-spacing: -0.01em;
   }
 
+  .card-title a {
+    text-decoration: none;
+  }
+
+  .card-title a:hover,
   .card-link:hover .card-title {
     text-decoration: underline;
   }
 
-  .eyebrow {
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--msl-primary);
+  /* Number + label chip, e.g. "222 local resources" */
+  .stat {
+    border-radius: var(--msl-radius-sm);
+    background: var(--msl-paper);
+    border: 1px solid var(--msl-line);
+    padding: 0.9rem 1.1rem;
   }
 
-  .muted {
-    color: var(--msl-ink-soft);
+  .stat strong {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .icon-circle {
+    display: grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 999px;
+    background: var(--msl-yellow);
+    color: var(--msl-green);
+    flex-shrink: 0;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.75rem;
+    border-radius: 999px;
+    background: var(--msl-sage);
+    font-size: 0.85rem;
+    font-weight: 600;
   }
 
   /* ---- Forms ------------------------------------------------------------- */
 
   .input {
     width: 100%;
-    min-height: 3rem;
-    padding: 0.5rem 0.9rem;
-    border: 2px solid var(--msl-ink-soft);
-    border-radius: var(--msl-radius);
+    min-height: 3.1rem;
+    padding: 0.5rem 1.2rem;
+    border: 2px solid var(--msl-line-strong);
+    border-radius: 999px;
     background: #fff;
     color: var(--msl-ink);
     font-size: 1.05rem;
   }
 
+  .input:hover {
+    border-color: var(--msl-ink-soft);
+  }
+
+  select.input {
+    border-radius: var(--msl-radius-sm);
+  }
+
   .label {
     display: block;
-    font-weight: 700;
-    margin-bottom: 0.35rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
   }
 
   /* ---- Rich text --------------------------------------------------------- */
@@ -292,17 +462,18 @@
   }
 
   .prose-msl blockquote {
-    border-left: 5px solid var(--msl-sand-strong);
-    padding-left: 1rem;
-    font-style: italic;
+    border-left: 6px solid var(--msl-yellow);
+    background: var(--msl-cream-2);
+    border-radius: 0 var(--msl-radius-sm) var(--msl-radius-sm) 0;
+    padding: 0.75rem 1rem;
   }
 
   .prose-msl img {
-    border-radius: var(--msl-radius);
+    border-radius: var(--msl-radius-sm);
   }
 }
 
-/* ---- Print (resource lists, newsletter) -------------------------------- */
+/* ---- Print (resource lists, newsletter) --------------------------------- */
 
 @media print {
   html {
@@ -326,8 +497,14 @@
   }
 
   .card {
-    border-width: 1px;
+    border: 1px solid #999;
+    box-shadow: none;
     break-inside: avoid;
+  }
+
+  .band-dark {
+    background: #fff;
+    color: #000;
   }
 
   .print-break {

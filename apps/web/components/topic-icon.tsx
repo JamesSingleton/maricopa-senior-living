@@ -37,11 +37,8 @@ const ICONS: Record<string, LucideIcon> = {
 export function TopicIcon({ name }: { name?: string | null }) {
   const Icon = (name && ICONS[name]) || Users;
   return (
-    <span
-      className="grid size-14 shrink-0 place-items-center rounded-full bg-[var(--msl-sand)] text-[var(--msl-primary)]"
-      aria-hidden="true"
-    >
-      <Icon className="size-8" strokeWidth={2} />
+    <span className="icon-circle" aria-hidden="true">
+      <Icon className="size-7" strokeWidth={2} />
     </span>
   );
 }
