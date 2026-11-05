@@ -45,6 +45,8 @@ pnpm --filter ./apps/studio exec sanity typegen generate   # → packages/sanity
 
 ## Functions (`apps/functions`)
 
+These run on **Sanity's** infrastructure (deployed with `sanity blueprints deploy`), not on Vercel.
+
 Kept outside the Studio, as Sanity recommends. They target **production**
 unless `BLUEPRINT_DATASET` is set.
 
@@ -57,8 +59,8 @@ unless `BLUEPRINT_DATASET` is set.
 ```bash
 cd apps/functions
 npx sanity@latest functions env add deploy-on-redirect DEPLOY_HOOK_URL https://api.vercel.com/v1/integrations/deploy/…
-pnpm plan     # review
-pnpm deploy   # apply
+pnpm run blueprints:plan     # review what will change on Sanity
+pnpm run blueprints:deploy   # deploy the Functions to Sanity
 ```
 
 ## Ron's account

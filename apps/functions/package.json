@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "plan": "sanity blueprints plan",
-    "deploy": "sanity blueprints deploy",
-    "dev": "sanity functions dev",
+    "blueprints:plan": "sanity blueprints plan",
+    "blueprints:deploy": "sanity blueprints deploy",
+    "functions:dev": "sanity functions dev",
     "check:types": "tsc --noEmit",
     "lint": "biome check ."
   },
