@@ -157,6 +157,9 @@ export function convertImage(image: OldBlock | undefined) {
   };
 }
 
+const GENERIC_LABEL =
+  /^(phone|phone number|tel|telephone|main|main phone|office|call|number)$/i;
+
 const PHONE_PATTERN =
   /(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}(?:\s*(?:ext\.?|extension|x)\s*\d{1,6})?/gi;
 
@@ -182,10 +185,12 @@ export function parsePhones(text: string | undefined) {
       .replace(/[:\-–|,;()]+/g, " ")
       .replace(/\s+/g, " ")
       .trim();
+    // Generic labels ("Phone", "Main") add nothing next to a Call button.
+    const useful = label && label.length <= 50 && !GENERIC_LABEL.test(label);
     phones.push({
       _type: "phoneNumber",
       _key: newKey(),
-      ...(label && label.length <= 50 ? { label } : {}),
+      ...(useful ? { label } : {}),
       number: match[0].trim(),
     });
     last = index + match[0].length;

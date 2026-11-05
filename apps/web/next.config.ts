@@ -133,6 +133,9 @@ const nextConfig: NextConfig = {
       { source: "/admin", destination: STUDIO_URL, permanent: false },
       { source: "/admin/:path*", destination: STUDIO_URL, permanent: false },
       { source: "/find-help", destination: "/resources", permanent: true },
+      // Nonprofit pages used to live under /about/; they're top-level now.
+      { source: "/about/who-we-are", destination: "/about", permanent: true },
+      { source: "/about/:slug", destination: "/:slug", permanent: true },
       ...(await sanityRedirects()),
     ];
   },

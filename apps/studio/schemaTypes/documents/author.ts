@@ -14,7 +14,7 @@ export const author = defineType({
       type: "string",
       validation: (rule) => rule.required(),
     }),
-    slugField({ source: "name" }),
+    slugField({ source: "name", prefix: "/writers" }),
     defineField({ name: "image", title: "Photo", type: "imageWithAlt" }),
     defineField({
       name: "bio",

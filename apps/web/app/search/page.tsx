@@ -101,11 +101,7 @@ async function Results({ searchParams }: { searchParams: SearchParams }) {
                 const external = Boolean(externalUrl);
                 const href =
                   externalUrl ??
-                  hrefFor({
-                    _type: result._type,
-                    slug: result.slug,
-                    section: result.section,
-                  });
+                  hrefFor({ _type: result._type, slug: result.slug });
                 if (!href) return null;
                 return (
                   <li key={result._id} className="card flex flex-col gap-2">

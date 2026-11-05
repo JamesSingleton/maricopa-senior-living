@@ -22,11 +22,13 @@ export const queryImageType = defineQuery(`
 `);
 
 /** Enough of any linkable document to build its URL. */
+/** "2026-11" from a publishMonth date, for /whats-new and /newsletter URLs. */
+const monthKey = /* groq */ `string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1]`;
+
 const targetFields = /* groq */ `
   _type,
   "slug": slug.current,
-  section,
-  month,
+  "month": ${monthKey},
   title
 `;
 
@@ -189,24 +191,17 @@ export const queryTopics = defineQuery(`
 // ---------------------------------------------------------------------------
 
 export const queryPage = defineQuery(`
-  *[_type == "page" && slug.current == $slug && section == $section][0]{
+  *[_type == "page" && slug.current == $slug][0]{
     _id,
     title,
     description,
-    section,
     "slug": slug.current,
     sections[]{ ${pageBuilderFields} }
   }
 `);
 
-export const queryAboutPages = defineQuery(`
-  *[_type == "page" && section == "about"] | order(title asc){
-    _id, title, "slug": slug.current, description
-  }
-`);
-
 export const queryPagePaths = defineQuery(`
-  *[_type == "page" && defined(slug.current)]{ "slug": slug.current, section }
+  *[_type == "page" && defined(slug.current)].slug.current
 `);
 
 // ---------------------------------------------------------------------------
@@ -378,20 +373,20 @@ export const queryEventPaths = defineQuery(`
 // ---------------------------------------------------------------------------
 
 export const queryMonthlyUpdate = defineQuery(`
-  *[_type == "monthlyUpdate" && month == $month][0]{
-    _id, month, title, intro, body[]{ ${richTextFields} }, _updatedAt
+  *[_type == "monthlyUpdate" && string::startsWith(publishMonth, $month)][0]{
+    _id, "month": ${monthKey}, title, intro, body[]{ ${richTextFields} }, _updatedAt
   }
 `);
 
 /** The newest month that isn't in the future. */
 export const queryCurrentMonthlyUpdate = defineQuery(`
-  *[_type == "monthlyUpdate" && month <= $month] | order(month desc)[0]{
-    _id, month, title, intro
+  *[_type == "monthlyUpdate" && publishMonth <= $month + "-31"] | order(publishMonth desc)[0]{
+    _id, "month": ${monthKey}, title, intro
   }
 `);
 
 export const queryMonthlyUpdateList = defineQuery(`
-  *[_type == "monthlyUpdate" && month <= $month] | order(month desc){ month, title, intro }
+  *[_type == "monthlyUpdate" && publishMonth <= $month + "-31"] | order(publishMonth desc){ "month": ${monthKey}, title, intro }
 `);
 
 const newsletterSectionFields = /* groq */ `
@@ -414,9 +409,9 @@ const newsletterSectionFields = /* groq */ `
 `;
 
 export const queryNewsletter = defineQuery(`
-  *[_type == "newsletterEdition" && month == $month][0]{
+  *[_type == "newsletterEdition" && string::startsWith(publishMonth, $month)][0]{
     _id,
-    month,
+    "month": ${monthKey},
     coverImage { ${imageFields} },
     coverMessage,
     sections[]{ ${newsletterSectionFields} },
@@ -426,8 +421,8 @@ export const queryNewsletter = defineQuery(`
 `);
 
 export const queryNewsletterList = defineQuery(`
-  *[_type == "newsletterEdition" && month <= $month] | order(month desc){
-    month,
+  *[_type == "newsletterEdition" && publishMonth <= $month + "-31"] | order(publishMonth desc){
+    "month": ${monthKey},
     coverImage { ${imageFields} },
     "hasSections": count(sections) > 0,
     "uploadedPdf": uploadedPdf.asset->{ url, size }
@@ -461,7 +456,6 @@ export const querySearch = defineQuery(`
     title,
     "slug": slug.current,
     summary,
-    section,
     url,
     source,
     start,
@@ -475,13 +469,13 @@ export const queryRedirect = defineQuery(`
 
 export const querySitemap = defineQuery(`
   {
-    "pages": *[_type == "page" && defined(slug.current)]{ "slug": slug.current, section, _updatedAt },
+    "pages": *[_type == "page" && defined(slug.current)]{ "slug": slug.current, _updatedAt },
     "resources": *[_type == "resource" && defined(slug.current)]{ "slug": slug.current, _updatedAt },
     "articles": *[_type == "article" && defined(slug.current)]{ "slug": slug.current, _updatedAt },
     "events": *[_type == "event" && defined(slug.current)]{ "slug": slug.current, _updatedAt },
     "topics": *[_type == "topic" && defined(slug.current)]{ "slug": slug.current, _updatedAt },
-    "months": *[_type == "monthlyUpdate"]{ month, _updatedAt },
-    "newsletters": *[_type == "newsletterEdition"]{ month, _updatedAt },
+    "months": *[_type == "monthlyUpdate" && defined(publishMonth)]{ "month": ${monthKey}, _updatedAt },
+    "newsletters": *[_type == "newsletterEdition" && defined(publishMonth)]{ "month": ${monthKey}, _updatedAt },
     "writers": *[_type == "author" && defined(slug.current)]{ "slug": slug.current, _updatedAt }
   }
 `);

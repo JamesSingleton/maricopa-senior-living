@@ -10,6 +10,7 @@ import { ArrowUpRight, Search } from "lucide-react";
 import Link from "next/link";
 
 import { type LinkValue, resolveLink, telHref } from "@/lib/links";
+import { MobileMenu } from "./mobile-menu";
 
 const FALLBACK_MENU: { label: string; href: string }[] = [
   { label: "Find Help", href: "/resources" },
@@ -70,7 +71,7 @@ export async function SiteHeader({ perspective, stega }: DynamicFetchOptions) {
   const title = settings?.siteTitle ?? "Maricopa Senior Living";
 
   return (
-    <header className="site-header border-b border-[var(--msl-line)] bg-[var(--msl-paper)]">
+    <header className="site-header relative border-b border-[var(--msl-line)] bg-[var(--msl-paper)]">
       <div className="container-page flex items-center justify-between gap-4 pb-2 pt-3 md:pb-3">
         <Link
           href="/"
@@ -83,9 +84,15 @@ export async function SiteHeader({ perspective, stega }: DynamicFetchOptions) {
           </span>
         </Link>
         <div className="flex shrink-0 items-center gap-2">
-          <Link href="/search" className="btn btn-secondary btn-sm">
+          <MobileMenu
+            items={items.map(({ label, href }) => ({ label, href }))}
+          />
+          <Link
+            href="/search"
+            className="btn btn-secondary btn-sm max-md:hidden"
+          >
             <Search className="size-5" aria-hidden="true" />
-            <span className="max-sm:sr-only">Search</span>
+            Search
           </Link>
           {settings?.donateUrl ? (
             <a
@@ -100,15 +107,15 @@ export async function SiteHeader({ perspective, stega }: DynamicFetchOptions) {
           ) : null}
         </div>
       </div>
-      {/* All six sections, always visible: one row from tablet up, a
-          two-column grid on phones. No drop-downs, no hidden menu. */}
-      <nav aria-label="Main" className="container-page pb-3">
-        <ul className="grid grid-cols-2 gap-2 md:flex md:flex-wrap md:gap-1">
+      {/* All six sections in one row from tablet up; phones use the
+          labelled Menu button above. No drop-downs. */}
+      <nav aria-label="Main" className="container-page hidden pb-3 md:block">
+        <ul className="flex flex-wrap gap-1">
           {items.map((item) => (
             <li key={item.href}>
               <Link
                 href={item.href}
-                className="flex min-h-[2.75rem] items-center justify-center whitespace-nowrap rounded-full border border-[var(--msl-line-strong)] px-4 text-center font-semibold text-[var(--msl-ink)] no-underline hover:bg-[var(--msl-cream-2)] md:border-transparent md:hover:border-[var(--msl-green)]"
+                className="flex min-h-[2.75rem] items-center justify-center whitespace-nowrap rounded-full border border-transparent px-4 text-center font-semibold text-[var(--msl-ink)] no-underline hover:border-[var(--msl-green)] hover:bg-[var(--msl-cream-2)]"
               >
                 {item.label}
               </Link>

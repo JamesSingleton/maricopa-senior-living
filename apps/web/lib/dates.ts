@@ -70,7 +70,7 @@ export function monthLabel(key: string) {
   );
 }
 
-export function isMonthKey(value: string | undefined): value is string {
+export function isMonthKey(value: string | null | undefined): value is string {
   return Boolean(value && /^\d{4}-(0[1-9]|1[0-2])$/.test(value));
 }
 

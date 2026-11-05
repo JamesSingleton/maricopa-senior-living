@@ -1,9 +1,10 @@
 import { BellIcon } from "@sanity/icons/Bell";
-import { defineField, defineType, getPublishedId } from "sanity";
+import { defineField, defineType } from "sanity";
 
 import { howToField } from "../../components/HowTo";
 import { isAdmin } from "../../lib/access";
-import { currentMonthKey, monthLabel, monthOptions } from "../../lib/months";
+import { currentMonthKey, monthLabel } from "../../lib/months";
+import { publishMonthField, toMonthKey } from "../publish-month";
 
 /**
  * "What's New in Maricopa" — one document per month, written by hand.
@@ -17,7 +18,9 @@ export const monthlyUpdate = defineType({
   icon: BellIcon,
   readOnly: ({ document, currentUser }) => {
     if (isAdmin(currentUser)) return false;
-    const month = (document as { month?: string } | undefined)?.month;
+    const month = toMonthKey(
+      (document as { publishMonth?: string } | undefined)?.publishMonth,
+    );
     return Boolean(month && month < currentMonthKey());
   },
   fields: [
@@ -25,23 +28,10 @@ export const monthlyUpdate = defineType({
       "Each month gets its own What's New. Use “Start next month” on the Studio home screen — it copies last month so you can update it.",
       "Earlier months are kept as an archive and can't be changed. Ask James if something in an old month needs fixing.",
     ]),
-    defineField({
-      name: "month",
-      type: "string",
-      options: { list: monthOptions() },
-      validation: (rule) =>
-        rule.required().custom(async (month, context) => {
-          if (!month) return true;
-          const id = getPublishedId(context.document?._id ?? "");
-          const client = context.getClient({ apiVersion: "2025-02-19" });
-          const taken = await client.fetch<boolean>(
-            'defined(*[_type == "monthlyUpdate" && month == $month && !(_id in [$id, "drafts." + $id])][0]._id)',
-            { month, id },
-          );
-          return taken
-            ? `There is already a What's New for ${monthLabel(month)}. Open that one instead.`
-            : true;
-        }),
+    publishMonthField({
+      type: "monthlyUpdate",
+      path: "/whats-new",
+      label: "What's New",
     }),
     defineField({
       name: "title",
@@ -67,19 +57,22 @@ export const monthlyUpdate = defineType({
     {
       title: "Newest month first",
       name: "monthDesc",
-      by: [{ field: "month", direction: "desc" }],
+      by: [{ field: "publishMonth", direction: "desc" }],
     },
   ],
   preview: {
-    select: { month: "month", title: "title" },
-    prepare: ({ month, title }) => ({
-      title: title || `What's New — ${monthLabel(month)}`,
-      subtitle:
-        month === currentMonthKey()
-          ? "This month"
-          : month < currentMonthKey()
-            ? "Archived"
-            : "Upcoming",
-    }),
+    select: { date: "publishMonth", title: "title" },
+    prepare: ({ date, title }) => {
+      const month = toMonthKey(date) ?? "";
+      return {
+        title: title || `What's New — ${monthLabel(month)}`,
+        subtitle:
+          month === currentMonthKey()
+            ? "This month"
+            : month < currentMonthKey()
+              ? "Archived"
+              : "Upcoming",
+      };
+    },
   },
 });

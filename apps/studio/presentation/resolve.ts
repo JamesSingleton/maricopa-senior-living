@@ -13,12 +13,8 @@ export const presentationResolve: PresentationPluginOptions["resolve"] = {
       resolve: () => at("Home", "/"),
     }),
     page: defineLocations({
-      select: { title: "title", slug: "slug.current", section: "section" },
-      resolve: (doc) =>
-        at(
-          doc?.title ?? "Page",
-          doc?.section === "about" ? `/about/${doc?.slug}` : `/${doc?.slug}`,
-        ),
+      select: { title: "title", slug: "slug.current" },
+      resolve: (doc) => at(doc?.title ?? "Page", `/${doc?.slug}`),
     }),
     article: defineLocations({
       select: { title: "title", slug: "slug.current" },
@@ -37,12 +33,14 @@ export const presentationResolve: PresentationPluginOptions["resolve"] = {
       resolve: (doc) => at(doc?.title ?? "Topic", `/topics/${doc?.slug}`),
     }),
     monthlyUpdate: defineLocations({
-      select: { month: "month" },
-      resolve: (doc) => at("What's New", `/whats-new/${doc?.month}`),
+      select: { month: "publishMonth" },
+      resolve: (doc) =>
+        at("What's New", `/whats-new/${String(doc?.month ?? "").slice(0, 7)}`),
     }),
     newsletterEdition: defineLocations({
-      select: { month: "month" },
-      resolve: (doc) => at("Newsletter", `/newsletter/${doc?.month}`),
+      select: { month: "publishMonth" },
+      resolve: (doc) =>
+        at("Newsletter", `/newsletter/${String(doc?.month ?? "").slice(0, 7)}`),
     }),
   },
 };

@@ -9,7 +9,7 @@ import { howToField } from "../../components/HowTo";
 import { adminOnly } from "../../lib/access";
 import { slugField } from "../../utils/slug";
 
-/** One-off pages, including the About Maricopa Senior Living section. */
+/** Pages built from sections: About us (/about), Donate, Quick Links… */
 export const page = defineType({
   name: "page",
   type: "document",
@@ -17,7 +17,7 @@ export const page = defineType({
   fields: [
     howToField("howTo", [
       "Build a page from sections: click “Add item” and choose what you need — text, pictures, a list of resources, phone numbers, a donate button…",
-      "Pages in the “About Maricopa Senior Living” section are about the nonprofit itself.",
+      "The “About us” page uses the web address “about”. Link to your other nonprofit pages (Donate, Contact…) from it with a Buttons section.",
     ]),
     defineField({
       name: "title",
@@ -25,20 +25,6 @@ export const page = defineType({
       validation: (rule) => rule.required().max(80),
     }),
     slugField({ reserved: true }),
-    defineField({
-      name: "section",
-      title: "Part of the site",
-      type: "string",
-      initialValue: "general",
-      options: {
-        layout: "radio",
-        list: [
-          { title: "General page", value: "general" },
-          { title: "About Maricopa Senior Living", value: "about" },
-        ],
-      },
-      validation: (rule) => rule.required(),
-    }),
     defineField({
       name: "description",
       title: "Short description",
@@ -54,11 +40,8 @@ export const page = defineType({
     }),
   ],
   preview: {
-    select: { title: "title", slug: "slug.current", section: "section" },
-    prepare: ({ title, slug, section }) => ({
-      title,
-      subtitle: section === "about" ? `/about/${slug ?? ""}` : `/${slug ?? ""}`,
-    }),
+    select: { title: "title", slug: "slug.current" },
+    prepare: ({ title, slug }) => ({ title, subtitle: `/${slug ?? ""}` }),
   },
 });
 

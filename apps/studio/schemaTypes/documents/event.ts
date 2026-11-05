@@ -38,7 +38,7 @@ export const event = defineType({
       group: "when",
       validation: (rule) => rule.required().max(100),
     }),
-    { ...slugField(), group: "when" },
+    { ...slugField({ prefix: "/events" }), group: "when" },
     defineField({
       name: "start",
       title: "Starts",

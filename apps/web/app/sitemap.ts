@@ -31,13 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry("/articles"),
     entry("/links"),
     entry("/about"),
-    ...each(data?.pages, (p) =>
-      p.slug
-        ? p.section === "about"
-          ? `/about/${p.slug}`
-          : `/${p.slug}`
-        : null,
-    ),
+    ...each(data?.pages, (p) => (p.slug ? `/${p.slug}` : null)),
     ...each(data?.topics, (t) => (t.slug ? `/topics/${t.slug}` : null)),
     ...each(data?.resources, (r) => (r.slug ? `/resources/${r.slug}` : null)),
     ...each(data?.articles, (a) => (a.slug ? `/articles/${a.slug}` : null)),

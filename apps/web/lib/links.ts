@@ -3,20 +3,15 @@
 export type LinkTarget = {
   _type?: string | null;
   slug?: string | null;
-  section?: string | null;
   month?: string | null;
 } | null;
 
 export function hrefFor(target: LinkTarget): string | null {
   if (!target?._type) return null;
-  const { _type, slug, section, month } = target;
+  const { _type, slug, month } = target;
   switch (_type) {
     case "page":
-      return slug
-        ? section === "about"
-          ? `/about/${slug}`
-          : `/${slug}`
-        : null;
+      return slug ? `/${slug}` : null;
     case "article":
       return slug ? `/articles/${slug}` : null;
     case "resource":

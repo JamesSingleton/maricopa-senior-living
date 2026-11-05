@@ -37,7 +37,7 @@ export const topic = defineType({
       type: "string",
       validation: (rule) => rule.required(),
     }),
-    slugField(),
+    slugField({ prefix: "/topics" }),
     defineField({
       name: "description",
       type: "text",

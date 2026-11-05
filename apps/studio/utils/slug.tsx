@@ -7,9 +7,10 @@ import {
 } from "sanity";
 import slugify from "slugify";
 
+import { PublicUrl } from "../components/PublicUrl";
+
 /** Slugs that would collide with the site's own sections. */
 export const RESERVED_SLUGS = new Set([
-  "about",
   "admin",
   "api",
   "articles",
@@ -42,9 +43,12 @@ async function isUniqueForType(slug: string, context: SlugValidationContext) {
 export function slugField({
   source = "title",
   reserved = false,
+  prefix = "",
 }: {
   source?: string;
   reserved?: boolean;
+  /** Path in front of the slug on the website, e.g. "/articles". */
+  prefix?: string;
 } = {}) {
   return defineField({
     name: "slug",
@@ -53,6 +57,17 @@ export function slugField({
     description:
       'The last part of this page\'s web address. Click "Generate" to make it from the title.',
     options: { source, slugify: createSlug, isUnique: isUniqueForType },
+    components: {
+      input: (props) => {
+        const current = (props.value as { current?: string } | undefined)
+          ?.current;
+        return (
+          <PublicUrl path={current ? `${prefix}/${current}` : null}>
+            {props.renderDefault(props)}
+          </PublicUrl>
+        );
+      },
+    },
     validation: (rule) =>
       rule.required().custom((value) => {
         const current = value?.current ?? "";

@@ -646,35 +646,7 @@ export type MonthlyUpdate = {
   _updatedAt: string;
   _rev: string;
   howTo?: string;
-  month:
-    | "2027-02"
-    | "2027-01"
-    | "2026-12"
-    | "2026-11"
-    | "2026-10"
-    | "2026-09"
-    | "2026-08"
-    | "2026-07"
-    | "2026-06"
-    | "2026-05"
-    | "2026-04"
-    | "2026-03"
-    | "2026-02"
-    | "2026-01"
-    | "2025-12"
-    | "2025-11"
-    | "2025-10"
-    | "2025-09"
-    | "2025-08"
-    | "2025-07"
-    | "2025-06"
-    | "2025-05"
-    | "2025-04"
-    | "2025-03"
-    | "2025-02"
-    | "2025-01"
-    | "2024-12"
-    | "2024-11";
+  publishMonth: string;
   title?: string;
   intro: string;
   body: RichText;
@@ -689,7 +661,6 @@ export type Page = {
   howTo?: string;
   title: string;
   slug: Slug;
-  section: "general" | "about";
   description?: string;
   sections: PageBuilder;
 };
@@ -813,35 +784,7 @@ export type NewsletterEdition = {
   _updatedAt: string;
   _rev: string;
   howTo?: string;
-  month:
-    | "2027-02"
-    | "2027-01"
-    | "2026-12"
-    | "2026-11"
-    | "2026-10"
-    | "2026-09"
-    | "2026-08"
-    | "2026-07"
-    | "2026-06"
-    | "2026-05"
-    | "2026-04"
-    | "2026-03"
-    | "2026-02"
-    | "2026-01"
-    | "2025-12"
-    | "2025-11"
-    | "2025-10"
-    | "2025-09"
-    | "2025-08"
-    | "2025-07"
-    | "2025-06"
-    | "2025-05"
-    | "2025-04"
-    | "2025-03"
-    | "2025-02"
-    | "2025-01"
-    | "2024-12"
-    | "2024-11";
+  publishMonth: string;
   coverImage?: ImageWithAlt;
   coverMessage?: string;
   sections: Array<
@@ -1234,7 +1177,7 @@ export type QuerySettingsResult =
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryNavigation
-// Query: *[_id == "navigation"][0]{    main[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } },    footer[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  }
+// Query: *[_id == "navigation"][0]{    main[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } },    footer[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  }
 export type QueryNavigationResult =
   | {
       main: null;
@@ -1263,105 +1206,42 @@ export type QueryNavigationResult =
           | {
               _type: "article";
               slug: string;
-              section: null;
               month: null;
               title: string;
             }
           | {
               _type: "event";
               slug: string;
-              section: null;
               month: null;
               title: string;
             }
           | {
               _type: "monthlyUpdate";
               slug: null;
-              section: null;
-              month:
-                | "2024-11"
-                | "2024-12"
-                | "2025-01"
-                | "2025-02"
-                | "2025-03"
-                | "2025-04"
-                | "2025-05"
-                | "2025-06"
-                | "2025-07"
-                | "2025-08"
-                | "2025-09"
-                | "2025-10"
-                | "2025-11"
-                | "2025-12"
-                | "2026-01"
-                | "2026-02"
-                | "2026-03"
-                | "2026-04"
-                | "2026-05"
-                | "2026-06"
-                | "2026-07"
-                | "2026-08"
-                | "2026-09"
-                | "2026-10"
-                | "2026-11"
-                | "2026-12"
-                | "2027-01"
-                | "2027-02";
+              month: string | null;
               title: string | null;
             }
           | {
               _type: "newsletterEdition";
               slug: null;
-              section: null;
-              month:
-                | "2024-11"
-                | "2024-12"
-                | "2025-01"
-                | "2025-02"
-                | "2025-03"
-                | "2025-04"
-                | "2025-05"
-                | "2025-06"
-                | "2025-07"
-                | "2025-08"
-                | "2025-09"
-                | "2025-10"
-                | "2025-11"
-                | "2025-12"
-                | "2026-01"
-                | "2026-02"
-                | "2026-03"
-                | "2026-04"
-                | "2026-05"
-                | "2026-06"
-                | "2026-07"
-                | "2026-08"
-                | "2026-09"
-                | "2026-10"
-                | "2026-11"
-                | "2026-12"
-                | "2027-01"
-                | "2027-02";
+              month: string | null;
               title: null;
             }
           | {
               _type: "page";
               slug: string;
-              section: "about" | "general";
               month: null;
               title: string;
             }
           | {
               _type: "resource";
               slug: string;
-              section: null;
               month: null;
               title: string;
             }
           | {
               _type: "topic";
               slug: string;
-              section: null;
               month: null;
               title: string;
             }
@@ -1389,105 +1269,42 @@ export type QueryNavigationResult =
           | {
               _type: "article";
               slug: string;
-              section: null;
               month: null;
               title: string;
             }
           | {
               _type: "event";
               slug: string;
-              section: null;
               month: null;
               title: string;
             }
           | {
               _type: "monthlyUpdate";
               slug: null;
-              section: null;
-              month:
-                | "2024-11"
-                | "2024-12"
-                | "2025-01"
-                | "2025-02"
-                | "2025-03"
-                | "2025-04"
-                | "2025-05"
-                | "2025-06"
-                | "2025-07"
-                | "2025-08"
-                | "2025-09"
-                | "2025-10"
-                | "2025-11"
-                | "2025-12"
-                | "2026-01"
-                | "2026-02"
-                | "2026-03"
-                | "2026-04"
-                | "2026-05"
-                | "2026-06"
-                | "2026-07"
-                | "2026-08"
-                | "2026-09"
-                | "2026-10"
-                | "2026-11"
-                | "2026-12"
-                | "2027-01"
-                | "2027-02";
+              month: string | null;
               title: string | null;
             }
           | {
               _type: "newsletterEdition";
               slug: null;
-              section: null;
-              month:
-                | "2024-11"
-                | "2024-12"
-                | "2025-01"
-                | "2025-02"
-                | "2025-03"
-                | "2025-04"
-                | "2025-05"
-                | "2025-06"
-                | "2025-07"
-                | "2025-08"
-                | "2025-09"
-                | "2025-10"
-                | "2025-11"
-                | "2025-12"
-                | "2026-01"
-                | "2026-02"
-                | "2026-03"
-                | "2026-04"
-                | "2026-05"
-                | "2026-06"
-                | "2026-07"
-                | "2026-08"
-                | "2026-09"
-                | "2026-10"
-                | "2026-11"
-                | "2026-12"
-                | "2027-01"
-                | "2027-02";
+              month: string | null;
               title: null;
             }
           | {
               _type: "page";
               slug: string;
-              section: "about" | "general";
               month: null;
               title: string;
             }
           | {
               _type: "resource";
               slug: string;
-              section: null;
               month: null;
               title: string;
             }
           | {
               _type: "topic";
               slug: string;
-              section: null;
               month: null;
               title: string;
             }
@@ -1498,7 +1315,7 @@ export type QueryNavigationResult =
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryHome
-// Query: *[_id == "home"][0]{    sections[]{   ...,  _key,  _type,  _type == "heroBlock" => { image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } }, buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } } },  _type == "textBlock" => { body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } } },  _type == "imageBlock" => { images[]{ _key,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },  _type == "buttonsBlock" => { buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } } },  _type == "calloutBlock" => { link{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } } },  _type == "resourceListBlock" => {    "topicSlug": topic->slug.current,    "topicTitle": topic->title,    "picked": resources[]->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } }  },  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "linkListBlock" => {    "topicId": topic._ref,    "topicSlug": topic->slug.current,    "picked": links[]->{   _id,  title,  url,  source,  summary,  publishedAt }  },  _type == "faqBlock" => { items[]{ _key, question, answer } },  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } } }  }
+// Query: *[_id == "home"][0]{    sections[]{   ...,  _key,  _type,  _type == "heroBlock" => { image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } }, buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },  _type == "textBlock" => { body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } } },  _type == "imageBlock" => { images[]{ _key,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },  _type == "buttonsBlock" => { buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },  _type == "calloutBlock" => { link{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },  _type == "resourceListBlock" => {    "topicSlug": topic->slug.current,    "topicTitle": topic->title,    "picked": resources[]->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } }  },  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "linkListBlock" => {    "topicId": topic._ref,    "topicSlug": topic->slug.current,    "picked": links[]->{   _id,  title,  url,  source,  summary,  publishedAt }  },  _type == "faqBlock" => { items[]{ _key, question, answer } },  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } } }  }
 export type QueryHomeResult =
   | {
       sections: Array<
@@ -1539,105 +1356,42 @@ export type QueryHomeResult =
                 | {
                     _type: "article";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "event";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "monthlyUpdate";
                     slug: null;
-                    section: null;
-                    month:
-                      | "2024-11"
-                      | "2024-12"
-                      | "2025-01"
-                      | "2025-02"
-                      | "2025-03"
-                      | "2025-04"
-                      | "2025-05"
-                      | "2025-06"
-                      | "2025-07"
-                      | "2025-08"
-                      | "2025-09"
-                      | "2025-10"
-                      | "2025-11"
-                      | "2025-12"
-                      | "2026-01"
-                      | "2026-02"
-                      | "2026-03"
-                      | "2026-04"
-                      | "2026-05"
-                      | "2026-06"
-                      | "2026-07"
-                      | "2026-08"
-                      | "2026-09"
-                      | "2026-10"
-                      | "2026-11"
-                      | "2026-12"
-                      | "2027-01"
-                      | "2027-02";
+                    month: string | null;
                     title: string | null;
                   }
                 | {
                     _type: "newsletterEdition";
                     slug: null;
-                    section: null;
-                    month:
-                      | "2024-11"
-                      | "2024-12"
-                      | "2025-01"
-                      | "2025-02"
-                      | "2025-03"
-                      | "2025-04"
-                      | "2025-05"
-                      | "2025-06"
-                      | "2025-07"
-                      | "2025-08"
-                      | "2025-09"
-                      | "2025-10"
-                      | "2025-11"
-                      | "2025-12"
-                      | "2026-01"
-                      | "2026-02"
-                      | "2026-03"
-                      | "2026-04"
-                      | "2026-05"
-                      | "2026-06"
-                      | "2026-07"
-                      | "2026-08"
-                      | "2026-09"
-                      | "2026-10"
-                      | "2026-11"
-                      | "2026-12"
-                      | "2027-01"
-                      | "2027-02";
+                    month: string | null;
                     title: null;
                   }
                 | {
                     _type: "page";
                     slug: string;
-                    section: "about" | "general";
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "resource";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "topic";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
@@ -1671,105 +1425,42 @@ export type QueryHomeResult =
                 | {
                     _type: "article";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "event";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "monthlyUpdate";
                     slug: null;
-                    section: null;
-                    month:
-                      | "2024-11"
-                      | "2024-12"
-                      | "2025-01"
-                      | "2025-02"
-                      | "2025-03"
-                      | "2025-04"
-                      | "2025-05"
-                      | "2025-06"
-                      | "2025-07"
-                      | "2025-08"
-                      | "2025-09"
-                      | "2025-10"
-                      | "2025-11"
-                      | "2025-12"
-                      | "2026-01"
-                      | "2026-02"
-                      | "2026-03"
-                      | "2026-04"
-                      | "2026-05"
-                      | "2026-06"
-                      | "2026-07"
-                      | "2026-08"
-                      | "2026-09"
-                      | "2026-10"
-                      | "2026-11"
-                      | "2026-12"
-                      | "2027-01"
-                      | "2027-02";
+                    month: string | null;
                     title: string | null;
                   }
                 | {
                     _type: "newsletterEdition";
                     slug: null;
-                    section: null;
-                    month:
-                      | "2024-11"
-                      | "2024-12"
-                      | "2025-01"
-                      | "2025-02"
-                      | "2025-03"
-                      | "2025-04"
-                      | "2025-05"
-                      | "2025-06"
-                      | "2025-07"
-                      | "2025-08"
-                      | "2025-09"
-                      | "2025-10"
-                      | "2025-11"
-                      | "2025-12"
-                      | "2026-01"
-                      | "2026-02"
-                      | "2026-03"
-                      | "2026-04"
-                      | "2026-05"
-                      | "2026-06"
-                      | "2026-07"
-                      | "2026-08"
-                      | "2026-09"
-                      | "2026-10"
-                      | "2026-11"
-                      | "2026-12"
-                      | "2027-01"
-                      | "2027-02";
+                    month: string | null;
                     title: null;
                   }
                 | {
                     _type: "page";
                     slug: string;
-                    section: "about" | "general";
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "resource";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "topic";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
@@ -1870,105 +1561,42 @@ export type QueryHomeResult =
                 | {
                     _type: "article";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "event";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "monthlyUpdate";
                     slug: null;
-                    section: null;
-                    month:
-                      | "2024-11"
-                      | "2024-12"
-                      | "2025-01"
-                      | "2025-02"
-                      | "2025-03"
-                      | "2025-04"
-                      | "2025-05"
-                      | "2025-06"
-                      | "2025-07"
-                      | "2025-08"
-                      | "2025-09"
-                      | "2025-10"
-                      | "2025-11"
-                      | "2025-12"
-                      | "2026-01"
-                      | "2026-02"
-                      | "2026-03"
-                      | "2026-04"
-                      | "2026-05"
-                      | "2026-06"
-                      | "2026-07"
-                      | "2026-08"
-                      | "2026-09"
-                      | "2026-10"
-                      | "2026-11"
-                      | "2026-12"
-                      | "2027-01"
-                      | "2027-02";
+                    month: string | null;
                     title: string | null;
                   }
                 | {
                     _type: "newsletterEdition";
                     slug: null;
-                    section: null;
-                    month:
-                      | "2024-11"
-                      | "2024-12"
-                      | "2025-01"
-                      | "2025-02"
-                      | "2025-03"
-                      | "2025-04"
-                      | "2025-05"
-                      | "2025-06"
-                      | "2025-07"
-                      | "2025-08"
-                      | "2025-09"
-                      | "2025-10"
-                      | "2025-11"
-                      | "2025-12"
-                      | "2026-01"
-                      | "2026-02"
-                      | "2026-03"
-                      | "2026-04"
-                      | "2026-05"
-                      | "2026-06"
-                      | "2026-07"
-                      | "2026-08"
-                      | "2026-09"
-                      | "2026-10"
-                      | "2026-11"
-                      | "2026-12"
-                      | "2027-01"
-                      | "2027-02";
+                    month: string | null;
                     title: null;
                   }
                 | {
                     _type: "page";
                     slug: string;
-                    section: "about" | "general";
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "resource";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "topic";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
@@ -2104,105 +1732,42 @@ export type QueryHomeResult =
                           | {
                               _type: "article";
                               slug: string;
-                              section: null;
                               month: null;
                               title: string;
                             }
                           | {
                               _type: "event";
                               slug: string;
-                              section: null;
                               month: null;
                               title: string;
                             }
                           | {
                               _type: "monthlyUpdate";
                               slug: null;
-                              section: null;
-                              month:
-                                | "2024-11"
-                                | "2024-12"
-                                | "2025-01"
-                                | "2025-02"
-                                | "2025-03"
-                                | "2025-04"
-                                | "2025-05"
-                                | "2025-06"
-                                | "2025-07"
-                                | "2025-08"
-                                | "2025-09"
-                                | "2025-10"
-                                | "2025-11"
-                                | "2025-12"
-                                | "2026-01"
-                                | "2026-02"
-                                | "2026-03"
-                                | "2026-04"
-                                | "2026-05"
-                                | "2026-06"
-                                | "2026-07"
-                                | "2026-08"
-                                | "2026-09"
-                                | "2026-10"
-                                | "2026-11"
-                                | "2026-12"
-                                | "2027-01"
-                                | "2027-02";
+                              month: string | null;
                               title: string | null;
                             }
                           | {
                               _type: "newsletterEdition";
                               slug: null;
-                              section: null;
-                              month:
-                                | "2024-11"
-                                | "2024-12"
-                                | "2025-01"
-                                | "2025-02"
-                                | "2025-03"
-                                | "2025-04"
-                                | "2025-05"
-                                | "2025-06"
-                                | "2025-07"
-                                | "2025-08"
-                                | "2025-09"
-                                | "2025-10"
-                                | "2025-11"
-                                | "2025-12"
-                                | "2026-01"
-                                | "2026-02"
-                                | "2026-03"
-                                | "2026-04"
-                                | "2026-05"
-                                | "2026-06"
-                                | "2026-07"
-                                | "2026-08"
-                                | "2026-09"
-                                | "2026-10"
-                                | "2026-11"
-                                | "2026-12"
-                                | "2027-01"
-                                | "2027-02";
+                              month: string | null;
                               title: null;
                             }
                           | {
                               _type: "page";
                               slug: string;
-                              section: "about" | "general";
                               month: null;
                               title: string;
                             }
                           | {
                               _type: "resource";
                               slug: string;
-                              section: null;
                               month: null;
                               title: string;
                             }
                           | {
                               _type: "topic";
                               slug: string;
-                              section: null;
                               month: null;
                               title: string;
                             };
@@ -2420,12 +1985,11 @@ export type QueryTopicsResult = Array<{
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryPage
-// Query: *[_type == "page" && slug.current == $slug && section == $section][0]{    _id,    title,    description,    section,    "slug": slug.current,    sections[]{   ...,  _key,  _type,  _type == "heroBlock" => { image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } }, buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } } },  _type == "textBlock" => { body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } } },  _type == "imageBlock" => { images[]{ _key,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },  _type == "buttonsBlock" => { buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } } },  _type == "calloutBlock" => { link{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } } },  _type == "resourceListBlock" => {    "topicSlug": topic->slug.current,    "topicTitle": topic->title,    "picked": resources[]->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } }  },  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "linkListBlock" => {    "topicId": topic._ref,    "topicSlug": topic->slug.current,    "picked": links[]->{   _id,  title,  url,  source,  summary,  publishedAt }  },  _type == "faqBlock" => { items[]{ _key, question, answer } },  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } } }  }
+// Query: *[_type == "page" && slug.current == $slug][0]{    _id,    title,    description,    "slug": slug.current,    sections[]{   ...,  _key,  _type,  _type == "heroBlock" => { image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } }, buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },  _type == "textBlock" => { body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } } },  _type == "imageBlock" => { images[]{ _key,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },  _type == "buttonsBlock" => { buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },  _type == "calloutBlock" => { link{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },  _type == "resourceListBlock" => {    "topicSlug": topic->slug.current,    "topicTitle": topic->title,    "picked": resources[]->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } }  },  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "linkListBlock" => {    "topicId": topic._ref,    "topicSlug": topic->slug.current,    "picked": links[]->{   _id,  title,  url,  source,  summary,  publishedAt }  },  _type == "faqBlock" => { items[]{ _key, question, answer } },  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } } }  }
 export type QueryPageResult = {
   _id: string;
   title: string;
   description: string | null;
-  section: "about" | "general";
   slug: string;
   sections: Array<
     | {
@@ -2465,105 +2029,42 @@ export type QueryPageResult = {
             | {
                 _type: "article";
                 slug: string;
-                section: null;
                 month: null;
                 title: string;
               }
             | {
                 _type: "event";
                 slug: string;
-                section: null;
                 month: null;
                 title: string;
               }
             | {
                 _type: "monthlyUpdate";
                 slug: null;
-                section: null;
-                month:
-                  | "2024-11"
-                  | "2024-12"
-                  | "2025-01"
-                  | "2025-02"
-                  | "2025-03"
-                  | "2025-04"
-                  | "2025-05"
-                  | "2025-06"
-                  | "2025-07"
-                  | "2025-08"
-                  | "2025-09"
-                  | "2025-10"
-                  | "2025-11"
-                  | "2025-12"
-                  | "2026-01"
-                  | "2026-02"
-                  | "2026-03"
-                  | "2026-04"
-                  | "2026-05"
-                  | "2026-06"
-                  | "2026-07"
-                  | "2026-08"
-                  | "2026-09"
-                  | "2026-10"
-                  | "2026-11"
-                  | "2026-12"
-                  | "2027-01"
-                  | "2027-02";
+                month: string | null;
                 title: string | null;
               }
             | {
                 _type: "newsletterEdition";
                 slug: null;
-                section: null;
-                month:
-                  | "2024-11"
-                  | "2024-12"
-                  | "2025-01"
-                  | "2025-02"
-                  | "2025-03"
-                  | "2025-04"
-                  | "2025-05"
-                  | "2025-06"
-                  | "2025-07"
-                  | "2025-08"
-                  | "2025-09"
-                  | "2025-10"
-                  | "2025-11"
-                  | "2025-12"
-                  | "2026-01"
-                  | "2026-02"
-                  | "2026-03"
-                  | "2026-04"
-                  | "2026-05"
-                  | "2026-06"
-                  | "2026-07"
-                  | "2026-08"
-                  | "2026-09"
-                  | "2026-10"
-                  | "2026-11"
-                  | "2026-12"
-                  | "2027-01"
-                  | "2027-02";
+                month: string | null;
                 title: null;
               }
             | {
                 _type: "page";
                 slug: string;
-                section: "about" | "general";
                 month: null;
                 title: string;
               }
             | {
                 _type: "resource";
                 slug: string;
-                section: null;
                 month: null;
                 title: string;
               }
             | {
                 _type: "topic";
                 slug: string;
-                section: null;
                 month: null;
                 title: string;
               }
@@ -2597,105 +2098,42 @@ export type QueryPageResult = {
             | {
                 _type: "article";
                 slug: string;
-                section: null;
                 month: null;
                 title: string;
               }
             | {
                 _type: "event";
                 slug: string;
-                section: null;
                 month: null;
                 title: string;
               }
             | {
                 _type: "monthlyUpdate";
                 slug: null;
-                section: null;
-                month:
-                  | "2024-11"
-                  | "2024-12"
-                  | "2025-01"
-                  | "2025-02"
-                  | "2025-03"
-                  | "2025-04"
-                  | "2025-05"
-                  | "2025-06"
-                  | "2025-07"
-                  | "2025-08"
-                  | "2025-09"
-                  | "2025-10"
-                  | "2025-11"
-                  | "2025-12"
-                  | "2026-01"
-                  | "2026-02"
-                  | "2026-03"
-                  | "2026-04"
-                  | "2026-05"
-                  | "2026-06"
-                  | "2026-07"
-                  | "2026-08"
-                  | "2026-09"
-                  | "2026-10"
-                  | "2026-11"
-                  | "2026-12"
-                  | "2027-01"
-                  | "2027-02";
+                month: string | null;
                 title: string | null;
               }
             | {
                 _type: "newsletterEdition";
                 slug: null;
-                section: null;
-                month:
-                  | "2024-11"
-                  | "2024-12"
-                  | "2025-01"
-                  | "2025-02"
-                  | "2025-03"
-                  | "2025-04"
-                  | "2025-05"
-                  | "2025-06"
-                  | "2025-07"
-                  | "2025-08"
-                  | "2025-09"
-                  | "2025-10"
-                  | "2025-11"
-                  | "2025-12"
-                  | "2026-01"
-                  | "2026-02"
-                  | "2026-03"
-                  | "2026-04"
-                  | "2026-05"
-                  | "2026-06"
-                  | "2026-07"
-                  | "2026-08"
-                  | "2026-09"
-                  | "2026-10"
-                  | "2026-11"
-                  | "2026-12"
-                  | "2027-01"
-                  | "2027-02";
+                month: string | null;
                 title: null;
               }
             | {
                 _type: "page";
                 slug: string;
-                section: "about" | "general";
                 month: null;
                 title: string;
               }
             | {
                 _type: "resource";
                 slug: string;
-                section: null;
                 month: null;
                 title: string;
               }
             | {
                 _type: "topic";
                 slug: string;
-                section: null;
                 month: null;
                 title: string;
               }
@@ -2796,105 +2234,42 @@ export type QueryPageResult = {
             | {
                 _type: "article";
                 slug: string;
-                section: null;
                 month: null;
                 title: string;
               }
             | {
                 _type: "event";
                 slug: string;
-                section: null;
                 month: null;
                 title: string;
               }
             | {
                 _type: "monthlyUpdate";
                 slug: null;
-                section: null;
-                month:
-                  | "2024-11"
-                  | "2024-12"
-                  | "2025-01"
-                  | "2025-02"
-                  | "2025-03"
-                  | "2025-04"
-                  | "2025-05"
-                  | "2025-06"
-                  | "2025-07"
-                  | "2025-08"
-                  | "2025-09"
-                  | "2025-10"
-                  | "2025-11"
-                  | "2025-12"
-                  | "2026-01"
-                  | "2026-02"
-                  | "2026-03"
-                  | "2026-04"
-                  | "2026-05"
-                  | "2026-06"
-                  | "2026-07"
-                  | "2026-08"
-                  | "2026-09"
-                  | "2026-10"
-                  | "2026-11"
-                  | "2026-12"
-                  | "2027-01"
-                  | "2027-02";
+                month: string | null;
                 title: string | null;
               }
             | {
                 _type: "newsletterEdition";
                 slug: null;
-                section: null;
-                month:
-                  | "2024-11"
-                  | "2024-12"
-                  | "2025-01"
-                  | "2025-02"
-                  | "2025-03"
-                  | "2025-04"
-                  | "2025-05"
-                  | "2025-06"
-                  | "2025-07"
-                  | "2025-08"
-                  | "2025-09"
-                  | "2025-10"
-                  | "2025-11"
-                  | "2025-12"
-                  | "2026-01"
-                  | "2026-02"
-                  | "2026-03"
-                  | "2026-04"
-                  | "2026-05"
-                  | "2026-06"
-                  | "2026-07"
-                  | "2026-08"
-                  | "2026-09"
-                  | "2026-10"
-                  | "2026-11"
-                  | "2026-12"
-                  | "2027-01"
-                  | "2027-02";
+                month: string | null;
                 title: null;
               }
             | {
                 _type: "page";
                 slug: string;
-                section: "about" | "general";
                 month: null;
                 title: string;
               }
             | {
                 _type: "resource";
                 slug: string;
-                section: null;
                 month: null;
                 title: string;
               }
             | {
                 _type: "topic";
                 slug: string;
-                section: null;
                 month: null;
                 title: string;
               }
@@ -3030,105 +2405,42 @@ export type QueryPageResult = {
                       | {
                           _type: "article";
                           slug: string;
-                          section: null;
                           month: null;
                           title: string;
                         }
                       | {
                           _type: "event";
                           slug: string;
-                          section: null;
                           month: null;
                           title: string;
                         }
                       | {
                           _type: "monthlyUpdate";
                           slug: null;
-                          section: null;
-                          month:
-                            | "2024-11"
-                            | "2024-12"
-                            | "2025-01"
-                            | "2025-02"
-                            | "2025-03"
-                            | "2025-04"
-                            | "2025-05"
-                            | "2025-06"
-                            | "2025-07"
-                            | "2025-08"
-                            | "2025-09"
-                            | "2025-10"
-                            | "2025-11"
-                            | "2025-12"
-                            | "2026-01"
-                            | "2026-02"
-                            | "2026-03"
-                            | "2026-04"
-                            | "2026-05"
-                            | "2026-06"
-                            | "2026-07"
-                            | "2026-08"
-                            | "2026-09"
-                            | "2026-10"
-                            | "2026-11"
-                            | "2026-12"
-                            | "2027-01"
-                            | "2027-02";
+                          month: string | null;
                           title: string | null;
                         }
                       | {
                           _type: "newsletterEdition";
                           slug: null;
-                          section: null;
-                          month:
-                            | "2024-11"
-                            | "2024-12"
-                            | "2025-01"
-                            | "2025-02"
-                            | "2025-03"
-                            | "2025-04"
-                            | "2025-05"
-                            | "2025-06"
-                            | "2025-07"
-                            | "2025-08"
-                            | "2025-09"
-                            | "2025-10"
-                            | "2025-11"
-                            | "2025-12"
-                            | "2026-01"
-                            | "2026-02"
-                            | "2026-03"
-                            | "2026-04"
-                            | "2026-05"
-                            | "2026-06"
-                            | "2026-07"
-                            | "2026-08"
-                            | "2026-09"
-                            | "2026-10"
-                            | "2026-11"
-                            | "2026-12"
-                            | "2027-01"
-                            | "2027-02";
+                          month: string | null;
                           title: null;
                         }
                       | {
                           _type: "page";
                           slug: string;
-                          section: "about" | "general";
                           month: null;
                           title: string;
                         }
                       | {
                           _type: "resource";
                           slug: string;
-                          section: null;
                           month: null;
                           title: string;
                         }
                       | {
                           _type: "topic";
                           slug: string;
-                          section: null;
                           month: null;
                           title: string;
                         };
@@ -3160,11 +2472,7 @@ export type QueryPageResult = {
                 allDay: boolean | null;
                 repeat: {
                   frequency:
-                    | "monthlyDate"
-                    | "monthlyWeekday"
-                    | "none"
-                    | "weekly"
-                    | null;
+                    "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
                   until: string | null;
                   skipDates: Array<string> | null;
                 } | null;
@@ -3259,22 +2567,9 @@ export type QueryPageResult = {
 } | null;
 
 // Source: ../../packages/sanity/src/queries.ts
-// Variable: queryAboutPages
-// Query: *[_type == "page" && section == "about"] | order(title asc){    _id, title, "slug": slug.current, description  }
-export type QueryAboutPagesResult = Array<{
-  _id: string;
-  title: string;
-  slug: string;
-  description: string | null;
-}>;
-
-// Source: ../../packages/sanity/src/queries.ts
 // Variable: queryPagePaths
-// Query: *[_type == "page" && defined(slug.current)]{ "slug": slug.current, section }
-export type QueryPagePathsResult = Array<{
-  slug: string;
-  section: "about" | "general";
-}>;
+// Query: *[_type == "page" && defined(slug.current)].slug.current
+export type QueryPagePathsResult = Array<string>;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryTopic
@@ -3494,7 +2789,7 @@ export type QueryResourcesForPrintResult = Array<{
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryResource
-// Query: *[_type == "resource" && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current },    email,    isGovernment,    hours[]{ _key, day, opens, closes },    hoursNote,    description[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } },    eligibility,    cost,    attachments[]{ _key, title, "file": asset->{ url, size, extension } },    lastVerified,    _updatedAt  }
+// Query: *[_type == "resource" && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current },    email,    isGovernment,    hours[]{ _key, day, opens, closes },    hoursNote,    description[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } },    eligibility,    cost,    attachments[]{ _key, title, "file": asset->{ url, size, extension } },    lastVerified,    _updatedAt  }
 export type QueryResourceResult = {
   _id: string;
   title: string;
@@ -3649,105 +2944,42 @@ export type QueryResourceResult = {
             | {
                 _type: "article";
                 slug: string;
-                section: null;
                 month: null;
                 title: string;
               }
             | {
                 _type: "event";
                 slug: string;
-                section: null;
                 month: null;
                 title: string;
               }
             | {
                 _type: "monthlyUpdate";
                 slug: null;
-                section: null;
-                month:
-                  | "2024-11"
-                  | "2024-12"
-                  | "2025-01"
-                  | "2025-02"
-                  | "2025-03"
-                  | "2025-04"
-                  | "2025-05"
-                  | "2025-06"
-                  | "2025-07"
-                  | "2025-08"
-                  | "2025-09"
-                  | "2025-10"
-                  | "2025-11"
-                  | "2025-12"
-                  | "2026-01"
-                  | "2026-02"
-                  | "2026-03"
-                  | "2026-04"
-                  | "2026-05"
-                  | "2026-06"
-                  | "2026-07"
-                  | "2026-08"
-                  | "2026-09"
-                  | "2026-10"
-                  | "2026-11"
-                  | "2026-12"
-                  | "2027-01"
-                  | "2027-02";
+                month: string | null;
                 title: string | null;
               }
             | {
                 _type: "newsletterEdition";
                 slug: null;
-                section: null;
-                month:
-                  | "2024-11"
-                  | "2024-12"
-                  | "2025-01"
-                  | "2025-02"
-                  | "2025-03"
-                  | "2025-04"
-                  | "2025-05"
-                  | "2025-06"
-                  | "2025-07"
-                  | "2025-08"
-                  | "2025-09"
-                  | "2025-10"
-                  | "2025-11"
-                  | "2025-12"
-                  | "2026-01"
-                  | "2026-02"
-                  | "2026-03"
-                  | "2026-04"
-                  | "2026-05"
-                  | "2026-06"
-                  | "2026-07"
-                  | "2026-08"
-                  | "2026-09"
-                  | "2026-10"
-                  | "2026-11"
-                  | "2026-12"
-                  | "2027-01"
-                  | "2027-02";
+                month: string | null;
                 title: null;
               }
             | {
                 _type: "page";
                 slug: string;
-                section: "about" | "general";
                 month: null;
                 title: string;
               }
             | {
                 _type: "resource";
                 slug: string;
-                section: null;
                 month: null;
                 title: string;
               }
             | {
                 _type: "topic";
                 slug: string;
-                section: null;
                 month: null;
                 title: string;
               };
@@ -3828,7 +3060,7 @@ export type QueryArticlesCountResult = number;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryArticle
-// Query: *[_type == "article" && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  summary,  publishedAt,  series,  "author": author->{ name, "slug": slug.current },  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    "author": author->{ name, "slug": slug.current, bio, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },    "topics": topics[]->{ title, "slug": slug.current },    body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } },    _updatedAt  }
+// Query: *[_type == "article" && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  summary,  publishedAt,  series,  "author": author->{ name, "slug": slug.current },  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    "author": author->{ name, "slug": slug.current, bio, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },    "topics": topics[]->{ title, "slug": slug.current },    body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } },    _updatedAt  }
 export type QueryArticleResult = {
   _id: string;
   title: string;
@@ -3903,105 +3135,42 @@ export type QueryArticleResult = {
                 | {
                     _type: "article";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "event";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "monthlyUpdate";
                     slug: null;
-                    section: null;
-                    month:
-                      | "2024-11"
-                      | "2024-12"
-                      | "2025-01"
-                      | "2025-02"
-                      | "2025-03"
-                      | "2025-04"
-                      | "2025-05"
-                      | "2025-06"
-                      | "2025-07"
-                      | "2025-08"
-                      | "2025-09"
-                      | "2025-10"
-                      | "2025-11"
-                      | "2025-12"
-                      | "2026-01"
-                      | "2026-02"
-                      | "2026-03"
-                      | "2026-04"
-                      | "2026-05"
-                      | "2026-06"
-                      | "2026-07"
-                      | "2026-08"
-                      | "2026-09"
-                      | "2026-10"
-                      | "2026-11"
-                      | "2026-12"
-                      | "2027-01"
-                      | "2027-02";
+                    month: string | null;
                     title: string | null;
                   }
                 | {
                     _type: "newsletterEdition";
                     slug: null;
-                    section: null;
-                    month:
-                      | "2024-11"
-                      | "2024-12"
-                      | "2025-01"
-                      | "2025-02"
-                      | "2025-03"
-                      | "2025-04"
-                      | "2025-05"
-                      | "2025-06"
-                      | "2025-07"
-                      | "2025-08"
-                      | "2025-09"
-                      | "2025-10"
-                      | "2025-11"
-                      | "2025-12"
-                      | "2026-01"
-                      | "2026-02"
-                      | "2026-03"
-                      | "2026-04"
-                      | "2026-05"
-                      | "2026-06"
-                      | "2026-07"
-                      | "2026-08"
-                      | "2026-09"
-                      | "2026-10"
-                      | "2026-11"
-                      | "2026-12"
-                      | "2027-01"
-                      | "2027-02";
+                    month: string | null;
                     title: null;
                   }
                 | {
                     _type: "page";
                     slug: string;
-                    section: "about" | "general";
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "resource";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "topic";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   };
@@ -4033,11 +3202,7 @@ export type QueryArticleResult = {
           allDay: boolean | null;
           repeat: {
             frequency:
-              | "monthlyDate"
-              | "monthlyWeekday"
-              | "none"
-              | "weekly"
-              | null;
+              "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
             until: string | null;
             skipDates: Array<string> | null;
           } | null;
@@ -4192,7 +3357,7 @@ export type QueryEventsInRangeResult = Array<{
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryEvent
-// Query: *[_type == "event" && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary,    address,    cost,    registration { required, link{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } } },    flyer {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    details[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } },    "topics": topics[]->{ title, "slug": slug.current }  }
+// Query: *[_type == "event" && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary,    address,    cost,    registration { required, link{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },    flyer {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    details[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } },    "topics": topics[]->{ title, "slug": slug.current }  }
 export type QueryEventResult = {
   _id: string;
   title: string;
@@ -4234,105 +3399,42 @@ export type QueryEventResult = {
         | {
             _type: "article";
             slug: string;
-            section: null;
             month: null;
             title: string;
           }
         | {
             _type: "event";
             slug: string;
-            section: null;
             month: null;
             title: string;
           }
         | {
             _type: "monthlyUpdate";
             slug: null;
-            section: null;
-            month:
-              | "2024-11"
-              | "2024-12"
-              | "2025-01"
-              | "2025-02"
-              | "2025-03"
-              | "2025-04"
-              | "2025-05"
-              | "2025-06"
-              | "2025-07"
-              | "2025-08"
-              | "2025-09"
-              | "2025-10"
-              | "2025-11"
-              | "2025-12"
-              | "2026-01"
-              | "2026-02"
-              | "2026-03"
-              | "2026-04"
-              | "2026-05"
-              | "2026-06"
-              | "2026-07"
-              | "2026-08"
-              | "2026-09"
-              | "2026-10"
-              | "2026-11"
-              | "2026-12"
-              | "2027-01"
-              | "2027-02";
+            month: string | null;
             title: string | null;
           }
         | {
             _type: "newsletterEdition";
             slug: null;
-            section: null;
-            month:
-              | "2024-11"
-              | "2024-12"
-              | "2025-01"
-              | "2025-02"
-              | "2025-03"
-              | "2025-04"
-              | "2025-05"
-              | "2025-06"
-              | "2025-07"
-              | "2025-08"
-              | "2025-09"
-              | "2025-10"
-              | "2025-11"
-              | "2025-12"
-              | "2026-01"
-              | "2026-02"
-              | "2026-03"
-              | "2026-04"
-              | "2026-05"
-              | "2026-06"
-              | "2026-07"
-              | "2026-08"
-              | "2026-09"
-              | "2026-10"
-              | "2026-11"
-              | "2026-12"
-              | "2027-01"
-              | "2027-02";
+            month: string | null;
             title: null;
           }
         | {
             _type: "page";
             slug: string;
-            section: "about" | "general";
             month: null;
             title: string;
           }
         | {
             _type: "resource";
             slug: string;
-            section: null;
             month: null;
             title: string;
           }
         | {
             _type: "topic";
             slug: string;
-            section: null;
             month: null;
             title: string;
           }
@@ -4381,105 +3483,42 @@ export type QueryEventResult = {
                 | {
                     _type: "article";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "event";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "monthlyUpdate";
                     slug: null;
-                    section: null;
-                    month:
-                      | "2024-11"
-                      | "2024-12"
-                      | "2025-01"
-                      | "2025-02"
-                      | "2025-03"
-                      | "2025-04"
-                      | "2025-05"
-                      | "2025-06"
-                      | "2025-07"
-                      | "2025-08"
-                      | "2025-09"
-                      | "2025-10"
-                      | "2025-11"
-                      | "2025-12"
-                      | "2026-01"
-                      | "2026-02"
-                      | "2026-03"
-                      | "2026-04"
-                      | "2026-05"
-                      | "2026-06"
-                      | "2026-07"
-                      | "2026-08"
-                      | "2026-09"
-                      | "2026-10"
-                      | "2026-11"
-                      | "2026-12"
-                      | "2027-01"
-                      | "2027-02";
+                    month: string | null;
                     title: string | null;
                   }
                 | {
                     _type: "newsletterEdition";
                     slug: null;
-                    section: null;
-                    month:
-                      | "2024-11"
-                      | "2024-12"
-                      | "2025-01"
-                      | "2025-02"
-                      | "2025-03"
-                      | "2025-04"
-                      | "2025-05"
-                      | "2025-06"
-                      | "2025-07"
-                      | "2025-08"
-                      | "2025-09"
-                      | "2025-10"
-                      | "2025-11"
-                      | "2025-12"
-                      | "2026-01"
-                      | "2026-02"
-                      | "2026-03"
-                      | "2026-04"
-                      | "2026-05"
-                      | "2026-06"
-                      | "2026-07"
-                      | "2026-08"
-                      | "2026-09"
-                      | "2026-10"
-                      | "2026-11"
-                      | "2026-12"
-                      | "2027-01"
-                      | "2027-02";
+                    month: string | null;
                     title: null;
                   }
                 | {
                     _type: "page";
                     slug: string;
-                    section: "about" | "general";
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "resource";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "topic";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   };
@@ -4511,11 +3550,7 @@ export type QueryEventResult = {
           allDay: boolean | null;
           repeat: {
             frequency:
-              | "monthlyDate"
-              | "monthlyWeekday"
-              | "none"
-              | "weekly"
-              | null;
+              "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
             until: string | null;
             skipDates: Array<string> | null;
           } | null;
@@ -4599,38 +3634,10 @@ export type QueryEventPathsResult = Array<string>;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryMonthlyUpdate
-// Query: *[_type == "monthlyUpdate" && month == $month][0]{    _id, month, title, intro, body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } }, _updatedAt  }
+// Query: *[_type == "monthlyUpdate" && string::startsWith(publishMonth, $month)][0]{    _id, "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], title, intro, body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } }, _updatedAt  }
 export type QueryMonthlyUpdateResult = {
   _id: string;
-  month:
-    | "2024-11"
-    | "2024-12"
-    | "2025-01"
-    | "2025-02"
-    | "2025-03"
-    | "2025-04"
-    | "2025-05"
-    | "2025-06"
-    | "2025-07"
-    | "2025-08"
-    | "2025-09"
-    | "2025-10"
-    | "2025-11"
-    | "2025-12"
-    | "2026-01"
-    | "2026-02"
-    | "2026-03"
-    | "2026-04"
-    | "2026-05"
-    | "2026-06"
-    | "2026-07"
-    | "2026-08"
-    | "2026-09"
-    | "2026-10"
-    | "2026-11"
-    | "2026-12"
-    | "2027-01"
-    | "2027-02";
+  month: string | null;
   title: string | null;
   intro: string;
   body: Array<
@@ -4659,105 +3666,42 @@ export type QueryMonthlyUpdateResult = {
                 | {
                     _type: "article";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "event";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "monthlyUpdate";
                     slug: null;
-                    section: null;
-                    month:
-                      | "2024-11"
-                      | "2024-12"
-                      | "2025-01"
-                      | "2025-02"
-                      | "2025-03"
-                      | "2025-04"
-                      | "2025-05"
-                      | "2025-06"
-                      | "2025-07"
-                      | "2025-08"
-                      | "2025-09"
-                      | "2025-10"
-                      | "2025-11"
-                      | "2025-12"
-                      | "2026-01"
-                      | "2026-02"
-                      | "2026-03"
-                      | "2026-04"
-                      | "2026-05"
-                      | "2026-06"
-                      | "2026-07"
-                      | "2026-08"
-                      | "2026-09"
-                      | "2026-10"
-                      | "2026-11"
-                      | "2026-12"
-                      | "2027-01"
-                      | "2027-02";
+                    month: string | null;
                     title: string | null;
                   }
                 | {
                     _type: "newsletterEdition";
                     slug: null;
-                    section: null;
-                    month:
-                      | "2024-11"
-                      | "2024-12"
-                      | "2025-01"
-                      | "2025-02"
-                      | "2025-03"
-                      | "2025-04"
-                      | "2025-05"
-                      | "2025-06"
-                      | "2025-07"
-                      | "2025-08"
-                      | "2025-09"
-                      | "2025-10"
-                      | "2025-11"
-                      | "2025-12"
-                      | "2026-01"
-                      | "2026-02"
-                      | "2026-03"
-                      | "2026-04"
-                      | "2026-05"
-                      | "2026-06"
-                      | "2026-07"
-                      | "2026-08"
-                      | "2026-09"
-                      | "2026-10"
-                      | "2026-11"
-                      | "2026-12"
-                      | "2027-01"
-                      | "2027-02";
+                    month: string | null;
                     title: null;
                   }
                 | {
                     _type: "page";
                     slug: string;
-                    section: "about" | "general";
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "resource";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   }
                 | {
                     _type: "topic";
                     slug: string;
-                    section: null;
                     month: null;
                     title: string;
                   };
@@ -4789,11 +3733,7 @@ export type QueryMonthlyUpdateResult = {
           allDay: boolean | null;
           repeat: {
             frequency:
-              | "monthlyDate"
-              | "monthlyWeekday"
-              | "none"
-              | "weekly"
-              | null;
+              "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
             until: string | null;
             skipDates: Array<string> | null;
           } | null;
@@ -4869,113 +3809,29 @@ export type QueryMonthlyUpdateResult = {
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryCurrentMonthlyUpdate
-// Query: *[_type == "monthlyUpdate" && month <= $month] | order(month desc)[0]{    _id, month, title, intro  }
+// Query: *[_type == "monthlyUpdate" && publishMonth <= $month + "-31"] | order(publishMonth desc)[0]{    _id, "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], title, intro  }
 export type QueryCurrentMonthlyUpdateResult = {
   _id: string;
-  month:
-    | "2024-11"
-    | "2024-12"
-    | "2025-01"
-    | "2025-02"
-    | "2025-03"
-    | "2025-04"
-    | "2025-05"
-    | "2025-06"
-    | "2025-07"
-    | "2025-08"
-    | "2025-09"
-    | "2025-10"
-    | "2025-11"
-    | "2025-12"
-    | "2026-01"
-    | "2026-02"
-    | "2026-03"
-    | "2026-04"
-    | "2026-05"
-    | "2026-06"
-    | "2026-07"
-    | "2026-08"
-    | "2026-09"
-    | "2026-10"
-    | "2026-11"
-    | "2026-12"
-    | "2027-01"
-    | "2027-02";
+  month: string | null;
   title: string | null;
   intro: string;
 } | null;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryMonthlyUpdateList
-// Query: *[_type == "monthlyUpdate" && month <= $month] | order(month desc){ month, title, intro }
+// Query: *[_type == "monthlyUpdate" && publishMonth <= $month + "-31"] | order(publishMonth desc){ "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], title, intro }
 export type QueryMonthlyUpdateListResult = Array<{
-  month:
-    | "2024-11"
-    | "2024-12"
-    | "2025-01"
-    | "2025-02"
-    | "2025-03"
-    | "2025-04"
-    | "2025-05"
-    | "2025-06"
-    | "2025-07"
-    | "2025-08"
-    | "2025-09"
-    | "2025-10"
-    | "2025-11"
-    | "2025-12"
-    | "2026-01"
-    | "2026-02"
-    | "2026-03"
-    | "2026-04"
-    | "2026-05"
-    | "2026-06"
-    | "2026-07"
-    | "2026-08"
-    | "2026-09"
-    | "2026-10"
-    | "2026-11"
-    | "2026-12"
-    | "2027-01"
-    | "2027-02";
+  month: string | null;
   title: string | null;
   intro: string;
 }>;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryNewsletter
-// Query: *[_type == "newsletterEdition" && month == $month][0]{    _id,    month,    coverImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    coverMessage,    sections[]{   _key,  _type,  heading,  _type == "comingUpSection" => {    includeEvents,    "hiddenEventIds": hiddenEvents[]._ref,    extraRows[]{ _key, when, what, where }  },  _type == "storySection" => {    byline,    image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } },    "article": article->{ title, "slug": slug.current, "author": author->name, body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } } }  },  _type == "flyerSection" => { pages[]{ _key,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },  _type == "funSection" => { body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } } } },    "uploadedPdf": uploadedPdf.asset->{ url, size },    _updatedAt  }
+// Query: *[_type == "newsletterEdition" && string::startsWith(publishMonth, $month)][0]{    _id,    "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],    coverImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    coverMessage,    sections[]{   _key,  _type,  heading,  _type == "comingUpSection" => {    includeEvents,    "hiddenEventIds": hiddenEvents[]._ref,    extraRows[]{ _key, when, what, where }  },  _type == "storySection" => {    byline,    image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } },    "article": article->{ title, "slug": slug.current, "author": author->name, body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } } }  },  _type == "flyerSection" => { pages[]{ _key,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },  _type == "funSection" => { body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } } } },    "uploadedPdf": uploadedPdf.asset->{ url, size },    _updatedAt  }
 export type QueryNewsletterResult = {
   _id: string;
-  month:
-    | "2024-11"
-    | "2024-12"
-    | "2025-01"
-    | "2025-02"
-    | "2025-03"
-    | "2025-04"
-    | "2025-05"
-    | "2025-06"
-    | "2025-07"
-    | "2025-08"
-    | "2025-09"
-    | "2025-10"
-    | "2025-11"
-    | "2025-12"
-    | "2026-01"
-    | "2026-02"
-    | "2026-03"
-    | "2026-04"
-    | "2026-05"
-    | "2026-06"
-    | "2026-07"
-    | "2026-08"
-    | "2026-09"
-    | "2026-10"
-    | "2026-11"
-    | "2026-12"
-    | "2027-01"
-    | "2027-02";
+  month: string | null;
   coverImage: {
     id: string | null;
     preview: string | null;
@@ -5059,105 +3915,42 @@ export type QueryNewsletterResult = {
                       | {
                           _type: "article";
                           slug: string;
-                          section: null;
                           month: null;
                           title: string;
                         }
                       | {
                           _type: "event";
                           slug: string;
-                          section: null;
                           month: null;
                           title: string;
                         }
                       | {
                           _type: "monthlyUpdate";
                           slug: null;
-                          section: null;
-                          month:
-                            | "2024-11"
-                            | "2024-12"
-                            | "2025-01"
-                            | "2025-02"
-                            | "2025-03"
-                            | "2025-04"
-                            | "2025-05"
-                            | "2025-06"
-                            | "2025-07"
-                            | "2025-08"
-                            | "2025-09"
-                            | "2025-10"
-                            | "2025-11"
-                            | "2025-12"
-                            | "2026-01"
-                            | "2026-02"
-                            | "2026-03"
-                            | "2026-04"
-                            | "2026-05"
-                            | "2026-06"
-                            | "2026-07"
-                            | "2026-08"
-                            | "2026-09"
-                            | "2026-10"
-                            | "2026-11"
-                            | "2026-12"
-                            | "2027-01"
-                            | "2027-02";
+                          month: string | null;
                           title: string | null;
                         }
                       | {
                           _type: "newsletterEdition";
                           slug: null;
-                          section: null;
-                          month:
-                            | "2024-11"
-                            | "2024-12"
-                            | "2025-01"
-                            | "2025-02"
-                            | "2025-03"
-                            | "2025-04"
-                            | "2025-05"
-                            | "2025-06"
-                            | "2025-07"
-                            | "2025-08"
-                            | "2025-09"
-                            | "2025-10"
-                            | "2025-11"
-                            | "2025-12"
-                            | "2026-01"
-                            | "2026-02"
-                            | "2026-03"
-                            | "2026-04"
-                            | "2026-05"
-                            | "2026-06"
-                            | "2026-07"
-                            | "2026-08"
-                            | "2026-09"
-                            | "2026-10"
-                            | "2026-11"
-                            | "2026-12"
-                            | "2027-01"
-                            | "2027-02";
+                          month: string | null;
                           title: null;
                         }
                       | {
                           _type: "page";
                           slug: string;
-                          section: "about" | "general";
                           month: null;
                           title: string;
                         }
                       | {
                           _type: "resource";
                           slug: string;
-                          section: null;
                           month: null;
                           title: string;
                         }
                       | {
                           _type: "topic";
                           slug: string;
-                          section: null;
                           month: null;
                           title: string;
                         };
@@ -5189,11 +3982,7 @@ export type QueryNewsletterResult = {
                 allDay: boolean | null;
                 repeat: {
                   frequency:
-                    | "monthlyDate"
-                    | "monthlyWeekday"
-                    | "none"
-                    | "weekly"
-                    | null;
+                    "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
                   until: string | null;
                   skipDates: Array<string> | null;
                 } | null;
@@ -5312,105 +4101,42 @@ export type QueryNewsletterResult = {
                       | {
                           _type: "article";
                           slug: string;
-                          section: null;
                           month: null;
                           title: string;
                         }
                       | {
                           _type: "event";
                           slug: string;
-                          section: null;
                           month: null;
                           title: string;
                         }
                       | {
                           _type: "monthlyUpdate";
                           slug: null;
-                          section: null;
-                          month:
-                            | "2024-11"
-                            | "2024-12"
-                            | "2025-01"
-                            | "2025-02"
-                            | "2025-03"
-                            | "2025-04"
-                            | "2025-05"
-                            | "2025-06"
-                            | "2025-07"
-                            | "2025-08"
-                            | "2025-09"
-                            | "2025-10"
-                            | "2025-11"
-                            | "2025-12"
-                            | "2026-01"
-                            | "2026-02"
-                            | "2026-03"
-                            | "2026-04"
-                            | "2026-05"
-                            | "2026-06"
-                            | "2026-07"
-                            | "2026-08"
-                            | "2026-09"
-                            | "2026-10"
-                            | "2026-11"
-                            | "2026-12"
-                            | "2027-01"
-                            | "2027-02";
+                          month: string | null;
                           title: string | null;
                         }
                       | {
                           _type: "newsletterEdition";
                           slug: null;
-                          section: null;
-                          month:
-                            | "2024-11"
-                            | "2024-12"
-                            | "2025-01"
-                            | "2025-02"
-                            | "2025-03"
-                            | "2025-04"
-                            | "2025-05"
-                            | "2025-06"
-                            | "2025-07"
-                            | "2025-08"
-                            | "2025-09"
-                            | "2025-10"
-                            | "2025-11"
-                            | "2025-12"
-                            | "2026-01"
-                            | "2026-02"
-                            | "2026-03"
-                            | "2026-04"
-                            | "2026-05"
-                            | "2026-06"
-                            | "2026-07"
-                            | "2026-08"
-                            | "2026-09"
-                            | "2026-10"
-                            | "2026-11"
-                            | "2026-12"
-                            | "2027-01"
-                            | "2027-02";
+                          month: string | null;
                           title: null;
                         }
                       | {
                           _type: "page";
                           slug: string;
-                          section: "about" | "general";
                           month: null;
                           title: string;
                         }
                       | {
                           _type: "resource";
                           slug: string;
-                          section: null;
                           month: null;
                           title: string;
                         }
                       | {
                           _type: "topic";
                           slug: string;
-                          section: null;
                           month: null;
                           title: string;
                         };
@@ -5442,11 +4168,7 @@ export type QueryNewsletterResult = {
                 allDay: boolean | null;
                 repeat: {
                   frequency:
-                    | "monthlyDate"
-                    | "monthlyWeekday"
-                    | "none"
-                    | "weekly"
-                    | null;
+                    "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
                   until: string | null;
                   skipDates: Array<string> | null;
                 } | null;
@@ -5547,105 +4269,42 @@ export type QueryNewsletterResult = {
                         | {
                             _type: "article";
                             slug: string;
-                            section: null;
                             month: null;
                             title: string;
                           }
                         | {
                             _type: "event";
                             slug: string;
-                            section: null;
                             month: null;
                             title: string;
                           }
                         | {
                             _type: "monthlyUpdate";
                             slug: null;
-                            section: null;
-                            month:
-                              | "2024-11"
-                              | "2024-12"
-                              | "2025-01"
-                              | "2025-02"
-                              | "2025-03"
-                              | "2025-04"
-                              | "2025-05"
-                              | "2025-06"
-                              | "2025-07"
-                              | "2025-08"
-                              | "2025-09"
-                              | "2025-10"
-                              | "2025-11"
-                              | "2025-12"
-                              | "2026-01"
-                              | "2026-02"
-                              | "2026-03"
-                              | "2026-04"
-                              | "2026-05"
-                              | "2026-06"
-                              | "2026-07"
-                              | "2026-08"
-                              | "2026-09"
-                              | "2026-10"
-                              | "2026-11"
-                              | "2026-12"
-                              | "2027-01"
-                              | "2027-02";
+                            month: string | null;
                             title: string | null;
                           }
                         | {
                             _type: "newsletterEdition";
                             slug: null;
-                            section: null;
-                            month:
-                              | "2024-11"
-                              | "2024-12"
-                              | "2025-01"
-                              | "2025-02"
-                              | "2025-03"
-                              | "2025-04"
-                              | "2025-05"
-                              | "2025-06"
-                              | "2025-07"
-                              | "2025-08"
-                              | "2025-09"
-                              | "2025-10"
-                              | "2025-11"
-                              | "2025-12"
-                              | "2026-01"
-                              | "2026-02"
-                              | "2026-03"
-                              | "2026-04"
-                              | "2026-05"
-                              | "2026-06"
-                              | "2026-07"
-                              | "2026-08"
-                              | "2026-09"
-                              | "2026-10"
-                              | "2026-11"
-                              | "2026-12"
-                              | "2027-01"
-                              | "2027-02";
+                            month: string | null;
                             title: null;
                           }
                         | {
                             _type: "page";
                             slug: string;
-                            section: "about" | "general";
                             month: null;
                             title: string;
                           }
                         | {
                             _type: "resource";
                             slug: string;
-                            section: null;
                             month: null;
                             title: string;
                           }
                         | {
                             _type: "topic";
                             slug: string;
-                            section: null;
                             month: null;
                             title: string;
                           };
@@ -5764,37 +4423,9 @@ export type QueryNewsletterResult = {
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryNewsletterList
-// Query: *[_type == "newsletterEdition" && month <= $month] | order(month desc){    month,    coverImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    "hasSections": count(sections) > 0,    "uploadedPdf": uploadedPdf.asset->{ url, size }  }
+// Query: *[_type == "newsletterEdition" && publishMonth <= $month + "-31"] | order(publishMonth desc){    "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],    coverImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    "hasSections": count(sections) > 0,    "uploadedPdf": uploadedPdf.asset->{ url, size }  }
 export type QueryNewsletterListResult = Array<{
-  month:
-    | "2024-11"
-    | "2024-12"
-    | "2025-01"
-    | "2025-02"
-    | "2025-03"
-    | "2025-04"
-    | "2025-05"
-    | "2025-06"
-    | "2025-07"
-    | "2025-08"
-    | "2025-09"
-    | "2025-10"
-    | "2025-11"
-    | "2025-12"
-    | "2026-01"
-    | "2026-02"
-    | "2026-03"
-    | "2026-04"
-    | "2026-05"
-    | "2026-06"
-    | "2026-07"
-    | "2026-08"
-    | "2026-09"
-    | "2026-10"
-    | "2026-11"
-    | "2026-12"
-    | "2027-01"
-    | "2027-02";
+  month: string | null;
   coverImage: {
     id: string | null;
     preview: string | null;
@@ -5820,7 +4451,7 @@ export type QueryNewsletterListResult = Array<{
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: querySearch
-// Query: *[    _type in ["resource", "helpfulLink", "article", "event", "page"]    && (      title match $q + "*"      || summary match $q + "*"      || pt::text(description) match $q + "*"      || pt::text(body) match $q + "*"      || topics[]->title match $q + "*"    )  ]  | score(      boost(title match $q + "*", 5),      boost(_type == "resource", 2),      summary match $q + "*"    )  | order(_score desc)[0...40]{    _type,    _id,    title,    "slug": slug.current,    summary,    section,    url,    source,    start,    phones[]{ _key, label, number }  }
+// Query: *[    _type in ["resource", "helpfulLink", "article", "event", "page"]    && (      title match $q + "*"      || summary match $q + "*"      || pt::text(description) match $q + "*"      || pt::text(body) match $q + "*"      || topics[]->title match $q + "*"    )  ]  | score(      boost(title match $q + "*", 5),      boost(_type == "resource", 2),      summary match $q + "*"    )  | order(_score desc)[0...40]{    _type,    _id,    title,    "slug": slug.current,    summary,    url,    source,    start,    phones[]{ _key, label, number }  }
 export type QuerySearchResult = Array<
   | {
       _type: "article";
@@ -5828,7 +4459,6 @@ export type QuerySearchResult = Array<
       title: string;
       slug: string;
       summary: string;
-      section: null;
       url: null;
       source: null;
       start: null;
@@ -5840,7 +4470,6 @@ export type QuerySearchResult = Array<
       title: string;
       slug: string;
       summary: string;
-      section: null;
       url: null;
       source: null;
       start: string;
@@ -5852,7 +4481,6 @@ export type QuerySearchResult = Array<
       title: string;
       slug: null;
       summary: string;
-      section: null;
       url: string;
       source: string;
       start: null;
@@ -5864,7 +4492,6 @@ export type QuerySearchResult = Array<
       title: string;
       slug: string;
       summary: null;
-      section: "about" | "general";
       url: null;
       source: null;
       start: null;
@@ -5876,7 +4503,6 @@ export type QuerySearchResult = Array<
       title: string;
       slug: string;
       summary: string;
-      section: null;
       url: null;
       source: null;
       start: null;
@@ -5898,11 +4524,10 @@ export type QueryRedirectResult = {
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: querySitemap
-// Query: {    "pages": *[_type == "page" && defined(slug.current)]{ "slug": slug.current, section, _updatedAt },    "resources": *[_type == "resource" && defined(slug.current)]{ "slug": slug.current, _updatedAt },    "articles": *[_type == "article" && defined(slug.current)]{ "slug": slug.current, _updatedAt },    "events": *[_type == "event" && defined(slug.current)]{ "slug": slug.current, _updatedAt },    "topics": *[_type == "topic" && defined(slug.current)]{ "slug": slug.current, _updatedAt },    "months": *[_type == "monthlyUpdate"]{ month, _updatedAt },    "newsletters": *[_type == "newsletterEdition"]{ month, _updatedAt },    "writers": *[_type == "author" && defined(slug.current)]{ "slug": slug.current, _updatedAt }  }
+// Query: {    "pages": *[_type == "page" && defined(slug.current)]{ "slug": slug.current, _updatedAt },    "resources": *[_type == "resource" && defined(slug.current)]{ "slug": slug.current, _updatedAt },    "articles": *[_type == "article" && defined(slug.current)]{ "slug": slug.current, _updatedAt },    "events": *[_type == "event" && defined(slug.current)]{ "slug": slug.current, _updatedAt },    "topics": *[_type == "topic" && defined(slug.current)]{ "slug": slug.current, _updatedAt },    "months": *[_type == "monthlyUpdate" && defined(publishMonth)]{ "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], _updatedAt },    "newsletters": *[_type == "newsletterEdition" && defined(publishMonth)]{ "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], _updatedAt },    "writers": *[_type == "author" && defined(slug.current)]{ "slug": slug.current, _updatedAt }  }
 export type QuerySitemapResult = {
   pages: Array<{
     slug: string;
-    section: "about" | "general";
     _updatedAt: string;
   }>;
   resources: Array<{
@@ -5922,67 +4547,11 @@ export type QuerySitemapResult = {
     _updatedAt: string;
   }>;
   months: Array<{
-    month:
-      | "2024-11"
-      | "2024-12"
-      | "2025-01"
-      | "2025-02"
-      | "2025-03"
-      | "2025-04"
-      | "2025-05"
-      | "2025-06"
-      | "2025-07"
-      | "2025-08"
-      | "2025-09"
-      | "2025-10"
-      | "2025-11"
-      | "2025-12"
-      | "2026-01"
-      | "2026-02"
-      | "2026-03"
-      | "2026-04"
-      | "2026-05"
-      | "2026-06"
-      | "2026-07"
-      | "2026-08"
-      | "2026-09"
-      | "2026-10"
-      | "2026-11"
-      | "2026-12"
-      | "2027-01"
-      | "2027-02";
+    month: string | null;
     _updatedAt: string;
   }>;
   newsletters: Array<{
-    month:
-      | "2024-11"
-      | "2024-12"
-      | "2025-01"
-      | "2025-02"
-      | "2025-03"
-      | "2025-04"
-      | "2025-05"
-      | "2025-06"
-      | "2025-07"
-      | "2025-08"
-      | "2025-09"
-      | "2025-10"
-      | "2025-11"
-      | "2025-12"
-      | "2026-01"
-      | "2026-02"
-      | "2026-03"
-      | "2026-04"
-      | "2026-05"
-      | "2026-06"
-      | "2026-07"
-      | "2026-08"
-      | "2026-09"
-      | "2026-10"
-      | "2026-11"
-      | "2026-12"
-      | "2027-01"
-      | "2027-02";
+    month: string | null;
     _updatedAt: string;
   }>;
   writers: Array<{
@@ -5996,36 +4565,35 @@ declare global {
   interface SanityQueries {
     '\n  *[_type == "article" && defined(mainImage)][0].mainImage{\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n\n  }\n': QueryImageTypeResult;
     '\n  *[_id == "settings"][0]{\n    siteTitle,\n    tagline,\n    description,\n    heroImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    contactEmail,\n    contactPhone { label, number },\n    mailingAddress,\n    donateUrl,\n    nonprofitStatement,\n    newsletterTitle,\n    newsletterDedication,\n    subscribeInstructions\n  }\n': QuerySettingsResult;
-    '\n  *[_id == "navigation"][0]{\n    main[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n },\n    footer[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n }\n  }\n': QueryNavigationResult;
-    '\n  *[_id == "home"][0]{\n    sections[]{ \n  ...,\n  _key,\n  _type,\n  _type == "heroBlock" => { image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }, buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n  _type == "textBlock" => { body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } },\n  _type == "imageBlock" => { images[]{ _key, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n  _type == "buttonsBlock" => { buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n  _type == "calloutBlock" => { link{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n  _type == "resourceListBlock" => {\n    "topicSlug": topic->slug.current,\n    "topicTitle": topic->title,\n    "picked": resources[]->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n }\n  },\n  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "linkListBlock" => {\n    "topicId": topic._ref,\n    "topicSlug": topic->slug.current,\n    "picked": links[]->{ \n  _id,\n  title,\n  url,\n  source,\n  summary,\n  publishedAt\n }\n  },\n  _type == "faqBlock" => { items[]{ _key, question, answer } },\n  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } }\n }\n  }\n': QueryHomeResult;
+    '\n  *[_id == "navigation"][0]{\n    main[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n },\n    footer[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n }\n  }\n': QueryNavigationResult;
+    '\n  *[_id == "home"][0]{\n    sections[]{ \n  ...,\n  _key,\n  _type,\n  _type == "heroBlock" => { image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }, buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n  _type == "textBlock" => { body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } },\n  _type == "imageBlock" => { images[]{ _key, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n  _type == "buttonsBlock" => { buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n  _type == "calloutBlock" => { link{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n  _type == "resourceListBlock" => {\n    "topicSlug": topic->slug.current,\n    "topicTitle": topic->title,\n    "picked": resources[]->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n }\n  },\n  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "linkListBlock" => {\n    "topicId": topic._ref,\n    "topicSlug": topic->slug.current,\n    "picked": links[]->{ \n  _id,\n  title,\n  url,\n  source,\n  summary,\n  publishedAt\n }\n  },\n  _type == "faqBlock" => { items[]{ _key, question, answer } },\n  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } }\n }\n  }\n': QueryHomeResult;
     '\n  {\n    "resources": count(*[_type == "resource"]),\n    "topics": count(*[_type == "topic"]),\n    "links": count(*[_type == "helpfulLink"])\n  }\n': QueryStatsResult;
     '\n  *[_type == "topic"] | order(order asc){\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    icon,\n    "resourceCount": count(*[_type == "resource" && references(^._id)])\n  }\n': QueryTopicsResult;
-    '\n  *[_type == "page" && slug.current == $slug && section == $section][0]{\n    _id,\n    title,\n    description,\n    section,\n    "slug": slug.current,\n    sections[]{ \n  ...,\n  _key,\n  _type,\n  _type == "heroBlock" => { image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }, buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n  _type == "textBlock" => { body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } },\n  _type == "imageBlock" => { images[]{ _key, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n  _type == "buttonsBlock" => { buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n  _type == "calloutBlock" => { link{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n  _type == "resourceListBlock" => {\n    "topicSlug": topic->slug.current,\n    "topicTitle": topic->title,\n    "picked": resources[]->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n }\n  },\n  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "linkListBlock" => {\n    "topicId": topic._ref,\n    "topicSlug": topic->slug.current,\n    "picked": links[]->{ \n  _id,\n  title,\n  url,\n  source,\n  summary,\n  publishedAt\n }\n  },\n  _type == "faqBlock" => { items[]{ _key, question, answer } },\n  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } }\n }\n  }\n': QueryPageResult;
-    '\n  *[_type == "page" && section == "about"] | order(title asc){\n    _id, title, "slug": slug.current, description\n  }\n': QueryAboutPagesResult;
-    '\n  *[_type == "page" && defined(slug.current)]{ "slug": slug.current, section }\n': QueryPagePathsResult;
+    '\n  *[_type == "page" && slug.current == $slug][0]{\n    _id,\n    title,\n    description,\n    "slug": slug.current,\n    sections[]{ \n  ...,\n  _key,\n  _type,\n  _type == "heroBlock" => { image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }, buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n  _type == "textBlock" => { body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } },\n  _type == "imageBlock" => { images[]{ _key, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n  _type == "buttonsBlock" => { buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n  _type == "calloutBlock" => { link{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n  _type == "resourceListBlock" => {\n    "topicSlug": topic->slug.current,\n    "topicTitle": topic->title,\n    "picked": resources[]->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n }\n  },\n  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "linkListBlock" => {\n    "topicId": topic._ref,\n    "topicSlug": topic->slug.current,\n    "picked": links[]->{ \n  _id,\n  title,\n  url,\n  source,\n  summary,\n  publishedAt\n }\n  },\n  _type == "faqBlock" => { items[]{ _key, question, answer } },\n  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } }\n }\n  }\n': QueryPageResult;
+    '\n  *[_type == "page" && defined(slug.current)].slug.current\n': QueryPagePathsResult;
     '\n  *[_type == "topic" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    icon,\n    "resources": *[_type == "resource" && references(^._id)] | order(title asc){ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n },\n    "links": *[_type == "helpfulLink" && references(^._id)] | order(publishedAt desc)[0...12]{ \n  _id,\n  title,\n  url,\n  source,\n  summary,\n  publishedAt\n },\n    "linkCount": count(*[_type == "helpfulLink" && references(^._id)]),\n    "articles": *[_type == "article" && references(^._id)] | order(publishedAt desc)[0...6]{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  publishedAt,\n  series,\n  "author": author->{ name, "slug": slug.current },\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }\n }\n  }\n': QueryTopicResult;
     'count(*[\n  _type == "resource"\n  && ($topic == "" || $topic in topics[]->slug.current)\n  && ($area == "" || serviceArea == $area)\n  && ($q == "" || title match $q + "*" || summary match $q + "*" || pt::text(description) match $q + "*")\n])': QueryResourcesCountResult;
     '\n  *[\n  _type == "resource"\n  && ($topic == "" || $topic in topics[]->slug.current)\n  && ($area == "" || serviceArea == $area)\n  && ($q == "" || title match $q + "*" || summary match $q + "*" || pt::text(description) match $q + "*")\n] | order(title asc){\n    \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n,\n    hours[]{ day, opens, closes },\n    hoursNote\n  }\n': QueryResourcesForPrintResult;
-    '\n  *[_type == "resource" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n,\n    email,\n    isGovernment,\n    hours[]{ _key, day, opens, closes },\n    hoursNote,\n    description[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    eligibility,\n    cost,\n    attachments[]{ _key, title, "file": asset->{ url, size, extension } },\n    lastVerified,\n    _updatedAt\n  }\n': QueryResourceResult;
+    '\n  *[_type == "resource" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n,\n    email,\n    isGovernment,\n    hours[]{ _key, day, opens, closes },\n    hoursNote,\n    description[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    eligibility,\n    cost,\n    attachments[]{ _key, title, "file": asset->{ url, size, extension } },\n    lastVerified,\n    _updatedAt\n  }\n': QueryResourceResult;
     '\n  *[_type == "resource" && defined(slug.current)].slug.current\n': QueryResourcePathsResult;
     'count(*[\n  _type == "helpfulLink" && ($topic == "" || $topic in topics[]->slug.current)\n])': QueryLinksCountResult;
     '\n  *[_type == "helpfulLink" && references($topicId)] | order(publishedAt desc)[0...30]{ \n  _id,\n  title,\n  url,\n  source,\n  summary,\n  publishedAt\n }\n': QueryLinksByTopicResult;
     '\n  *[_type == "resource" && $topic in topics[]->slug.current] | order(title asc)[0...30]{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n }\n': QueryResourcesByTopicSlugResult;
     'count(*[\n  _type == "article"\n  && ($series == "" || series == $series)\n  && ($topicId == "" || references($topicId))\n])': QueryArticlesCountResult;
-    '\n  *[_type == "article" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  publishedAt,\n  series,\n  "author": author->{ name, "slug": slug.current },\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }\n,\n    "author": author->{ name, "slug": slug.current, bio, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n    "topics": topics[]->{ title, "slug": slug.current },\n    body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    _updatedAt\n  }\n': QueryArticleResult;
+    '\n  *[_type == "article" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  publishedAt,\n  series,\n  "author": author->{ name, "slug": slug.current },\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }\n,\n    "author": author->{ name, "slug": slug.current, bio, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n    "topics": topics[]->{ title, "slug": slug.current },\n    body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    _updatedAt\n  }\n': QueryArticleResult;
     '\n  *[_type == "article" && defined(slug.current)] | order(publishedAt desc)[0...200].slug.current\n': QueryArticlePathsResult;
     '\n  *[_type == "author" && slug.current == $slug][0]{\n    name,\n    "slug": slug.current,\n    bio,\n    tribute,\n    image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    "articles": *[_type == "article" && references(^._id)] | order(publishedAt desc){ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  publishedAt,\n  series,\n  "author": author->{ name, "slug": slug.current },\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }\n }\n  }\n': QueryWriterResult;
     '\n  *[\n    _type == "event"\n    && dateTime(start) <= dateTime($to)\n    && (\n      dateTime(coalesce(end, start)) >= dateTime($from)\n      || (repeat.frequency in ["weekly", "monthlyWeekday", "monthlyDate"] && repeat.until >= string::split($from, "T")[0])\n    )\n    && ($topicId == "" || references($topicId))\n    && ($mslOnly == false || hostedByMsl == true)\n  ] | order(start asc){ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n }\n': QueryEventsInRangeResult;
-    '\n  *[_type == "event" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n,\n    address,\n    cost,\n    registration { required, link{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n    flyer { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    details[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    "topics": topics[]->{ title, "slug": slug.current }\n  }\n': QueryEventResult;
+    '\n  *[_type == "event" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n,\n    address,\n    cost,\n    registration { required, link{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n    flyer { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    details[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    "topics": topics[]->{ title, "slug": slug.current }\n  }\n': QueryEventResult;
     '\n  *[_type == "event" && defined(slug.current)] | order(start desc)[0...200].slug.current\n': QueryEventPathsResult;
-    '\n  *[_type == "monthlyUpdate" && month == $month][0]{\n    _id, month, title, intro, body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n }, _updatedAt\n  }\n': QueryMonthlyUpdateResult;
-    '\n  *[_type == "monthlyUpdate" && month <= $month] | order(month desc)[0]{\n    _id, month, title, intro\n  }\n': QueryCurrentMonthlyUpdateResult;
-    '\n  *[_type == "monthlyUpdate" && month <= $month] | order(month desc){ month, title, intro }\n': QueryMonthlyUpdateListResult;
-    '\n  *[_type == "newsletterEdition" && month == $month][0]{\n    _id,\n    month,\n    coverImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    coverMessage,\n    sections[]{ \n  _key,\n  _type,\n  heading,\n  _type == "comingUpSection" => {\n    includeEvents,\n    "hiddenEventIds": hiddenEvents[]._ref,\n    extraRows[]{ _key, when, what, where }\n  },\n  _type == "storySection" => {\n    byline,\n    image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    "article": article->{ title, "slug": slug.current, "author": author->name, body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } }\n  },\n  _type == "flyerSection" => { pages[]{ _key, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n  _type == "funSection" => { body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } }\n },\n    "uploadedPdf": uploadedPdf.asset->{ url, size },\n    _updatedAt\n  }\n': QueryNewsletterResult;
-    '\n  *[_type == "newsletterEdition" && month <= $month] | order(month desc){\n    month,\n    coverImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    "hasSections": count(sections) > 0,\n    "uploadedPdf": uploadedPdf.asset->{ url, size }\n  }\n': QueryNewsletterListResult;
-    '\n  *[\n    _type in ["resource", "helpfulLink", "article", "event", "page"]\n    && (\n      title match $q + "*"\n      || summary match $q + "*"\n      || pt::text(description) match $q + "*"\n      || pt::text(body) match $q + "*"\n      || topics[]->title match $q + "*"\n    )\n  ]\n  | score(\n      boost(title match $q + "*", 5),\n      boost(_type == "resource", 2),\n      summary match $q + "*"\n    )\n  | order(_score desc)[0...40]{\n    _type,\n    _id,\n    title,\n    "slug": slug.current,\n    summary,\n    section,\n    url,\n    source,\n    start,\n    phones[]{ _key, label, number }\n  }\n': QuerySearchResult;
+    '\n  *[_type == "monthlyUpdate" && string::startsWith(publishMonth, $month)][0]{\n    _id, "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], title, intro, body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n }, _updatedAt\n  }\n': QueryMonthlyUpdateResult;
+    '\n  *[_type == "monthlyUpdate" && publishMonth <= $month + "-31"] | order(publishMonth desc)[0]{\n    _id, "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], title, intro\n  }\n': QueryCurrentMonthlyUpdateResult;
+    '\n  *[_type == "monthlyUpdate" && publishMonth <= $month + "-31"] | order(publishMonth desc){ "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], title, intro }\n': QueryMonthlyUpdateListResult;
+    '\n  *[_type == "newsletterEdition" && string::startsWith(publishMonth, $month)][0]{\n    _id,\n    "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n    coverImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    coverMessage,\n    sections[]{ \n  _key,\n  _type,\n  heading,\n  _type == "comingUpSection" => {\n    includeEvents,\n    "hiddenEventIds": hiddenEvents[]._ref,\n    extraRows[]{ _key, when, what, where }\n  },\n  _type == "storySection" => {\n    byline,\n    image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    "article": article->{ title, "slug": slug.current, "author": author->name, body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } }\n  },\n  _type == "flyerSection" => { pages[]{ _key, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n  _type == "funSection" => { body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } }\n },\n    "uploadedPdf": uploadedPdf.asset->{ url, size },\n    _updatedAt\n  }\n': QueryNewsletterResult;
+    '\n  *[_type == "newsletterEdition" && publishMonth <= $month + "-31"] | order(publishMonth desc){\n    "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n    coverImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    "hasSections": count(sections) > 0,\n    "uploadedPdf": uploadedPdf.asset->{ url, size }\n  }\n': QueryNewsletterListResult;
+    '\n  *[\n    _type in ["resource", "helpfulLink", "article", "event", "page"]\n    && (\n      title match $q + "*"\n      || summary match $q + "*"\n      || pt::text(description) match $q + "*"\n      || pt::text(body) match $q + "*"\n      || topics[]->title match $q + "*"\n    )\n  ]\n  | score(\n      boost(title match $q + "*", 5),\n      boost(_type == "resource", 2),\n      summary match $q + "*"\n    )\n  | order(_score desc)[0...40]{\n    _type,\n    _id,\n    title,\n    "slug": slug.current,\n    summary,\n    url,\n    source,\n    start,\n    phones[]{ _key, label, number }\n  }\n': QuerySearchResult;
     '\n  *[_type == "redirect" && source == $source][0]{ destination, permanent }\n': QueryRedirectResult;
-    '\n  {\n    "pages": *[_type == "page" && defined(slug.current)]{ "slug": slug.current, section, _updatedAt },\n    "resources": *[_type == "resource" && defined(slug.current)]{ "slug": slug.current, _updatedAt },\n    "articles": *[_type == "article" && defined(slug.current)]{ "slug": slug.current, _updatedAt },\n    "events": *[_type == "event" && defined(slug.current)]{ "slug": slug.current, _updatedAt },\n    "topics": *[_type == "topic" && defined(slug.current)]{ "slug": slug.current, _updatedAt },\n    "months": *[_type == "monthlyUpdate"]{ month, _updatedAt },\n    "newsletters": *[_type == "newsletterEdition"]{ month, _updatedAt },\n    "writers": *[_type == "author" && defined(slug.current)]{ "slug": slug.current, _updatedAt }\n  }\n': QuerySitemapResult;
+    '\n  {\n    "pages": *[_type == "page" && defined(slug.current)]{ "slug": slug.current, _updatedAt },\n    "resources": *[_type == "resource" && defined(slug.current)]{ "slug": slug.current, _updatedAt },\n    "articles": *[_type == "article" && defined(slug.current)]{ "slug": slug.current, _updatedAt },\n    "events": *[_type == "event" && defined(slug.current)]{ "slug": slug.current, _updatedAt },\n    "topics": *[_type == "topic" && defined(slug.current)]{ "slug": slug.current, _updatedAt },\n    "months": *[_type == "monthlyUpdate" && defined(publishMonth)]{ "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], _updatedAt },\n    "newsletters": *[_type == "newsletterEdition" && defined(publishMonth)]{ "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], _updatedAt },\n    "writers": *[_type == "author" && defined(slug.current)]{ "slug": slug.current, _updatedAt }\n  }\n': QuerySitemapResult;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

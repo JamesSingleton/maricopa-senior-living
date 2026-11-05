@@ -41,7 +41,7 @@ export const resource = defineType({
         rule.custom(warnIfDuplicate("title")).warning(),
       ],
     }),
-    { ...slugField(), group: "basics" },
+    { ...slugField({ prefix: "/resources" }), group: "basics" },
     { ...summaryField(), group: "basics" },
     { ...topicsField(), group: "basics" },
     defineField({

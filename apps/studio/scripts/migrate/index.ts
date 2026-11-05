@@ -89,7 +89,7 @@ const existing = DRY_RUN
         _id, _type, "key": select(
           _type == "author" => name,
           _type == "redirect" => source,
-          _type in ["monthlyUpdate", "newsletterEdition"] => month,
+          _type in ["monthlyUpdate", "newsletterEdition"] => string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],
           _type in ["topic", "page"] => slug.current,
           legacyId
         )
@@ -376,13 +376,13 @@ for (const doc of ofType("post")) {
   ) {
     count("page-about");
     const title = doc.title.replace(/^msl\s*[-–]\s*/i, "").trim();
-    const pageSlug = aboutSlug(title);
+    // "Who We Are" is the /about page; the rest are ordinary pages.
+    const pageSlug = /who we are/i.test(title) ? "about" : aboutSlug(title);
     pages.push({
       _id: idFor("page", pageSlug),
       _type: "page",
       title,
       slug: { _type: "slug", current: pageSlug },
-      section: "about",
       description: summarize(plainText(doc.body), 200),
       sections: [
         { _type: "textBlock", _key: newKey(), body: convertRichText(doc.body) },
@@ -447,7 +447,7 @@ for (const [month, pdf] of newsletterPdfs) {
   out.push({
     _id: idFor("newsletterEdition", month),
     _type: "newsletterEdition",
-    month,
+    publishMonth: `${month}-01`,
     sections: [],
     uploadedPdf: { _type: "file", asset: ref(pdf.asset) },
   });
@@ -478,7 +478,7 @@ for (const [month, file] of Object.entries(SNAPSHOTS)) {
   out.push({
     _id: idFor("monthlyUpdate", month),
     _type: "monthlyUpdate",
-    month,
+    publishMonth: `${month}-01`,
     intro: summarize(introText.replace(/\s*\.\s*\.\s*\.\s*$/, "…"), 400),
     body: convertRichText(body),
   });
@@ -495,7 +495,6 @@ for (const old of ofType("page")) {
     _type: "page",
     title: old.title,
     slug: { _type: "slug", current: pageSlug },
-    section: "general",
     sections: [
       { _type: "textBlock", _key: newKey(), body: convertRichText(old.body) },
     ],
@@ -539,7 +538,6 @@ pages.push({
   _type: "page",
   title: "Quick Links",
   slug: { _type: "slug", current: "quick-links" },
-  section: "general",
   description:
     "Websites for the City of Maricopa, weather, traffic, and local and national services.",
   sections: quickLinkSections,

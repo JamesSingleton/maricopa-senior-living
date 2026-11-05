@@ -10,9 +10,10 @@ type Params = Promise<{ slug: string }>;
 
 export async function generateStaticParams() {
   const { data } = await cachedSanityStaticParams({ query: queryPagePaths });
+  // /about has its own route.
   const slugs = (data ?? [])
-    .filter((p) => p.section === "general" && p.slug)
-    .map((p) => ({ slug: p.slug as string }));
+    .filter((slug): slug is string => Boolean(slug) && slug !== "about")
+    .map((slug) => ({ slug }));
   return slugs.length ? slugs : [{ slug: "quick-links" }];
 }
 
@@ -21,7 +22,7 @@ export async function generateMetadata({
 }: {
   params: Params;
 }): Promise<Metadata> {
-  return pageMetadata((await params).slug, "general");
+  return pageMetadata((await params).slug);
 }
 
 /**
@@ -37,5 +38,5 @@ export default function GeneralPage({ params }: { params: Params }) {
 }
 
 async function GeneralPageContent({ params }: { params: Params }) {
-  return renderCmsPage((await params).slug, "general");
+  return renderCmsPage((await params).slug);
 }

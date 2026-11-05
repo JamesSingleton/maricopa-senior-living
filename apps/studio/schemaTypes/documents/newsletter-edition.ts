@@ -3,15 +3,11 @@ import { DocumentTextIcon } from "@sanity/icons/DocumentText";
 import { EnvelopeIcon } from "@sanity/icons/Envelope";
 import { FaceHappyIcon } from "@sanity/icons/FaceHappy";
 import { ImagesIcon } from "@sanity/icons/Images";
-import {
-  defineArrayMember,
-  defineField,
-  defineType,
-  getPublishedId,
-} from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
 import { howToField } from "../../components/HowTo";
-import { monthLabel, monthOptions } from "../../lib/months";
+import { monthLabel } from "../../lib/months";
+import { publishMonthField, toMonthKey } from "../publish-month";
 
 const comingUpSection = defineArrayMember({
   name: "comingUpSection",
@@ -175,23 +171,10 @@ export const newsletterEdition = defineType({
       "Build this month's “Keeping you informed…still” here. Add sections in the order you want them; the table of contents is made for you.",
       "When it's ready, publish it and click “Download PDF” on the newsletter page to attach to your email.",
     ]),
-    defineField({
-      name: "month",
-      type: "string",
-      options: { list: monthOptions() },
-      validation: (rule) =>
-        rule.required().custom(async (month, context) => {
-          if (!month) return true;
-          const id = getPublishedId(context.document?._id ?? "");
-          const client = context.getClient({ apiVersion: "2025-02-19" });
-          const taken = await client.fetch<boolean>(
-            'defined(*[_type == "newsletterEdition" && month == $month && !(_id in [$id, "drafts." + $id])][0]._id)',
-            { month, id },
-          );
-          return taken
-            ? `There is already a newsletter for ${monthLabel(month)}.`
-            : true;
-        }),
+    publishMonthField({
+      type: "newsletterEdition",
+      path: "/newsletter",
+      label: "newsletter",
     }),
     defineField({
       name: "coverImage",
@@ -223,13 +206,13 @@ export const newsletterEdition = defineType({
     {
       title: "Newest first",
       name: "monthDesc",
-      by: [{ field: "month", direction: "desc" }],
+      by: [{ field: "publishMonth", direction: "desc" }],
     },
   ],
   preview: {
-    select: { month: "month", media: "coverImage" },
-    prepare: ({ month, media }) => ({
-      title: `Keeping you informed…still — ${monthLabel(month)}`,
+    select: { date: "publishMonth", media: "coverImage" },
+    prepare: ({ date, media }) => ({
+      title: `Keeping you informed…still — ${monthLabel(toMonthKey(date))}`,
       media,
     }),
   },

@@ -134,23 +134,40 @@ async function HeroBlock({ block, perspective, stega }: Props) {
               role="search"
               className="mt-8 max-w-xl"
             >
-              <label htmlFor="hero-search" className="label">
+              <label htmlFor="hero-search" className="label text-lg">
                 What are you looking for?
               </label>
-              <div className="flex flex-col gap-2 rounded-[2rem] border-2 border-[var(--msl-line-strong)] bg-white p-1.5 sm:flex-row sm:items-center">
+              <div className="flex flex-col gap-3 sm:flex-row">
                 <input
                   id="hero-search"
                   name="q"
                   type="search"
                   required
-                  className="input border-0"
-                  placeholder="Meals, rides, Medicare…"
+                  className="input min-h-[3.4rem] border-[var(--msl-green)] text-lg"
+                  placeholder="For example: meals"
                 />
-                <button type="submit" className="btn btn-yellow shrink-0">
+                <button
+                  type="submit"
+                  className="btn min-h-[3.4rem] shrink-0 px-7 text-lg"
+                >
                   <Search className="size-5" aria-hidden="true" />
                   Search
                 </button>
               </div>
+              <p className="mt-4 flex flex-wrap items-center gap-2">
+                <span className="muted text-base">Popular:</span>
+                {["Meals", "Rides", "Medicare", "Caregiving", "Housing"].map(
+                  (term) => (
+                    <Link
+                      key={term}
+                      href={`/search?q=${encodeURIComponent(term.toLowerCase())}`}
+                      className="pill min-h-[2.5rem] px-4 text-base no-underline hover:bg-[var(--msl-yellow)]"
+                    >
+                      {term}
+                    </Link>
+                  ),
+                )}
+              </p>
             </form>
           ) : null}
           {block.buttons?.length ? (
@@ -166,13 +183,6 @@ async function HeroBlock({ block, perspective, stega }: Props) {
               )}
             </div>
           ) : null}
-          <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-base font-semibold">
-            <li className="eyebrow text-[var(--msl-ink)]">Places to call</li>
-            <li className="eyebrow text-[var(--msl-ink)]">Events calendar</li>
-            <li className="eyebrow text-[var(--msl-ink)]">
-              Monthly newsletter
-            </li>
-          </ul>
         </div>
         <div className="relative">
           {image?.id ? (

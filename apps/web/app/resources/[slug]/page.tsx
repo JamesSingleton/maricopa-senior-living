@@ -112,7 +112,7 @@ async function ResourcePageContent({ params }: { params: Params }) {
             <section aria-labelledby="reach">
               <h2 id="reach">How to reach them</h2>
               <div className="mt-4 flex flex-col gap-4">
-                <CallButtons phones={resource.phones} max={6} />
+                <CallButtons phones={resource.phones} max={6} showLabels />
                 {resource.email ? (
                   <p className="text-lg">
                     Email:{" "}

@@ -10,48 +10,41 @@ import { PageHeader } from "@/components/page-header";
 import { draftAware } from "./draft";
 import { redirectOrNotFound } from "./redirects";
 
-export async function pageMetadata(
-  slug: string,
-  section: "general" | "about",
-): Promise<Metadata> {
+export async function pageMetadata(slug: string): Promise<Metadata> {
   const { data } = await cachedSanityMetadata({
     query: queryPage,
-    params: { slug, section },
+    params: { slug },
     perspective: "published",
   });
   return data
     ? {
         title: data.title ?? undefined,
         description: data.description ?? undefined,
-        alternates: {
-          canonical: section === "about" ? `/about/${slug}` : `/${slug}`,
-        },
+        alternates: { canonical: `/${slug}` },
       }
     : {};
 }
 
 /** A page built from sections in the Studio. Unknown paths try redirects. */
-export function renderCmsPage(slug: string, section: "general" | "about") {
+export function renderCmsPage(slug: string) {
   return draftAware(async ({ perspective, stega }) => {
     const { data: page } = await cachedSanity({
       query: queryPage,
-      params: { slug, section },
+      params: { slug },
       perspective,
       stega,
     });
-    if (!page)
-      return redirectOrNotFound(
-        section === "about" ? `/about/${slug}` : `/${slug}`,
-      );
+    if (!page) return redirectOrNotFound(`/${slug}`);
     const firstIsHero = page.sections?.[0]?._type === "heroBlock";
     return (
       <>
         {firstIsHero ? null : (
           <PageHeader
             title={page.title ?? "Page"}
-            intro={page.description}
             crumbs={
-              section === "about" ? [{ label: "About us", href: "/about" }] : []
+              slug === "about"
+                ? []
+                : [{ label: page.title ?? "Page", href: `/${slug}` }]
             }
           />
         )}

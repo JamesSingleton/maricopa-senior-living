@@ -8,35 +8,55 @@ import { SanityImage, type SanityImageData } from "./sanity-image";
 
 type Phone = { _key?: string; label?: string | null; number?: string | null };
 
-/** Green "Call" buttons, one per number, with the label underneath. */
+const isFax = (phone: Phone) => /\bfax\b/i.test(phone.label ?? "");
+
+/**
+ * Green "Call" buttons, one per number. Labels ("Casa Grande office",
+ * "Toll free") only show with `showLabels`, as a heading above the button,
+ * so they never read like a caption of the wrong thing. Fax numbers are
+ * shown as text, never as a Call button.
+ */
 export function CallButtons({
   phones,
   max = 3,
+  showLabels = false,
 }: {
   phones?: Phone[] | null;
   max?: number;
+  showLabels?: boolean;
 }) {
-  const list = (phones ?? []).filter((p) => p.number).slice(0, max);
-  if (!list.length) return null;
+  const all = (phones ?? []).filter((p) => p.number);
+  const callable = all.filter((p) => !isFax(p)).slice(0, max);
+  const faxes = showLabels ? all.filter(isFax) : [];
+  if (!callable.length && !faxes.length) return null;
   return (
-    <ul className="flex flex-wrap gap-3">
-      {list.map((phone) => (
-        <li key={phone._key ?? phone.number}>
-          <a href={telHref(phone.number as string)} className="btn btn-call">
-            <Phone className="size-5" aria-hidden="true" />
-            <span>
-              {phone.label ? (
-                <span className="sr-only">{phone.label}: </span>
-              ) : null}
-              Call {phone.number}
-            </span>
-          </a>
-          {phone.label ? (
-            <p className="muted mt-1 pl-4 text-base">{phone.label}</p>
-          ) : null}
-        </li>
+    <div className="flex flex-col gap-4">
+      <ul
+        className={showLabels ? "flex flex-col gap-4" : "flex flex-wrap gap-3"}
+      >
+        {callable.map((phone) => (
+          <li key={phone._key ?? phone.number}>
+            {showLabels && phone.label ? (
+              <p className="mb-1.5 font-semibold">{phone.label}</p>
+            ) : null}
+            <a href={telHref(phone.number as string)} className="btn btn-call">
+              <Phone className="size-5" aria-hidden="true" />
+              <span>
+                Call {phone.number}
+                {phone.label ? (
+                  <span className="sr-only"> ({phone.label})</span>
+                ) : null}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      {faxes.map((fax) => (
+        <p key={fax._key ?? fax.number} className="muted">
+          Fax: {fax.number}
+        </p>
       ))}
-    </ul>
+    </div>
   );
 }
 
@@ -98,26 +118,25 @@ export type LinkCardData = {
 
 export function HelpfulLinkCard({ link }: { link: LinkCardData }) {
   if (!link.url) return null;
+  const host = hostOf(link.url);
   return (
-    <article className="card flex h-full flex-col gap-3">
-      <p className="eyebrow">{link.source ?? hostOf(link.url)}</p>
-      <h3 className="card-title">
-        <a href={link.url} rel="noopener noreferrer" target="_blank">
-          {link.title}
-          <span className="sr-only">
-            {" "}
-            (opens {hostOf(link.url)} in a new tab)
-          </span>
-        </a>
-      </h3>
+    <a
+      href={link.url}
+      rel="noopener noreferrer"
+      target="_blank"
+      className="card card-link flex h-full flex-col gap-3"
+    >
+      <span className="eyebrow">{link.source ?? host}</span>
+      <span className="card-title">{link.title}</span>
       {link.summary ? (
-        <p className="muted line-clamp-4">{link.summary}</p>
+        <span className="muted line-clamp-4">{link.summary}</span>
       ) : null}
-      <p className="mt-auto inline-flex items-center gap-2 text-base font-semibold">
-        Read on {hostOf(link.url)}
+      <span className="mt-auto inline-flex items-center gap-2 text-base font-semibold underline underline-offset-4">
+        Read on {host}
         <ArrowUpRight className="size-5" aria-hidden="true" />
-      </p>
-    </article>
+      </span>
+      <span className="sr-only"> (opens in a new tab)</span>
+    </a>
   );
 }
 
