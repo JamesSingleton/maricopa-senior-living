@@ -45,6 +45,11 @@ const linkFields = /* groq */ `
 
 const phoneFields = /* groq */ `_key, label, number`;
 
+const addressFields = /* groq */ `street, city, state, zip, note`;
+
+/** Optional "Search & sharing" overrides. */
+const seoFields = /* groq */ `"seo": seo{ title, description, "imageId": image.asset._ref, noIndex }`;
+
 const eventCardFields = /* groq */ `
   _id,
   title,
@@ -55,7 +60,9 @@ const eventCardFields = /* groq */ `
   repeat { frequency, until, skipDates },
   location,
   hostedByMsl,
-  summary
+  summary,
+  status,
+  attendance
 `;
 
 const resourceCardFields = /* groq */ `
@@ -66,7 +73,7 @@ const resourceCardFields = /* groq */ `
   serviceArea,
   phones[]{ ${phoneFields} },
   website,
-  address,
+  address{ ${addressFields} },
   "topics": topics[]->{ title, "slug": slug.current }
 `;
 
@@ -128,7 +135,7 @@ const pageBuilderFields = /* groq */ `
     "topicSlug": topic->slug.current,
     "picked": links[]->{ ${linkCardFields} }
   },
-  _type == "faqBlock" => { items[]{ _key, question, answer } },
+  _type == "faqBlock" => { items[]{ _key, question, answer, "answerText": pt::text(answer) } },
   _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } }
 `;
 
@@ -137,14 +144,18 @@ const pageBuilderFields = /* groq */ `
 // ---------------------------------------------------------------------------
 
 export const querySettings = defineQuery(`
-  *[_id == "settings"][0]{
+  *[_type == "settings" && _id == "settings"][0]{
     siteTitle,
     tagline,
     description,
     heroImage { ${imageFields} },
     contactEmail,
     contactPhone { label, number },
-    mailingAddress,
+    mailingAddress{ ${addressFields} },
+    profiles,
+    ein,
+    "logoId": logo.asset._ref,
+    "shareImageId": shareImage.asset._ref,
     donateUrl,
     nonprofitStatement,
     newsletterTitle,
@@ -154,14 +165,14 @@ export const querySettings = defineQuery(`
 `);
 
 export const queryNavigation = defineQuery(`
-  *[_id == "navigation"][0]{
+  *[_type == "navigation" && _id == "navigation"][0]{
     main[]{ ${linkFields} },
     footer[]{ ${linkFields} }
   }
 `);
 
 export const queryHome = defineQuery(`
-  *[_id == "home"][0]{
+  *[_type == "home" && _id == "home"][0]{
     sections[]{ ${pageBuilderFields} }
   }
 `);
@@ -196,6 +207,7 @@ export const queryPage = defineQuery(`
     title,
     description,
     "slug": slug.current,
+    ${seoFields},
     sections[]{ ${pageBuilderFields} }
   }
 `);
@@ -211,6 +223,7 @@ export const queryPagePaths = defineQuery(`
 export const queryTopic = defineQuery(`
   *[_type == "topic" && slug.current == $slug][0]{
     _id,
+    _updatedAt,
     title,
     "slug": slug.current,
     description,
@@ -260,6 +273,7 @@ export const queryResource = defineQuery(`
     cost,
     attachments[]{ _key, title, "file": asset->{ url, size, extension } },
     lastVerified,
+    ${seoFields},
     _updatedAt
   }
 `);
@@ -312,8 +326,10 @@ export function queryArticlesSlice(start: number, end: number) {
 export const queryArticle = defineQuery(`
   *[_type == "article" && slug.current == $slug][0]{
     ${articleCardFields},
-    "author": author->{ name, "slug": slug.current, bio, image { ${imageFields} } },
+    "author": author->{ name, "slug": slug.current, bio, role, credentials, profiles, image { ${imageFields} } },
     "topics": topics[]->{ title, "slug": slug.current },
+    reviewedAt,
+    ${seoFields},
     body[]{ ${richTextFields} },
     _updatedAt
   }
@@ -328,6 +344,9 @@ export const queryWriter = defineQuery(`
     name,
     "slug": slug.current,
     bio,
+    role,
+    credentials,
+    profiles,
     tribute,
     image { ${imageFields} },
     "articles": *[_type == "article" && references(^._id)] | order(publishedAt desc){ ${articleCardFields} }
@@ -355,8 +374,11 @@ export const queryEventsInRange = defineQuery(`
 export const queryEvent = defineQuery(`
   *[_type == "event" && slug.current == $slug][0]{
     ${eventCardFields},
-    address,
+    address{ ${addressFields} },
+    onlineUrl,
+    isFree,
     cost,
+    ${seoFields},
     registration { required, link{ ${linkFields} } },
     flyer { ${imageFields} },
     details[]{ ${richTextFields} },
@@ -469,10 +491,10 @@ export const queryRedirect = defineQuery(`
 
 export const querySitemap = defineQuery(`
   {
-    "pages": *[_type == "page" && defined(slug.current)]{ "slug": slug.current, _updatedAt },
-    "resources": *[_type == "resource" && defined(slug.current)]{ "slug": slug.current, _updatedAt },
-    "articles": *[_type == "article" && defined(slug.current)]{ "slug": slug.current, _updatedAt },
-    "events": *[_type == "event" && defined(slug.current)]{ "slug": slug.current, _updatedAt },
+    "pages": *[_type == "page" && defined(slug.current) && seo.noIndex != true]{ "slug": slug.current, _updatedAt },
+    "resources": *[_type == "resource" && defined(slug.current) && seo.noIndex != true]{ "slug": slug.current, _updatedAt },
+    "articles": *[_type == "article" && defined(slug.current) && seo.noIndex != true]{ "slug": slug.current, _updatedAt },
+    "events": *[_type == "event" && defined(slug.current) && seo.noIndex != true]{ "slug": slug.current, _updatedAt },
     "topics": *[_type == "topic" && defined(slug.current)]{ "slug": slug.current, _updatedAt },
     "months": *[_type == "monthlyUpdate" && defined(publishMonth)]{ "month": ${monthKey}, _updatedAt },
     "newsletters": *[_type == "newsletterEdition" && defined(publishMonth)]{ "month": ${monthKey}, _updatedAt },

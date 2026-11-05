@@ -9,7 +9,10 @@ import {
 import { ArrowUpRight, Search } from "lucide-react";
 import Link from "next/link";
 
+import { addressLines } from "@/lib/address";
 import { type LinkValue, resolveLink, telHref } from "@/lib/links";
+import { siteGraph } from "@/lib/structured-data";
+import { JsonLd } from "./json-ld";
 import { MobileMenu } from "./mobile-menu";
 
 const FALLBACK_MENU: { label: string; href: string }[] = [
@@ -138,6 +141,7 @@ export async function SiteFooter({ perspective, stega }: DynamicFetchOptions) {
 
   return (
     <footer className="site-footer band-dark mt-20">
+      <JsonLd data={siteGraph(settings ?? null)} />
       <div className="container-page grid gap-10 py-14 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
           <div className="flex items-center gap-3">
@@ -207,9 +211,13 @@ export async function SiteFooter({ perspective, stega }: DynamicFetchOptions) {
                 </a>
               </li>
             ) : null}
-            {settings?.mailingAddress ? (
-              <li className="muted whitespace-pre-line">
-                {settings.mailingAddress}
+            {addressLines(settings?.mailingAddress ?? null).length ? (
+              <li className="muted">
+                {addressLines(settings?.mailingAddress ?? null).map((line) => (
+                  <span key={line} className="block">
+                    {line}
+                  </span>
+                ))}
               </li>
             ) : null}
           </ul>

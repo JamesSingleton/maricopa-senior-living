@@ -9,6 +9,7 @@ import { PageBuilder } from "@/components/page-builder";
 import { PageHeader } from "@/components/page-header";
 import { draftAware } from "./draft";
 import { redirectOrNotFound } from "./redirects";
+import { seoMetadata } from "./seo";
 
 export async function pageMetadata(slug: string): Promise<Metadata> {
   const { data } = await cachedSanityMetadata({
@@ -17,11 +18,12 @@ export async function pageMetadata(slug: string): Promise<Metadata> {
     perspective: "published",
   });
   return data
-    ? {
-        title: data.title ?? undefined,
-        description: data.description ?? undefined,
-        alternates: { canonical: `/${slug}` },
-      }
+    ? seoMetadata({
+        seo: data.seo,
+        title: data.title,
+        description: data.description,
+        path: `/${slug}`,
+      })
     : {};
 }
 

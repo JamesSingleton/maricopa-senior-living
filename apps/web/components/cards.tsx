@@ -235,6 +235,16 @@ export function EventRow({
             {occurrence.location}
           </p>
         ) : null}
+        {occurrence.status && occurrence.status !== "scheduled" ? (
+          <p className="font-bold text-[var(--msl-warning-line)]">
+            {{
+              cancelled: "Cancelled",
+              postponed: "Postponed",
+              movedOnline: "Moved online",
+              rescheduled: "New date",
+            }[String(occurrence.status)] ?? ""}
+          </p>
+        ) : null}
         <div className="flex flex-wrap gap-2 pt-1">
           {occurrence.hostedByMsl ? (
             <span className="pill text-[var(--msl-green)]">

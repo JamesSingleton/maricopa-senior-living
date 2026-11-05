@@ -73,7 +73,24 @@ export const imageWithAlt = defineType({
       title: "Describe the picture",
       type: "string",
       description:
-        "One sentence for people who can't see it, e.g. \"Volunteers serving lunch at the Senior Center\". Leave empty only if it's decoration.",
+        'One sentence for people who can\'t see it, e.g. "Volunteers serving lunch at the Senior Center".',
+      hidden: ({ parent }) => Boolean(parent?.decorative),
+      validation: (rule) =>
+        rule.custom((alt, { parent }) => {
+          const image = parent as
+            | { asset?: unknown; decorative?: boolean }
+            | undefined;
+          if (!image?.asset || image.decorative || alt?.trim()) return true;
+          return "Describe the picture in a sentence, or tick “This picture is decoration”.";
+        }),
+    }),
+    defineField({
+      name: "decorative",
+      title: "This picture is decoration",
+      type: "boolean",
+      description:
+        "Tick only if the picture adds nothing (a border, a pattern). Screen readers will skip it.",
+      initialValue: false,
     }),
     defineField({
       name: "caption",

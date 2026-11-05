@@ -14,11 +14,15 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { CallButtons } from "@/components/cards";
+import { JsonLd } from "@/components/json-ld";
 import { PageHeader } from "@/components/page-header";
 import { RichText } from "@/components/rich-text";
+import { addressLines, mapsUrl } from "@/lib/address";
 import { formatClock, formatLongDate } from "@/lib/dates";
 import { draftAware, Loading } from "@/lib/draft";
 import { hostOf } from "@/lib/links";
+import { seoMetadata } from "@/lib/seo";
+import { resourceLd } from "@/lib/structured-data";
 
 type Params = Promise<{ slug: string }>;
 const DAYS = [
@@ -56,11 +60,12 @@ export async function generateMetadata({
     perspective: "published",
   });
   return data
-    ? {
-        title: data.title ?? undefined,
-        description: data.summary ?? undefined,
-        alternates: { canonical: `/resources/${slug}` },
-      }
+    ? seoMetadata({
+        seo: data.seo,
+        title: data.title,
+        description: data.summary,
+        path: `/resources/${slug}`,
+      })
     : {};
 }
 
@@ -92,6 +97,7 @@ async function ResourcePageContent({ params }: { params: Params }) {
 
     return (
       <>
+        <JsonLd data={resourceLd(resource)} />
         <PageHeader
           title={resource.title ?? "Resource"}
           intro={resource.summary}
@@ -132,23 +138,32 @@ async function ResourcePageContent({ params }: { params: Params }) {
                     </a>
                   </p>
                 ) : null}
-                {resource.address ? (
+                {addressLines(resource.address).length ? (
                   <div>
                     <p className="font-bold">Address</p>
-                    <address className="whitespace-pre-line text-lg not-italic">
-                      {resource.address}
+                    {resource.address?.note ? (
+                      <p className="muted">{resource.address.note}</p>
+                    ) : null}
+                    <address className="text-lg not-italic">
+                      {addressLines(resource.address).map((line) => (
+                        <span key={line} className="block">
+                          {line}
+                        </span>
+                      ))}
                     </address>
-                    <a
-                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(resource.address)}`}
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      Get directions
-                      <span className="sr-only">
-                        {" "}
-                        (opens Google Maps in a new tab)
-                      </span>
-                    </a>
+                    {mapsUrl(resource.address) ? (
+                      <a
+                        href={mapsUrl(resource.address) as string}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        Get directions
+                        <span className="sr-only">
+                          {" "}
+                          (opens Google Maps in a new tab)
+                        </span>
+                      </a>
+                    ) : null}
                   </div>
                 ) : null}
               </div>

@@ -1,5 +1,5 @@
 import { UserIcon } from "@sanity/icons/User";
-import { defineField, defineType } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
 import { slugField } from "../../utils/slug";
 
@@ -15,12 +15,32 @@ export const author = defineType({
       validation: (rule) => rule.required(),
     }),
     slugField({ source: "name", prefix: "/writers" }),
+    defineField({
+      name: "role",
+      type: "string",
+      description:
+        'For example "Founder, Maricopa Senior Living" or "Columnist".',
+    }),
+    defineField({
+      name: "credentials",
+      type: "string",
+      description:
+        'Professional letters or training, e.g. "CDP — Certified Dementia Practitioner".',
+    }),
     defineField({ name: "image", title: "Photo", type: "imageWithAlt" }),
     defineField({
       name: "bio",
       type: "text",
       rows: 3,
       description: "A sentence or two about this writer.",
+    }),
+    defineField({
+      name: "profiles",
+      title: "Profile links",
+      type: "array",
+      description:
+        "Optional pages about this writer elsewhere (LinkedIn, a business website).",
+      of: [defineArrayMember({ type: "url" })],
     }),
     defineField({
       name: "tribute",

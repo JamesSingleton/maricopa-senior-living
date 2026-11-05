@@ -11,6 +11,7 @@ import { topic } from "./documents/topic";
 import { openingHours, phoneNumber } from "./objects/contact";
 import { link } from "./objects/link";
 import { imageWithAlt, richText, simpleText } from "./objects/rich-text";
+import { postalAddress, seo } from "./objects/seo";
 
 export const schemaTypes = [
   // Content Ron creates
@@ -33,6 +34,8 @@ export const schemaTypes = [
   richText,
   simpleText,
   imageWithAlt,
+  seo,
+  postalAddress,
   phoneNumber,
   openingHours,
   pageBuilder,

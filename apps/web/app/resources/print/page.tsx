@@ -10,6 +10,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 
 import { PrintButton } from "@/components/print-button";
+import { addressText } from "@/lib/address";
 import { formatClock } from "@/lib/dates";
 import { Loading } from "@/lib/draft";
 import { firstParam, type SearchParams } from "@/lib/params";
@@ -89,9 +90,7 @@ async function PrintList({ searchParams }: { searchParams: SearchParams }) {
                 .map((p) => [p.label, p.number].filter(Boolean).join(": "))
                 .join(" · ")}
             </p>
-            {r.address ? (
-              <p className="whitespace-pre-line">{r.address}</p>
-            ) : null}
+            {r.address ? <p>{addressText(r.address)}</p> : null}
             {r.website ? (
               <p>
                 {r.website

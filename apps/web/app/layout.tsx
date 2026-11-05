@@ -1,7 +1,11 @@
 import "@maricopa-senior-living/ui/globals.css";
 import "./site.css";
 
-import { SanityLive } from "@maricopa-senior-living/sanity/live";
+import {
+  cachedSanityMetadata,
+  SanityLive,
+} from "@maricopa-senior-living/sanity/live";
+import { querySettings } from "@maricopa-senior-living/sanity/queries";
 import type { Metadata, Viewport } from "next";
 import { Onest } from "next/font/google";
 import { draftMode } from "next/headers";
@@ -12,6 +16,7 @@ import { DisableDraftMode } from "@/components/DisableDraftMode";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { baseUrl } from "@/lib/constants";
 import { draftAware } from "@/lib/draft";
+import { imageUrl } from "@/lib/structured-data";
 
 // Onest: open, high x-height sans with metrics Next knows (no fallback
 // warning), used for headings and text alike.
@@ -21,20 +26,33 @@ const sans = Onest({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(baseUrl),
-  title: {
-    template: "%s | Maricopa Senior Living",
-    default: "Maricopa Senior Living — resources to help you age your way",
-  },
-  description:
-    "Local resources, events and news for seniors and caregivers in Maricopa, Arizona.",
-  openGraph: {
-    type: "website",
-    siteName: "Maricopa Senior Living",
-    locale: "en_US",
-  },
-};
+/** Site defaults; pages override title, description and share picture. */
+export async function generateMetadata(): Promise<Metadata> {
+  const { data: settings } = await cachedSanityMetadata({
+    query: querySettings,
+    perspective: "published",
+  });
+  const shareImage = imageUrl(
+    settings?.shareImageId ?? settings?.heroImage?.id,
+    1200,
+  );
+  return {
+    metadataBase: new URL(baseUrl),
+    title: {
+      template: "%s | Maricopa Senior Living",
+      default: "Maricopa Senior Living — resources to help you age your way",
+    },
+    description:
+      settings?.description ??
+      "Local resources, events and news for seniors and caregivers in Maricopa, Arizona.",
+    openGraph: {
+      type: "website",
+      siteName: settings?.siteTitle ?? "Maricopa Senior Living",
+      locale: "en_US",
+      ...(shareImage ? { images: [{ url: shareImage, width: 1200 }] } : {}),
+    },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: "#1e2a23",

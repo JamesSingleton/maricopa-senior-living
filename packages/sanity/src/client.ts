@@ -33,6 +33,14 @@ const NEVER_ENCODE = new Set([
   "closes",
   "slug",
   "source",
+  // Address parts and event settings feed structured data and map links.
+  "street",
+  "city",
+  "state",
+  "zip",
+  "status",
+  "attendance",
+  "onlineUrl",
 ]);
 
 export const client = createClient({

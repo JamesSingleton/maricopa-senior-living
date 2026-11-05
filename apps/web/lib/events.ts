@@ -15,6 +15,8 @@ export type EventSource = {
   location?: string | null;
   hostedByMsl?: boolean | null;
   summary?: string | null;
+  status?: string | null;
+  attendance?: string | null;
 };
 
 /** One date an event happens on (a repeating event yields several). */

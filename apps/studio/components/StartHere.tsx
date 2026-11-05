@@ -56,23 +56,50 @@ const JOBS: Job[] = [
   },
 ];
 
-function useNeedsReviewCount() {
+type Status = {
+  needsReview: number;
+  dueForChecking: number;
+  eventsThisWeek: number;
+  hasThisMonth: boolean;
+};
+
+/** Live numbers for the "How things stand" panel. */
+const STATUS_QUERY = `{
+  "needsReview": count(*[needsReview == true && !(_id in path("drafts.**"))]),
+  "dueForChecking": count(*[_type == "resource" && !(_id in path("drafts.**")) && (!defined(lastVerified) || lastVerified < string::split(string(dateTime(now()) - 60*60*24*365), "T")[0])]),
+  "eventsThisWeek": count(*[_type == "event" && !(_id in path("drafts.**")) && dateTime(start) >= dateTime(now()) && dateTime(start) < dateTime(now()) + 60*60*24*7]),
+  "hasThisMonth": defined(*[_type == "monthlyUpdate" && string::startsWith(publishMonth, string::split(string(now()), "T")[0][0...7])][0]._id)
+}`;
+
+function useStatus() {
   const client = useClient({ apiVersion: "2025-02-19" });
-  const [count, setCount] = useState<number | null>(null);
+  const [status, setStatus] = useState<Status | null>(null);
   useEffect(() => {
     client
-      .fetch<number>(
-        "count(*[needsReview == true && !(_id in path('drafts.**'))])",
-      )
-      .then(setCount)
-      .catch(() => setCount(null));
+      .fetch<Status>(STATUS_QUERY)
+      .then(setStatus)
+      .catch(() => setStatus(null));
   }, [client]);
-  return count;
+  return status;
+}
+
+function StatusItem({
+  tone,
+  children,
+}: {
+  tone: "positive" | "caution" | "default";
+  children: React.ReactNode;
+}) {
+  return (
+    <Card padding={4} radius={3} tone={tone} border>
+      <Text size={2}>{children}</Text>
+    </Card>
+  );
 }
 
 /** Ron's landing screen: big buttons for the jobs he does every month. */
 export function StartHere() {
-  const needsReview = useNeedsReviewCount();
+  const status = useStatus();
   return (
     <Box padding={[4, 5, 6]} style={{ maxWidth: 1000, margin: "0 auto" }}>
       <Stack gap={5}>
@@ -110,15 +137,37 @@ export function StartHere() {
             </IntentLink>
           ))}
         </Grid>
-        {needsReview ? (
-          <Card padding={4} radius={3} tone="caution" border>
-            <Flex gap={3} align="center">
-              <Text size={2}>
-                {needsReview} items brought over from the old website still need
-                a quick check. Find them under “Needs review” in Content.
-              </Text>
-            </Flex>
-          </Card>
+        {status ? (
+          <Stack gap={3}>
+            <Heading size={2} as="h2">
+              How things stand
+            </Heading>
+            <StatusItem tone={status.hasThisMonth ? "positive" : "caution"}>
+              {status.hasThisMonth
+                ? "This month's What's New is published."
+                : "This month's What's New hasn't been started yet — use “Start next month's What's New”."}
+            </StatusItem>
+            <StatusItem tone="default">
+              {status.eventsThisWeek === 1
+                ? "1 event is coming up in the next 7 days."
+                : `${status.eventsThisWeek} events are coming up in the next 7 days.`}
+            </StatusItem>
+            {status.needsReview ? (
+              <StatusItem tone="caution">
+                {status.needsReview} items brought over from the old website
+                still need a quick check. Find them under “Needs review” in
+                Content.
+              </StatusItem>
+            ) : null}
+            {status.dueForChecking ? (
+              <StatusItem tone="caution">
+                {status.dueForChecking} resources haven't been checked in over a
+                year. Find them under “Due for checking” in Content — call or
+                visit their website, fix anything that changed, and set “Last
+                checked”.
+              </StatusItem>
+            ) : null}
+          </Stack>
         ) : null}
       </Stack>
     </Box>

@@ -19,6 +19,7 @@ import {
   convertImage,
   convertRichText,
   newKey,
+  parseAddress,
   parsePhones,
   plainText,
   publisherFor,
@@ -225,7 +226,9 @@ for (const doc of ofType("service")) {
       isGovernment: /\.gov\b/i.test(doc.website ?? ""),
       ...(phones.length ? { phones } : {}),
       ...(doc.website ? { website: doc.website.trim() } : {}),
-      ...(doc.address ? { address: doc.address.trim() } : {}),
+      ...(parseAddress(doc.address)
+        ? { address: parseAddress(doc.address)?.address }
+        : {}),
       ...(doc.businessHours?.length
         ? {
             hours: [...doc.businessHours]

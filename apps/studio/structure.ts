@@ -1,10 +1,17 @@
 import { BellIcon } from "@sanity/icons/Bell";
 import { CalendarIcon } from "@sanity/icons/Calendar";
+import { ClockIcon } from "@sanity/icons/Clock";
 import { CogIcon } from "@sanity/icons/Cog";
 import { WarningOutlineIcon } from "@sanity/icons/WarningOutline";
 import type { StructureResolver } from "sanity/structure";
 
 import { isAdmin } from "./lib/access";
+
+const REVIEW_TYPES = [
+  { type: "resource", title: "Resources" },
+  { type: "helpfulLink", title: "Helpful links" },
+  { type: "article", title: "Articles" },
+];
 
 /**
  * Ron's Studio: his everyday jobs first, in plain words. Site structure is
@@ -66,10 +73,32 @@ export const structure: StructureResolver = (S, { currentUser }) => {
         .title("Needs review")
         .icon(WarningOutlineIcon)
         .child(
-          S.documentList()
+          S.list()
             .title("Brought over from the old site — please check")
-            .filter("needsReview == true")
-            .apiVersion("2025-02-19"),
+            .items(
+              REVIEW_TYPES.map(({ type, title }) =>
+                S.listItem()
+                  .title(title)
+                  .id(`review-${type}`)
+                  .schemaType(type)
+                  .child(
+                    S.documentTypeList(type)
+                      .title(`${title} to check`)
+                      .filter(`_type == "${type}" && needsReview == true`),
+                  ),
+              ),
+            ),
+        ),
+      S.listItem()
+        .title("Due for checking")
+        .icon(ClockIcon)
+        .child(
+          S.documentTypeList("resource")
+            .title("Resources not checked in a year")
+            .filter(
+              '_type == "resource" && (!defined(lastVerified) || lastVerified < string::split(string(dateTime(now()) - 60*60*24*365), "T")[0])',
+            )
+            .defaultOrdering([{ field: "lastVerified", direction: "asc" }]),
         ),
       ...(admin
         ? [

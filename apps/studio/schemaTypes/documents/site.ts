@@ -8,6 +8,7 @@ import { defineArrayMember, defineField, defineType } from "sanity";
 import { withHowTo } from "../../components/HowTo";
 import { adminOnly } from "../../lib/access";
 import { slugField } from "../../utils/slug";
+import { seoField } from "../objects/seo";
 
 /** Pages built from sections: About us (/about), Donate, Quick Links… */
 export const page = defineType({
@@ -32,7 +33,8 @@ export const page = defineType({
       title: "Short description",
       type: "text",
       rows: 2,
-      description: "Shown in search engines and when the page is shared.",
+      description:
+        "One or two sentences about the page. Used by search engines and when the page is shared.",
       validation: (rule) => rule.max(200),
     }),
     defineField({
@@ -40,6 +42,7 @@ export const page = defineType({
       type: "pageBuilder",
       validation: (rule) => rule.required().min(1),
     }),
+    seoField,
   ],
   preview: {
     select: { title: "title", slug: "slug.current" },
@@ -113,6 +116,22 @@ export const settings = defineType({
       description: "The wild horses photo used at the top of the site.",
     }),
     defineField({
+      name: "logo",
+      type: "image",
+      group: "site",
+      description:
+        "A square logo, used by search engines. The wild-horses mark works.",
+    }),
+    defineField({
+      name: "shareImage",
+      title: "Default picture when shared",
+      type: "image",
+      group: "site",
+      options: { hotspot: true },
+      description:
+        "Used when a page without its own picture is shared on Facebook or by email. 1200 × 630 works best.",
+    }),
+    defineField({
       name: "contactEmail",
       type: "email",
       group: "contact",
@@ -124,11 +143,32 @@ export const settings = defineType({
     }),
     defineField({
       name: "mailingAddress",
-      type: "text",
-      rows: 2,
+      type: "postalAddress",
       group: "contact",
       description:
-        "Required in newsletter emails by law (CAN-SPAM). A PO box is fine.",
+        "Shown in the footer and required in newsletter emails by law (CAN-SPAM). A PO box is fine.",
+    }),
+    defineField({
+      name: "profiles",
+      title: "Profile links",
+      type: "array",
+      group: "contact",
+      description:
+        "Maricopa Senior Living's pages elsewhere (Facebook, GuideStar/Candid…). Helps search engines connect them to this site.",
+      of: [defineArrayMember({ type: "url" })],
+    }),
+    defineField({
+      name: "ein",
+      title: "EIN (tax ID)",
+      type: "string",
+      group: "contact",
+      description: "Optional. Lets donors confirm the 501(c)(3) status.",
+      validation: (rule) =>
+        rule.custom((value) =>
+          !value || /^\d{2}-?\d{7}$/.test(value)
+            ? true
+            : "Use the 9-digit EIN, e.g. 12-3456789.",
+        ),
     }),
     defineField({
       name: "donateUrl",

@@ -58,6 +58,10 @@ async function WriterPageContent({ params }: { params: Params }) {
     return (
       <>
         <PageHeader
+          eyebrow={
+            [writer.role, writer.credentials].filter(Boolean).join(" · ") ||
+            null
+          }
           title={writer.name ?? "Writer"}
           intro={writer.bio}
           crumbs={[{ label: "Articles", href: "/articles" }]}

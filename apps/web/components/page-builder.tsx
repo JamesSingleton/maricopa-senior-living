@@ -25,9 +25,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+import { addressText } from "@/lib/address";
 import { monthKey, monthLabel } from "@/lib/dates";
 import { expandOccurrences } from "@/lib/events";
 import { type LinkValue, resolveLink, telHref } from "@/lib/links";
+import { faqLd } from "@/lib/structured-data";
 import {
   ArticleCard,
   type ArticleCardData,
@@ -35,6 +37,7 @@ import {
   HelpfulLinkCard,
   ResourceCard,
 } from "./cards";
+import { JsonLd } from "./json-ld";
 import { RichText } from "./rich-text";
 import { SanityImage, type SanityImageData } from "./sanity-image";
 import { TopicIcon } from "./topic-icon";
@@ -485,7 +488,9 @@ async function ContactBlock({ block, perspective, stega }: Props) {
   const useSite = block.useSiteContact !== false;
   const phone = useSite ? settings?.contactPhone?.number : block.phone?.number;
   const email = useSite ? settings?.contactEmail : block.email;
-  const address = useSite ? settings?.mailingAddress : block.address;
+  const address = useSite
+    ? addressText(settings?.mailingAddress ?? null)
+    : block.address;
   return (
     <Section
       eyebrow="Contact"
@@ -588,23 +593,34 @@ async function NewsletterSignupBlock({ block, perspective, stega }: Props) {
 }
 
 function FaqBlock({ block }: Props) {
+  const items = (block.items ?? []) as {
+    question?: string;
+    answerText?: string;
+  }[];
   return (
-    <Section heading={block.heading ?? "Questions and answers"}>
-      <div className="flex flex-col gap-3">
-        {(block.items ?? []).map(
-          (item: { _key: string; question?: string; answer?: unknown[] }) => (
-            <details key={item._key} className="card">
-              <summary className="cursor-pointer text-lg font-bold">
-                {item.question}
-              </summary>
-              <div className="mt-3">
-                <RichText value={item.answer} />
-              </div>
-            </details>
-          ),
+    <>
+      <JsonLd
+        data={faqLd(
+          items.map((i) => ({ question: i.question, answer: i.answerText })),
         )}
-      </div>
-    </Section>
+      />
+      <Section heading={block.heading ?? "Questions and answers"}>
+        <div className="flex flex-col gap-3">
+          {(block.items ?? []).map(
+            (item: { _key: string; question?: string; answer?: unknown[] }) => (
+              <details key={item._key} className="card">
+                <summary className="cursor-pointer text-lg font-bold">
+                  {item.question}
+                </summary>
+                <div className="mt-3">
+                  <RichText value={item.answer} />
+                </div>
+              </details>
+            ),
+          )}
+        </div>
+      </Section>
+    </>
   );
 }
 

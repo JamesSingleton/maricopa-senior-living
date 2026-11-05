@@ -11,12 +11,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 
+import { JsonLd } from "@/components/json-ld";
 import { PageHeader } from "@/components/page-header";
 import { RichText } from "@/components/rich-text";
 import { SanityImage } from "@/components/sanity-image";
 import { formatLongDate } from "@/lib/dates";
 import { draftAware, Loading } from "@/lib/draft";
 import { redirectOrNotFound } from "@/lib/redirects";
+import { seoMetadata } from "@/lib/seo";
+import { articleLd } from "@/lib/structured-data";
 
 type Params = Promise<{ slug: string }>;
 
@@ -37,16 +40,16 @@ export async function generateMetadata({
     perspective: "published",
   });
   if (!data) return {};
-  return {
-    title: data.title ?? undefined,
-    description: data.summary ?? undefined,
-    alternates: { canonical: `/articles/${slug}` },
-    openGraph: {
-      type: "article",
-      publishedTime: data.publishedAt ?? undefined,
-      authors: data.author?.name ? [data.author.name] : undefined,
-    },
-  };
+  return seoMetadata({
+    seo: data.seo,
+    title: data.title,
+    description: data.summary,
+    imageId: data.mainImage?.id,
+    path: `/articles/${slug}`,
+    type: "article",
+    publishedTime: data.publishedAt,
+    modifiedTime: data._updatedAt,
+  });
 }
 
 /**
@@ -74,6 +77,9 @@ async function ArticlePageContent({ params }: { params: Params }) {
     if (!article) return redirectOrNotFound(`/articles/${slug}`);
     return (
       <article>
+        <JsonLd
+          data={articleLd({ ...article, mainImageId: article.mainImage?.id })}
+        />
         <PageHeader
           title={article.title ?? "Article"}
           eyebrow={
@@ -89,10 +95,18 @@ async function ArticlePageContent({ params }: { params: Params }) {
             ) : (
               article.author?.name
             )}
+            {article.author?.credentials
+              ? `, ${article.author.credentials}`
+              : ""}
             {article.publishedAt
               ? ` · ${formatLongDate(article.publishedAt)}`
               : ""}
           </p>
+          {article.reviewedAt ? (
+            <p className="muted mt-1 text-base">
+              Last checked for accuracy {formatLongDate(article.reviewedAt)}
+            </p>
+          ) : null}
         </PageHeader>
         <div className="container-page py-8">
           {article.mainImage?.id ? (

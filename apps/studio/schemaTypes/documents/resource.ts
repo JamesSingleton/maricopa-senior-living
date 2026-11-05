@@ -3,6 +3,7 @@ import { defineArrayMember, defineField, defineType } from "sanity";
 
 import { withHowTo } from "../../components/HowTo";
 import { slugField } from "../../utils/slug";
+import { seoField } from "../objects/seo";
 import {
   needsReviewField,
   summaryField,
@@ -92,8 +93,7 @@ export const resource = defineType({
     defineField({
       name: "address",
       title: "Street address",
-      type: "text",
-      rows: 2,
+      type: "postalAddress",
       group: "contact",
     }),
     defineField({
@@ -158,6 +158,7 @@ export const resource = defineType({
       description:
         "When you last confirmed the phone number and details are right.",
     }),
+    { ...seoField, group: "details" },
     { ...needsReviewField, group: "details" },
     defineField({
       name: "legacyId",
@@ -173,9 +174,9 @@ export const resource = defineType({
         phones?: unknown[];
         email?: string;
         website?: string;
-        address?: string;
+        address?: { street?: string };
       };
-      return d?.phones?.length || d?.email || d?.website || d?.address
+      return d?.phones?.length || d?.email || d?.website || d?.address?.street
         ? true
         : "Add at least one way to reach them: a phone number, email, website or address.";
     }),

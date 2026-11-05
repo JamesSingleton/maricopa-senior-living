@@ -251,3 +251,146 @@ export function slugMaker(taken: Iterable<string> = []) {
     return slug;
   };
 }
+
+const STATES: Record<string, string> = {
+  arizona: "AZ",
+  "new york": "NY",
+  california: "CA",
+  florida: "FL",
+  virginia: "VA",
+  maryland: "MD",
+  louisiana: "LA",
+  texas: "TX",
+};
+/** Cities seen in the data, for addresses with no comma before the city. */
+const KNOWN_CITIES = [
+  "San Tan Valley",
+  "Queen Creek",
+  "Casa Grande",
+  "Sun Lakes",
+  "Maricopa",
+  "Phoenix",
+  "Mesa",
+  "Tempe",
+  "Chandler",
+  "Gilbert",
+  "Coolidge",
+  "Florence",
+  "Tucson",
+  "Eloy",
+  "Scottsdale",
+  "Glendale",
+  "Stanfield",
+  "Arizona City",
+  "Apache Junction",
+  "Peoria",
+  "New York",
+];
+
+export type PostalAddress = {
+  _type: "postalAddress";
+  street?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  note?: string;
+};
+
+/**
+ * Free-text address → parts. Returns `parsed: false` (and the whole text as
+ * the street) when it can't be split confidently, so it gets reviewed.
+ */
+export function parseAddress(
+  text: string | undefined,
+): { address: PostalAddress; parsed: boolean } | null {
+  if (!text?.trim()) return null;
+  let rest = text
+    .replace(/\s*\|\s*/g, ", ")
+    .replace(/,?\s*(United States|USA)\b\.?/gi, "")
+    .replace(/\s*\(([^)]*)\)\s*$/, "")
+    .replace(/\b(AZ)(\d{5})/i, "$1 $2")
+    .replace(/,\s*(AZ|Arizona),\s*(\d{5})/i, ", $1 $2")
+    .replace(/\s+/g, " ")
+    .replace(/[.\s]+$/, "")
+    .trim();
+  let note: string | undefined;
+  // "Main Office: 1110 W. Washington…" or "K9s For Warriors, 114 Camp…" →
+  // the leading name becomes the note.
+  const label = rest.match(/^([^0-9:]{3,80}?)(?::|,|\s-)?\s+(?=\d{2,}\s)/);
+  if (
+    label &&
+    !/^(N|S|E|W|North|South|East|West)\.?$/i.test(label[1]?.trim() ?? "")
+  ) {
+    note = label[1]?.replace(/[,:-]\s*$/, "").trim();
+    rest = rest.slice(label[0].length);
+  }
+  // "Casa Grande 85130" with no state: assume Arizona for known cities.
+  const noState = rest.match(
+    /[,\s]+([A-Za-z][A-Za-z .'-]*?),?\s+(\d{5}(?:-\d{4})?)$/,
+  );
+  if (
+    noState &&
+    KNOWN_CITIES.some((c) =>
+      noState[1]?.toLowerCase().endsWith(c.toLowerCase()),
+    )
+  ) {
+    rest = `${rest.slice(0, noState.index)}, ${noState[1]}, AZ ${noState[2]}`;
+  } else if (
+    KNOWN_CITIES.some((c) => rest.toLowerCase().endsWith(` ${c.toLowerCase()}`))
+  ) {
+    rest = `${rest}, AZ`;
+  }
+  const tail = rest.match(
+    /[,\s]+([A-Za-z][A-Za-z .'-]*?)[,\s]+(AZ|Arizona|DC|[A-Z]{2}|Florida|Virginia|Maryland|California|Louisiana|Texas|New York)\.?,?(?:\s+(\d{5}(?:-\d{4})?))?\s*$/i,
+  );
+  if (tail) {
+    let before = rest.slice(0, tail.index).trim();
+    let city = tail[1]?.trim() ?? "";
+    // Washington, DC quadrants belong to the street: "810 Vermont Ave., NW".
+    const quadrant = city.match(/^(NW|NE|SW|SE)\s+(.+)$/);
+    if (quadrant) {
+      before = `${before} ${quadrant[1]}`;
+      city = quadrant[2] ?? city;
+    }
+    // No comma before the city: take a known city off the end of the street.
+    const known = KNOWN_CITIES.find((c) =>
+      `${before} ${city}`.toLowerCase().endsWith(c.toLowerCase()),
+    );
+    if (known && !city.toLowerCase().includes(known.toLowerCase())) {
+      const joined = `${before} ${city}`;
+      before = joined.slice(0, joined.length - known.length).trim();
+      city = known;
+    } else if (
+      known &&
+      city.toLowerCase() !== known.toLowerCase() &&
+      city.toLowerCase().endsWith(known.toLowerCase())
+    ) {
+      before = `${before} ${city.slice(0, city.length - known.length)}`.trim();
+      city = known;
+    }
+    const stateRaw = tail[2] ?? "";
+    const state =
+      stateRaw.length === 2
+        ? stateRaw.toUpperCase()
+        : (STATES[stateRaw.toLowerCase()] ?? stateRaw);
+    return {
+      parsed: true,
+      address: {
+        _type: "postalAddress",
+        street: before.replace(/[,\s]+$/, ""),
+        city: city.replace(/\b\w/g, (c) => c.toUpperCase()),
+        state,
+        ...(tail[3] ? { zip: tail[3] } : {}),
+        ...(note ? { note } : {}),
+      },
+    };
+  }
+  // Couldn't split it: keep exactly what was typed so nothing is lost.
+  return {
+    parsed: false,
+    address: {
+      _type: "postalAddress",
+      street: text.replace(/\s+/g, " ").trim(),
+    },
+  };
+}

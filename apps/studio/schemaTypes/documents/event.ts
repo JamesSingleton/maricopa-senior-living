@@ -3,6 +3,7 @@ import { defineArrayMember, defineField, defineType } from "sanity";
 
 import { withHowTo } from "../../components/HowTo";
 import { slugField } from "../../utils/slug";
+import { seoField } from "../objects/seo";
 import { summaryField, topicsField } from "../shared";
 
 type EventDoc = {
@@ -20,6 +21,20 @@ export const event = defineType({
   name: "event",
   type: "document",
   icon: CalendarIcon,
+  // New events start tomorrow, 9–10 AM Arizona time (UTC−7 all year).
+  initialValue: () => {
+    const tomorrow = new Date(Date.now() + 24 * 3600 * 1000);
+    const day = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/Phoenix",
+    }).format(tomorrow);
+    return {
+      start: new Date(`${day}T09:00:00-07:00`).toISOString(),
+      end: new Date(`${day}T10:00:00-07:00`).toISOString(),
+      status: "scheduled",
+      attendance: "inPerson",
+      isFree: true,
+    };
+  },
   groups: [
     { name: "when", title: "When & where", default: true },
     { name: "details", title: "Details" },
@@ -44,7 +59,12 @@ export const event = defineType({
       type: "datetime",
       group: "when",
       description: "Date and start time (Arizona time).",
-      options: { timeStep: 15 },
+      // Always Arizona time, wherever the editor is.
+      options: {
+        timeStep: 15,
+        displayTimeZone: "America/Phoenix",
+        allowTimeZoneSwitch: false,
+      } as { timeStep: number },
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -54,7 +74,12 @@ export const event = defineType({
       group: "when",
       description:
         "Optional. For a repeating event, use the end time on the first day.",
-      options: { timeStep: 15 },
+      // Always Arizona time, wherever the editor is.
+      options: {
+        timeStep: 15,
+        displayTimeZone: "America/Phoenix",
+        allowTimeZoneSwitch: false,
+      } as { timeStep: number },
       validation: (rule) =>
         rule.custom((end, { document }) => {
           const start = (document as EventDoc)?.start;
@@ -145,9 +170,55 @@ export const event = defineType({
     }),
     defineField({
       name: "address",
+      title: "Street address",
+      type: "postalAddress",
+      group: "when",
+      description: "Optional, for directions. Leave empty for online events.",
+      hidden: ({ document }) =>
+        (document as { attendance?: string })?.attendance === "online",
+    }),
+    defineField({
+      name: "attendance",
+      title: "In person or online?",
       type: "string",
       group: "when",
-      description: "Optional street address, for directions.",
+      initialValue: "inPerson",
+      options: {
+        layout: "radio",
+        list: [
+          { title: "In person", value: "inPerson" },
+          { title: "Online", value: "online" },
+          { title: "Both", value: "mixed" },
+        ],
+      },
+    }),
+    defineField({
+      name: "onlineUrl",
+      title: "Online link (Zoom, YouTube…)",
+      type: "url",
+      group: "when",
+      hidden: ({ document }) =>
+        (document as { attendance?: string })?.attendance === "inPerson" ||
+        !(document as { attendance?: string })?.attendance,
+      validation: (rule) => rule.uri({ scheme: ["http", "https"] }),
+    }),
+    defineField({
+      name: "status",
+      type: "string",
+      group: "when",
+      initialValue: "scheduled",
+      description:
+        "If it's cancelled or moved, change this instead of deleting the event.",
+      options: {
+        layout: "radio",
+        list: [
+          { title: "Going ahead", value: "scheduled" },
+          { title: "Cancelled", value: "cancelled" },
+          { title: "Postponed (new date to come)", value: "postponed" },
+          { title: "Moved online", value: "movedOnline" },
+          { title: "New date (rescheduled)", value: "rescheduled" },
+        ],
+      },
     }),
     { ...summaryField(), group: "details" },
     { ...topicsField({ min: 0, max: 3 }), group: "details" },
@@ -178,10 +249,19 @@ export const event = defineType({
       ],
     }),
     defineField({
+      name: "isFree",
+      title: "Free",
+      type: "boolean",
+      group: "details",
+      initialValue: true,
+    }),
+    defineField({
       name: "cost",
       type: "string",
       group: "details",
-      description: 'For example "Free" or "$10".',
+      description: 'For example "$10" or "$5 for members".',
+      hidden: ({ document }) =>
+        (document as { isFree?: boolean })?.isFree !== false,
     }),
     defineField({
       name: "flyer",
@@ -189,6 +269,7 @@ export const event = defineType({
       type: "imageWithAlt",
       group: "details",
     }),
+    { ...seoField, group: "details" },
     defineField({
       name: "details",
       title: "More information",

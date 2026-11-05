@@ -13,8 +13,11 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { ArticleCard, HelpfulLinkCard, ResourceCard } from "@/components/cards";
+import { JsonLd } from "@/components/json-ld";
 import { PageHeader } from "@/components/page-header";
 import { draftAware, Loading } from "@/lib/draft";
+import { seoMetadata } from "@/lib/seo";
+import { topicLd } from "@/lib/structured-data";
 
 type Params = Promise<{ slug: string }>;
 
@@ -37,10 +40,11 @@ export async function generateMetadata({
     perspective: "published",
   });
   return data
-    ? {
-        title: data.title ?? undefined,
-        description: data.description ?? undefined,
-      }
+    ? seoMetadata({
+        title: data.title,
+        description: data.description,
+        path: `/topics/${slug}`,
+      })
     : {};
 }
 
@@ -69,6 +73,9 @@ async function TopicPageContent({ params }: { params: Params }) {
     const resources = topic.resources ?? [];
     return (
       <>
+        <JsonLd
+          data={topicLd({ ...topic, resources: topic.resources ?? [] })}
+        />
         <PageHeader
           title={topic.title ?? "Topic"}
           intro={topic.description}

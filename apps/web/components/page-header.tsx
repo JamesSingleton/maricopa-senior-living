@@ -1,6 +1,9 @@
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
+import { breadcrumbs } from "@/lib/structured-data";
+import { JsonLd } from "./json-ld";
+
 export type Crumb = { label: string; href: string };
 
 /** Page title band with a "You are here" trail. */
@@ -19,6 +22,7 @@ export function PageHeader({
 }) {
   return (
     <div className="bg-gradient-to-b from-[var(--msl-cream-2)] to-[var(--msl-cream)]">
+      {crumbs.length ? <JsonLd data={breadcrumbs(crumbs)} /> : null}
       <div className="container-page pb-10 pt-8 md:pb-14 md:pt-10">
         {crumbs.length ? (
           <nav aria-label="You are here" className="no-print mb-6 text-base">

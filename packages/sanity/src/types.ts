@@ -385,11 +385,34 @@ export type PhoneNumber = {
   number: string;
 };
 
+export type PostalAddress = {
+  _type: "postalAddress";
+  street?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  note?: string;
+};
+
 export type SanityImageAssetReference = {
   _ref: string;
   _type: "reference";
   _weak?: boolean;
   [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
+
+export type Seo = {
+  _type: "seo";
+  title?: string;
+  description?: string;
+  image?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  noIndex?: boolean;
 };
 
 export type ImageWithAlt = {
@@ -399,6 +422,7 @@ export type ImageWithAlt = {
   hotspot?: SanityImageHotspot;
   crop?: SanityImageCrop;
   alt?: string;
+  decorative?: boolean;
   caption?: string;
 };
 
@@ -597,14 +621,46 @@ export type Settings = {
   tagline?: string;
   description?: string;
   heroImage?: ImageWithAlt;
+  logo?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  shareImage?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
   contactEmail?: string;
   contactPhone?: PhoneNumber;
-  mailingAddress?: string;
+  mailingAddress?: PostalAddress;
+  profiles?: Array<string>;
+  ein?: string;
   donateUrl?: string;
   nonprofitStatement?: string;
   newsletterTitle?: string;
   newsletterDedication?: string;
   subscribeInstructions?: string;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x: number;
+  y: number;
+  height: number;
+  width: number;
 };
 
 export type Home = {
@@ -613,7 +669,6 @@ export type Home = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  howTo?: string;
   title?: string;
   sections: PageBuilder;
 };
@@ -624,7 +679,6 @@ export type HelpfulLink = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  howTo?: string;
   title: string;
   url: string;
   source: string;
@@ -645,7 +699,6 @@ export type MonthlyUpdate = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  howTo?: string;
   publishMonth: string;
   title?: string;
   intro: string;
@@ -658,11 +711,11 @@ export type Page = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  howTo?: string;
   title: string;
   slug: Slug;
   description?: string;
   sections: PageBuilder;
+  seo?: Seo;
 };
 
 export type AuthorReference = {
@@ -678,11 +731,11 @@ export type Article = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  howTo?: string;
   title: string;
   slug: Slug;
   author: AuthorReference;
   publishedAt: string;
+  reviewedAt?: string;
   series?: "none" | "joans-corner" | "rons-ramblings";
   summary: string;
   topics?: Array<
@@ -692,6 +745,7 @@ export type Article = {
   >;
   mainImage?: ImageWithAlt;
   body: RichText;
+  seo?: Seo;
   needsReview?: boolean;
   legacyId?: string;
 };
@@ -702,7 +756,6 @@ export type Resource = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  howTo?: string;
   title: string;
   slug: Slug;
   summary: string;
@@ -720,7 +773,7 @@ export type Resource = {
   >;
   email?: string;
   website?: string;
-  address?: string;
+  address?: PostalAddress;
   hours?: Array<
     {
       _key: string;
@@ -738,6 +791,7 @@ export type Resource = {
     _key: string;
   }>;
   lastVerified?: string;
+  seo?: Seo;
   needsReview?: boolean;
   legacyId?: string;
 };
@@ -748,7 +802,6 @@ export type Event = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  howTo?: string;
   title: string;
   slug: Slug;
   start: string;
@@ -760,7 +813,11 @@ export type Event = {
     skipDates?: Array<string>;
   };
   location: string;
-  address?: string;
+  address?: PostalAddress;
+  attendance?: "inPerson" | "online" | "mixed";
+  onlineUrl?: string;
+  status?:
+    "scheduled" | "cancelled" | "postponed" | "movedOnline" | "rescheduled";
   summary: string;
   topics?: Array<
     {
@@ -772,8 +829,10 @@ export type Event = {
     required?: boolean;
     link?: Link;
   };
+  isFree?: boolean;
   cost?: string;
   flyer?: ImageWithAlt;
+  seo?: Seo;
   details?: RichText;
 };
 
@@ -783,7 +842,6 @@ export type NewsletterEdition = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  howTo?: string;
   publishMonth: string;
   coverImage?: ImageWithAlt;
   coverMessage?: string;
@@ -881,25 +939,12 @@ export type Author = {
   _rev: string;
   name: string;
   slug: Slug;
+  role?: string;
+  credentials?: string;
   image?: ImageWithAlt;
   bio?: string;
+  profiles?: Array<string>;
   tribute?: string;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x: number;
-  y: number;
-  height: number;
-  width: number;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -1025,7 +1070,9 @@ export type AllSanitySchemaTypes =
   | PageBuilder
   | OpeningHours
   | PhoneNumber
+  | PostalAddress
   | SanityImageAssetReference
+  | Seo
   | ImageWithAlt
   | PageReference
   | ArticleReference
@@ -1038,6 +1085,8 @@ export type AllSanitySchemaTypes =
   | Redirect
   | Navigation
   | Settings
+  | SanityImageCrop
+  | SanityImageHotspot
   | Home
   | HelpfulLink
   | MonthlyUpdate
@@ -1050,8 +1099,6 @@ export type AllSanitySchemaTypes =
   | Topic
   | Slug
   | Author
-  | SanityImageCrop
-  | SanityImageHotspot
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -1083,914 +1130,186 @@ export type QueryImageTypeResult = {
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: querySettings
-// Query: *[_id == "settings"][0]{    siteTitle,    tagline,    description,    heroImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    contactEmail,    contactPhone { label, number },    mailingAddress,    donateUrl,    nonprofitStatement,    newsletterTitle,    newsletterDedication,    subscribeInstructions  }
-export type QuerySettingsResult =
-  | {
-      siteTitle: null;
-      tagline: null;
-      description: null;
-      heroImage: null;
-      contactEmail: null;
-      contactPhone: null;
-      mailingAddress: null;
-      donateUrl: null;
-      nonprofitStatement: null;
-      newsletterTitle: null;
-      newsletterDedication: null;
-      subscribeInstructions: null;
-    }
-  | {
-      siteTitle: null;
-      tagline: null;
-      description: string;
-      heroImage: null;
-      contactEmail: null;
-      contactPhone: null;
-      mailingAddress: null;
-      donateUrl: null;
-      nonprofitStatement: null;
-      newsletterTitle: null;
-      newsletterDedication: null;
-      subscribeInstructions: null;
-    }
-  | {
-      siteTitle: null;
-      tagline: null;
-      description: SimpleText | null;
-      heroImage: null;
-      contactEmail: null;
-      contactPhone: null;
-      mailingAddress: null;
-      donateUrl: null;
-      nonprofitStatement: null;
-      newsletterTitle: null;
-      newsletterDedication: null;
-      subscribeInstructions: null;
-    }
-  | {
-      siteTitle: null;
-      tagline: null;
-      description: string | null;
-      heroImage: null;
-      contactEmail: null;
-      contactPhone: null;
-      mailingAddress: null;
-      donateUrl: null;
-      nonprofitStatement: null;
-      newsletterTitle: null;
-      newsletterDedication: null;
-      subscribeInstructions: null;
-    }
-  | {
-      siteTitle: string;
-      tagline: string | null;
-      description: string | null;
-      heroImage: {
-        id: string | null;
-        preview: string | null;
-        alt: string | "";
-        caption: string | null;
-        hotspot: {
-          x: number;
-          y: number;
-        } | null;
-        crop: {
-          top: number;
-          bottom: number;
-          left: number;
-          right: number;
-        } | null;
-      } | null;
-      contactEmail: string | null;
-      contactPhone: {
-        label: string | null;
-        number: string;
-      } | null;
-      mailingAddress: string | null;
-      donateUrl: string | null;
-      nonprofitStatement: string | null;
-      newsletterTitle: string | null;
-      newsletterDedication: string | null;
-      subscribeInstructions: string | null;
-    }
-  | null;
+// Query: *[_type == "settings" && _id == "settings"][0]{    siteTitle,    tagline,    description,    heroImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    contactEmail,    contactPhone { label, number },    mailingAddress{ street, city, state, zip, note },    profiles,    ein,    "logoId": logo.asset._ref,    "shareImageId": shareImage.asset._ref,    donateUrl,    nonprofitStatement,    newsletterTitle,    newsletterDedication,    subscribeInstructions  }
+export type QuerySettingsResult = {
+  siteTitle: string;
+  tagline: string | null;
+  description: string | null;
+  heroImage: {
+    id: string | null;
+    preview: string | null;
+    alt: string | "";
+    caption: string | null;
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      top: number;
+      bottom: number;
+      left: number;
+      right: number;
+    } | null;
+  } | null;
+  contactEmail: string | null;
+  contactPhone: {
+    label: string | null;
+    number: string;
+  } | null;
+  mailingAddress: {
+    street: string | null;
+    city: string | null;
+    state: string | null;
+    zip: string | null;
+    note: string | null;
+  } | null;
+  profiles: Array<string> | null;
+  ein: string | null;
+  logoId: string | null;
+  shareImageId: string | null;
+  donateUrl: string | null;
+  nonprofitStatement: string | null;
+  newsletterTitle: string | null;
+  newsletterDedication: string | null;
+  subscribeInstructions: string | null;
+} | null;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryNavigation
-// Query: *[_id == "navigation"][0]{    main[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } },    footer[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  }
-export type QueryNavigationResult =
-  | {
-      main: null;
-      footer: null;
-    }
-  | {
-      main: Array<{
-        _key: string;
-        label: string;
-        kind: "email" | "external" | "internal" | "phone" | "section";
-        section:
-          | "/about"
-          | "/articles"
-          | "/events"
-          | "/links"
-          | "/newsletter"
-          | "/resources"
-          | "/search"
-          | "/topics"
-          | "/whats-new"
-          | null;
-        url: string | null;
-        phone: string | null;
-        email: string | null;
-        target:
-          | {
-              _type: "article";
-              slug: string;
-              month: null;
-              title: string;
-            }
-          | {
-              _type: "event";
-              slug: string;
-              month: null;
-              title: string;
-            }
-          | {
-              _type: "monthlyUpdate";
-              slug: null;
-              month: string | null;
-              title: string | null;
-            }
-          | {
-              _type: "newsletterEdition";
-              slug: null;
-              month: string | null;
-              title: null;
-            }
-          | {
-              _type: "page";
-              slug: string;
-              month: null;
-              title: string;
-            }
-          | {
-              _type: "resource";
-              slug: string;
-              month: null;
-              title: string;
-            }
-          | {
-              _type: "topic";
-              slug: string;
-              month: null;
-              title: string;
-            }
-          | null;
-      }> | null;
-      footer: Array<{
-        _key: string;
-        label: string;
-        kind: "email" | "external" | "internal" | "phone" | "section";
-        section:
-          | "/about"
-          | "/articles"
-          | "/events"
-          | "/links"
-          | "/newsletter"
-          | "/resources"
-          | "/search"
-          | "/topics"
-          | "/whats-new"
-          | null;
-        url: string | null;
-        phone: string | null;
-        email: string | null;
-        target:
-          | {
-              _type: "article";
-              slug: string;
-              month: null;
-              title: string;
-            }
-          | {
-              _type: "event";
-              slug: string;
-              month: null;
-              title: string;
-            }
-          | {
-              _type: "monthlyUpdate";
-              slug: null;
-              month: string | null;
-              title: string | null;
-            }
-          | {
-              _type: "newsletterEdition";
-              slug: null;
-              month: string | null;
-              title: null;
-            }
-          | {
-              _type: "page";
-              slug: string;
-              month: null;
-              title: string;
-            }
-          | {
-              _type: "resource";
-              slug: string;
-              month: null;
-              title: string;
-            }
-          | {
-              _type: "topic";
-              slug: string;
-              month: null;
-              title: string;
-            }
-          | null;
-      }> | null;
-    }
-  | null;
+// Query: *[_type == "navigation" && _id == "navigation"][0]{    main[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } },    footer[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  }
+export type QueryNavigationResult = {
+  main: Array<{
+    _key: string;
+    label: string;
+    kind: "email" | "external" | "internal" | "phone" | "section";
+    section:
+      | "/about"
+      | "/articles"
+      | "/events"
+      | "/links"
+      | "/newsletter"
+      | "/resources"
+      | "/search"
+      | "/topics"
+      | "/whats-new"
+      | null;
+    url: string | null;
+    phone: string | null;
+    email: string | null;
+    target:
+      | {
+          _type: "article";
+          slug: string;
+          month: null;
+          title: string;
+        }
+      | {
+          _type: "event";
+          slug: string;
+          month: null;
+          title: string;
+        }
+      | {
+          _type: "monthlyUpdate";
+          slug: null;
+          month: string | null;
+          title: string | null;
+        }
+      | {
+          _type: "newsletterEdition";
+          slug: null;
+          month: string | null;
+          title: null;
+        }
+      | {
+          _type: "page";
+          slug: string;
+          month: null;
+          title: string;
+        }
+      | {
+          _type: "resource";
+          slug: string;
+          month: null;
+          title: string;
+        }
+      | {
+          _type: "topic";
+          slug: string;
+          month: null;
+          title: string;
+        }
+      | null;
+  }> | null;
+  footer: Array<{
+    _key: string;
+    label: string;
+    kind: "email" | "external" | "internal" | "phone" | "section";
+    section:
+      | "/about"
+      | "/articles"
+      | "/events"
+      | "/links"
+      | "/newsletter"
+      | "/resources"
+      | "/search"
+      | "/topics"
+      | "/whats-new"
+      | null;
+    url: string | null;
+    phone: string | null;
+    email: string | null;
+    target:
+      | {
+          _type: "article";
+          slug: string;
+          month: null;
+          title: string;
+        }
+      | {
+          _type: "event";
+          slug: string;
+          month: null;
+          title: string;
+        }
+      | {
+          _type: "monthlyUpdate";
+          slug: null;
+          month: string | null;
+          title: string | null;
+        }
+      | {
+          _type: "newsletterEdition";
+          slug: null;
+          month: string | null;
+          title: null;
+        }
+      | {
+          _type: "page";
+          slug: string;
+          month: null;
+          title: string;
+        }
+      | {
+          _type: "resource";
+          slug: string;
+          month: null;
+          title: string;
+        }
+      | {
+          _type: "topic";
+          slug: string;
+          month: null;
+          title: string;
+        }
+      | null;
+  }> | null;
+} | null;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryHome
-// Query: *[_id == "home"][0]{    sections[]{   ...,  _key,  _type,  _type == "heroBlock" => { image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } }, buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },  _type == "textBlock" => { body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } } },  _type == "imageBlock" => { images[]{ _key,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },  _type == "buttonsBlock" => { buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },  _type == "calloutBlock" => { link{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },  _type == "resourceListBlock" => {    "topicSlug": topic->slug.current,    "topicTitle": topic->title,    "picked": resources[]->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } }  },  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "linkListBlock" => {    "topicId": topic._ref,    "topicSlug": topic->slug.current,    "picked": links[]->{   _id,  title,  url,  source,  summary,  publishedAt }  },  _type == "faqBlock" => { items[]{ _key, question, answer } },  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } } }  }
-export type QueryHomeResult =
-  | {
-      sections: Array<
-        | {
-            _key: string;
-            _type: "articleListBlock";
-            heading?: string;
-            mode?: "joans-corner" | "latest" | "topic";
-            topic?: TopicReference;
-            limit?: number;
-            topicId: string | null;
-            topicSlug: string | null;
-          }
-        | {
-            _key: string;
-            _type: "buttonsBlock";
-            heading?: string;
-            intro?: string;
-            buttons: Array<{
-              _key: string;
-              label: string;
-              kind: "email" | "external" | "internal" | "phone" | "section";
-              section:
-                | "/about"
-                | "/articles"
-                | "/events"
-                | "/links"
-                | "/newsletter"
-                | "/resources"
-                | "/search"
-                | "/topics"
-                | "/whats-new"
-                | null;
-              url: string | null;
-              phone: string | null;
-              email: string | null;
-              target:
-                | {
-                    _type: "article";
-                    slug: string;
-                    month: null;
-                    title: string;
-                  }
-                | {
-                    _type: "event";
-                    slug: string;
-                    month: null;
-                    title: string;
-                  }
-                | {
-                    _type: "monthlyUpdate";
-                    slug: null;
-                    month: string | null;
-                    title: string | null;
-                  }
-                | {
-                    _type: "newsletterEdition";
-                    slug: null;
-                    month: string | null;
-                    title: null;
-                  }
-                | {
-                    _type: "page";
-                    slug: string;
-                    month: null;
-                    title: string;
-                  }
-                | {
-                    _type: "resource";
-                    slug: string;
-                    month: null;
-                    title: string;
-                  }
-                | {
-                    _type: "topic";
-                    slug: string;
-                    month: null;
-                    title: string;
-                  }
-                | null;
-            }>;
-          }
-        | {
-            _key: string;
-            _type: "calloutBlock";
-            tone?: "info" | "warning";
-            text: string;
-            link: {
-              _key: null;
-              label: string;
-              kind: "email" | "external" | "internal" | "phone" | "section";
-              section:
-                | "/about"
-                | "/articles"
-                | "/events"
-                | "/links"
-                | "/newsletter"
-                | "/resources"
-                | "/search"
-                | "/topics"
-                | "/whats-new"
-                | null;
-              url: string | null;
-              phone: string | null;
-              email: string | null;
-              target:
-                | {
-                    _type: "article";
-                    slug: string;
-                    month: null;
-                    title: string;
-                  }
-                | {
-                    _type: "event";
-                    slug: string;
-                    month: null;
-                    title: string;
-                  }
-                | {
-                    _type: "monthlyUpdate";
-                    slug: null;
-                    month: string | null;
-                    title: string | null;
-                  }
-                | {
-                    _type: "newsletterEdition";
-                    slug: null;
-                    month: string | null;
-                    title: null;
-                  }
-                | {
-                    _type: "page";
-                    slug: string;
-                    month: null;
-                    title: string;
-                  }
-                | {
-                    _type: "resource";
-                    slug: string;
-                    month: null;
-                    title: string;
-                  }
-                | {
-                    _type: "topic";
-                    slug: string;
-                    month: null;
-                    title: string;
-                  }
-                | null;
-            } | null;
-          }
-        | {
-            _key: string;
-            _type: "contactBlock";
-            heading?: string;
-            intro?: string;
-            useSiteContact?: boolean;
-            phone?: PhoneNumber;
-            email?: string;
-            address?: string;
-          }
-        | {
-            _key: string;
-            _type: "donateBlock";
-            heading?: string;
-            text?: string;
-          }
-        | {
-            _key: string;
-            _type: "eventListBlock";
-            heading?: string;
-            intro?: string;
-            mode?: "all" | "msl" | "topic";
-            topic?: TopicReference;
-            limit?: number;
-            topicId: string | null;
-            topicSlug: string | null;
-          }
-        | {
-            _key: string;
-            _type: "faqBlock";
-            heading?: string;
-            items: Array<{
-              _key: string;
-              question: string;
-              answer: SimpleText;
-            }>;
-          }
-        | {
-            _key: string;
-            _type: "fileBlock";
-            heading?: string;
-            intro?: string;
-            file: {
-              url: string;
-              size: number;
-              extension: string;
-              originalFilename: string | null;
-            } | null;
-            buttonLabel?: string;
-          }
-        | {
-            _key: string;
-            _type: "heroBlock";
-            heading: string;
-            text?: string;
-            image: {
-              id: string | null;
-              preview: string | null;
-              alt: string | "";
-              caption: string | null;
-              hotspot: {
-                x: number;
-                y: number;
-              } | null;
-              crop: {
-                top: number;
-                bottom: number;
-                left: number;
-                right: number;
-              } | null;
-            } | null;
-            showSearch?: boolean;
-            buttons: Array<{
-              _key: string;
-              label: string;
-              kind: "email" | "external" | "internal" | "phone" | "section";
-              section:
-                | "/about"
-                | "/articles"
-                | "/events"
-                | "/links"
-                | "/newsletter"
-                | "/resources"
-                | "/search"
-                | "/topics"
-                | "/whats-new"
-                | null;
-              url: string | null;
-              phone: string | null;
-              email: string | null;
-              target:
-                | {
-                    _type: "article";
-                    slug: string;
-                    month: null;
-                    title: string;
-                  }
-                | {
-                    _type: "event";
-                    slug: string;
-                    month: null;
-                    title: string;
-                  }
-                | {
-                    _type: "monthlyUpdate";
-                    slug: null;
-                    month: string | null;
-                    title: string | null;
-                  }
-                | {
-                    _type: "newsletterEdition";
-                    slug: null;
-                    month: string | null;
-                    title: null;
-                  }
-                | {
-                    _type: "page";
-                    slug: string;
-                    month: null;
-                    title: string;
-                  }
-                | {
-                    _type: "resource";
-                    slug: string;
-                    month: null;
-                    title: string;
-                  }
-                | {
-                    _type: "topic";
-                    slug: string;
-                    month: null;
-                    title: string;
-                  }
-                | null;
-            }> | null;
-          }
-        | {
-            _key: string;
-            _type: "imageBlock";
-            heading?: string;
-            images: Array<{
-              _key: string;
-              id: string | null;
-              preview: string | null;
-              alt: string | "";
-              caption: string | null;
-              hotspot: {
-                x: number;
-                y: number;
-              } | null;
-              crop: {
-                top: number;
-                bottom: number;
-                left: number;
-                right: number;
-              } | null;
-            }>;
-          }
-        | {
-            _key: string;
-            _type: "linkListBlock";
-            heading?: string;
-            intro?: string;
-            mode?: "manual" | "topic";
-            topic?: TopicReference;
-            links?: Array<
-              {
-                _key: string;
-              } & HelpfulLinkReference
-            >;
-            limit?: number;
-            topicId: string | null;
-            topicSlug: string | null;
-            picked: Array<{
-              _id: string;
-              title: string;
-              url: string;
-              source: string;
-              summary: string;
-              publishedAt: string | null;
-            }> | null;
-          }
-        | {
-            _key: string;
-            _type: "newsletterSignupBlock";
-            heading?: string;
-            text?: string;
-            showLatest?: boolean;
-          }
-        | {
-            _key: string;
-            _type: "quickContactsBlock";
-            heading?: string;
-            contacts: Array<{
-              name: string;
-              number: PhoneNumber;
-              note?: string;
-              _type: "quickContact";
-              _key: string;
-            }>;
-          }
-        | {
-            _key: string;
-            _type: "resourceListBlock";
-            heading?: string;
-            intro?: string;
-            mode?: "manual" | "topic";
-            topic?: TopicReference;
-            resources?: Array<
-              {
-                _key: string;
-              } & ResourceReference
-            >;
-            limit?: number;
-            topicSlug: string | null;
-            topicTitle: string | null;
-            picked: Array<{
-              _id: string;
-              title: string;
-              slug: string;
-              summary: string;
-              serviceArea: "arizona" | "maricopa" | "national" | "pinal";
-              phones: Array<{
-                _key: string;
-                label: string | null;
-                number: string;
-              }> | null;
-              website: string | null;
-              address: string | null;
-              topics: Array<{
-                title: string;
-                slug: string;
-              }> | null;
-            }> | null;
-          }
-        | {
-            _key: string;
-            _type: "textBlock";
-            heading?: string;
-            body: Array<
-              | {
-                  children?: Array<{
-                    marks?: Array<string>;
-                    text?: string;
-                    _type: "span";
-                    _key: string;
-                  }>;
-                  style?: "blockquote" | "h2" | "h3" | "normal";
-                  listItem?: "bullet" | "number";
-                  markDefs: Array<
-                    | {
-                        reference:
-                          | ArticleReference
-                          | EventReference
-                          | MonthlyUpdateReference
-                          | NewsletterEditionReference
-                          | PageReference
-                          | ResourceReference
-                          | TopicReference;
-                        _type: "internalLink";
-                        _key: string;
-                        target:
-                          | {
-                              _type: "article";
-                              slug: string;
-                              month: null;
-                              title: string;
-                            }
-                          | {
-                              _type: "event";
-                              slug: string;
-                              month: null;
-                              title: string;
-                            }
-                          | {
-                              _type: "monthlyUpdate";
-                              slug: null;
-                              month: string | null;
-                              title: string | null;
-                            }
-                          | {
-                              _type: "newsletterEdition";
-                              slug: null;
-                              month: string | null;
-                              title: null;
-                            }
-                          | {
-                              _type: "page";
-                              slug: string;
-                              month: null;
-                              title: string;
-                            }
-                          | {
-                              _type: "resource";
-                              slug: string;
-                              month: null;
-                              title: string;
-                            }
-                          | {
-                              _type: "topic";
-                              slug: string;
-                              month: null;
-                              title: string;
-                            };
-                      }
-                    | {
-                        href: string;
-                        _type: "link";
-                        _key: string;
-                      }
-                  > | null;
-                  level?: number;
-                  _type: "block";
-                  _key: string;
-                }
-              | {
-                  tone?: "info" | "warning";
-                  text: string;
-                  _type: "callout";
-                  _key: string;
-                  markDefs: null;
-                }
-              | {
-                  event: {
-                    _id: string;
-                    title: string;
-                    slug: string;
-                    start: string;
-                    end: string | null;
-                    allDay: boolean | null;
-                    repeat: {
-                      frequency:
-                        | "monthlyDate"
-                        | "monthlyWeekday"
-                        | "none"
-                        | "weekly"
-                        | null;
-                      until: string | null;
-                      skipDates: Array<string> | null;
-                    } | null;
-                    location: string;
-                    hostedByMsl: boolean | null;
-                    summary: string;
-                  };
-                  _type: "eventCard";
-                  _key: string;
-                  markDefs: null;
-                }
-              | {
-                  asset?: SanityFileAssetReference;
-                  media?: unknown;
-                  title: string;
-                  _type: "fileAttachment";
-                  _key: string;
-                  markDefs: null;
-                  file: {
-                    url: string;
-                    size: number;
-                    extension: string;
-                    originalFilename: string | null;
-                  } | null;
-                }
-              | {
-                  _key: string;
-                  _type: "imageWithAlt";
-                  asset?: SanityImageAssetReference;
-                  media?: unknown;
-                  hotspot: {
-                    x: number;
-                    y: number;
-                  } | null;
-                  crop: {
-                    top: number;
-                    bottom: number;
-                    left: number;
-                    right: number;
-                  } | null;
-                  alt: string | "";
-                  caption: string | null;
-                  markDefs: null;
-                  id: string | null;
-                  preview: string | null;
-                }
-              | {
-                  resource: {
-                    _id: string;
-                    title: string;
-                    slug: string;
-                    summary: string;
-                    serviceArea: "arizona" | "maricopa" | "national" | "pinal";
-                    phones: Array<{
-                      _key: string;
-                      label: string | null;
-                      number: string;
-                    }> | null;
-                    website: string | null;
-                    address: string | null;
-                    topics: Array<{
-                      title: string;
-                      slug: string;
-                    }> | null;
-                  };
-                  _type: "resourceCard";
-                  _key: string;
-                  markDefs: null;
-                }
-            >;
-          }
-        | {
-            _key: string;
-            _type: "topicsBlock";
-            heading?: string;
-            intro?: string;
-          }
-        | {
-            _key: string;
-            _type: "videoBlock";
-            heading?: string;
-            url: string;
-            caption: string;
-          }
-        | {
-            _key: string;
-            _type: "whatsNewBlock";
-            heading?: string;
-            buttonLabel?: string;
-          }
-      >;
-    }
-  | {
-      sections: Array<
-        | {
-            heading?: string;
-            includeEvents?: boolean;
-            hiddenEvents?: Array<
-              {
-                _key: string;
-              } & EventReference
-            >;
-            extraRows?: Array<{
-              when: string;
-              what: string;
-              where?: string;
-              _type: "row";
-              _key: string;
-            }>;
-            _type: "comingUpSection";
-            _key: string;
-          }
-        | {
-            heading: string;
-            pages: Array<
-              {
-                _key: string;
-              } & ImageWithAlt
-            >;
-            _type: "flyerSection";
-            _key: string;
-          }
-        | {
-            heading: string;
-            body?: RichText;
-            _type: "funSection";
-            _key: string;
-          }
-        | {
-            heading: string;
-            article?: ArticleReference;
-            byline?: string;
-            body?: RichText;
-            image?: ImageWithAlt;
-            _type: "storySection";
-            _key: string;
-          }
-      >;
-    }
-  | {
-      sections: null;
-    }
-  | null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryStats
-// Query: {    "resources": count(*[_type == "resource"]),    "topics": count(*[_type == "topic"]),    "links": count(*[_type == "helpfulLink"])  }
-export type QueryStatsResult = {
-  resources: number;
-  topics: number;
-  links: number;
-};
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryTopics
-// Query: *[_type == "topic"] | order(order asc){    _id,    title,    "slug": slug.current,    description,    icon,    "resourceCount": count(*[_type == "resource" && references(^._id)])  }
-export type QueryTopicsResult = Array<{
-  _id: string;
-  title: string;
-  slug: string;
-  description: string;
-  icon:
-    | "brain"
-    | "bus"
-    | "flower"
-    | "hand-heart"
-    | "heart-pulse"
-    | "house"
-    | "medal"
-    | "paw-print"
-    | "piggy-bank"
-    | "scale"
-    | "shield-check"
-    | "sun"
-    | "users"
-    | "utensils";
-  resourceCount: number;
-}>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryPage
-// Query: *[_type == "page" && slug.current == $slug][0]{    _id,    title,    description,    "slug": slug.current,    sections[]{   ...,  _key,  _type,  _type == "heroBlock" => { image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } }, buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },  _type == "textBlock" => { body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } } },  _type == "imageBlock" => { images[]{ _key,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },  _type == "buttonsBlock" => { buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },  _type == "calloutBlock" => { link{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },  _type == "resourceListBlock" => {    "topicSlug": topic->slug.current,    "topicTitle": topic->title,    "picked": resources[]->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } }  },  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "linkListBlock" => {    "topicId": topic._ref,    "topicSlug": topic->slug.current,    "picked": links[]->{   _id,  title,  url,  source,  summary,  publishedAt }  },  _type == "faqBlock" => { items[]{ _key, question, answer } },  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } } }  }
-export type QueryPageResult = {
-  _id: string;
-  title: string;
-  description: string | null;
-  slug: string;
+// Query: *[_type == "home" && _id == "home"][0]{    sections[]{   ...,  _key,  _type,  _type == "heroBlock" => { image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } }, buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },  _type == "textBlock" => { body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary,  status,  attendance } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address{ street, city, state, zip, note },  "topics": topics[]->{ title, "slug": slug.current } } } } },  _type == "imageBlock" => { images[]{ _key,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },  _type == "buttonsBlock" => { buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },  _type == "calloutBlock" => { link{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },  _type == "resourceListBlock" => {    "topicSlug": topic->slug.current,    "topicTitle": topic->title,    "picked": resources[]->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address{ street, city, state, zip, note },  "topics": topics[]->{ title, "slug": slug.current } }  },  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "linkListBlock" => {    "topicId": topic._ref,    "topicSlug": topic->slug.current,    "picked": links[]->{   _id,  title,  url,  source,  summary,  publishedAt }  },  _type == "faqBlock" => { items[]{ _key, question, answer, "answerText": pt::text(answer) } },  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } } }  }
+export type QueryHomeResult = {
   sections: Array<
     | {
         _key: string;
@@ -2175,6 +1494,7 @@ export type QueryPageResult = {
           _key: string;
           question: string;
           answer: SimpleText;
+          answerText: string;
         }>;
       }
     | {
@@ -2368,7 +1688,13 @@ export type QueryPageResult = {
             number: string;
           }> | null;
           website: string | null;
-          address: string | null;
+          address: {
+            street: string | null;
+            city: string | null;
+            state: string | null;
+            zip: string | null;
+            note: string | null;
+          } | null;
           topics: Array<{
             title: string;
             slug: string;
@@ -2479,6 +1805,14 @@ export type QueryPageResult = {
                 location: string;
                 hostedByMsl: boolean | null;
                 summary: string;
+                status:
+                  | "cancelled"
+                  | "movedOnline"
+                  | "postponed"
+                  | "rescheduled"
+                  | "scheduled"
+                  | null;
+                attendance: "inPerson" | "mixed" | "online" | null;
               };
               _type: "eventCard";
               _key: string;
@@ -2514,6 +1848,7 @@ export type QueryPageResult = {
                 right: number;
               } | null;
               alt: string | "";
+              decorative?: boolean;
               caption: string | null;
               markDefs: null;
               id: string | null;
@@ -2532,7 +1867,659 @@ export type QueryPageResult = {
                   number: string;
                 }> | null;
                 website: string | null;
-                address: string | null;
+                address: {
+                  street: string | null;
+                  city: string | null;
+                  state: string | null;
+                  zip: string | null;
+                  note: string | null;
+                } | null;
+                topics: Array<{
+                  title: string;
+                  slug: string;
+                }> | null;
+              };
+              _type: "resourceCard";
+              _key: string;
+              markDefs: null;
+            }
+        >;
+      }
+    | {
+        _key: string;
+        _type: "topicsBlock";
+        heading?: string;
+        intro?: string;
+      }
+    | {
+        _key: string;
+        _type: "videoBlock";
+        heading?: string;
+        url: string;
+        caption: string;
+      }
+    | {
+        _key: string;
+        _type: "whatsNewBlock";
+        heading?: string;
+        buttonLabel?: string;
+      }
+  >;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryStats
+// Query: {    "resources": count(*[_type == "resource"]),    "topics": count(*[_type == "topic"]),    "links": count(*[_type == "helpfulLink"])  }
+export type QueryStatsResult = {
+  resources: number;
+  topics: number;
+  links: number;
+};
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryTopics
+// Query: *[_type == "topic"] | order(order asc){    _id,    title,    "slug": slug.current,    description,    icon,    "resourceCount": count(*[_type == "resource" && references(^._id)])  }
+export type QueryTopicsResult = Array<{
+  _id: string;
+  title: string;
+  slug: string;
+  description: string;
+  icon:
+    | "brain"
+    | "bus"
+    | "flower"
+    | "hand-heart"
+    | "heart-pulse"
+    | "house"
+    | "medal"
+    | "paw-print"
+    | "piggy-bank"
+    | "scale"
+    | "shield-check"
+    | "sun"
+    | "users"
+    | "utensils";
+  resourceCount: number;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryPage
+// Query: *[_type == "page" && slug.current == $slug][0]{    _id,    title,    description,    "slug": slug.current,    "seo": seo{ title, description, "imageId": image.asset._ref, noIndex },    sections[]{   ...,  _key,  _type,  _type == "heroBlock" => { image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } }, buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },  _type == "textBlock" => { body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary,  status,  attendance } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address{ street, city, state, zip, note },  "topics": topics[]->{ title, "slug": slug.current } } } } },  _type == "imageBlock" => { images[]{ _key,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },  _type == "buttonsBlock" => { buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },  _type == "calloutBlock" => { link{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },  _type == "resourceListBlock" => {    "topicSlug": topic->slug.current,    "topicTitle": topic->title,    "picked": resources[]->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address{ street, city, state, zip, note },  "topics": topics[]->{ title, "slug": slug.current } }  },  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "linkListBlock" => {    "topicId": topic._ref,    "topicSlug": topic->slug.current,    "picked": links[]->{   _id,  title,  url,  source,  summary,  publishedAt }  },  _type == "faqBlock" => { items[]{ _key, question, answer, "answerText": pt::text(answer) } },  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } } }  }
+export type QueryPageResult = {
+  _id: string;
+  title: string;
+  description: string | null;
+  slug: string;
+  seo: {
+    title: string | null;
+    description: string | null;
+    imageId: string | null;
+    noIndex: boolean | null;
+  } | null;
+  sections: Array<
+    | {
+        _key: string;
+        _type: "articleListBlock";
+        heading?: string;
+        mode?: "joans-corner" | "latest" | "topic";
+        topic?: TopicReference;
+        limit?: number;
+        topicId: string | null;
+        topicSlug: string | null;
+      }
+    | {
+        _key: string;
+        _type: "buttonsBlock";
+        heading?: string;
+        intro?: string;
+        buttons: Array<{
+          _key: string;
+          label: string;
+          kind: "email" | "external" | "internal" | "phone" | "section";
+          section:
+            | "/about"
+            | "/articles"
+            | "/events"
+            | "/links"
+            | "/newsletter"
+            | "/resources"
+            | "/search"
+            | "/topics"
+            | "/whats-new"
+            | null;
+          url: string | null;
+          phone: string | null;
+          email: string | null;
+          target:
+            | {
+                _type: "article";
+                slug: string;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "event";
+                slug: string;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "monthlyUpdate";
+                slug: null;
+                month: string | null;
+                title: string | null;
+              }
+            | {
+                _type: "newsletterEdition";
+                slug: null;
+                month: string | null;
+                title: null;
+              }
+            | {
+                _type: "page";
+                slug: string;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "resource";
+                slug: string;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "topic";
+                slug: string;
+                month: null;
+                title: string;
+              }
+            | null;
+        }>;
+      }
+    | {
+        _key: string;
+        _type: "calloutBlock";
+        tone?: "info" | "warning";
+        text: string;
+        link: {
+          _key: null;
+          label: string;
+          kind: "email" | "external" | "internal" | "phone" | "section";
+          section:
+            | "/about"
+            | "/articles"
+            | "/events"
+            | "/links"
+            | "/newsletter"
+            | "/resources"
+            | "/search"
+            | "/topics"
+            | "/whats-new"
+            | null;
+          url: string | null;
+          phone: string | null;
+          email: string | null;
+          target:
+            | {
+                _type: "article";
+                slug: string;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "event";
+                slug: string;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "monthlyUpdate";
+                slug: null;
+                month: string | null;
+                title: string | null;
+              }
+            | {
+                _type: "newsletterEdition";
+                slug: null;
+                month: string | null;
+                title: null;
+              }
+            | {
+                _type: "page";
+                slug: string;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "resource";
+                slug: string;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "topic";
+                slug: string;
+                month: null;
+                title: string;
+              }
+            | null;
+        } | null;
+      }
+    | {
+        _key: string;
+        _type: "contactBlock";
+        heading?: string;
+        intro?: string;
+        useSiteContact?: boolean;
+        phone?: PhoneNumber;
+        email?: string;
+        address?: string;
+      }
+    | {
+        _key: string;
+        _type: "donateBlock";
+        heading?: string;
+        text?: string;
+      }
+    | {
+        _key: string;
+        _type: "eventListBlock";
+        heading?: string;
+        intro?: string;
+        mode?: "all" | "msl" | "topic";
+        topic?: TopicReference;
+        limit?: number;
+        topicId: string | null;
+        topicSlug: string | null;
+      }
+    | {
+        _key: string;
+        _type: "faqBlock";
+        heading?: string;
+        items: Array<{
+          _key: string;
+          question: string;
+          answer: SimpleText;
+          answerText: string;
+        }>;
+      }
+    | {
+        _key: string;
+        _type: "fileBlock";
+        heading?: string;
+        intro?: string;
+        file: {
+          url: string;
+          size: number;
+          extension: string;
+          originalFilename: string | null;
+        } | null;
+        buttonLabel?: string;
+      }
+    | {
+        _key: string;
+        _type: "heroBlock";
+        heading: string;
+        text?: string;
+        image: {
+          id: string | null;
+          preview: string | null;
+          alt: string | "";
+          caption: string | null;
+          hotspot: {
+            x: number;
+            y: number;
+          } | null;
+          crop: {
+            top: number;
+            bottom: number;
+            left: number;
+            right: number;
+          } | null;
+        } | null;
+        showSearch?: boolean;
+        buttons: Array<{
+          _key: string;
+          label: string;
+          kind: "email" | "external" | "internal" | "phone" | "section";
+          section:
+            | "/about"
+            | "/articles"
+            | "/events"
+            | "/links"
+            | "/newsletter"
+            | "/resources"
+            | "/search"
+            | "/topics"
+            | "/whats-new"
+            | null;
+          url: string | null;
+          phone: string | null;
+          email: string | null;
+          target:
+            | {
+                _type: "article";
+                slug: string;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "event";
+                slug: string;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "monthlyUpdate";
+                slug: null;
+                month: string | null;
+                title: string | null;
+              }
+            | {
+                _type: "newsletterEdition";
+                slug: null;
+                month: string | null;
+                title: null;
+              }
+            | {
+                _type: "page";
+                slug: string;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "resource";
+                slug: string;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "topic";
+                slug: string;
+                month: null;
+                title: string;
+              }
+            | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "imageBlock";
+        heading?: string;
+        images: Array<{
+          _key: string;
+          id: string | null;
+          preview: string | null;
+          alt: string | "";
+          caption: string | null;
+          hotspot: {
+            x: number;
+            y: number;
+          } | null;
+          crop: {
+            top: number;
+            bottom: number;
+            left: number;
+            right: number;
+          } | null;
+        }>;
+      }
+    | {
+        _key: string;
+        _type: "linkListBlock";
+        heading?: string;
+        intro?: string;
+        mode?: "manual" | "topic";
+        topic?: TopicReference;
+        links?: Array<
+          {
+            _key: string;
+          } & HelpfulLinkReference
+        >;
+        limit?: number;
+        topicId: string | null;
+        topicSlug: string | null;
+        picked: Array<{
+          _id: string;
+          title: string;
+          url: string;
+          source: string;
+          summary: string;
+          publishedAt: string | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "newsletterSignupBlock";
+        heading?: string;
+        text?: string;
+        showLatest?: boolean;
+      }
+    | {
+        _key: string;
+        _type: "quickContactsBlock";
+        heading?: string;
+        contacts: Array<{
+          name: string;
+          number: PhoneNumber;
+          note?: string;
+          _type: "quickContact";
+          _key: string;
+        }>;
+      }
+    | {
+        _key: string;
+        _type: "resourceListBlock";
+        heading?: string;
+        intro?: string;
+        mode?: "manual" | "topic";
+        topic?: TopicReference;
+        resources?: Array<
+          {
+            _key: string;
+          } & ResourceReference
+        >;
+        limit?: number;
+        topicSlug: string | null;
+        topicTitle: string | null;
+        picked: Array<{
+          _id: string;
+          title: string;
+          slug: string;
+          summary: string;
+          serviceArea: "arizona" | "maricopa" | "national" | "pinal";
+          phones: Array<{
+            _key: string;
+            label: string | null;
+            number: string;
+          }> | null;
+          website: string | null;
+          address: {
+            street: string | null;
+            city: string | null;
+            state: string | null;
+            zip: string | null;
+            note: string | null;
+          } | null;
+          topics: Array<{
+            title: string;
+            slug: string;
+          }> | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "textBlock";
+        heading?: string;
+        body: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h2" | "h3" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs: Array<
+                | {
+                    reference:
+                      | ArticleReference
+                      | EventReference
+                      | MonthlyUpdateReference
+                      | NewsletterEditionReference
+                      | PageReference
+                      | ResourceReference
+                      | TopicReference;
+                    _type: "internalLink";
+                    _key: string;
+                    target:
+                      | {
+                          _type: "article";
+                          slug: string;
+                          month: null;
+                          title: string;
+                        }
+                      | {
+                          _type: "event";
+                          slug: string;
+                          month: null;
+                          title: string;
+                        }
+                      | {
+                          _type: "monthlyUpdate";
+                          slug: null;
+                          month: string | null;
+                          title: string | null;
+                        }
+                      | {
+                          _type: "newsletterEdition";
+                          slug: null;
+                          month: string | null;
+                          title: null;
+                        }
+                      | {
+                          _type: "page";
+                          slug: string;
+                          month: null;
+                          title: string;
+                        }
+                      | {
+                          _type: "resource";
+                          slug: string;
+                          month: null;
+                          title: string;
+                        }
+                      | {
+                          _type: "topic";
+                          slug: string;
+                          month: null;
+                          title: string;
+                        };
+                  }
+                | {
+                    href: string;
+                    _type: "link";
+                    _key: string;
+                  }
+              > | null;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              tone?: "info" | "warning";
+              text: string;
+              _type: "callout";
+              _key: string;
+              markDefs: null;
+            }
+          | {
+              event: {
+                _id: string;
+                title: string;
+                slug: string;
+                start: string;
+                end: string | null;
+                allDay: boolean | null;
+                repeat: {
+                  frequency:
+                    "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
+                  until: string | null;
+                  skipDates: Array<string> | null;
+                } | null;
+                location: string;
+                hostedByMsl: boolean | null;
+                summary: string;
+                status:
+                  | "cancelled"
+                  | "movedOnline"
+                  | "postponed"
+                  | "rescheduled"
+                  | "scheduled"
+                  | null;
+                attendance: "inPerson" | "mixed" | "online" | null;
+              };
+              _type: "eventCard";
+              _key: string;
+              markDefs: null;
+            }
+          | {
+              asset?: SanityFileAssetReference;
+              media?: unknown;
+              title: string;
+              _type: "fileAttachment";
+              _key: string;
+              markDefs: null;
+              file: {
+                url: string;
+                size: number;
+                extension: string;
+                originalFilename: string | null;
+              } | null;
+            }
+          | {
+              _key: string;
+              _type: "imageWithAlt";
+              asset?: SanityImageAssetReference;
+              media?: unknown;
+              hotspot: {
+                x: number;
+                y: number;
+              } | null;
+              crop: {
+                top: number;
+                bottom: number;
+                left: number;
+                right: number;
+              } | null;
+              alt: string | "";
+              decorative?: boolean;
+              caption: string | null;
+              markDefs: null;
+              id: string | null;
+              preview: string | null;
+            }
+          | {
+              resource: {
+                _id: string;
+                title: string;
+                slug: string;
+                summary: string;
+                serviceArea: "arizona" | "maricopa" | "national" | "pinal";
+                phones: Array<{
+                  _key: string;
+                  label: string | null;
+                  number: string;
+                }> | null;
+                website: string | null;
+                address: {
+                  street: string | null;
+                  city: string | null;
+                  state: string | null;
+                  zip: string | null;
+                  note: string | null;
+                } | null;
                 topics: Array<{
                   title: string;
                   slug: string;
@@ -2573,9 +2560,10 @@ export type QueryPagePathsResult = Array<string>;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryTopic
-// Query: *[_type == "topic" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    description,    icon,    "resources": *[_type == "resource" && references(^._id)] | order(title asc){   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } },    "links": *[_type == "helpfulLink" && references(^._id)] | order(publishedAt desc)[0...12]{   _id,  title,  url,  source,  summary,  publishedAt },    "linkCount": count(*[_type == "helpfulLink" && references(^._id)]),    "articles": *[_type == "article" && references(^._id)] | order(publishedAt desc)[0...6]{   _id,  title,  "slug": slug.current,  summary,  publishedAt,  series,  "author": author->{ name, "slug": slug.current },  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } }  }
+// Query: *[_type == "topic" && slug.current == $slug][0]{    _id,    _updatedAt,    title,    "slug": slug.current,    description,    icon,    "resources": *[_type == "resource" && references(^._id)] | order(title asc){   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address{ street, city, state, zip, note },  "topics": topics[]->{ title, "slug": slug.current } },    "links": *[_type == "helpfulLink" && references(^._id)] | order(publishedAt desc)[0...12]{   _id,  title,  url,  source,  summary,  publishedAt },    "linkCount": count(*[_type == "helpfulLink" && references(^._id)]),    "articles": *[_type == "article" && references(^._id)] | order(publishedAt desc)[0...6]{   _id,  title,  "slug": slug.current,  summary,  publishedAt,  series,  "author": author->{ name, "slug": slug.current },  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } }  }
 export type QueryTopicResult = {
   _id: string;
+  _updatedAt: string;
   title: string;
   slug: string;
   description: string;
@@ -2606,7 +2594,13 @@ export type QueryTopicResult = {
       number: string;
     }> | null;
     website: string | null;
-    address: string | null;
+    address: {
+      street: string | null;
+      city: string | null;
+      state: string | null;
+      zip: string | null;
+      note: string | null;
+    } | null;
     topics: Array<{
       title: string;
       slug: string;
@@ -2658,7 +2652,7 @@ export type QueryResourcesCountResult = number;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryResourcesForPrint
-// Query: *[  _type == "resource"  && ($topic == "" || $topic in topics[]->slug.current)  && ($area == "" || serviceArea == $area)  && ($q == "" || title match $q + "*" || summary match $q + "*" || pt::text(description) match $q + "*")] | order(title asc){      _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current },    hours[]{ day, opens, closes },    hoursNote  }
+// Query: *[  _type == "resource"  && ($topic == "" || $topic in topics[]->slug.current)  && ($area == "" || serviceArea == $area)  && ($q == "" || title match $q + "*" || summary match $q + "*" || pt::text(description) match $q + "*")] | order(title asc){      _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address{ street, city, state, zip, note },  "topics": topics[]->{ title, "slug": slug.current },    hours[]{ day, opens, closes },    hoursNote  }
 export type QueryResourcesForPrintResult = Array<{
   _id: string;
   title: string;
@@ -2671,7 +2665,13 @@ export type QueryResourcesForPrintResult = Array<{
     number: string;
   }> | null;
   website: string | null;
-  address: string | null;
+  address: {
+    street: string | null;
+    city: string | null;
+    state: string | null;
+    zip: string | null;
+    note: string | null;
+  } | null;
   topics: Array<{
     title: string;
     slug: string;
@@ -2789,7 +2789,7 @@ export type QueryResourcesForPrintResult = Array<{
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryResource
-// Query: *[_type == "resource" && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current },    email,    isGovernment,    hours[]{ _key, day, opens, closes },    hoursNote,    description[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } },    eligibility,    cost,    attachments[]{ _key, title, "file": asset->{ url, size, extension } },    lastVerified,    _updatedAt  }
+// Query: *[_type == "resource" && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address{ street, city, state, zip, note },  "topics": topics[]->{ title, "slug": slug.current },    email,    isGovernment,    hours[]{ _key, day, opens, closes },    hoursNote,    description[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary,  status,  attendance } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address{ street, city, state, zip, note },  "topics": topics[]->{ title, "slug": slug.current } } } },    eligibility,    cost,    attachments[]{ _key, title, "file": asset->{ url, size, extension } },    lastVerified,    "seo": seo{ title, description, "imageId": image.asset._ref, noIndex },    _updatedAt  }
 export type QueryResourceResult = {
   _id: string;
   title: string;
@@ -2802,7 +2802,13 @@ export type QueryResourceResult = {
     number: string;
   }> | null;
   website: string | null;
-  address: string | null;
+  address: {
+    street: string | null;
+    city: string | null;
+    state: string | null;
+    zip: string | null;
+    note: string | null;
+  } | null;
   topics: Array<{
     title: string;
     slug: string;
@@ -3006,6 +3012,12 @@ export type QueryResourceResult = {
     } | null;
   }> | null;
   lastVerified: string | null;
+  seo: {
+    title: string | null;
+    description: string | null;
+    imageId: string | null;
+    noIndex: boolean | null;
+  } | null;
   _updatedAt: string;
 } | null;
 
@@ -3033,7 +3045,7 @@ export type QueryLinksByTopicResult = Array<{
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryResourcesByTopicSlug
-// Query: *[_type == "resource" && $topic in topics[]->slug.current] | order(title asc)[0...30]{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } }
+// Query: *[_type == "resource" && $topic in topics[]->slug.current] | order(title asc)[0...30]{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address{ street, city, state, zip, note },  "topics": topics[]->{ title, "slug": slug.current } }
 export type QueryResourcesByTopicSlugResult = Array<{
   _id: string;
   title: string;
@@ -3046,7 +3058,13 @@ export type QueryResourcesByTopicSlugResult = Array<{
     number: string;
   }> | null;
   website: string | null;
-  address: string | null;
+  address: {
+    street: string | null;
+    city: string | null;
+    state: string | null;
+    zip: string | null;
+    note: string | null;
+  } | null;
   topics: Array<{
     title: string;
     slug: string;
@@ -3060,7 +3078,7 @@ export type QueryArticlesCountResult = number;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryArticle
-// Query: *[_type == "article" && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  summary,  publishedAt,  series,  "author": author->{ name, "slug": slug.current },  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    "author": author->{ name, "slug": slug.current, bio, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },    "topics": topics[]->{ title, "slug": slug.current },    body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } },    _updatedAt  }
+// Query: *[_type == "article" && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  summary,  publishedAt,  series,  "author": author->{ name, "slug": slug.current },  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    "author": author->{ name, "slug": slug.current, bio, role, credentials, profiles, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },    "topics": topics[]->{ title, "slug": slug.current },    reviewedAt,    "seo": seo{ title, description, "imageId": image.asset._ref, noIndex },    body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary,  status,  attendance } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address{ street, city, state, zip, note },  "topics": topics[]->{ title, "slug": slug.current } } } },    _updatedAt  }
 export type QueryArticleResult = {
   _id: string;
   title: string;
@@ -3072,6 +3090,9 @@ export type QueryArticleResult = {
     name: string;
     slug: string;
     bio: string | null;
+    role: string | null;
+    credentials: string | null;
+    profiles: Array<string> | null;
     image: {
       id: string | null;
       preview: string | null;
@@ -3109,6 +3130,13 @@ export type QueryArticleResult = {
     title: string;
     slug: string;
   }> | null;
+  reviewedAt: string | null;
+  seo: {
+    title: string | null;
+    description: string | null;
+    imageId: string | null;
+    noIndex: boolean | null;
+  } | null;
   body: Array<
     | {
         children?: Array<{
@@ -3209,6 +3237,14 @@ export type QueryArticleResult = {
           location: string;
           hostedByMsl: boolean | null;
           summary: string;
+          status:
+            | "cancelled"
+            | "movedOnline"
+            | "postponed"
+            | "rescheduled"
+            | "scheduled"
+            | null;
+          attendance: "inPerson" | "mixed" | "online" | null;
         };
         _type: "eventCard";
         _key: string;
@@ -3244,6 +3280,7 @@ export type QueryArticleResult = {
           right: number;
         } | null;
         alt: string | "";
+        decorative?: boolean;
         caption: string | null;
         markDefs: null;
         id: string | null;
@@ -3262,7 +3299,13 @@ export type QueryArticleResult = {
             number: string;
           }> | null;
           website: string | null;
-          address: string | null;
+          address: {
+            street: string | null;
+            city: string | null;
+            state: string | null;
+            zip: string | null;
+            note: string | null;
+          } | null;
           topics: Array<{
             title: string;
             slug: string;
@@ -3283,11 +3326,14 @@ export type QueryArticlePathsResult = Array<string>;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryWriter
-// Query: *[_type == "author" && slug.current == $slug][0]{    name,    "slug": slug.current,    bio,    tribute,    image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    "articles": *[_type == "article" && references(^._id)] | order(publishedAt desc){   _id,  title,  "slug": slug.current,  summary,  publishedAt,  series,  "author": author->{ name, "slug": slug.current },  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } }  }
+// Query: *[_type == "author" && slug.current == $slug][0]{    name,    "slug": slug.current,    bio,    role,    credentials,    profiles,    tribute,    image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    "articles": *[_type == "article" && references(^._id)] | order(publishedAt desc){   _id,  title,  "slug": slug.current,  summary,  publishedAt,  series,  "author": author->{ name, "slug": slug.current },  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } }  }
 export type QueryWriterResult = {
   name: string;
   slug: string;
   bio: string | null;
+  role: string | null;
+  credentials: string | null;
+  profiles: Array<string> | null;
   tribute: string | null;
   image: {
     id: string | null;
@@ -3337,7 +3383,7 @@ export type QueryWriterResult = {
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryEventsInRange
-// Query: *[    _type == "event"    && dateTime(start) <= dateTime($to)    && (      dateTime(coalesce(end, start)) >= dateTime($from)      || (repeat.frequency in ["weekly", "monthlyWeekday", "monthlyDate"] && repeat.until >= string::split($from, "T")[0])    )    && ($topicId == "" || references($topicId))    && ($mslOnly == false || hostedByMsl == true)  ] | order(start asc){   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary }
+// Query: *[    _type == "event"    && dateTime(start) <= dateTime($to)    && (      dateTime(coalesce(end, start)) >= dateTime($from)      || (repeat.frequency in ["weekly", "monthlyWeekday", "monthlyDate"] && repeat.until >= string::split($from, "T")[0])    )    && ($topicId == "" || references($topicId))    && ($mslOnly == false || hostedByMsl == true)  ] | order(start asc){   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary,  status,  attendance }
 export type QueryEventsInRangeResult = Array<{
   _id: string;
   title: string;
@@ -3353,11 +3399,19 @@ export type QueryEventsInRangeResult = Array<{
   location: string;
   hostedByMsl: boolean | null;
   summary: string;
+  status:
+    | "cancelled"
+    | "movedOnline"
+    | "postponed"
+    | "rescheduled"
+    | "scheduled"
+    | null;
+  attendance: "inPerson" | "mixed" | "online" | null;
 }>;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryEvent
-// Query: *[_type == "event" && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary,    address,    cost,    registration { required, link{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },    flyer {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    details[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } },    "topics": topics[]->{ title, "slug": slug.current }  }
+// Query: *[_type == "event" && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary,  status,  attendance,    address{ street, city, state, zip, note },    onlineUrl,    isFree,    cost,    "seo": seo{ title, description, "imageId": image.asset._ref, noIndex },    registration { required, link{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } } },    flyer {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    details[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary,  status,  attendance } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address{ street, city, state, zip, note },  "topics": topics[]->{ title, "slug": slug.current } } } },    "topics": topics[]->{ title, "slug": slug.current }  }
 export type QueryEventResult = {
   _id: string;
   title: string;
@@ -3373,8 +3427,30 @@ export type QueryEventResult = {
   location: string;
   hostedByMsl: boolean | null;
   summary: string;
-  address: string | null;
+  status:
+    | "cancelled"
+    | "movedOnline"
+    | "postponed"
+    | "rescheduled"
+    | "scheduled"
+    | null;
+  attendance: "inPerson" | "mixed" | "online" | null;
+  address: {
+    street: string | null;
+    city: string | null;
+    state: string | null;
+    zip: string | null;
+    note: string | null;
+  } | null;
+  onlineUrl: string | null;
+  isFree: boolean | null;
   cost: string | null;
+  seo: {
+    title: string | null;
+    description: string | null;
+    imageId: string | null;
+    noIndex: boolean | null;
+  } | null;
   registration: {
     required: boolean | null;
     link: {
@@ -3557,6 +3633,14 @@ export type QueryEventResult = {
           location: string;
           hostedByMsl: boolean | null;
           summary: string;
+          status:
+            | "cancelled"
+            | "movedOnline"
+            | "postponed"
+            | "rescheduled"
+            | "scheduled"
+            | null;
+          attendance: "inPerson" | "mixed" | "online" | null;
         };
         _type: "eventCard";
         _key: string;
@@ -3592,6 +3676,7 @@ export type QueryEventResult = {
           right: number;
         } | null;
         alt: string | "";
+        decorative?: boolean;
         caption: string | null;
         markDefs: null;
         id: string | null;
@@ -3610,7 +3695,13 @@ export type QueryEventResult = {
             number: string;
           }> | null;
           website: string | null;
-          address: string | null;
+          address: {
+            street: string | null;
+            city: string | null;
+            state: string | null;
+            zip: string | null;
+            note: string | null;
+          } | null;
           topics: Array<{
             title: string;
             slug: string;
@@ -3634,7 +3725,7 @@ export type QueryEventPathsResult = Array<string>;
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryMonthlyUpdate
-// Query: *[_type == "monthlyUpdate" && string::startsWith(publishMonth, $month)][0]{    _id, "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], title, intro, body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } }, _updatedAt  }
+// Query: *[_type == "monthlyUpdate" && string::startsWith(publishMonth, $month)][0]{    _id, "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], title, intro, body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary,  status,  attendance } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address{ street, city, state, zip, note },  "topics": topics[]->{ title, "slug": slug.current } } } }, _updatedAt  }
 export type QueryMonthlyUpdateResult = {
   _id: string;
   month: string | null;
@@ -3740,6 +3831,14 @@ export type QueryMonthlyUpdateResult = {
           location: string;
           hostedByMsl: boolean | null;
           summary: string;
+          status:
+            | "cancelled"
+            | "movedOnline"
+            | "postponed"
+            | "rescheduled"
+            | "scheduled"
+            | null;
+          attendance: "inPerson" | "mixed" | "online" | null;
         };
         _type: "eventCard";
         _key: string;
@@ -3775,6 +3874,7 @@ export type QueryMonthlyUpdateResult = {
           right: number;
         } | null;
         alt: string | "";
+        decorative?: boolean;
         caption: string | null;
         markDefs: null;
         id: string | null;
@@ -3793,7 +3893,13 @@ export type QueryMonthlyUpdateResult = {
             number: string;
           }> | null;
           website: string | null;
-          address: string | null;
+          address: {
+            street: string | null;
+            city: string | null;
+            state: string | null;
+            zip: string | null;
+            note: string | null;
+          } | null;
           topics: Array<{
             title: string;
             slug: string;
@@ -3828,7 +3934,7 @@ export type QueryMonthlyUpdateListResult = Array<{
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryNewsletter
-// Query: *[_type == "newsletterEdition" && string::startsWith(publishMonth, $month)][0]{    _id,    "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],    coverImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    coverMessage,    sections[]{   _key,  _type,  heading,  _type == "comingUpSection" => {    includeEvents,    "hiddenEventIds": hiddenEvents[]._ref,    extraRows[]{ _key, when, what, where }  },  _type == "storySection" => {    byline,    image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } },    "article": article->{ title, "slug": slug.current, "author": author->name, body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } } }  },  _type == "flyerSection" => { pages[]{ _key,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },  _type == "funSection" => { body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } } } },    "uploadedPdf": uploadedPdf.asset->{ url, size },    _updatedAt  }
+// Query: *[_type == "newsletterEdition" && string::startsWith(publishMonth, $month)][0]{    _id,    "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],    coverImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    coverMessage,    sections[]{   _key,  _type,  heading,  _type == "comingUpSection" => {    includeEvents,    "hiddenEventIds": hiddenEvents[]._ref,    extraRows[]{ _key, when, what, where }  },  _type == "storySection" => {    byline,    image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary,  status,  attendance } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address{ street, city, state, zip, note },  "topics": topics[]->{ title, "slug": slug.current } } } },    "article": article->{ title, "slug": slug.current, "author": author->name, body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary,  status,  attendance } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address{ street, city, state, zip, note },  "topics": topics[]->{ title, "slug": slug.current } } } } }  },  _type == "flyerSection" => { pages[]{ _key,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },  _type == "funSection" => { body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary,  status,  attendance } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address{ street, city, state, zip, note },  "topics": topics[]->{ title, "slug": slug.current } } } } } },    "uploadedPdf": uploadedPdf.asset->{ url, size },    _updatedAt  }
 export type QueryNewsletterResult = {
   _id: string;
   month: string | null;
@@ -3989,6 +4095,14 @@ export type QueryNewsletterResult = {
                 location: string;
                 hostedByMsl: boolean | null;
                 summary: string;
+                status:
+                  | "cancelled"
+                  | "movedOnline"
+                  | "postponed"
+                  | "rescheduled"
+                  | "scheduled"
+                  | null;
+                attendance: "inPerson" | "mixed" | "online" | null;
               };
               _type: "eventCard";
               _key: string;
@@ -4024,6 +4138,7 @@ export type QueryNewsletterResult = {
                 right: number;
               } | null;
               alt: string | "";
+              decorative?: boolean;
               caption: string | null;
               markDefs: null;
               id: string | null;
@@ -4042,7 +4157,13 @@ export type QueryNewsletterResult = {
                   number: string;
                 }> | null;
                 website: string | null;
-                address: string | null;
+                address: {
+                  street: string | null;
+                  city: string | null;
+                  state: string | null;
+                  zip: string | null;
+                  note: string | null;
+                } | null;
                 topics: Array<{
                   title: string;
                   slug: string;
@@ -4175,6 +4296,14 @@ export type QueryNewsletterResult = {
                 location: string;
                 hostedByMsl: boolean | null;
                 summary: string;
+                status:
+                  | "cancelled"
+                  | "movedOnline"
+                  | "postponed"
+                  | "rescheduled"
+                  | "scheduled"
+                  | null;
+                attendance: "inPerson" | "mixed" | "online" | null;
               };
               _type: "eventCard";
               _key: string;
@@ -4210,6 +4339,7 @@ export type QueryNewsletterResult = {
                 right: number;
               } | null;
               alt: string | "";
+              decorative?: boolean;
               caption: string | null;
               markDefs: null;
               id: string | null;
@@ -4228,7 +4358,13 @@ export type QueryNewsletterResult = {
                   number: string;
                 }> | null;
                 website: string | null;
-                address: string | null;
+                address: {
+                  street: string | null;
+                  city: string | null;
+                  state: string | null;
+                  zip: string | null;
+                  note: string | null;
+                } | null;
                 topics: Array<{
                   title: string;
                   slug: string;
@@ -4347,6 +4483,14 @@ export type QueryNewsletterResult = {
                   location: string;
                   hostedByMsl: boolean | null;
                   summary: string;
+                  status:
+                    | "cancelled"
+                    | "movedOnline"
+                    | "postponed"
+                    | "rescheduled"
+                    | "scheduled"
+                    | null;
+                  attendance: "inPerson" | "mixed" | "online" | null;
                 };
                 _type: "eventCard";
                 _key: string;
@@ -4382,6 +4526,7 @@ export type QueryNewsletterResult = {
                   right: number;
                 } | null;
                 alt: string | "";
+                decorative?: boolean;
                 caption: string | null;
                 markDefs: null;
                 id: string | null;
@@ -4400,7 +4545,13 @@ export type QueryNewsletterResult = {
                     number: string;
                   }> | null;
                   website: string | null;
-                  address: string | null;
+                  address: {
+                    street: string | null;
+                    city: string | null;
+                    state: string | null;
+                    zip: string | null;
+                    note: string | null;
+                  } | null;
                   topics: Array<{
                     title: string;
                     slug: string;
@@ -4524,7 +4675,7 @@ export type QueryRedirectResult = {
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: querySitemap
-// Query: {    "pages": *[_type == "page" && defined(slug.current)]{ "slug": slug.current, _updatedAt },    "resources": *[_type == "resource" && defined(slug.current)]{ "slug": slug.current, _updatedAt },    "articles": *[_type == "article" && defined(slug.current)]{ "slug": slug.current, _updatedAt },    "events": *[_type == "event" && defined(slug.current)]{ "slug": slug.current, _updatedAt },    "topics": *[_type == "topic" && defined(slug.current)]{ "slug": slug.current, _updatedAt },    "months": *[_type == "monthlyUpdate" && defined(publishMonth)]{ "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], _updatedAt },    "newsletters": *[_type == "newsletterEdition" && defined(publishMonth)]{ "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], _updatedAt },    "writers": *[_type == "author" && defined(slug.current)]{ "slug": slug.current, _updatedAt }  }
+// Query: {    "pages": *[_type == "page" && defined(slug.current) && seo.noIndex != true]{ "slug": slug.current, _updatedAt },    "resources": *[_type == "resource" && defined(slug.current) && seo.noIndex != true]{ "slug": slug.current, _updatedAt },    "articles": *[_type == "article" && defined(slug.current) && seo.noIndex != true]{ "slug": slug.current, _updatedAt },    "events": *[_type == "event" && defined(slug.current) && seo.noIndex != true]{ "slug": slug.current, _updatedAt },    "topics": *[_type == "topic" && defined(slug.current)]{ "slug": slug.current, _updatedAt },    "months": *[_type == "monthlyUpdate" && defined(publishMonth)]{ "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], _updatedAt },    "newsletters": *[_type == "newsletterEdition" && defined(publishMonth)]{ "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], _updatedAt },    "writers": *[_type == "author" && defined(slug.current)]{ "slug": slug.current, _updatedAt }  }
 export type QuerySitemapResult = {
   pages: Array<{
     slug: string;
@@ -4564,36 +4715,36 @@ export type QuerySitemapResult = {
 declare global {
   interface SanityQueries {
     '\n  *[_type == "article" && defined(mainImage)][0].mainImage{\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n\n  }\n': QueryImageTypeResult;
-    '\n  *[_id == "settings"][0]{\n    siteTitle,\n    tagline,\n    description,\n    heroImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    contactEmail,\n    contactPhone { label, number },\n    mailingAddress,\n    donateUrl,\n    nonprofitStatement,\n    newsletterTitle,\n    newsletterDedication,\n    subscribeInstructions\n  }\n': QuerySettingsResult;
-    '\n  *[_id == "navigation"][0]{\n    main[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n },\n    footer[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n }\n  }\n': QueryNavigationResult;
-    '\n  *[_id == "home"][0]{\n    sections[]{ \n  ...,\n  _key,\n  _type,\n  _type == "heroBlock" => { image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }, buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n  _type == "textBlock" => { body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } },\n  _type == "imageBlock" => { images[]{ _key, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n  _type == "buttonsBlock" => { buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n  _type == "calloutBlock" => { link{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n  _type == "resourceListBlock" => {\n    "topicSlug": topic->slug.current,\n    "topicTitle": topic->title,\n    "picked": resources[]->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n }\n  },\n  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "linkListBlock" => {\n    "topicId": topic._ref,\n    "topicSlug": topic->slug.current,\n    "picked": links[]->{ \n  _id,\n  title,\n  url,\n  source,\n  summary,\n  publishedAt\n }\n  },\n  _type == "faqBlock" => { items[]{ _key, question, answer } },\n  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } }\n }\n  }\n': QueryHomeResult;
+    '\n  *[_type == "settings" && _id == "settings"][0]{\n    siteTitle,\n    tagline,\n    description,\n    heroImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    contactEmail,\n    contactPhone { label, number },\n    mailingAddress{ street, city, state, zip, note },\n    profiles,\n    ein,\n    "logoId": logo.asset._ref,\n    "shareImageId": shareImage.asset._ref,\n    donateUrl,\n    nonprofitStatement,\n    newsletterTitle,\n    newsletterDedication,\n    subscribeInstructions\n  }\n': QuerySettingsResult;
+    '\n  *[_type == "navigation" && _id == "navigation"][0]{\n    main[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n },\n    footer[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n }\n  }\n': QueryNavigationResult;
+    '\n  *[_type == "home" && _id == "home"][0]{\n    sections[]{ \n  ...,\n  _key,\n  _type,\n  _type == "heroBlock" => { image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }, buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n  _type == "textBlock" => { body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary,\n  status,\n  attendance\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address{ street, city, state, zip, note },\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } },\n  _type == "imageBlock" => { images[]{ _key, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n  _type == "buttonsBlock" => { buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n  _type == "calloutBlock" => { link{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n  _type == "resourceListBlock" => {\n    "topicSlug": topic->slug.current,\n    "topicTitle": topic->title,\n    "picked": resources[]->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address{ street, city, state, zip, note },\n  "topics": topics[]->{ title, "slug": slug.current }\n }\n  },\n  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "linkListBlock" => {\n    "topicId": topic._ref,\n    "topicSlug": topic->slug.current,\n    "picked": links[]->{ \n  _id,\n  title,\n  url,\n  source,\n  summary,\n  publishedAt\n }\n  },\n  _type == "faqBlock" => { items[]{ _key, question, answer, "answerText": pt::text(answer) } },\n  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } }\n }\n  }\n': QueryHomeResult;
     '\n  {\n    "resources": count(*[_type == "resource"]),\n    "topics": count(*[_type == "topic"]),\n    "links": count(*[_type == "helpfulLink"])\n  }\n': QueryStatsResult;
     '\n  *[_type == "topic"] | order(order asc){\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    icon,\n    "resourceCount": count(*[_type == "resource" && references(^._id)])\n  }\n': QueryTopicsResult;
-    '\n  *[_type == "page" && slug.current == $slug][0]{\n    _id,\n    title,\n    description,\n    "slug": slug.current,\n    sections[]{ \n  ...,\n  _key,\n  _type,\n  _type == "heroBlock" => { image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }, buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n  _type == "textBlock" => { body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } },\n  _type == "imageBlock" => { images[]{ _key, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n  _type == "buttonsBlock" => { buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n  _type == "calloutBlock" => { link{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n  _type == "resourceListBlock" => {\n    "topicSlug": topic->slug.current,\n    "topicTitle": topic->title,\n    "picked": resources[]->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n }\n  },\n  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "linkListBlock" => {\n    "topicId": topic._ref,\n    "topicSlug": topic->slug.current,\n    "picked": links[]->{ \n  _id,\n  title,\n  url,\n  source,\n  summary,\n  publishedAt\n }\n  },\n  _type == "faqBlock" => { items[]{ _key, question, answer } },\n  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } }\n }\n  }\n': QueryPageResult;
+    '\n  *[_type == "page" && slug.current == $slug][0]{\n    _id,\n    title,\n    description,\n    "slug": slug.current,\n    "seo": seo{ title, description, "imageId": image.asset._ref, noIndex },\n    sections[]{ \n  ...,\n  _key,\n  _type,\n  _type == "heroBlock" => { image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }, buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n  _type == "textBlock" => { body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary,\n  status,\n  attendance\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address{ street, city, state, zip, note },\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } },\n  _type == "imageBlock" => { images[]{ _key, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n  _type == "buttonsBlock" => { buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n  _type == "calloutBlock" => { link{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n  _type == "resourceListBlock" => {\n    "topicSlug": topic->slug.current,\n    "topicTitle": topic->title,\n    "picked": resources[]->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address{ street, city, state, zip, note },\n  "topics": topics[]->{ title, "slug": slug.current }\n }\n  },\n  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "linkListBlock" => {\n    "topicId": topic._ref,\n    "topicSlug": topic->slug.current,\n    "picked": links[]->{ \n  _id,\n  title,\n  url,\n  source,\n  summary,\n  publishedAt\n }\n  },\n  _type == "faqBlock" => { items[]{ _key, question, answer, "answerText": pt::text(answer) } },\n  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } }\n }\n  }\n': QueryPageResult;
     '\n  *[_type == "page" && defined(slug.current)].slug.current\n': QueryPagePathsResult;
-    '\n  *[_type == "topic" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    icon,\n    "resources": *[_type == "resource" && references(^._id)] | order(title asc){ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n },\n    "links": *[_type == "helpfulLink" && references(^._id)] | order(publishedAt desc)[0...12]{ \n  _id,\n  title,\n  url,\n  source,\n  summary,\n  publishedAt\n },\n    "linkCount": count(*[_type == "helpfulLink" && references(^._id)]),\n    "articles": *[_type == "article" && references(^._id)] | order(publishedAt desc)[0...6]{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  publishedAt,\n  series,\n  "author": author->{ name, "slug": slug.current },\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }\n }\n  }\n': QueryTopicResult;
+    '\n  *[_type == "topic" && slug.current == $slug][0]{\n    _id,\n    _updatedAt,\n    title,\n    "slug": slug.current,\n    description,\n    icon,\n    "resources": *[_type == "resource" && references(^._id)] | order(title asc){ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address{ street, city, state, zip, note },\n  "topics": topics[]->{ title, "slug": slug.current }\n },\n    "links": *[_type == "helpfulLink" && references(^._id)] | order(publishedAt desc)[0...12]{ \n  _id,\n  title,\n  url,\n  source,\n  summary,\n  publishedAt\n },\n    "linkCount": count(*[_type == "helpfulLink" && references(^._id)]),\n    "articles": *[_type == "article" && references(^._id)] | order(publishedAt desc)[0...6]{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  publishedAt,\n  series,\n  "author": author->{ name, "slug": slug.current },\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }\n }\n  }\n': QueryTopicResult;
     'count(*[\n  _type == "resource"\n  && ($topic == "" || $topic in topics[]->slug.current)\n  && ($area == "" || serviceArea == $area)\n  && ($q == "" || title match $q + "*" || summary match $q + "*" || pt::text(description) match $q + "*")\n])': QueryResourcesCountResult;
-    '\n  *[\n  _type == "resource"\n  && ($topic == "" || $topic in topics[]->slug.current)\n  && ($area == "" || serviceArea == $area)\n  && ($q == "" || title match $q + "*" || summary match $q + "*" || pt::text(description) match $q + "*")\n] | order(title asc){\n    \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n,\n    hours[]{ day, opens, closes },\n    hoursNote\n  }\n': QueryResourcesForPrintResult;
-    '\n  *[_type == "resource" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n,\n    email,\n    isGovernment,\n    hours[]{ _key, day, opens, closes },\n    hoursNote,\n    description[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    eligibility,\n    cost,\n    attachments[]{ _key, title, "file": asset->{ url, size, extension } },\n    lastVerified,\n    _updatedAt\n  }\n': QueryResourceResult;
+    '\n  *[\n  _type == "resource"\n  && ($topic == "" || $topic in topics[]->slug.current)\n  && ($area == "" || serviceArea == $area)\n  && ($q == "" || title match $q + "*" || summary match $q + "*" || pt::text(description) match $q + "*")\n] | order(title asc){\n    \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address{ street, city, state, zip, note },\n  "topics": topics[]->{ title, "slug": slug.current }\n,\n    hours[]{ day, opens, closes },\n    hoursNote\n  }\n': QueryResourcesForPrintResult;
+    '\n  *[_type == "resource" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address{ street, city, state, zip, note },\n  "topics": topics[]->{ title, "slug": slug.current }\n,\n    email,\n    isGovernment,\n    hours[]{ _key, day, opens, closes },\n    hoursNote,\n    description[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary,\n  status,\n  attendance\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address{ street, city, state, zip, note },\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    eligibility,\n    cost,\n    attachments[]{ _key, title, "file": asset->{ url, size, extension } },\n    lastVerified,\n    "seo": seo{ title, description, "imageId": image.asset._ref, noIndex },\n    _updatedAt\n  }\n': QueryResourceResult;
     '\n  *[_type == "resource" && defined(slug.current)].slug.current\n': QueryResourcePathsResult;
     'count(*[\n  _type == "helpfulLink" && ($topic == "" || $topic in topics[]->slug.current)\n])': QueryLinksCountResult;
     '\n  *[_type == "helpfulLink" && references($topicId)] | order(publishedAt desc)[0...30]{ \n  _id,\n  title,\n  url,\n  source,\n  summary,\n  publishedAt\n }\n': QueryLinksByTopicResult;
-    '\n  *[_type == "resource" && $topic in topics[]->slug.current] | order(title asc)[0...30]{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n }\n': QueryResourcesByTopicSlugResult;
+    '\n  *[_type == "resource" && $topic in topics[]->slug.current] | order(title asc)[0...30]{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address{ street, city, state, zip, note },\n  "topics": topics[]->{ title, "slug": slug.current }\n }\n': QueryResourcesByTopicSlugResult;
     'count(*[\n  _type == "article"\n  && ($series == "" || series == $series)\n  && ($topicId == "" || references($topicId))\n])': QueryArticlesCountResult;
-    '\n  *[_type == "article" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  publishedAt,\n  series,\n  "author": author->{ name, "slug": slug.current },\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }\n,\n    "author": author->{ name, "slug": slug.current, bio, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n    "topics": topics[]->{ title, "slug": slug.current },\n    body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    _updatedAt\n  }\n': QueryArticleResult;
+    '\n  *[_type == "article" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  publishedAt,\n  series,\n  "author": author->{ name, "slug": slug.current },\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }\n,\n    "author": author->{ name, "slug": slug.current, bio, role, credentials, profiles, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n    "topics": topics[]->{ title, "slug": slug.current },\n    reviewedAt,\n    "seo": seo{ title, description, "imageId": image.asset._ref, noIndex },\n    body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary,\n  status,\n  attendance\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address{ street, city, state, zip, note },\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    _updatedAt\n  }\n': QueryArticleResult;
     '\n  *[_type == "article" && defined(slug.current)] | order(publishedAt desc)[0...200].slug.current\n': QueryArticlePathsResult;
-    '\n  *[_type == "author" && slug.current == $slug][0]{\n    name,\n    "slug": slug.current,\n    bio,\n    tribute,\n    image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    "articles": *[_type == "article" && references(^._id)] | order(publishedAt desc){ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  publishedAt,\n  series,\n  "author": author->{ name, "slug": slug.current },\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }\n }\n  }\n': QueryWriterResult;
-    '\n  *[\n    _type == "event"\n    && dateTime(start) <= dateTime($to)\n    && (\n      dateTime(coalesce(end, start)) >= dateTime($from)\n      || (repeat.frequency in ["weekly", "monthlyWeekday", "monthlyDate"] && repeat.until >= string::split($from, "T")[0])\n    )\n    && ($topicId == "" || references($topicId))\n    && ($mslOnly == false || hostedByMsl == true)\n  ] | order(start asc){ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n }\n': QueryEventsInRangeResult;
-    '\n  *[_type == "event" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n,\n    address,\n    cost,\n    registration { required, link{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n    flyer { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    details[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    "topics": topics[]->{ title, "slug": slug.current }\n  }\n': QueryEventResult;
+    '\n  *[_type == "author" && slug.current == $slug][0]{\n    name,\n    "slug": slug.current,\n    bio,\n    role,\n    credentials,\n    profiles,\n    tribute,\n    image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    "articles": *[_type == "article" && references(^._id)] | order(publishedAt desc){ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  publishedAt,\n  series,\n  "author": author->{ name, "slug": slug.current },\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }\n }\n  }\n': QueryWriterResult;
+    '\n  *[\n    _type == "event"\n    && dateTime(start) <= dateTime($to)\n    && (\n      dateTime(coalesce(end, start)) >= dateTime($from)\n      || (repeat.frequency in ["weekly", "monthlyWeekday", "monthlyDate"] && repeat.until >= string::split($from, "T")[0])\n    )\n    && ($topicId == "" || references($topicId))\n    && ($mslOnly == false || hostedByMsl == true)\n  ] | order(start asc){ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary,\n  status,\n  attendance\n }\n': QueryEventsInRangeResult;
+    '\n  *[_type == "event" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary,\n  status,\n  attendance\n,\n    address{ street, city, state, zip, note },\n    onlineUrl,\n    isFree,\n    cost,\n    "seo": seo{ title, description, "imageId": image.asset._ref, noIndex },\n    registration { required, link{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n }\n } },\n    flyer { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    details[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary,\n  status,\n  attendance\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address{ street, city, state, zip, note },\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    "topics": topics[]->{ title, "slug": slug.current }\n  }\n': QueryEventResult;
     '\n  *[_type == "event" && defined(slug.current)] | order(start desc)[0...200].slug.current\n': QueryEventPathsResult;
-    '\n  *[_type == "monthlyUpdate" && string::startsWith(publishMonth, $month)][0]{\n    _id, "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], title, intro, body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n }, _updatedAt\n  }\n': QueryMonthlyUpdateResult;
+    '\n  *[_type == "monthlyUpdate" && string::startsWith(publishMonth, $month)][0]{\n    _id, "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], title, intro, body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary,\n  status,\n  attendance\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address{ street, city, state, zip, note },\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n }, _updatedAt\n  }\n': QueryMonthlyUpdateResult;
     '\n  *[_type == "monthlyUpdate" && publishMonth <= $month + "-31"] | order(publishMonth desc)[0]{\n    _id, "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], title, intro\n  }\n': QueryCurrentMonthlyUpdateResult;
     '\n  *[_type == "monthlyUpdate" && publishMonth <= $month + "-31"] | order(publishMonth desc){ "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], title, intro }\n': QueryMonthlyUpdateListResult;
-    '\n  *[_type == "newsletterEdition" && string::startsWith(publishMonth, $month)][0]{\n    _id,\n    "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n    coverImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    coverMessage,\n    sections[]{ \n  _key,\n  _type,\n  heading,\n  _type == "comingUpSection" => {\n    includeEvents,\n    "hiddenEventIds": hiddenEvents[]._ref,\n    extraRows[]{ _key, when, what, where }\n  },\n  _type == "storySection" => {\n    byline,\n    image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    "article": article->{ title, "slug": slug.current, "author": author->name, body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } }\n  },\n  _type == "flyerSection" => { pages[]{ _key, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n  _type == "funSection" => { body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } }\n },\n    "uploadedPdf": uploadedPdf.asset->{ url, size },\n    _updatedAt\n  }\n': QueryNewsletterResult;
+    '\n  *[_type == "newsletterEdition" && string::startsWith(publishMonth, $month)][0]{\n    _id,\n    "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n    coverImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    coverMessage,\n    sections[]{ \n  _key,\n  _type,\n  heading,\n  _type == "comingUpSection" => {\n    includeEvents,\n    "hiddenEventIds": hiddenEvents[]._ref,\n    extraRows[]{ _key, when, what, where }\n  },\n  _type == "storySection" => {\n    byline,\n    image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary,\n  status,\n  attendance\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address{ street, city, state, zip, note },\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    "article": article->{ title, "slug": slug.current, "author": author->name, body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary,\n  status,\n  attendance\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address{ street, city, state, zip, note },\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } }\n  },\n  _type == "flyerSection" => { pages[]{ _key, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n  _type == "funSection" => { body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary,\n  status,\n  attendance\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address{ street, city, state, zip, note },\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } }\n },\n    "uploadedPdf": uploadedPdf.asset->{ url, size },\n    _updatedAt\n  }\n': QueryNewsletterResult;
     '\n  *[_type == "newsletterEdition" && publishMonth <= $month + "-31"] | order(publishMonth desc){\n    "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1],\n    coverImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    "hasSections": count(sections) > 0,\n    "uploadedPdf": uploadedPdf.asset->{ url, size }\n  }\n': QueryNewsletterListResult;
     '\n  *[\n    _type in ["resource", "helpfulLink", "article", "event", "page"]\n    && (\n      title match $q + "*"\n      || summary match $q + "*"\n      || pt::text(description) match $q + "*"\n      || pt::text(body) match $q + "*"\n      || topics[]->title match $q + "*"\n    )\n  ]\n  | score(\n      boost(title match $q + "*", 5),\n      boost(_type == "resource", 2),\n      summary match $q + "*"\n    )\n  | order(_score desc)[0...40]{\n    _type,\n    _id,\n    title,\n    "slug": slug.current,\n    summary,\n    url,\n    source,\n    start,\n    phones[]{ _key, label, number }\n  }\n': QuerySearchResult;
     '\n  *[_type == "redirect" && source == $source][0]{ destination, permanent }\n': QueryRedirectResult;
-    '\n  {\n    "pages": *[_type == "page" && defined(slug.current)]{ "slug": slug.current, _updatedAt },\n    "resources": *[_type == "resource" && defined(slug.current)]{ "slug": slug.current, _updatedAt },\n    "articles": *[_type == "article" && defined(slug.current)]{ "slug": slug.current, _updatedAt },\n    "events": *[_type == "event" && defined(slug.current)]{ "slug": slug.current, _updatedAt },\n    "topics": *[_type == "topic" && defined(slug.current)]{ "slug": slug.current, _updatedAt },\n    "months": *[_type == "monthlyUpdate" && defined(publishMonth)]{ "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], _updatedAt },\n    "newsletters": *[_type == "newsletterEdition" && defined(publishMonth)]{ "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], _updatedAt },\n    "writers": *[_type == "author" && defined(slug.current)]{ "slug": slug.current, _updatedAt }\n  }\n': QuerySitemapResult;
+    '\n  {\n    "pages": *[_type == "page" && defined(slug.current) && seo.noIndex != true]{ "slug": slug.current, _updatedAt },\n    "resources": *[_type == "resource" && defined(slug.current) && seo.noIndex != true]{ "slug": slug.current, _updatedAt },\n    "articles": *[_type == "article" && defined(slug.current) && seo.noIndex != true]{ "slug": slug.current, _updatedAt },\n    "events": *[_type == "event" && defined(slug.current) && seo.noIndex != true]{ "slug": slug.current, _updatedAt },\n    "topics": *[_type == "topic" && defined(slug.current)]{ "slug": slug.current, _updatedAt },\n    "months": *[_type == "monthlyUpdate" && defined(publishMonth)]{ "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], _updatedAt },\n    "newsletters": *[_type == "newsletterEdition" && defined(publishMonth)]{ "month": string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1], _updatedAt },\n    "writers": *[_type == "author" && defined(slug.current)]{ "slug": slug.current, _updatedAt }\n  }\n': QuerySitemapResult;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

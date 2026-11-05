@@ -3,6 +3,7 @@ import { defineField, defineType } from "sanity";
 
 import { withHowTo } from "../../components/HowTo";
 import { slugField } from "../../utils/slug";
+import { seoField } from "../objects/seo";
 import { needsReviewField, summaryField, topicsField } from "../shared";
 
 export const ARTICLE_SERIES = [
@@ -16,6 +17,13 @@ export const article = defineType({
   name: "article",
   type: "document",
   icon: DocumentTextIcon,
+  // Most articles are Ron's, so new ones start with him as the writer.
+  initialValue: async (_params: unknown, { getClient }) => {
+    const ron = await getClient({ apiVersion: "2025-02-19" }).fetch<
+      string | null
+    >('*[_type == "author" && name == "Ron Smith"][0]._id');
+    return ron ? { author: { _type: "reference", _ref: ron } } : {};
+  },
   components: {
     input: withHowTo([
       "Articles are things written for this website — by Ron, Joan, or another local writer.",
@@ -44,6 +52,13 @@ export const article = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "reviewedAt",
+      title: "Last checked",
+      type: "date",
+      description:
+        "When you last read this over and confirmed it's still correct. Shown on the article, which helps people (and Google) trust it.",
+    }),
+    defineField({
       name: "series",
       type: "string",
       initialValue: "none",
@@ -62,6 +77,7 @@ export const article = defineType({
       type: "richText",
       validation: (rule) => rule.required(),
     }),
+    seoField,
     needsReviewField,
     defineField({
       name: "legacyId",
