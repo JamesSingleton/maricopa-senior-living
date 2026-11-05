@@ -1,10 +1,14 @@
 import type { NextConfig } from "next";
 import { sanity } from "next-sanity/live/cache-life";
 
+/** The standalone Studio (apps/studio), e.g. https://studio.maricopaseniorliving.org */
+const STUDIO_URL =
+  process.env.NEXT_PUBLIC_SANITY_STUDIO_URL ??
+  "https://studio.maricopaseniorliving.org";
+
 /**
- * Origins allowed to frame the site. The embedded Studio at /admin is
- * same-origin; a standalone Studio (NEXT_PUBLIC_SANITY_STUDIO_URL) needs to
- * frame the site for the Presentation tool.
+ * Origins allowed to frame the site: the Studio's Presentation tool shows
+ * the site in an iframe for live preview.
  */
 function frameAncestors() {
   const origins = ["'self'"];
@@ -14,22 +18,61 @@ function frameAncestors() {
       origins.push(new URL(studio).origin);
     }
   } catch {
-    // Ignore a malformed value; 'self' still covers the embedded Studio.
+    // Ignore a malformed value.
   }
   return origins.join(" ");
 }
 
+/**
+ * Redirect documents (old /category, /tag and /articles URLs from the
+ * previous site) loaded at build time, so they are real 301s handled before
+ * routing. Changing redirects in the Studio takes effect on the next deploy.
+ */
+async function sanityRedirects() {
+  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+  const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
+  const token = process.env.SANITY_API_READ_TOKEN;
+  if (!projectId || !dataset) return [];
+  const query = encodeURIComponent(
+    '*[_type == "redirect" && defined(source) && defined(destination)]{source, destination, permanent}',
+  );
+  try {
+    const response = await fetch(
+      `https://${projectId}.api.sanity.io/v2025-02-19/data/query/${dataset}?query=${query}&perspective=published`,
+      { headers: token ? { Authorization: `Bearer ${token}` } : {} },
+    );
+    const { result } = (await response.json()) as {
+      result?: { source: string; destination: string; permanent?: boolean }[];
+    };
+    return (result ?? [])
+      .filter((r) => r.source.startsWith("/") && r.source !== r.destination)
+      .map((r) => ({
+        // Escape characters path-to-regexp treats as patterns.
+        source: r.source.replace(/[()?+*:]/g, (c) => `\\${c}`),
+        destination: r.destination,
+        permanent: r.permanent !== false,
+      }));
+  } catch (error) {
+    console.warn("Could not load redirects from Sanity", error);
+    return [];
+  }
+}
+
 // https://nextjs.org/docs/advanced-features/security-headers
-// 'unsafe-eval' stays while the Studio is embedded at /admin.
+// The Studio is no longer embedded, so 'unsafe-eval' is only needed by the
+// Next dev server. YouTube (privacy mode) is the only embed the site allows.
+const evalInDev =
+  process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : "";
 const ContentSecurityPolicy = `
     default-src 'self' vercel.live https://cdn.userway.org/;
-    script-src 'self' 'unsafe-eval' 'unsafe-inline' plausible.io;
+    script-src 'self'${evalInDev} 'unsafe-inline' plausible.io;
+    frame-src 'self' vercel.live https://www.youtube-nocookie.com;
     style-src 'self' 'unsafe-inline';
     img-src * blob: data:;
     media-src 'self' https://cdn.sanity.io;
     connect-src *;
     font-src 'self' https://cdn.userway.org/ https://fonts.gstatic.com/ https://fonts.googleapis.com/;
-    script-src-elem 'self' 'unsafe-eval' 'unsafe-inline' plausible.io https://cdn.userway.org/ https://core.sanity-cdn.com/ https://vercel.live;
+    script-src-elem 'self'${evalInDev} 'unsafe-inline' plausible.io https://cdn.userway.org/ https://core.sanity-cdn.com/ https://vercel.live;
     style-src-elem 'self' 'unsafe-inline' https://cdn.userway.org/;
     frame-ancestors ${frameAncestors()};
 `;
@@ -82,23 +125,16 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "cdn.sanity.io",
       },
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-      },
-      {
-        protocol: "https",
-        hostname: "bestwpware.com",
-      },
-      {
-        protocol: "https",
-        hostname: "maricopaseniorliving.org",
-      },
-      {
-        protocol: "https",
-        hostname: "secure.gravatar.com",
-      },
     ],
+  },
+  async redirects() {
+    return [
+      // Ron's old bookmark: the Studio moved out of the website.
+      { source: "/admin", destination: STUDIO_URL, permanent: false },
+      { source: "/admin/:path*", destination: STUDIO_URL, permanent: false },
+      { source: "/find-help", destination: "/resources", permanent: true },
+      ...(await sanityRedirects()),
+    ];
   },
   async headers() {
     return [

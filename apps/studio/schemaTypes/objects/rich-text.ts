@@ -73,7 +73,7 @@ export const imageWithAlt = defineType({
       title: "Describe the picture",
       type: "string",
       description:
-        'One sentence for people who can\'t see it, e.g. "Volunteers serving lunch at the Senior Center". Leave empty only if it\'s decoration.',
+        "One sentence for people who can't see it, e.g. \"Volunteers serving lunch at the Senior Center\". Leave empty only if it's decoration.",
     }),
     defineField({
       name: "caption",

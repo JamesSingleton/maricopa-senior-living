@@ -1,6 +1,5 @@
 import { BellIcon } from "@sanity/icons/Bell";
 import { BlockContentIcon } from "@sanity/icons/BlockContent";
-import { ThLargeIcon } from "@sanity/icons/ThLarge";
 import { CalendarIcon } from "@sanity/icons/Calendar";
 import { CreditCardIcon } from "@sanity/icons/CreditCard";
 import { DocumentPdfIcon } from "@sanity/icons/DocumentPdf";
@@ -15,6 +14,7 @@ import { LinkIcon } from "@sanity/icons/Link";
 import { MobileDeviceIcon } from "@sanity/icons/MobileDevice";
 import { PinIcon } from "@sanity/icons/Pin";
 import { PlayIcon } from "@sanity/icons/Play";
+import { ThLargeIcon } from "@sanity/icons/ThLarge";
 import { UsersIcon } from "@sanity/icons/Users";
 import { defineArrayMember, defineField, defineType } from "sanity";
 
@@ -65,27 +65,32 @@ function block(
   });
 }
 
-export const heroBlock = block("heroBlock", "Big picture with heading", HomeIcon, [
-  defineField({
-    name: "heading",
-    type: "string",
-    validation: (rule) => rule.required().max(80),
-  }),
-  defineField({ name: "text", type: "text", rows: 2 }),
-  defineField({ name: "image", type: "imageWithAlt" }),
-  defineField({
-    name: "showSearch",
-    title: "Show the search box",
-    type: "boolean",
-    initialValue: true,
-  }),
-  defineField({
-    name: "buttons",
-    type: "array",
-    of: [defineArrayMember({ type: "link" })],
-    validation: (rule) => rule.max(2),
-  }),
-]);
+export const heroBlock = block(
+  "heroBlock",
+  "Big picture with heading",
+  HomeIcon,
+  [
+    defineField({
+      name: "heading",
+      type: "string",
+      validation: (rule) => rule.required().max(80),
+    }),
+    defineField({ name: "text", type: "text", rows: 2 }),
+    defineField({ name: "image", type: "imageWithAlt" }),
+    defineField({
+      name: "showSearch",
+      title: "Show the search box",
+      type: "boolean",
+      initialValue: true,
+    }),
+    defineField({
+      name: "buttons",
+      type: "array",
+      of: [defineArrayMember({ type: "link" })],
+      validation: (rule) => rule.max(2),
+    }),
+  ],
+);
 
 export const textBlock = block("textBlock", "Text", BlockContentIcon, [
   heading,
@@ -175,7 +180,9 @@ export const resourceListBlock = block(
     defineField({
       name: "resources",
       type: "array",
-      of: [defineArrayMember({ type: "reference", to: [{ type: "resource" }] })],
+      of: [
+        defineArrayMember({ type: "reference", to: [{ type: "resource" }] }),
+      ],
       hidden: ({ parent }) => parent?.mode !== "manual",
     }),
     defineField({
@@ -243,40 +250,35 @@ export const articleListBlock = block(
   ],
 );
 
-export const linkListBlock = block(
-  "linkListBlock",
-  "Helpful links",
-  LinkIcon,
-  [
-    heading,
-    intro,
-    listMode([
-      { title: "Newest helpful links in a topic", value: "topic" },
-      { title: "Pick them by hand", value: "manual" },
-    ]),
-    defineField({
-      name: "topic",
-      type: "reference",
-      to: [{ type: "topic" }],
-      hidden: ({ parent }) => parent?.mode === "manual",
-    }),
-    defineField({
-      name: "links",
-      type: "array",
-      of: [
-        defineArrayMember({ type: "reference", to: [{ type: "helpfulLink" }] }),
-      ],
-      hidden: ({ parent }) => parent?.mode !== "manual",
-    }),
-    defineField({
-      name: "limit",
-      title: "How many to show",
-      type: "number",
-      initialValue: 6,
-      validation: (rule) => rule.min(1).max(30).integer(),
-    }),
-  ],
-);
+export const linkListBlock = block("linkListBlock", "Helpful links", LinkIcon, [
+  heading,
+  intro,
+  listMode([
+    { title: "Newest helpful links in a topic", value: "topic" },
+    { title: "Pick them by hand", value: "manual" },
+  ]),
+  defineField({
+    name: "topic",
+    type: "reference",
+    to: [{ type: "topic" }],
+    hidden: ({ parent }) => parent?.mode === "manual",
+  }),
+  defineField({
+    name: "links",
+    type: "array",
+    of: [
+      defineArrayMember({ type: "reference", to: [{ type: "helpfulLink" }] }),
+    ],
+    hidden: ({ parent }) => parent?.mode !== "manual",
+  }),
+  defineField({
+    name: "limit",
+    title: "How many to show",
+    type: "number",
+    initialValue: 6,
+    validation: (rule) => rule.min(1).max(30).integer(),
+  }),
+]);
 
 export const quickContactsBlock = block(
   "quickContactsBlock",
@@ -351,7 +353,8 @@ export const donateBlock = block("donateBlock", "Donate", CreditCardIcon, [
     name: "text",
     type: "text",
     rows: 3,
-    description: "Why giving matters. The button uses the donate link in Site settings.",
+    description:
+      "Why giving matters. The button uses the donate link in Site settings.",
   }),
 ]);
 
@@ -396,11 +399,13 @@ export const videoBlock = block("videoBlock", "Video", PlayIcon, [
     title: "YouTube address",
     type: "url",
     validation: (rule) =>
-      rule.required().custom((url) =>
-        !url || /youtube\.com|youtu\.be/.test(url)
-          ? true
-          : "Only YouTube videos are supported.",
-      ),
+      rule
+        .required()
+        .custom((url) =>
+          !url || /youtube\.com|youtu\.be/.test(url)
+            ? true
+            : "Only YouTube videos are supported.",
+        ),
   }),
   defineField({
     name: "caption",
@@ -410,21 +415,26 @@ export const videoBlock = block("videoBlock", "Video", PlayIcon, [
   }),
 ]);
 
-export const fileBlock = block("fileBlock", "File to download", DocumentPdfIcon, [
-  heading,
-  intro,
-  defineField({
-    name: "file",
-    type: "file",
-    validation: (rule) => rule.required(),
-  }),
-  defineField({
-    name: "buttonLabel",
-    title: "Button text",
-    type: "string",
-    initialValue: "View the file",
-  }),
-]);
+export const fileBlock = block(
+  "fileBlock",
+  "File to download",
+  DocumentPdfIcon,
+  [
+    heading,
+    intro,
+    defineField({
+      name: "file",
+      type: "file",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "buttonLabel",
+      title: "Button text",
+      type: "string",
+      initialValue: "View the file",
+    }),
+  ],
+);
 
 export const topicsBlock = block("topicsBlock", "Topic tiles", ThLargeIcon, [
   heading,
@@ -502,17 +512,38 @@ export const pageBuilder = defineType({
         {
           name: "content",
           title: "Words & pictures",
-          of: ["heroBlock", "textBlock", "imageBlock", "videoBlock", "calloutBlock", "faqBlock"],
+          of: [
+            "heroBlock",
+            "textBlock",
+            "imageBlock",
+            "videoBlock",
+            "calloutBlock",
+            "faqBlock",
+          ],
         },
         {
           name: "lists",
           title: "Lists from the website",
-          of: ["topicsBlock", "whatsNewBlock", "resourceListBlock", "eventListBlock", "articleListBlock", "linkListBlock"],
+          of: [
+            "topicsBlock",
+            "whatsNewBlock",
+            "resourceListBlock",
+            "eventListBlock",
+            "articleListBlock",
+            "linkListBlock",
+          ],
         },
         {
           name: "actions",
           title: "Buttons & contact",
-          of: ["buttonsBlock", "quickContactsBlock", "contactBlock", "donateBlock", "fileBlock", "newsletterSignupBlock"],
+          of: [
+            "buttonsBlock",
+            "quickContactsBlock",
+            "contactBlock",
+            "donateBlock",
+            "fileBlock",
+            "newsletterSignupBlock",
+          ],
         },
       ],
       views: [{ name: "list" }],

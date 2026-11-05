@@ -62,8 +62,17 @@ export function summarize(text: string, max = 300) {
 function convertBlock(block: OldBlock) {
   const keepDefs = new Map<string, MarkDef>();
   for (const def of block.markDefs ?? []) {
-    if (def._type === "link" && def._key && def.href && LINK_SCHEMES.test(def.href.trim())) {
-      keepDefs.set(def._key, { _type: "link", _key: def._key, href: def.href.trim() });
+    if (
+      def._type === "link" &&
+      def._key &&
+      def.href &&
+      LINK_SCHEMES.test(def.href.trim())
+    ) {
+      keepDefs.set(def._key, {
+        _type: "link",
+        _key: def._key,
+        href: def.href.trim(),
+      });
     }
   }
   const children = (block.children ?? []).map((child) => ({
@@ -82,7 +91,9 @@ function convertBlock(block: OldBlock) {
       ? { listItem: block.listItem, level: block.level ?? 1 }
       : {}),
     markDefs: [...keepDefs.values()],
-    children: children.length ? children : [{ _type: "span", _key: newKey(), text: "", marks: [] }],
+    children: children.length
+      ? children
+      : [{ _type: "span", _key: newKey(), text: "", marks: [] }],
   };
 }
 
@@ -156,7 +167,12 @@ const PHONE_PATTERN =
  */
 export function parsePhones(text: string | undefined) {
   if (!text) return [];
-  const phones: { _type: string; _key: string; label?: string; number: string }[] = [];
+  const phones: {
+    _type: string;
+    _key: string;
+    label?: string;
+    number: string;
+  }[] = [];
   let last = 0;
   for (const match of text.matchAll(PHONE_PATTERN)) {
     const index = match.index ?? 0;

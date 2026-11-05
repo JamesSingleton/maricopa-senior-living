@@ -71,7 +71,7 @@ export const structure: StructureResolver = (S, { currentUser }) => {
         .child(
           S.documentList()
             .title("Brought over from the old site — please check")
-            .filter('needsReview == true')
+            .filter("needsReview == true")
             .apiVersion("2025-02-19"),
         ),
       ...(admin

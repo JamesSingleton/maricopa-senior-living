@@ -13,7 +13,6 @@
 import { randomUUID } from "node:crypto";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-
 import { createClient } from "@sanity/client";
 
 import {
@@ -26,7 +25,12 @@ import {
   slugMaker,
   summarize,
 } from "./convert.ts";
-import { NON_TOPIC_CATEGORIES, TOPICS, topicForCategory, topicsForTag } from "./topics.ts";
+import {
+  NON_TOPIC_CATEGORIES,
+  TOPICS,
+  topicForCategory,
+  topicsForTag,
+} from "./topics.ts";
 
 const TARGET_DATASET = "development";
 const PROJECT_ID = "bksfw1p8";
@@ -35,7 +39,8 @@ const DATA = resolve(ROOT, "migration/data");
 const DRY_RUN = process.argv.includes("--dry-run");
 const SKIP_ASSETS = process.argv.includes("--skip-assets");
 
-if (TARGET_DATASET !== "development") throw new Error("Refusing: target must be development");
+if (TARGET_DATASET !== "development")
+  throw new Error("Refusing: target must be development");
 const token = process.env.SANITY_API_WRITE_TOKEN;
 if (!token && !DRY_RUN) throw new Error("SANITY_API_WRITE_TOKEN is required");
 
@@ -46,21 +51,28 @@ const dev = createClient({
   token,
   useCdn: false,
 });
-if (dev.config().dataset !== "development") throw new Error("Refusing: client is not on development");
+if (dev.config().dataset !== "development")
+  throw new Error("Refusing: client is not on development");
 
 // biome-ignore lint/suspicious/noExplicitAny: loose legacy documents
 type Doc = Record<string, any>;
 
 const source = new Map<string, Doc>();
-for (const line of readFileSync(resolve(DATA, "production.ndjson"), "utf8").split("\n")) {
+for (const line of readFileSync(
+  resolve(DATA, "production.ndjson"),
+  "utf8",
+).split("\n")) {
   if (!line.trim()) continue;
   const doc = JSON.parse(line) as Doc;
   if (doc._id.startsWith("drafts.")) continue;
   source.set(doc._id, doc);
 }
-const ofType = (type: string) => [...source.values()].filter((d) => d._type === type);
-const deref = (ref?: { _ref?: string }) => (ref?._ref ? source.get(ref._ref) : undefined);
-const titleOf = (ref?: { _ref?: string }) => deref(ref)?.title ?? deref(ref)?.name;
+const ofType = (type: string) =>
+  [...source.values()].filter((d) => d._type === type);
+const deref = (ref?: { _ref?: string }) =>
+  ref?._ref ? source.get(ref._ref) : undefined;
+const titleOf = (ref?: { _ref?: string }) =>
+  deref(ref)?.title ?? deref(ref)?.name;
 
 const report: Record<string, number> = {};
 const count = (key: string) => {
@@ -84,11 +96,16 @@ const existing = DRY_RUN
       }`,
     );
 const existingId = new Map(existing.map((d) => [`${d._type}:${d.key}`, d._id]));
-const idFor = (type: string, key: string) => existingId.get(`${type}:${key}`) ?? randomUUID();
+const idFor = (type: string, key: string) =>
+  existingId.get(`${type}:${key}`) ?? randomUUID();
 
 const out: Doc[] = [];
 const ref = (_ref: string) => ({ _type: "reference", _ref });
-const keyedRef = (_ref: string) => ({ _type: "reference", _ref, _key: newKey() });
+const keyedRef = (_ref: string) => ({
+  _type: "reference",
+  _ref,
+  _key: newKey(),
+});
 
 // ---------------------------------------------------------------------------
 // Topics
@@ -117,9 +134,13 @@ function topicsFor(doc: Doc, fallback = "community-activities") {
     if (slug) tally.set(slug, (tally.get(slug) ?? 0) + 3);
   }
   for (const tag of doc.tags ?? []) {
-    for (const slug of topicsForTag(titleOf(tag))) tally.set(slug, (tally.get(slug) ?? 0) + 1);
+    for (const slug of topicsForTag(titleOf(tag)))
+      tally.set(slug, (tally.get(slug) ?? 0) + 1);
   }
-  const slugs = [...tally.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3).map(([s]) => s);
+  const slugs = [...tally.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+    .map(([s]) => s);
   if (!slugs.length) slugs.push(fallback);
   return slugs.map((slug) => keyedRef(topicId.get(slug) as string));
 }
@@ -127,7 +148,12 @@ function topicsFor(doc: Doc, fallback = "community-activities") {
 // ---------------------------------------------------------------------------
 // Writers
 // ---------------------------------------------------------------------------
-const PUBLISHER_AUTHORS = new Set(["InMaricopa Magazine", "Maricopa Monitor", "Pinal Central", "Pinal County"]);
+const PUBLISHER_AUTHORS = new Set([
+  "InMaricopa Magazine",
+  "Maricopa Monitor",
+  "Pinal Central",
+  "Pinal County",
+]);
 const authorId = new Map<string, string>();
 function writer(name: string, sourceDoc?: Doc) {
   if (authorId.has(name)) return authorId.get(name) as string;
@@ -138,7 +164,9 @@ function writer(name: string, sourceDoc?: Doc) {
     _type: "author",
     name,
     slug: { _type: "slug", current: slugMaker()(name) },
-    ...(sourceDoc?.image?.asset ? { image: convertImage(sourceDoc.image) } : {}),
+    ...(sourceDoc?.image?.asset
+      ? { image: convertImage(sourceDoc.image) }
+      : {}),
   });
   return _id;
 }
@@ -154,17 +182,33 @@ const redirects: { source: string; destination: string }[] = [];
 function serviceArea(doc: Doc) {
   const address = (doc.address ?? "").toLowerCase();
   const phone = doc.phone ?? "";
-  if (address.includes("maricopa") || /\b520[\s.-]?568/.test(phone)) return "maricopa";
-  if (/\b(800|888|877|866|855|844|833)\b/.test(phone) && !address) return "national";
-  if (/pinal|casa grande|florence|coolidge|eloy|san tan/.test(address) || /pinal/i.test(doc.website ?? "")) return "pinal";
+  if (address.includes("maricopa") || /\b520[\s.-]?568/.test(phone))
+    return "maricopa";
+  if (/\b(800|888|877|866|855|844|833)\b/.test(phone) && !address)
+    return "national";
+  if (
+    /pinal|casa grande|florence|coolidge|eloy|san tan/.test(address) ||
+    /pinal/i.test(doc.website ?? "")
+  )
+    return "pinal";
   return "arizona";
 }
 
-const DAY_ORDER = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+const DAY_ORDER = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
 
 for (const doc of ofType("service")) {
   const description = plainText(doc.description);
-  const hasContact = Boolean((doc.phone && parsePhones(doc.phone).length) || doc.address);
+  const hasContact = Boolean(
+    (doc.phone && parsePhones(doc.phone).length) || doc.address,
+  );
   if (hasContact) {
     count("resource");
     const phones = parsePhones(doc.phone);
@@ -186,11 +230,23 @@ for (const doc of ofType("service")) {
         ? {
             hours: [...doc.businessHours]
               .filter((h: Doc) => h.day && h.opensAt && h.closesAt)
-              .sort((a: Doc, b: Doc) => DAY_ORDER.indexOf(a.day) - DAY_ORDER.indexOf(b.day))
-              .map((h: Doc) => ({ _type: "openingHours", _key: newKey(), day: h.day, opens: h.opensAt, closes: h.closesAt })),
+              .sort(
+                (a: Doc, b: Doc) =>
+                  DAY_ORDER.indexOf(a.day) - DAY_ORDER.indexOf(b.day),
+              )
+              .map((h: Doc) => ({
+                _type: "openingHours",
+                _key: newKey(),
+                day: h.day,
+                opens: h.opensAt,
+                closes: h.closesAt,
+              })),
           }
         : {}),
-      description: [...convertRichText(doc.description, { simple: true }), ...notes],
+      description: [
+        ...convertRichText(doc.description, { simple: true }),
+        ...notes,
+      ],
       ...(doc.audience?.length ? { eligibility: plainText(doc.audience) } : {}),
       ...(doc.attachments?.length
         ? {
@@ -240,9 +296,24 @@ for (const doc of ofType("service")) {
 // ---------------------------------------------------------------------------
 // Posts → articles, helpful links, About pages, newsletter archive
 // ---------------------------------------------------------------------------
-const MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
+const MONTHS = [
+  "january",
+  "february",
+  "march",
+  "april",
+  "may",
+  "june",
+  "july",
+  "august",
+  "september",
+  "october",
+  "november",
+  "december",
+];
 function monthKeyFrom(text: string) {
-  const match = text.toLowerCase().match(new RegExp(`(${MONTHS.join("|")})\\s*,?\\s*(20\\d\\d)`));
+  const match = text
+    .toLowerCase()
+    .match(new RegExp(`(${MONTHS.join("|")})\\s*,?\\s*(20\\d\\d)`));
   if (!match) return undefined;
   return `${match[2]}-${String(MONTHS.indexOf(match[1] as string) + 1).padStart(2, "0")}`;
 }
@@ -255,13 +326,20 @@ function firstExternalUrl(doc: Doc) {
   for (const block of doc.body ?? []) {
     for (const def of block.markDefs ?? []) {
       const href: string = def.href ?? "";
-      if (/^https?:/.test(href) && !/maricopaseniorliving|\/author\/|\/users\/profile|\/tag\//.test(href)) return href;
+      if (
+        /^https?:/.test(href) &&
+        !/maricopaseniorliving|\/author\/|\/users\/profile|\/tag\//.test(href)
+      )
+        return href;
     }
   }
   return undefined;
 }
 
-const categoryNames = (doc: Doc) => (doc.categories ?? []).map((c: Doc) => (titleOf(c) ?? "").trim().toLowerCase());
+const categoryNames = (doc: Doc) =>
+  (doc.categories ?? []).map((c: Doc) =>
+    (titleOf(c) ?? "").trim().toLowerCase(),
+  );
 
 for (const doc of ofType("post")) {
   const slug = doc.slug?.current;
@@ -269,12 +347,16 @@ for (const doc of ofType("post")) {
   for (const block of doc.body ?? []) {
     if (block._type !== "attachment" || !block.asset?._ref) continue;
     const label = block.description ?? "";
-    const month = /keeping you informed/i.test(label) ? monthKeyFrom(label) : undefined;
-    if (month && !newsletterPdfs.has(month)) newsletterPdfs.set(month, { asset: block.asset._ref, title: label });
+    const month = /keeping you informed/i.test(label)
+      ? monthKeyFrom(label)
+      : undefined;
+    if (month && !newsletterPdfs.has(month))
+      newsletterPdfs.set(month, { asset: block.asset._ref, title: label });
   }
   if (doc.isArchived) {
     count("post-archived-skipped");
-    if (slug) redirects.push({ source: `/articles/${slug}`, destination: "/articles" });
+    if (slug)
+      redirects.push({ source: `/articles/${slug}`, destination: "/articles" });
     continue;
   }
   const authorName = titleOf(doc.author) ?? "Maricopa Senior Living";
@@ -288,7 +370,10 @@ for (const doc of ofType("post")) {
     redirects.push({ source: `/articles/${slug}`, destination: "/newsletter" });
     continue;
   }
-  if (/^msl\s*[-–]/i.test(doc.title) || cats.includes("maricopa senior living a 501 (c)(3) arizona nonprofit")) {
+  if (
+    /^msl\s*[-–]/i.test(doc.title) ||
+    cats.includes("maricopa senior living a 501 (c)(3) arizona nonprofit")
+  ) {
     count("page-about");
     const title = doc.title.replace(/^msl\s*[-–]\s*/i, "").trim();
     const pageSlug = aboutSlug(title);
@@ -299,9 +384,14 @@ for (const doc of ofType("post")) {
       slug: { _type: "slug", current: pageSlug },
       section: "about",
       description: summarize(plainText(doc.body), 200),
-      sections: [{ _type: "textBlock", _key: newKey(), body: convertRichText(doc.body) }],
+      sections: [
+        { _type: "textBlock", _key: newKey(), body: convertRichText(doc.body) },
+      ],
     });
-    redirects.push({ source: `/articles/${slug}`, destination: `/about/${pageSlug}` });
+    redirects.push({
+      source: `/articles/${slug}`,
+      destination: `/about/${pageSlug}`,
+    });
     continue;
   }
   if (PUBLISHER_AUTHORS.has(authorName)) {
@@ -406,7 +496,9 @@ for (const old of ofType("page")) {
     title: old.title,
     slug: { _type: "slug", current: pageSlug },
     section: "general",
-    sections: [{ _type: "textBlock", _key: newKey(), body: convertRichText(old.body) }],
+    sections: [
+      { _type: "textBlock", _key: newKey(), body: convertRichText(old.body) },
+    ],
   });
 }
 
@@ -428,8 +520,17 @@ const quickLinkSections = (oldNav?.headerPrimary ?? [])
           style: "normal",
           listItem: "bullet",
           level: 1,
-          markDefs: [{ _type: "link", _key: linkKey, href: child.link.url.trim() }],
-          children: [{ _type: "span", _key: newKey(), text: (child.link.text ?? child.link.url).trim(), marks: [linkKey] }],
+          markDefs: [
+            { _type: "link", _key: linkKey, href: child.link.url.trim() },
+          ],
+          children: [
+            {
+              _type: "span",
+              _key: newKey(),
+              text: (child.link.text ?? child.link.url).trim(),
+              marks: [linkKey],
+            },
+          ],
         };
       }),
   }));
@@ -439,7 +540,8 @@ pages.push({
   title: "Quick Links",
   slug: { _type: "slug", current: "quick-links" },
   section: "general",
-  description: "Websites for the City of Maricopa, weather, traffic, and local and national services.",
+  description:
+    "Websites for the City of Maricopa, weather, traffic, and local and national services.",
   sections: quickLinkSections,
 });
 out.push(...pages);
@@ -452,19 +554,46 @@ out.push({
   _type: "settings",
   siteTitle: "Maricopa Senior Living",
   tagline: "A directory of resources to help you age your way!",
-  description: oldSettings.siteDescription ?? "Local resources, events and news for seniors and caregivers in Maricopa, Arizona.",
-  ...(heroImage ? { heroImage: { ...heroImage, alt: "Wild horses grazing in the desert near Maricopa, Arizona" } } : {}),
-  ...(oldSettings.contactEmail ? { contactEmail: oldSettings.contactEmail } : {}),
+  description:
+    oldSettings.siteDescription ??
+    "Local resources, events and news for seniors and caregivers in Maricopa, Arizona.",
+  ...(heroImage
+    ? {
+        heroImage: {
+          ...heroImage,
+          alt: "Wild horses grazing in the desert near Maricopa, Arizona",
+        },
+      }
+    : {}),
+  ...(oldSettings.contactEmail
+    ? { contactEmail: oldSettings.contactEmail }
+    : {}),
   donateUrl: "https://www.paypal.com/donate?hosted_button_id=VDPMC329ZC5ZE",
-  nonprofitStatement: "Maricopa Senior Living is an Arizona 501(c)(3) nonprofit.",
+  nonprofitStatement:
+    "Maricopa Senior Living is an Arizona 501(c)(3) nonprofit.",
   newsletterTitle: "Keeping you informed…still",
-  subscribeInstructions: "Subscribe today! It's free, quick & easy. Email your name to pjchoa@msn.com or rondsmithaz@msn.com.",
+  subscribeInstructions:
+    "Subscribe today! It's free, quick & easy. Email your name to pjchoa@msn.com or rondsmithaz@msn.com.",
 });
 
-const section = (label: string, path: string) => ({ _type: "link", _key: newKey(), label, kind: "section", section: path });
+const section = (label: string, path: string) => ({
+  _type: "link",
+  _key: newKey(),
+  label,
+  kind: "section",
+  section: path,
+});
 const pageLink = (label: string, slug: string) => {
   const target = pages.find((p) => p.slug.current === slug);
-  return target ? { _type: "link", _key: newKey(), label, kind: "internal", reference: ref(target._id) } : section(label, "/about");
+  return target
+    ? {
+        _type: "link",
+        _key: newKey(),
+        label,
+        kind: "internal",
+        reference: ref(target._id),
+      }
+    : section(label, "/about");
 };
 out.push({
   _id: "navigation",
@@ -497,24 +626,72 @@ out.push({
       _key: newKey(),
       heading: "Find help in Maricopa",
       text: "A directory of resources to help you age your way.",
-      ...(heroImage ? { image: { ...heroImage, alt: "Wild horses grazing in the desert near Maricopa, Arizona" } } : {}),
+      ...(heroImage
+        ? {
+            image: {
+              ...heroImage,
+              alt: "Wild horses grazing in the desert near Maricopa, Arizona",
+            },
+          }
+        : {}),
       showSearch: true,
     },
-    { _type: "topicsBlock", _key: newKey(), heading: "What do you need help with?" },
-    { _type: "whatsNewBlock", _key: newKey(), heading: "This month in Maricopa", buttonLabel: "Read this month's What's New" },
-    { _type: "eventListBlock", _key: newKey(), heading: "Coming up", mode: "all", limit: 5 },
+    {
+      _type: "topicsBlock",
+      _key: newKey(),
+      heading: "What do you need help with?",
+    },
+    {
+      _type: "whatsNewBlock",
+      _key: newKey(),
+      heading: "This month in Maricopa",
+      buttonLabel: "Read this month's What's New",
+    },
+    {
+      _type: "eventListBlock",
+      _key: newKey(),
+      heading: "Coming up",
+      mode: "all",
+      limit: 5,
+    },
     {
       _type: "quickContactsBlock",
       _key: newKey(),
       heading: "Important phone numbers",
       contacts: [
-        { _type: "quickContact", _key: newKey(), name: "Emergency", number: { _type: "phoneNumber", number: "911" } },
-        { _type: "quickContact", _key: newKey(), name: "Maricopa Police (non-emergency)", number: { _type: "phoneNumber", number: "520-568-3673" } },
-        { _type: "quickContact", _key: newKey(), name: "Suicide & Crisis Lifeline", number: { _type: "phoneNumber", number: "988" }, note: "Call or text, any time" },
+        {
+          _type: "quickContact",
+          _key: newKey(),
+          name: "Emergency",
+          number: { _type: "phoneNumber", number: "911" },
+        },
+        {
+          _type: "quickContact",
+          _key: newKey(),
+          name: "Maricopa Police (non-emergency)",
+          number: { _type: "phoneNumber", number: "520-568-3673" },
+        },
+        {
+          _type: "quickContact",
+          _key: newKey(),
+          name: "Suicide & Crisis Lifeline",
+          number: { _type: "phoneNumber", number: "988" },
+          note: "Call or text, any time",
+        },
       ],
     },
-    { _type: "newsletterSignupBlock", _key: newKey(), heading: "Keeping you informed…still", showLatest: true },
-    { _type: "donateBlock", _key: newKey(), heading: "Support Maricopa Senior Living", text: "We're a volunteer-run Arizona 501(c)(3) nonprofit. Your gift keeps this guide free for everyone." },
+    {
+      _type: "newsletterSignupBlock",
+      _key: newKey(),
+      heading: "Keeping you informed…still",
+      showLatest: true,
+    },
+    {
+      _type: "donateBlock",
+      _key: newKey(),
+      heading: "Support Maricopa Senior Living",
+      text: "We're a volunteer-run Arizona 501(c)(3) nonprofit. Your gift keeps this guide free for everyone.",
+    },
   ],
 });
 
@@ -545,7 +722,9 @@ for (const tag of ofType("tag")) {
   const [topic] = topicsForTag(tag.title);
   redirects.push({
     source: `/tag/${slug}`,
-    destination: topic ? `/topics/${topic}` : `/search?q=${encodeURIComponent(tag.title ?? slug)}`,
+    destination: topic
+      ? `/topics/${topic}`
+      : `/search?q=${encodeURIComponent(tag.title ?? slug)}`,
   });
 }
 const seenSources = new Set<string>();
@@ -570,7 +749,12 @@ const walk = (value: unknown) => {
   if (Array.isArray(value)) value.forEach(walk);
   else if (value && typeof value === "object") {
     const v = value as Doc;
-    if (v._type === "reference" && typeof v._ref === "string" && /^(image|file)-/.test(v._ref)) assetRefs.add(v._ref);
+    if (
+      v._type === "reference" &&
+      typeof v._ref === "string" &&
+      /^(image|file)-/.test(v._ref)
+    )
+      assetRefs.add(v._ref);
     Object.values(v).forEach(walk);
   }
 };
@@ -588,9 +772,15 @@ const assetMap: Record<string, string> = existsSync(MAP_FILE)
   : {};
 if (!SKIP_ASSETS) {
   const wanted = [...assetRefs].map((id) => assetMap[id] ?? id);
-  const present = new Set(await dev.fetch<string[]>("*[_id in $ids]._id", { ids: wanted }));
-  const missing = [...assetRefs].filter((id) => !present.has(assetMap[id] ?? id));
-  console.log(`Uploading ${missing.length} assets (${present.size} already in development)…`);
+  const present = new Set(
+    await dev.fetch<string[]>("*[_id in $ids]._id", { ids: wanted }),
+  );
+  const missing = [...assetRefs].filter(
+    (id) => !present.has(assetMap[id] ?? id),
+  );
+  console.log(
+    `Uploading ${missing.length} assets (${present.size} already in development)…`,
+  );
   let done = 0;
   const queue = [...missing];
   await Promise.all(
@@ -605,9 +795,13 @@ if (!SKIP_ASSETS) {
           continue;
         }
         const buffer = Buffer.from(await response.arrayBuffer());
-        const uploaded = await dev.assets.upload(id.startsWith("image-") ? "image" : "file", buffer, {
-          filename: asset.originalFilename,
-        });
+        const uploaded = await dev.assets.upload(
+          id.startsWith("image-") ? "image" : "file",
+          buffer,
+          {
+            filename: asset.originalFilename,
+          },
+        );
         if (uploaded._id !== id) assetMap[id] = uploaded._id;
         done++;
         if (done % 25 === 0) console.log(`  ${done}/${missing.length}`);
@@ -620,7 +814,11 @@ const remap = (value: unknown): unknown => {
   if (Array.isArray(value)) return value.map(remap);
   if (value && typeof value === "object") {
     const v = value as Doc;
-    if (v._type === "reference" && typeof v._ref === "string" && assetMap[v._ref]) {
+    if (
+      v._type === "reference" &&
+      typeof v._ref === "string" &&
+      assetMap[v._ref]
+    ) {
       return { ...v, _ref: assetMap[v._ref] };
     }
     return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, remap(x)]));
@@ -640,7 +838,8 @@ out.sort((a, b) => {
 for (let index = 0; index < out.length; index += 50) {
   const batch = out.slice(index, index + 50);
   const tx = dev.transaction();
-  for (const doc of batch) tx.createOrReplace(doc as { _id: string; _type: string });
+  for (const doc of batch)
+    tx.createOrReplace(doc as { _id: string; _type: string });
   await tx.commit({ visibility: "async" });
   console.log(`  wrote ${Math.min(index + 50, out.length)}/${out.length}`);
 }

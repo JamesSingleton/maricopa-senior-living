@@ -1,0 +1,336 @@
+/*
+ * Maricopa Senior Living — design tokens and base styles.
+ *
+ * Built for older readers: 20px body text, 1.6 line height, high-contrast
+ * colors (all text pairs ≥ 7:1 or 4.5:1 for large text), underlined links,
+ * big tap targets (≥ 48px) and a strong focus ring. Colors come from the
+ * wild-horses photo: desert sand, sage, sky and a deep terracotta.
+ */
+
+:root {
+  --msl-bg: #fbf8f2;
+  --msl-surface: #ffffff;
+  --msl-sand: #f1e6d4;
+  --msl-sand-strong: #e3cfae;
+  --msl-sky: #e6eef1;
+  --msl-sage: #e4eadc;
+  --msl-ink: #1d2327;
+  --msl-ink-soft: #3d464c;
+  --msl-line: #cbbfa9;
+  --msl-primary: #8a3416; /* terracotta, 8.0:1 on white */
+  --msl-primary-hover: #6e280f;
+  --msl-primary-ink: #ffffff;
+  --msl-link: #174f8c; /* familiar link blue, 8.3:1 on white */
+  --msl-link-visited: #5b2f86;
+  --msl-green: #2f5a32;
+  --msl-warning-bg: #fff2d6;
+  --msl-warning-line: #b26b00;
+  --msl-focus: #e07a1f;
+  --msl-radius: 10px;
+  --msl-max: 1180px;
+  --msl-measure: 68ch;
+
+  /* Map onto the shadcn tokens used by packages/ui components. */
+  --background: var(--msl-bg);
+  --foreground: var(--msl-ink);
+  --primary: var(--msl-primary);
+  --primary-foreground: var(--msl-primary-ink);
+  --muted-foreground: var(--msl-ink-soft);
+  --border: var(--msl-line);
+  --ring: var(--msl-focus);
+}
+
+@layer base {
+  html {
+    font-size: 125%; /* 20px base; everything else scales from it */
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 1rem;
+  }
+
+  body {
+    background: var(--msl-bg);
+    color: var(--msl-ink);
+    font-family: var(--font-body), system-ui, sans-serif;
+    line-height: 1.6;
+  }
+
+  h1,
+  h2,
+  h3,
+  .font-heading {
+    font-family: var(--font-heading), Georgia, serif;
+    line-height: 1.2;
+    color: var(--msl-ink);
+    text-wrap: balance;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 1.4rem + 2.6vw, 2.9rem);
+    font-weight: 600;
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  a {
+    color: var(--msl-link);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 0.08em;
+  }
+
+  a:hover {
+    text-decoration-thickness: 0.15em;
+  }
+
+  :focus-visible {
+    outline: 4px solid var(--msl-focus);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--msl-sand-strong);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* ---- Layout ------------------------------------------------------------ */
+
+  .container-page {
+    width: 100%;
+    max-width: var(--msl-max);
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+
+  @media (min-width: 48rem) {
+    .container-page {
+      padding-inline: 2rem;
+    }
+  }
+
+  .measure {
+    max-width: var(--msl-measure);
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -10rem;
+    z-index: 100;
+    background: var(--msl-ink);
+    color: #fff;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--msl-radius);
+  }
+
+  .skip-link:focus {
+    top: 1rem;
+  }
+
+  /* ---- Buttons ----------------------------------------------------------- */
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3rem; /* 60px */
+    padding: 0.6rem 1.25rem;
+    border-radius: var(--msl-radius);
+    border: 2px solid var(--msl-primary);
+    background: var(--msl-primary);
+    color: var(--msl-primary-ink);
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .btn:hover {
+    background: var(--msl-primary-hover);
+    border-color: var(--msl-primary-hover);
+    text-decoration: none;
+  }
+
+  .btn-secondary {
+    background: var(--msl-surface);
+    color: var(--msl-primary);
+  }
+
+  .btn-secondary:hover {
+    background: var(--msl-sand);
+    color: var(--msl-primary-hover);
+  }
+
+  .btn-call {
+    background: var(--msl-green);
+    border-color: var(--msl-green);
+  }
+
+  .btn-call:hover {
+    background: #23452a;
+    border-color: #23452a;
+  }
+
+  /* ---- Cards ------------------------------------------------------------- */
+
+  .card {
+    background: var(--msl-surface);
+    border: 2px solid var(--msl-line);
+    border-radius: var(--msl-radius);
+    padding: 1.25rem;
+  }
+
+  .card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .card-link:hover {
+    border-color: var(--msl-primary);
+    text-decoration: none;
+  }
+
+  .card-title {
+    font-family: var(--font-heading), Georgia, serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--msl-link);
+  }
+
+  .card-link:hover .card-title {
+    text-decoration: underline;
+  }
+
+  .eyebrow {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--msl-primary);
+  }
+
+  .muted {
+    color: var(--msl-ink-soft);
+  }
+
+  /* ---- Forms ------------------------------------------------------------- */
+
+  .input {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.5rem 0.9rem;
+    border: 2px solid var(--msl-ink-soft);
+    border-radius: var(--msl-radius);
+    background: #fff;
+    color: var(--msl-ink);
+    font-size: 1.05rem;
+  }
+
+  .label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+
+  /* ---- Rich text --------------------------------------------------------- */
+
+  .prose-msl {
+    max-width: var(--msl-measure);
+    font-size: 1.05rem;
+  }
+
+  .prose-msl > * + * {
+    margin-top: 1em;
+  }
+
+  .prose-msl h2 {
+    margin-top: 1.6em;
+  }
+
+  .prose-msl h3 {
+    margin-top: 1.3em;
+  }
+
+  .prose-msl ul,
+  .prose-msl ol {
+    padding-left: 1.5em;
+  }
+
+  .prose-msl ul {
+    list-style: disc;
+  }
+
+  .prose-msl ol {
+    list-style: decimal;
+  }
+
+  .prose-msl li + li {
+    margin-top: 0.4em;
+  }
+
+  .prose-msl blockquote {
+    border-left: 5px solid var(--msl-sand-strong);
+    padding-left: 1rem;
+    font-style: italic;
+  }
+
+  .prose-msl img {
+    border-radius: var(--msl-radius);
+  }
+}
+
+/* ---- Print (resource lists, newsletter) -------------------------------- */
+
+@media print {
+  html {
+    font-size: 11pt;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  .no-print,
+  .site-header,
+  .site-footer,
+  .skip-link {
+    display: none !important;
+  }
+
+  a {
+    color: #000;
+    text-decoration: none;
+  }
+
+  .card {
+    border-width: 1px;
+    break-inside: avoid;
+  }
+
+  .print-break {
+    break-before: page;
+  }
+}

@@ -71,7 +71,12 @@ export const home = defineType({
     howToField("howTo", [
       "These sections make up the home page, top to bottom. Drag them to reorder.",
     ]),
-    defineField({ name: "title", type: "string", initialValue: "Home", hidden: true }),
+    defineField({
+      name: "title",
+      type: "string",
+      initialValue: "Home",
+      hidden: true,
+    }),
     defineField({
       name: "sections",
       type: "pageBuilder",

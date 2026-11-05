@@ -24,10 +24,13 @@ export const resource = defineType({
     { name: "details", title: "More details" },
   ],
   fields: [
-    { ...howToField("howTo", [
-      "A resource is an organization or service people can call or visit — for example a food bank, a clinic or a transportation program.",
-      "If it's just an article or a website to read, add a Helpful link instead.",
-    ]), group: "basics" },
+    {
+      ...howToField("howTo", [
+        "A resource is an organization or service people can call or visit — for example a food bank, a clinic or a transportation program.",
+        "If it's just an article or a website to read, add a Helpful link instead.",
+      ]),
+      group: "basics",
+    },
     defineField({
       name: "title",
       title: "Name",

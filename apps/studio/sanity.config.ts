@@ -5,11 +5,7 @@ import { presentationTool } from "sanity/presentation";
 import { structureTool } from "sanity/structure";
 
 import { StartHere } from "./components/StartHere";
-import {
-  ADMIN_ONLY_TYPES,
-  isAdmin,
-  SINGLETON_TYPES,
-} from "./lib/access";
+import { ADMIN_ONLY_TYPES, isAdmin, SINGLETON_TYPES } from "./lib/access";
 import { presentationResolve } from "./presentation/resolve";
 import { schemaTypes } from "./schemaTypes";
 import { structure } from "./structure";
@@ -61,8 +57,14 @@ export default defineConfig({
       const filtered = previous.filter(
         (item) =>
           !SINGLETON_TYPES.has(item.templateId) &&
-          !(item.templateId === "monthlyUpdate" && creationContext.type === "global") &&
-          !(item.templateId === "newsletterEdition" && creationContext.type === "global"),
+          !(
+            item.templateId === "monthlyUpdate" &&
+            creationContext.type === "global"
+          ) &&
+          !(
+            item.templateId === "newsletterEdition" &&
+            creationContext.type === "global"
+          ),
       );
       return isAdmin(currentUser)
         ? filtered

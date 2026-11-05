@@ -92,11 +92,13 @@ export const link = defineType({
       description: "Starts with https://",
       hidden: ({ parent }) => parent?.kind !== "external",
       validation: (rule) =>
-        rule.uri({ scheme: ["http", "https"] }).custom((value, { parent }) =>
-          (parent as { kind?: string })?.kind === "external" && !value
-            ? "Paste the website address."
-            : true,
-        ),
+        rule
+          .uri({ scheme: ["http", "https"] })
+          .custom((value, { parent }) =>
+            (parent as { kind?: string })?.kind === "external" && !value
+              ? "Paste the website address."
+              : true,
+          ),
     }),
     defineField({
       name: "phone",

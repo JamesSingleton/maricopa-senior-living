@@ -1,7 +1,7 @@
 import { Box, Card, Flex, Grid, Heading, Stack, Text } from "@sanity/ui";
+import { useEffect, useState } from "react";
 import { useClient } from "sanity";
 import { IntentLink } from "sanity/router";
-import { useEffect, useState } from "react";
 
 type Job = {
   title: string;
@@ -19,7 +19,8 @@ const JOBS: Job[] = [
   },
   {
     title: "Add an event",
-    description: "Something happening on a date. It can repeat weekly or monthly.",
+    description:
+      "Something happening on a date. It can repeat weekly or monthly.",
     intent: "create",
     params: { type: "event" },
   },
@@ -60,7 +61,9 @@ function useNeedsReviewCount() {
   const [count, setCount] = useState<number | null>(null);
   useEffect(() => {
     client
-      .fetch<number>("count(*[needsReview == true && !(_id in path('drafts.**'))])")
+      .fetch<number>(
+        "count(*[needsReview == true && !(_id in path('drafts.**'))])",
+      )
       .then(setCount)
       .catch(() => setCount(null));
   }, [client]);
@@ -88,7 +91,13 @@ export function StartHere() {
               params={job.params}
               style={{ textDecoration: "none", color: "inherit" }}
             >
-              <Card padding={5} radius={3} shadow={1} tone="default" style={{ height: "100%" }}>
+              <Card
+                padding={5}
+                radius={3}
+                shadow={1}
+                tone="default"
+                style={{ height: "100%" }}
+              >
                 <Stack space={3}>
                   <Text size={3} weight="semibold">
                     {job.title}
@@ -105,8 +114,8 @@ export function StartHere() {
           <Card padding={4} radius={3} tone="caution" border>
             <Flex gap={3} align="center">
               <Text size={2}>
-                {needsReview} items brought over from the old website still
-                need a quick check. Find them under “Needs review” in Content.
+                {needsReview} items brought over from the old website still need
+                a quick check. Find them under “Needs review” in Content.
               </Text>
             </Flex>
           </Card>

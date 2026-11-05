@@ -16,7 +16,8 @@ export const TOPICS: TopicDef[] = [
   {
     slug: "health-wellness",
     title: "Health & Wellness",
-    description: "Staying healthy: doctors, clinics, exercise, medical equipment and health tips.",
+    description:
+      "Staying healthy: doctors, clinics, exercise, medical equipment and health tips.",
     icon: "heart-pulse",
     categories: [
       "Health and Wellness",
@@ -29,12 +30,14 @@ export const TOPICS: TopicDef[] = [
       "Medical Equipment, Loan Closets and Donations",
       "Arizona Department of Health Services (ADHS) - Seniors",
     ],
-    tagHints: /health|mayo|exercise|heart|diabet|dental|vision|hearing|medical|doctor|flu|vaccin|stroke|cancer/i,
+    tagHints:
+      /health|mayo|exercise|heart|diabet|dental|vision|hearing|medical|doctor|flu|vaccin|stroke|cancer/i,
   },
   {
     slug: "dementia-memory",
     title: "Dementia & Memory",
-    description: "Alzheimer's and dementia: support, memory cafés and caring for a loved one.",
+    description:
+      "Alzheimer's and dementia: support, memory cafés and caring for a loved one.",
     icon: "brain",
     categories: ["Dementia", "Dementia Friendly Maricopa"],
     tagHints: /alzheimer|dementia|memory/i,
@@ -44,21 +47,32 @@ export const TOPICS: TopicDef[] = [
     title: "Caregiving",
     description: "Help for caregivers and help at home.",
     icon: "hand-heart",
-    categories: ["Caregivers", "Home Care Services", "Placement Services for Seniors"],
+    categories: [
+      "Caregivers",
+      "Home Care Services",
+      "Placement Services for Seniors",
+    ],
     tagHints: /caregiv|home care|respite/i,
   },
   {
     slug: "housing-living",
     title: "Housing & Living Options",
-    description: "Staying in your home, independent and assisted living, and nursing homes.",
+    description:
+      "Staying in your home, independent and assisted living, and nursing homes.",
     icon: "house",
-    categories: ["Senior Living Options", "Independent Living", "Aging in Place"],
-    tagHints: /housing|assisted living|nursing home|aging in place|home safety|home checklist|retirement communit/i,
+    categories: [
+      "Senior Living Options",
+      "Independent Living",
+      "Aging in Place",
+    ],
+    tagHints:
+      /housing|assisted living|nursing home|aging in place|home safety|home checklist|retirement communit/i,
   },
   {
     slug: "money-benefits",
     title: "Money & Benefits",
-    description: "Medicare, Medicaid, Social Security, taxes, utilities and financial help.",
+    description:
+      "Medicare, Medicaid, Social Security, taxes, utilities and financial help.",
     icon: "piggy-bank",
     categories: [
       "Finances, financial services and planning",
@@ -70,7 +84,8 @@ export const TOPICS: TopicDef[] = [
       "Utilities",
       "Assistance for Economically Disadvantaged, Elderly and/or Homebound",
     ],
-    tagHints: /medicare|medicaid|social security|financ|tax|irs|insurance|utilit|ahcccs|altcs|benefit/i,
+    tagHints:
+      /medicare|medicaid|social security|financ|tax|irs|insurance|utilit|ahcccs|altcs|benefit/i,
   },
   {
     slug: "legal-planning",
@@ -85,20 +100,28 @@ export const TOPICS: TopicDef[] = [
       "Legal Services",
       "Notary",
     ],
-    tagHints: /legal|estate|will|advance|directive|power of attorney|notary|planning/i,
+    tagHints:
+      /legal|estate|will|advance|directive|power of attorney|notary|planning/i,
   },
   {
     slug: "end-of-life-grief",
     title: "End of Life & Grief",
     description: "Hospice and palliative care, funerals, grief and loss.",
     icon: "flower",
-    categories: ["End of Life", "Hospice / Palliative Care", "Grief/Loss", "Suicide"],
-    tagHints: /hospice|palliative|grief|loss|funeral|end-of-life|end of life|death|suicide/i,
+    categories: [
+      "End of Life",
+      "Hospice / Palliative Care",
+      "Grief/Loss",
+      "Suicide",
+    ],
+    tagHints:
+      /hospice|palliative|grief|loss|funeral|end-of-life|end of life|death|suicide/i,
   },
   {
     slug: "safety-scams",
     title: "Safety & Scams",
-    description: "Avoiding scams and fraud, fall prevention and personal safety.",
+    description:
+      "Avoiding scams and fraud, fall prevention and personal safety.",
     icon: "shield-check",
     categories: [
       "Frauds and Scams",
@@ -109,12 +132,14 @@ export const TOPICS: TopicDef[] = [
       "Victims",
       "Women's Centers",
     ],
-    tagHints: /scam|fraud|fall|abuse|safety|yellow dot|identity theft|elder abuse/i,
+    tagHints:
+      /scam|fraud|fall|abuse|safety|yellow dot|identity theft|elder abuse/i,
   },
   {
     slug: "weather-emergencies",
     title: "Weather & Emergencies",
-    description: "Extreme heat, monsoons, cooling centers and emergency preparedness.",
+    description:
+      "Extreme heat, monsoons, cooling centers and emergency preparedness.",
     icon: "sun",
     categories: ["Extreme Weather", "Weather", "Emergency Preparedness"],
     tagHints: /heat|weather|monsoon|emergenc|cooling|hydrat|power outage/i,
@@ -122,9 +147,15 @@ export const TOPICS: TopicDef[] = [
   {
     slug: "food-basic-needs",
     title: "Food & Basic Needs",
-    description: "Food banks, meals, nutrition and help with clothing and housing.",
+    description:
+      "Food banks, meals, nutrition and help with clothing and housing.",
     icon: "utensils",
-    categories: ["The Basics (Nutrition, Clothing and Housing)", "Food", "Nutrition Assistance", "Meal Programs"],
+    categories: [
+      "The Basics (Nutrition, Clothing and Housing)",
+      "Food",
+      "Nutrition Assistance",
+      "Meal Programs",
+    ],
     tagHints: /food|meal|nutrition|pantry|snap|grocer/i,
   },
   {
@@ -138,7 +169,8 @@ export const TOPICS: TopicDef[] = [
   {
     slug: "community-activities",
     title: "Community & Activities",
-    description: "The Senior Center, library, clubs, volunteering, arts, learning and trips.",
+    description:
+      "The Senior Center, library, clubs, volunteering, arts, learning and trips.",
     icon: "users",
     categories: [
       "City of Maricopa Community / Senior Center",
@@ -162,12 +194,14 @@ export const TOPICS: TopicDef[] = [
       "Websites",
       "Product & Service Reviews",
     ],
-    tagHints: /volunteer|librar|art|culture|club|travel|trip|museum|class|learn|technolog|computer|lonel|isolat|social|communit/i,
+    tagHints:
+      /volunteer|librar|art|culture|club|travel|trip|museum|class|learn|technolog|computer|lonel|isolat|social|communit/i,
   },
   {
     slug: "veterans",
     title: "Veterans",
-    description: "Benefits, health care and groups for veterans and their families.",
+    description:
+      "Benefits, health care and groups for veterans and their families.",
     icon: "medal",
     categories: ["Veterans"],
     tagHints: /veteran|\bva\b|vfw|american legion|military/i,

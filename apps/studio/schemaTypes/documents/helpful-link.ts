@@ -43,7 +43,8 @@ export const helpfulLink = defineType({
     defineField({
       name: "source",
       type: "string",
-      description: 'Who published it, e.g. "AARP", "Mayo Clinic", "InMaricopa".',
+      description:
+        'Who published it, e.g. "AARP", "Mayo Clinic", "InMaricopa".',
       validation: (rule) => rule.required(),
     }),
     summaryField({ max: 400 }),

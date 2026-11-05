@@ -41,7 +41,10 @@ export const newsletterNextTemplate: Template = {
     { getClient }: InitialValueResolverContext,
   ) => {
     const client = getClient({ apiVersion: "2025-02-19" });
-    const latest = await client.fetch<{ month?: string; sections?: unknown[] } | null>(
+    const latest = await client.fetch<{
+      month?: string;
+      sections?: unknown[];
+    } | null>(
       '*[_type == "newsletterEdition" && !(_id in path("drafts.**"))] | order(month desc)[0]{month, "sections": sections[_type in ["comingUpSection", "funSection"]]{..., "_key": _key}}',
     );
     const thisMonth = currentMonthKey();
@@ -51,10 +54,16 @@ export const newsletterNextTemplate: Template = {
       month,
       // Keep the recurring layout (events table, fun page); stories and
       // flyers change every month.
-      sections:
-        latest?.sections?.length
-          ? latest.sections
-          : [{ _type: "comingUpSection", _key: "coming-up", heading: "What's Coming Up?", includeEvents: true }],
+      sections: latest?.sections?.length
+        ? latest.sections
+        : [
+            {
+              _type: "comingUpSection",
+              _key: "coming-up",
+              heading: "What's Coming Up?",
+              includeEvents: true,
+            },
+          ],
     };
   },
 };

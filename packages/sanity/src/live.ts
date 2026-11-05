@@ -1,4 +1,5 @@
 import { env } from "@maricopa-senior-living/env/server";
+import { cacheLife } from "next/cache";
 import { cookies, draftMode } from "next/headers";
 import type { QueryParams } from "next-sanity";
 import {
@@ -11,7 +12,9 @@ import {
 import { client } from "./client";
 
 export const { sanityFetch, SanityLive } = defineLive({
-  client,
+  // Server-only: published reads also need the token because the
+  // development dataset is private.
+  client: client.withConfig({ token: env.SANITY_API_READ_TOKEN }),
   serverToken: env.SANITY_API_READ_TOKEN,
   browserToken: env.SANITY_API_READ_TOKEN,
   strict: true,
@@ -29,6 +32,20 @@ export const cachedSanity: StrictDefinedFetchType = async (options) => {
   "use cache";
   return sanityFetch(options);
 };
+
+/**
+ * "Now", rounded to the hour, from a cached scope. Pages that show upcoming
+ * events or "this month" read the time through this, which caps their cache
+ * at an hour (Next uses the shortest cacheLife in scope) — Sanity Live only
+ * refreshes when content changes, not when time passes.
+ */
+export async function cachedNow() {
+  "use cache";
+  cacheLife("hours");
+  const now = new Date();
+  now.setUTCMinutes(0, 0, 0);
+  return now.toISOString();
+}
 
 export interface DynamicFetchOptions {
   perspective: LivePerspective;

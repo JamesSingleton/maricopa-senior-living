@@ -46,7 +46,8 @@ export const monthlyUpdate = defineType({
     defineField({
       name: "title",
       type: "string",
-      description: "Leave empty to use “What's New in Maricopa — [Month Year]”.",
+      description:
+        "Leave empty to use “What's New in Maricopa — [Month Year]”.",
     }),
     defineField({
       name: "intro",

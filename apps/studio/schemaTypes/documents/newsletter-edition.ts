@@ -3,7 +3,12 @@ import { DocumentTextIcon } from "@sanity/icons/DocumentText";
 import { EnvelopeIcon } from "@sanity/icons/Envelope";
 import { FaceHappyIcon } from "@sanity/icons/FaceHappy";
 import { ImagesIcon } from "@sanity/icons/Images";
-import { defineArrayMember, defineField, defineType, getPublishedId } from "sanity";
+import {
+  defineArrayMember,
+  defineField,
+  defineType,
+  getPublishedId,
+} from "sanity";
 
 import { howToField } from "../../components/HowTo";
 import { monthLabel, monthOptions } from "../../lib/months";
