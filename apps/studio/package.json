@@ -8,10 +8,12 @@
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "build": "sanity build",
-    "deploy:schema": "sanity schema deploy --manifest-dir ./dist/static",
+    "deploy:schema": "sanity schema deploy",
     "deploy": "sanity deploy",
     "type": "sanity schema extract --enforce-required-fields && sanity typegen generate",
-    "check:types": "tsc --noEmit"
+    "check:types": "tsc --noEmit",
+    "blueprints:plan": "sanity blueprints plan",
+    "blueprints:deploy": "sanity blueprints deploy"
   },
   "dependencies": {
     "@sanity/client": "catalog:",

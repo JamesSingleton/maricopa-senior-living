@@ -3,7 +3,8 @@ import {
   defineSyncTagInvalidateFunction,
 } from "@sanity/blueprints";
 
-// Matches apps/web/sanity.cli.ts. Sanity CLI does not load .env files.
+// Sanity CLI does not load .env files. The functions serve the live site, so
+// they default to production; set SANITY_STUDIO_DATASET to test elsewhere.
 const projectId =
   process.env.SANITY_STUDIO_PROJECT_ID ??
   process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ??

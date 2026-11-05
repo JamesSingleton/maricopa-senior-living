@@ -1,11 +1,11 @@
 import { HomeIcon } from "@sanity/icons/Home";
 import { visionTool } from "@sanity/vision";
-import { defineConfig } from "sanity";
+import { defineConfig, defineSingleton } from "sanity";
 import { presentationTool } from "sanity/presentation";
 import { structureTool } from "sanity/structure";
 
 import { StartHere } from "./components/StartHere";
-import { ADMIN_ONLY_TYPES, isAdmin, SINGLETON_TYPES } from "./lib/access";
+import { ADMIN_ONLY_TYPES, isAdmin } from "./lib/access";
 import { presentationResolve } from "./presentation/resolve";
 import { schemaTypes } from "./schemaTypes";
 import { structure } from "./structure";
@@ -16,7 +16,14 @@ const projectId = process.env.SANITY_STUDIO_PROJECT_ID ?? "bksfw1p8";
 // test edits (or a migration) at the live site.
 const dataset = process.env.SANITY_STUDIO_DATASET ?? "development";
 
+/**
+ * Ron may publish and undo changes on singletons, but not delete or
+ * unpublish them (the built-in registry only removes Duplicate).
+ */
 const SINGLETON_ACTIONS = new Set(["publish", "discardChanges", "restore"]);
+
+/** Monthly types are created from "Start next month", never from scratch. */
+const STARTED_FROM_TEMPLATE = new Set(["monthlyUpdate", "newsletterEdition"]);
 
 export default defineConfig({
   name: "default",
@@ -30,11 +37,7 @@ export default defineConfig({
   schema: {
     types: schemaTypes,
     templates: (previous) => [
-      ...previous.filter(
-        (template) =>
-          !SINGLETON_TYPES.has(template.schemaType) &&
-          template.schemaType !== "topic",
-      ),
+      ...previous,
       startNextMonthTemplate,
       newsletterNextTemplate,
     ],
@@ -52,17 +55,30 @@ export default defineConfig({
       : previous.filter((tool) => tool.name !== "vision")),
   ],
   document: {
+    // Fixed-ID documents: no "Create new", no Duplicate, edited in place.
+    singletons: [
+      defineSingleton({
+        documentId: "home",
+        schemaType: "home",
+        title: "Home page",
+      }),
+      defineSingleton({
+        documentId: "settings",
+        schemaType: "settings",
+        title: "Site settings",
+      }),
+      defineSingleton({
+        documentId: "navigation",
+        schemaType: "navigation",
+        title: "Menus",
+      }),
+    ],
     // Ron's "Create new" menu only offers content, never structure.
     newDocumentOptions: (previous, { currentUser, creationContext }) => {
       const filtered = previous.filter(
         (item) =>
-          !SINGLETON_TYPES.has(item.templateId) &&
           !(
-            item.templateId === "monthlyUpdate" &&
-            creationContext.type === "global"
-          ) &&
-          !(
-            item.templateId === "newsletterEdition" &&
+            STARTED_FROM_TEMPLATE.has(item.templateId) &&
             creationContext.type === "global"
           ),
       );
@@ -70,11 +86,13 @@ export default defineConfig({
         ? filtered
         : filtered.filter((item) => !ADMIN_ONLY_TYPES.has(item.templateId));
     },
-    actions: (previous, { schemaType, currentUser }) => {
-      if (SINGLETON_TYPES.has(schemaType)) {
-        return previous.filter(
-          (action) => action.action && SINGLETON_ACTIONS.has(action.action),
-        );
+    actions: (previous, { singleton, schemaType, currentUser }) => {
+      if (singleton) {
+        return isAdmin(currentUser)
+          ? previous
+          : previous.filter(
+              (action) => action.action && SINGLETON_ACTIONS.has(action.action),
+            );
       }
       if (ADMIN_ONLY_TYPES.has(schemaType) && !isAdmin(currentUser)) {
         return [];

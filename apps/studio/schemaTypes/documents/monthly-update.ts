@@ -1,7 +1,7 @@
 import { BellIcon } from "@sanity/icons/Bell";
 import { defineField, defineType } from "sanity";
 
-import { howToField } from "../../components/HowTo";
+import { withHowTo } from "../../components/HowTo";
 import { isAdmin } from "../../lib/access";
 import { currentMonthKey, monthLabel } from "../../lib/months";
 import { publishMonthField, toMonthKey } from "../publish-month";
@@ -23,11 +23,13 @@ export const monthlyUpdate = defineType({
     );
     return Boolean(month && month < currentMonthKey());
   },
-  fields: [
-    howToField("howTo", [
+  components: {
+    input: withHowTo([
       "Each month gets its own What's New. Use “Start next month” on the Studio home screen — it copies last month so you can update it.",
       "Earlier months are kept as an archive and can't be changed. Ask James if something in an old month needs fixing.",
     ]),
+  },
+  fields: [
     publishMonthField({
       type: "monthlyUpdate",
       path: "/whats-new",

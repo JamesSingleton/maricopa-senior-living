@@ -1,6 +1,7 @@
 import { CopyIcon } from "@sanity/icons/Copy";
 import { LaunchIcon } from "@sanity/icons/Launch";
-import { Button, Card, Flex, Stack, Text, useToast } from "@sanity/ui";
+import { Button, Card, Flex, Stack, Text } from "@sanity/ui";
+import { useToast } from "@sanity/ui/toast";
 import type { ReactNode } from "react";
 
 /** The public website; override for staging with SANITY_STUDIO_SITE_URL. */
@@ -22,7 +23,7 @@ export function PublicUrl({
   const toast = useToast();
   const url = path ? `${SITE_URL}${path}` : null;
   return (
-    <Stack space={3}>
+    <Stack gap={3}>
       {children}
       <Card
         padding={3}

@@ -1,7 +1,7 @@
 import { DocumentTextIcon } from "@sanity/icons/DocumentText";
 import { defineField, defineType } from "sanity";
 
-import { howToField } from "../../components/HowTo";
+import { withHowTo } from "../../components/HowTo";
 import { slugField } from "../../utils/slug";
 import { needsReviewField, summaryField, topicsField } from "../shared";
 
@@ -16,11 +16,13 @@ export const article = defineType({
   name: "article",
   type: "document",
   icon: DocumentTextIcon,
-  fields: [
-    howToField("howTo", [
+  components: {
+    input: withHowTo([
       "Articles are things written for this website — by Ron, Joan, or another local writer.",
       "Found a good article on another website? Add it as a Helpful link instead of copying it here.",
     ]),
+  },
+  fields: [
     defineField({
       name: "title",
       type: "string",

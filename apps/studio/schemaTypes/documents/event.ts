@@ -1,7 +1,7 @@
 import { CalendarIcon } from "@sanity/icons/Calendar";
 import { defineArrayMember, defineField, defineType } from "sanity";
 
-import { howToField } from "../../components/HowTo";
+import { withHowTo } from "../../components/HowTo";
 import { slugField } from "../../utils/slug";
 import { summaryField, topicsField } from "../shared";
 
@@ -24,14 +24,13 @@ export const event = defineType({
     { name: "when", title: "When & where", default: true },
     { name: "details", title: "Details" },
   ],
+  components: {
+    input: withHowTo([
+      "Add one event for each thing that's happening. For something every week or month, set it once under “Repeats” instead of adding it again and again.",
+      "If one date is cancelled, add it under “Skip these dates”.",
+    ]),
+  },
   fields: [
-    {
-      ...howToField("howTo", [
-        "Add one event for each thing that's happening. For something every week or month, set it once under “Repeats” instead of adding it again and again.",
-        "If one date is cancelled, add it under “Skip these dates”.",
-      ]),
-      group: "when",
-    },
     defineField({
       name: "title",
       type: "string",

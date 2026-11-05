@@ -1,4 +1,9 @@
-import { defineField, getPublishedId, type ValidationContext } from "sanity";
+import {
+  defineArrayMember,
+  defineField,
+  getPublishedId,
+  type ValidationContext,
+} from "sanity";
 
 /**
  * Warning (not an error) when another document of the same type already has
@@ -40,7 +45,7 @@ export function topicsField({ min = 1, max = 3 } = {}) {
     name: "topics",
     type: "array",
     description: `Pick ${min === max ? max : `${min}–${max}`} topics people would look under. Topics are a fixed list; ask James if one is missing.`,
-    of: [{ type: "reference", to: [{ type: "topic" }] }],
+    of: [defineArrayMember({ type: "reference", to: [{ type: "topic" }] })],
     options: { layout: "tags" },
     validation: (rule) =>
       rule

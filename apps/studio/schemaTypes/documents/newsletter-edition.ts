@@ -5,7 +5,7 @@ import { FaceHappyIcon } from "@sanity/icons/FaceHappy";
 import { ImagesIcon } from "@sanity/icons/Images";
 import { defineArrayMember, defineField, defineType } from "sanity";
 
-import { howToField } from "../../components/HowTo";
+import { withHowTo } from "../../components/HowTo";
 import { monthLabel } from "../../lib/months";
 import { publishMonthField, toMonthKey } from "../publish-month";
 
@@ -166,11 +166,13 @@ export const newsletterEdition = defineType({
   title: "Newsletter",
   type: "document",
   icon: EnvelopeIcon,
-  fields: [
-    howToField("howTo", [
+  components: {
+    input: withHowTo([
       "Build this month's “Keeping you informed…still” here. Add sections in the order you want them; the table of contents is made for you.",
-      "When it's ready, publish it and click “Download PDF” on the newsletter page to attach to your email.",
+      "When it's ready, publish it and click “Print or save as PDF” on the newsletter page to attach to your email.",
     ]),
+  },
+  fields: [
     publishMonthField({
       type: "newsletterEdition",
       path: "/newsletter",

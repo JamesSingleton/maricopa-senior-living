@@ -75,15 +75,15 @@ export function StartHere() {
   const needsReview = useNeedsReviewCount();
   return (
     <Box padding={[4, 5, 6]} style={{ maxWidth: 1000, margin: "0 auto" }}>
-      <Stack space={5}>
-        <Stack space={3}>
+      <Stack gap={5}>
+        <Stack gap={3}>
           <Heading size={4}>What would you like to do?</Heading>
           <Text size={2} muted>
             Click a box to start. Nothing goes on the website until you press
             “Publish”.
           </Text>
         </Stack>
-        <Grid columns={[1, 2]} gap={4}>
+        <Grid gridTemplateColumns={[1, 2]} gap={4}>
           {JOBS.map((job) => (
             <IntentLink
               key={job.title}
@@ -98,7 +98,7 @@ export function StartHere() {
                 tone="default"
                 style={{ height: "100%" }}
               >
-                <Stack space={3}>
+                <Stack gap={3}>
                   <Text size={3} weight="semibold">
                     {job.title}
                   </Text>

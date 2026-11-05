@@ -22,12 +22,3 @@ export const ADMIN_ONLY_TYPES = new Set([
   "settings",
   "redirect",
 ]);
-
-/** One-of-a-kind documents with fixed IDs; never duplicated or deleted. */
-export const SINGLETONS = {
-  home: { id: "home", title: "Home page" },
-  settings: { id: "settings", title: "Site settings" },
-  navigation: { id: "navigation", title: "Menus" },
-} as const;
-
-export const SINGLETON_TYPES = new Set(Object.keys(SINGLETONS));

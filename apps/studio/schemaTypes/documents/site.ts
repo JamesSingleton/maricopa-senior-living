@@ -5,7 +5,7 @@ import { MenuIcon } from "@sanity/icons/Menu";
 import { TransferIcon } from "@sanity/icons/Transfer";
 import { defineArrayMember, defineField, defineType } from "sanity";
 
-import { howToField } from "../../components/HowTo";
+import { withHowTo } from "../../components/HowTo";
 import { adminOnly } from "../../lib/access";
 import { slugField } from "../../utils/slug";
 
@@ -14,11 +14,13 @@ export const page = defineType({
   name: "page",
   type: "document",
   icon: DocumentIcon,
-  fields: [
-    howToField("howTo", [
+  components: {
+    input: withHowTo([
       "Build a page from sections: click “Add item” and choose what you need — text, pictures, a list of resources, phone numbers, a donate button…",
       "The “About us” page uses the web address “about”. Link to your other nonprofit pages (Donate, Contact…) from it with a Buttons section.",
     ]),
+  },
+  fields: [
     defineField({
       name: "title",
       type: "string",
@@ -50,10 +52,12 @@ export const home = defineType({
   title: "Home page",
   type: "document",
   icon: HomeIcon,
-  fields: [
-    howToField("howTo", [
+  components: {
+    input: withHowTo([
       "These sections make up the home page, top to bottom. Drag them to reorder.",
     ]),
+  },
+  fields: [
     defineField({
       name: "title",
       type: "string",

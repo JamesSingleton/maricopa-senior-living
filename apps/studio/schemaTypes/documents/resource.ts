@@ -1,7 +1,7 @@
 import { PinIcon } from "@sanity/icons/Pin";
 import { defineArrayMember, defineField, defineType } from "sanity";
 
-import { howToField } from "../../components/HowTo";
+import { withHowTo } from "../../components/HowTo";
 import { slugField } from "../../utils/slug";
 import {
   needsReviewField,
@@ -23,14 +23,13 @@ export const resource = defineType({
     { name: "contact", title: "How to reach them" },
     { name: "details", title: "More details" },
   ],
+  components: {
+    input: withHowTo([
+      "A resource is an organization or service people can call or visit — for example a food bank, a clinic or a transportation program.",
+      "If it's just an article or a website to read, add a Helpful link instead.",
+    ]),
+  },
   fields: [
-    {
-      ...howToField("howTo", [
-        "A resource is an organization or service people can call or visit — for example a food bank, a clinic or a transportation program.",
-        "If it's just an article or a website to read, add a Helpful link instead.",
-      ]),
-      group: "basics",
-    },
     defineField({
       name: "title",
       title: "Name",

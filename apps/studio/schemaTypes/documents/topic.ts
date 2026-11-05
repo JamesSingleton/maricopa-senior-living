@@ -1,5 +1,5 @@
 import { TagIcon } from "@sanity/icons/Tag";
-import { defineField, defineType } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
 import { adminOnly } from "../../lib/access";
 import { slugField } from "../../utils/slug";
@@ -62,7 +62,7 @@ export const topic = defineType({
       name: "legacyCategories",
       title: "Old category and tag names",
       type: "array",
-      of: [{ type: "string" }],
+      of: [defineArrayMember({ type: "string" })],
       description:
         "Old website categories/tags folded into this topic. Used for redirects.",
       options: { layout: "tags" },

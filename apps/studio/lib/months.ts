@@ -25,16 +25,3 @@ export function monthLabel(key?: string) {
     { month: "long", year: "numeric", timeZone: "UTC" },
   );
 }
-
-/** Choices for a month picker: 24 months back to 3 ahead of today. */
-export function monthOptions(back = 24, ahead = 3) {
-  const now = currentMonthKey();
-  const [year = 0, month = 1] = now.split("-").map(Number);
-  const options: { title: string; value: string }[] = [];
-  for (let offset = ahead; offset >= -back; offset--) {
-    const date = new Date(Date.UTC(year, month - 1 + offset, 15));
-    const value = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}`;
-    options.push({ title: monthLabel(value), value });
-  }
-  return options;
-}

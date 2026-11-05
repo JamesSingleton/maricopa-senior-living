@@ -1,7 +1,7 @@
 import { LinkIcon } from "@sanity/icons/Link";
 import { defineField, defineType } from "sanity";
 
-import { howToField } from "../../components/HowTo";
+import { withHowTo } from "../../components/HowTo";
 import {
   needsReviewField,
   summaryField,
@@ -18,11 +18,13 @@ export const helpfulLink = defineType({
   title: "Helpful link",
   type: "document",
   icon: LinkIcon,
-  fields: [
-    howToField("howTo", [
+  components: {
+    input: withHowTo([
       "Use this for a good article or website from somewhere else (AARP, Mayo Clinic, the City, and so on).",
       "Don't paste the whole article — write a sentence or two about why it's helpful. Visitors click through to read it.",
     ]),
+  },
+  fields: [
     defineField({
       name: "title",
       type: "string",

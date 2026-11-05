@@ -42,3 +42,6 @@ npm-debug.log*
 
 # Migration exports (production content snapshots; never commit)
 migration/data/
+
+# Sanity Function build output
+.build/

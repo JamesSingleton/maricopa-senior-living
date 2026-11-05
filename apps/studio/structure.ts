@@ -4,7 +4,7 @@ import { CogIcon } from "@sanity/icons/Cog";
 import { WarningOutlineIcon } from "@sanity/icons/WarningOutline";
 import type { StructureResolver } from "sanity/structure";
 
-import { isAdmin, SINGLETONS } from "./lib/access";
+import { isAdmin } from "./lib/access";
 
 /**
  * Ron's Studio: his everyday jobs first, in plain words. Site structure is
@@ -13,12 +13,9 @@ import { isAdmin, SINGLETONS } from "./lib/access";
 export const structure: StructureResolver = (S, { currentUser }) => {
   const admin = isAdmin(currentUser);
 
-  const singleton = (type: keyof typeof SINGLETONS) =>
-    S.listItem()
-      .title(SINGLETONS[type].title)
-      .id(type)
-      .schemaType(type)
-      .child(S.document().schemaType(type).documentId(SINGLETONS[type].id));
+  // Registered in sanity.config.ts `document.singletons`.
+  const singleton = (id: "home" | "settings" | "navigation") =>
+    S.listItem().singleton(id);
 
   const list = (type: string, title: string) =>
     S.documentTypeListItem(type).title(title);

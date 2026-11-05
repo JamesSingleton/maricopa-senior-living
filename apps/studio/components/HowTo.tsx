@@ -1,19 +1,16 @@
 import { Card, Stack, Text } from "@sanity/ui";
+import type { ObjectInputProps } from "sanity";
 
 /**
- * A plain-language help box shown at the top of a form. It stores nothing:
- * it's rendered in place of a hidden, never-filled string field.
+ * Plain-language help shown at the top of a document form. It's a form
+ * component, not a field, so it never ends up in the data or the types.
  */
-export function howToField(name: string, lines: string[]) {
-  return {
-    name,
-    title: "How to",
-    type: "string" as const,
-    readOnly: true,
-    components: {
-      field: () => (
+export function withHowTo(lines: string[]) {
+  return function HowToInput(props: ObjectInputProps) {
+    return (
+      <Stack gap={5}>
         <Card padding={4} radius={3} tone="primary" border>
-          <Stack space={3}>
+          <Stack gap={3}>
             {lines.map((line) => (
               <Text key={line} size={2}>
                 {line}
@@ -21,7 +18,8 @@ export function howToField(name: string, lines: string[]) {
             ))}
           </Stack>
         </Card>
-      ),
-    },
+        {props.renderDefault(props)}
+      </Stack>
+    );
   };
 }
