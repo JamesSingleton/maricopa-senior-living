@@ -14,17 +14,14 @@
     "check:types": "tsc --noEmit"
   },
   "dependencies": {
-    "@sanity/assist": "^6.2.1",
     "@sanity/client": "catalog:",
     "@sanity/functions": "^1.8.0",
     "@sanity/icons": "^5.2.2",
     "@sanity/ui": "^3.5.5",
     "@sanity/vision": "catalog:",
-    "lucide-react": "^1.47.0",
     "react": "catalog:",
     "react-dom": "catalog:",
     "sanity": "catalog:",
-    "sanity-plugin-media": "^6.3.0",
     "slugify": "^1.6.9",
     "styled-components": "^6.5.3"
   },

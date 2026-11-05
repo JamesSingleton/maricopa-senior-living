@@ -1,57 +1,35 @@
+import { UserIcon } from "@sanity/icons/User";
 import { defineField, defineType } from "sanity";
 
-import { createSlug, isUnique } from "../../utils/slug";
+import { slugField } from "../../utils/slug";
 
 export const author = defineType({
   name: "author",
-  title: "Author",
+  title: "Writer",
   type: "document",
+  icon: UserIcon,
   fields: [
     defineField({
       name: "name",
-      title: "Name",
       type: "string",
       validation: (rule) => rule.required(),
     }),
-    defineField({
-      name: "slug",
-      title: "Slug",
-      type: "slug",
-      options: {
-        source: "name",
-        slugify: createSlug,
-        maxLength: 96,
-        isUnique,
-      },
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: "image",
-      title: "Image",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
-      validation: (rule) => rule.required(),
-    }),
+    slugField({ source: "name" }),
+    defineField({ name: "image", title: "Photo", type: "imageWithAlt" }),
     defineField({
       name: "bio",
-      title: "Bio",
-      type: "array",
-      of: [
-        {
-          title: "Block",
-          type: "block",
-          styles: [{ title: "Normal", value: "normal" }],
-          lists: [],
-        },
-      ],
+      type: "text",
+      rows: 3,
+      description: "A sentence or two about this writer.",
+    }),
+    defineField({
+      name: "tribute",
+      title: "In memory",
+      type: "text",
+      rows: 3,
+      description:
+        "For writers who have passed away. Shown at the top of their page.",
     }),
   ],
-  preview: {
-    select: {
-      title: "name",
-      media: "image",
-    },
-  },
+  preview: { select: { title: "name", media: "image" } },
 });

@@ -1,114 +1,96 @@
-import {
-  BookMarked,
-  CogIcon,
-  File,
-  FileText,
-  type LucideIcon,
-  PanelBottomIcon,
-  PanelsTopLeftIcon,
-  PanelTopIcon,
-  Settings2,
-  TagIcon,
-  TagsIcon,
-  User,
-} from "lucide-react";
-import type {
-  StructureBuilder,
-  StructureResolverContext,
-} from "sanity/structure";
+import { BellIcon } from "@sanity/icons/Bell";
+import { CalendarIcon } from "@sanity/icons/Calendar";
+import { CogIcon } from "@sanity/icons/Cog";
+import { WarningOutlineIcon } from "@sanity/icons/WarningOutline";
+import type { StructureResolver } from "sanity/structure";
 
-import type { SchemaType, SingletonType } from "./schemaTypes";
-import { getTitleCase } from "./utils/helper";
+import { isAdmin, SINGLETONS } from "./lib/access";
 
-type Base<T = SchemaType> = {
-  id?: string;
-  type: T;
-  preview?: boolean;
-  title?: string;
-  icon?: LucideIcon;
-};
+/**
+ * Ron's Studio: his everyday jobs first, in plain words. Site structure is
+ * tucked under "Site setup", visible only to administrators.
+ */
+export const structure: StructureResolver = (S, { currentUser }) => {
+  const admin = isAdmin(currentUser);
 
-type CreateSingleton = {
-  S: StructureBuilder;
-} & Base<SingletonType>;
+  const singleton = (type: keyof typeof SINGLETONS) =>
+    S.listItem()
+      .title(SINGLETONS[type].title)
+      .id(type)
+      .schemaType(type)
+      .child(S.document().schemaType(type).documentId(SINGLETONS[type].id));
 
-type CreateList = {
-  S: StructureBuilder;
-} & Base;
+  const list = (type: string, title: string) =>
+    S.documentTypeListItem(type).title(title);
 
-const createSingleton = ({ S, type, title, icon }: CreateSingleton) => {
-  const newTitle = title ?? getTitleCase(type);
-  return S.listItem()
-    .title(newTitle)
-    .icon(icon ?? File)
-    .child(S.document().schemaType(type).documentId(type));
-};
-
-const createList = ({ S, type, icon, title, id }: CreateList) => {
-  const newTitle = title ?? getTitleCase(type);
-  return S.documentTypeListItem(type)
-    .id(id ?? type)
-    .title(newTitle)
-    .icon(icon ?? File);
-};
-
-export const structure = (
-  S: StructureBuilder,
-  context: StructureResolverContext,
-) => {
   return S.list()
-    .title("Content")
+    .title("Maricopa Senior Living")
     .items([
-      // createSingleton({ S, type: 'homePage', icon: HomeIcon }),
-      S.divider(),
-      // createHierarchicalPageStructure(S, context),
-      // createSlugBasedStructure(S, "page"),
-      // createSlugBasedStructure(S, 'page'),
-      // createIndexListWithOrderableItems({
-      //   S,
-      //   index: { type: 'blogIndex', icon: BookMarked },
-      //   list: { type: 'blog', title: 'Blogs', icon: FileText },
-      //   context,
-      // }),
-      // createList({
-      //   S,
-      //   type: 'faq',
-      //   title: 'FAQs',
-      //   icon: MessageCircle,
-      // }),
-      createList({ S, type: "author", title: "Authors", icon: User }),
-      createList({ S, type: "category", title: "Categories", icon: TagIcon }),
-      createList({ S, type: "page", title: "Pages", icon: PanelsTopLeftIcon }),
-      createList({ S, type: "post", title: "Posts", icon: FileText }),
-      createList({ S, type: "service", title: "Services", icon: BookMarked }),
-      createList({ S, type: "tag", title: "Tags", icon: TagsIcon }),
-      S.divider(),
+      list("monthlyUpdate", "What's New (monthly)").icon(BellIcon),
       S.listItem()
-        .title("Site Configuration")
-        .icon(Settings2)
+        .title("Events")
+        .icon(CalendarIcon)
         .child(
           S.list()
-            .title("Site Configuration")
+            .title("Events")
             .items([
-              createSingleton({
-                S,
-                type: "navbar",
-                title: "Navigation",
-                icon: PanelTopIcon,
-              }),
-              createSingleton({
-                S,
-                type: "footer",
-                title: "Footer",
-                icon: PanelBottomIcon,
-              }),
-              createSingleton({
-                S,
-                type: "settings",
-                title: "Global Settings",
-                icon: CogIcon,
-              }),
+              S.listItem()
+                .title("Upcoming & repeating")
+                .child(
+                  S.documentTypeList("event")
+                    .title("Upcoming & repeating")
+                    .filter(
+                      '_type == "event" && (dateTime(coalesce(end, start)) >= dateTime(now()) || (defined(repeat.until) && repeat.until >= now()))',
+                    )
+                    .defaultOrdering([{ field: "start", direction: "asc" }]),
+                ),
+              S.listItem()
+                .title("Past events")
+                .child(
+                  S.documentTypeList("event")
+                    .title("Past events")
+                    .filter(
+                      '_type == "event" && dateTime(coalesce(end, start)) < dateTime(now()) && !(defined(repeat.until) && repeat.until >= now())',
+                    )
+                    .defaultOrdering([{ field: "start", direction: "desc" }]),
+                ),
             ]),
         ),
+      list("resource", "Resources"),
+      list("helpfulLink", "Helpful links"),
+      list("article", "Articles"),
+      list("newsletterEdition", "Newsletters"),
+      S.divider(),
+      list("page", "Pages"),
+      singleton("home"),
+      list("author", "Writers"),
+      S.divider(),
+      S.listItem()
+        .title("Needs review")
+        .icon(WarningOutlineIcon)
+        .child(
+          S.documentList()
+            .title("Brought over from the old site — please check")
+            .filter('needsReview == true')
+            .apiVersion("2025-02-19"),
+        ),
+      ...(admin
+        ? [
+            S.divider(),
+            S.listItem()
+              .title("Site setup (admin)")
+              .icon(CogIcon)
+              .child(
+                S.list()
+                  .title("Site setup")
+                  .items([
+                    singleton("settings"),
+                    singleton("navigation"),
+                    list("topic", "Topics"),
+                    list("redirect", "Redirects"),
+                  ]),
+              ),
+          ]
+        : []),
     ]);
 };
