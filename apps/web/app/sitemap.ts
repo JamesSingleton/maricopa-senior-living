@@ -1,67 +1,34 @@
 import { cachedSanityMetadata } from "@maricopa-senior-living/sanity/live";
-import {
-  queryAllPageSlugs,
-  queryArticlePaths,
-  queryCategoryPaths,
-  queryTagPaths,
-} from "@maricopa-senior-living/sanity/queries";
+import { querySitemap } from "@maricopa-senior-living/sanity/queries";
 import type { MetadataRoute } from "next";
 
 import { baseUrl } from "@/lib/constants";
 
+type Entry = { slug: string | null; _updatedAt: string };
+
+/**
+ * Public URLs with their real last-edit dates. Archived posts and empty
+ * tags/categories are left out; search results are not indexable pages.
+ */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [
-    { data: pageSlugs },
-    { data: articleSlugs },
-    { data: categoryPaths },
-    { data: tagPaths },
-  ] = await Promise.all([
-    cachedSanityMetadata({
-      query: queryAllPageSlugs,
-      perspective: "published",
-    }),
-    cachedSanityMetadata({
-      query: queryArticlePaths,
-      perspective: "published",
-    }),
-    cachedSanityMetadata({
-      query: queryCategoryPaths,
-      perspective: "published",
-    }),
-    cachedSanityMetadata({
-      query: queryTagPaths,
-      perspective: "published",
-    }),
-  ]);
+  const { data } = await cachedSanityMetadata({
+    query: querySitemap,
+    perspective: "published",
+  });
 
-  const staticRoutes: MetadataRoute.Sitemap = [
-    { url: baseUrl, lastModified: new Date() },
-    { url: `${baseUrl}/search`, lastModified: new Date() },
+  const toEntries = (entries: Entry[] | undefined, prefix: string) =>
+    (entries ?? [])
+      .filter((entry): entry is Entry & { slug: string } => Boolean(entry.slug))
+      .map((entry) => ({
+        url: `${baseUrl}${prefix}/${entry.slug.replace(/^\//, "")}`,
+        lastModified: entry._updatedAt,
+      }));
+
+  return [
+    { url: baseUrl },
+    ...toEntries(data?.pages, ""),
+    ...toEntries(data?.articles, "/articles"),
+    ...toEntries(data?.categories, "/category"),
+    ...toEntries(data?.tags, "/tag"),
   ];
-
-  const pages =
-    pageSlugs?.map((page) => ({
-      url: `${baseUrl}/${page.slug}`,
-      lastModified: new Date(),
-    })) ?? [];
-
-  const articles =
-    articleSlugs?.map((slug) => ({
-      url: `${baseUrl}/articles/${slug}`,
-      lastModified: new Date(),
-    })) ?? [];
-
-  const categories =
-    categoryPaths?.map((entry) => ({
-      url: `${baseUrl}/category/${entry.category}`,
-      lastModified: new Date(),
-    })) ?? [];
-
-  const tags =
-    tagPaths?.map((entry) => ({
-      url: `${baseUrl}/tag/${entry.tag}`,
-      lastModified: new Date(),
-    })) ?? [];
-
-  return [...staticRoutes, ...pages, ...articles, ...categories, ...tags];
 }

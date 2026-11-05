@@ -1,17 +1,37 @@
 import type { NextConfig } from "next";
 import { sanity } from "next-sanity/live/cache-life";
 
+/**
+ * Origins allowed to frame the site. The embedded Studio at /admin is
+ * same-origin; a standalone Studio (NEXT_PUBLIC_SANITY_STUDIO_URL) needs to
+ * frame the site for the Presentation tool.
+ */
+function frameAncestors() {
+  const origins = ["'self'"];
+  try {
+    const studio = process.env.NEXT_PUBLIC_SANITY_STUDIO_URL;
+    if (studio && /^https?:\/\//.test(studio)) {
+      origins.push(new URL(studio).origin);
+    }
+  } catch {
+    // Ignore a malformed value; 'self' still covers the embedded Studio.
+  }
+  return origins.join(" ");
+}
+
 // https://nextjs.org/docs/advanced-features/security-headers
+// 'unsafe-eval' stays while the Studio is embedded at /admin.
 const ContentSecurityPolicy = `
     default-src 'self' vercel.live https://cdn.userway.org/;
     script-src 'self' 'unsafe-eval' 'unsafe-inline' plausible.io;
     style-src 'self' 'unsafe-inline';
     img-src * blob: data:;
-    media-src 'none';
+    media-src 'self' https://cdn.sanity.io;
     connect-src *;
     font-src 'self' https://cdn.userway.org/ https://fonts.gstatic.com/ https://fonts.googleapis.com/;
-    script-src-elem 'self' 'unsafe-eval' 'unsafe-inline' plausible.io https://cdn.userway.org/ https://core.sanity-cdn.com/;
+    script-src-elem 'self' 'unsafe-eval' 'unsafe-inline' plausible.io https://cdn.userway.org/ https://core.sanity-cdn.com/ https://vercel.live;
     style-src-elem 'self' 'unsafe-inline' https://cdn.userway.org/;
+    frame-ancestors ${frameAncestors()};
 `;
 
 const securityHeaders = [

@@ -52,12 +52,12 @@ export async function generateMetadata(
   if (!tag) return {};
 
   return {
-    title: `${tag.title}`,
-    description: `${tag.excerpt}`,
+    title: tag.title ?? undefined,
+    description: tag.excerpt ?? undefined,
     openGraph: {
       ...previousOpenGraph,
-      title: `${tag.title}`,
-      description: `${tag.excerpt}`,
+      title: tag.title ?? undefined,
+      description: tag.excerpt ?? undefined,
       url: `${baseUrl}/tag/${tag.slug}`,
     },
   };
@@ -112,13 +112,15 @@ async function CachedTagPage({
 
   return (
     <div>
-      <h1 className="inline-block align-middle text-4xl font-semibold capitalize sm:text-5xl md:text-6xl">
+      <h1 className="inline-block align-middle text-4xl font-semibold sm:text-5xl md:text-6xl">
         {tagData.title}
       </h1>
-      <CustomPortableText
-        value={tagData.description}
-        paragraphClasses="prose prose-lg prose-indigo text-sm font-medium text-zinc-500 sm:text-base md:text-lg lg:max-w-none pt-4"
-      />
+      {tagData.description ? (
+        <CustomPortableText
+          value={tagData.description}
+          paragraphClasses="prose prose-lg prose-indigo text-lg text-zinc-800 lg:max-w-none pt-4"
+        />
+      ) : null}
       <section className="space-y-8 pt-4">
         {tagData.services &&
           tagData.services.length > 0 &&

@@ -49,13 +49,14 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${post.title}`,
-    description: `${post.excerpt}`,
+    title: post.title ?? undefined,
+    description: post.excerpt ?? undefined,
+    alternates: { canonical: `/articles/${slug}` },
     openGraph: {
-      title: `${post.title}`,
-      description: `${post.excerpt}`,
+      title: post.title ?? undefined,
+      description: post.excerpt ?? undefined,
       type: "article",
-      tags: post.tags?.map((tag) => tag.title),
+      tags: post.tags?.flatMap((tag) => (tag?.title ? [tag.title] : [])),
       publishedTime: post.publishedAt,
       modifiedTime: post._updatedAt,
     },
@@ -121,16 +122,20 @@ async function CachedArticlePage({
       <article className="prose prose-lg prose-indigo lg:max-w-none">
         <div className="px-4 py-4 sm:px-10 sm:py-10">
           <div className="flex flex-wrap space-x-5 xl:space-x-10">
-            <span className="flex items-center space-x-2">
-              <SanityImage
-                image={post.author.image}
-                alt={`Avatar of ${post.author.name}`}
-                width={24}
-                height={24}
-                className="h-6 w-6 rounded-full"
-              />
-              <span>{post.author.name}</span>
-            </span>
+            {post.author?.name ? (
+              <span className="flex items-center space-x-2">
+                {post.author.image ? (
+                  <SanityImage
+                    image={post.author.image}
+                    alt=""
+                    width={24}
+                    height={24}
+                    className="h-6 w-6 rounded-full"
+                  />
+                ) : null}
+                <span>{post.author.name}</span>
+              </span>
+            ) : null}
             <span className="flex items-center space-x-2">
               <CalendarIcon className="h-5 w-5 text-zinc-500" />
               <span className="sr-only">Published on</span>{" "}
@@ -150,22 +155,24 @@ async function CachedArticlePage({
               />
             </div>
           )}
-          <CustomPortableText value={post.body} />
-          {post.tags && (
+          {post.body ? <CustomPortableText value={post.body} /> : null}
+          {post.tags && post.tags.length > 0 && (
             <div className="mt-8 md:mt-14">
               <h2 className="text-xl font-semibold">Tags</h2>
               <ul className="not-prose flex list-none items-center space-x-4 pl-0">
-                {post.tags.map((tag) => (
-                  <li key={tag._id}>
-                    <Link
-                      href={`/tag/${tag.slug}`}
-                      prefetch={false}
-                      className="rounded bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
-                    >
-                      {tag.title}
-                    </Link>
-                  </li>
-                ))}
+                {post.tags
+                  .flatMap((tag) => (tag ? [tag] : []))
+                  .map((tag) => (
+                    <li key={tag._id}>
+                      <Link
+                        href={`/tag/${tag.slug}`}
+                        prefetch={false}
+                        className="rounded bg-zinc-200 px-3 py-1 text-base transition-all duration-150 hover:bg-red-400 hover:text-white"
+                      >
+                        {tag.title}
+                      </Link>
+                    </li>
+                  ))}
               </ul>
             </div>
           )}

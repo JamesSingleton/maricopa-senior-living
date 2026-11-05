@@ -1,7 +1,16 @@
+import { timingSafeEqual } from "node:crypto";
 import { revalidateTag } from "next/cache";
 import type { NextRequest } from "next/server";
 
 import { webhookSecret } from "@/lib/sanity.api";
+
+/** Constant-time comparison so response timing can't leak the secret. */
+function secretsMatch(provided: string | null, expected: string) {
+  if (!provided) return false;
+  const a = Buffer.from(provided);
+  const b = Buffer.from(expected);
+  return a.length === b.length && timingSafeEqual(a, b);
+}
 
 type ExpireTagsBody = {
   secret?: string;
@@ -32,7 +41,7 @@ export async function POST(request: NextRequest) {
     // no valid JSON body
   }
 
-  if (secret !== webhookSecret) {
+  if (!secretsMatch(secret, webhookSecret)) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 

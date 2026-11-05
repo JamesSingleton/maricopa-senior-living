@@ -14,6 +14,19 @@ import type { ReactNode } from "react";
 
 import BusinessHours from "./BusinessHours";
 import { CustomPortableText } from "./CustomPortableText";
+import { PhoneLinks } from "./PhoneLinks";
+
+function fileAssetOrNull(attachment: unknown) {
+  try {
+    return getFileAsset(attachment as Parameters<typeof getFileAsset>[0], {
+      dataset: env.NEXT_PUBLIC_SANITY_DATASET,
+      projectId: env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+    });
+  } catch {
+    // An attachment row saved without a file would otherwise crash the page.
+    return null;
+  }
+}
 
 const interactiveLinkClassName =
   "text-primary underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
@@ -69,16 +82,16 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
         <dl className="divide-y divide-border">
           {directoryItem.audience && (
             <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4">
-              <dt className="text-sm font-medium">Audience/Eligibility</dt>
-              <dd className="prose mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0">
+              <dt className="text-base font-medium">Audience/Eligibility</dt>
+              <dd className="prose mt-1 text-base leading-6 sm:col-span-2 sm:mt-0">
                 <CustomPortableText value={directoryItem.audience} />
               </dd>
             </div>
           )}
           {directoryItem.website && (
             <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4">
-              <dt className="text-sm font-medium">Website</dt>
-              <dd className="mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0">
+              <dt className="text-base font-medium">Website</dt>
+              <dd className="mt-1 text-base leading-6 sm:col-span-2 sm:mt-0">
                 <ExternalLink
                   href={directoryItem.website}
                   ariaLabel={`${directoryItem.title} website (opens in a new tab)`}
@@ -91,22 +104,19 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
           )}
           {directoryItem.phone && (
             <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4">
-              <dt className="text-sm font-medium">Phone</dt>
-              <dd className="mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0">
-                <a
-                  href={`tel:${directoryItem.phone}`}
-                  aria-label={`Call ${directoryItem.phone}`}
+              <dt className="text-base font-medium">Phone</dt>
+              <dd className="mt-1 text-base leading-6 sm:col-span-2 sm:mt-0">
+                <PhoneLinks
+                  text={directoryItem.phone}
                   className={interactiveLinkClassName}
-                >
-                  {directoryItem.phone}
-                </a>
+                />
               </dd>
             </div>
           )}
           {directoryItem.address && (
             <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4">
-              <dt className="text-sm font-medium">Location</dt>
-              <dd className="mt-1 text-sm leading-6 text-muted-foreground sm:col-span-2 sm:mt-0">
+              <dt className="text-base font-medium">Location</dt>
+              <dd className="mt-1 text-base leading-6 text-muted-foreground sm:col-span-2 sm:mt-0">
                 <address className="not-italic">
                   {directoryItem.address}
                 </address>
@@ -115,39 +125,37 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
           )}
           {directoryItem.businessHours && (
             <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4">
-              <dt className="text-sm font-medium">Hours</dt>
-              <dd className="mt-1 text-sm leading-6 text-muted-foreground sm:col-span-2 sm:mt-0">
+              <dt className="text-base font-medium">Hours</dt>
+              <dd className="mt-1 text-base leading-6 text-muted-foreground sm:col-span-2 sm:mt-0">
                 <BusinessHours hours={directoryItem.businessHours} />
               </dd>
             </div>
           )}
           {directoryItem.notes && (
             <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4">
-              <dt className="text-sm font-medium">Notes</dt>
-              <dd className="prose mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0">
+              <dt className="text-base font-medium">Notes</dt>
+              <dd className="prose mt-1 text-base leading-6 sm:col-span-2 sm:mt-0">
                 <CustomPortableText value={directoryItem.notes} />
               </dd>
             </div>
           )}
-          {directoryItem.attachments && (
+          {directoryItem.attachments?.some(fileAssetOrNull) && (
             <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4">
-              <dt className="text-sm font-medium leading-6">Attachments</dt>
-              <dd className="mt-2 text-sm sm:col-span-2 sm:mt-0">
+              <dt className="text-base font-medium leading-6">Attachments</dt>
+              <dd className="mt-2 text-base sm:col-span-2 sm:mt-0">
                 <ul
                   aria-label={`${directoryItem.title} attachments`}
                   className="divide-y divide-border rounded-md border border-border"
                 >
                   {directoryItem.attachments.map((attachment: any) => {
-                    const attachmentAsset = getFileAsset(attachment, {
-                      dataset: env.NEXT_PUBLIC_SANITY_DATASET,
-                      projectId: env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-                    });
+                    const attachmentAsset = fileAssetOrNull(attachment);
+                    if (!attachmentAsset) return null;
                     const fileType = attachmentAsset.extension.toUpperCase();
 
                     return (
                       <li
                         key={attachment._key}
-                        className="flex items-center justify-between gap-4 py-4 pl-4 pr-5 text-sm leading-6"
+                        className="flex items-center justify-between gap-4 py-4 pl-4 pr-5 text-base leading-6"
                       >
                         <div className="flex min-w-0 flex-1 items-center">
                           <PaperclipIcon
@@ -178,15 +186,15 @@ const DirectoryCard = ({ directoryItem }: { directoryItem: any }) => {
               </dd>
             </div>
           )}
-          {directoryItem.tags && (
+          {directoryItem.tags?.length > 0 && (
             <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4">
-              <dt className="text-sm font-medium leading-6">Tags</dt>
-              <dd className="mt-2 text-sm sm:col-span-2 sm:mt-0">
+              <dt className="text-base font-medium leading-6">Tags</dt>
+              <dd className="mt-2 text-base sm:col-span-2 sm:mt-0">
                 <ul
                   aria-label={`Tags for ${directoryItem.title}`}
                   className="flex flex-wrap gap-2"
                 >
-                  {directoryItem.tags.map((tag: any) => (
+                  {directoryItem.tags.filter(Boolean).map((tag: any) => (
                     <li key={`${tag._id}_${directoryItem.title}`}>
                       <Link
                         className={cn(

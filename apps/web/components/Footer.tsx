@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { resolveHeaderNavHref } from "@/lib/header-nav";
+
 interface FooterProps {
   _key: string;
   url: string;
@@ -24,8 +26,10 @@ export default function Footer({ menu }: { menu: FooterProps[] }) {
             <div key={item._key} className="pb-6">
               {item.reference ? (
                 <Link
-                  href={`/${item.reference.slug}`}
-                  className="text-base leading-6 text-zinc-600 hover:text-zinc-900"
+                  href={
+                    resolveHeaderNavHref({ reference: item.reference }).href
+                  }
+                  className="text-lg leading-7 text-zinc-800 underline-offset-4 hover:underline"
                   prefetch={false}
                 >
                   {item.reference.title}
@@ -33,7 +37,7 @@ export default function Footer({ menu }: { menu: FooterProps[] }) {
               ) : (
                 <a
                   href={item.url}
-                  className="text-base leading-6 text-zinc-600 hover:text-zinc-900"
+                  className="text-lg leading-7 text-zinc-800 underline-offset-4 hover:underline"
                 >
                   {item.text}
                 </a>
@@ -41,7 +45,7 @@ export default function Footer({ menu }: { menu: FooterProps[] }) {
             </div>
           ))}
         </nav>
-        <p className="mt-10 text-center text-sm leading-5 text-zinc-500">
+        <p className="mt-10 text-center text-base leading-6 text-zinc-700">
           &copy; <CopyrightYear /> Maricopa Senior Living. All rights reserved.{" "}
           <a
             className="text-indigo-600 hover:text-indigo-700"
@@ -58,6 +62,8 @@ export default function Footer({ menu }: { menu: FooterProps[] }) {
 }
 
 async function CopyrightYear() {
+  // Cached with the site default (up to a year). A shorter cacheLife here
+  // would shorten every page's cache, since the footer is on all of them.
   "use cache";
   return new Date().getFullYear();
 }
