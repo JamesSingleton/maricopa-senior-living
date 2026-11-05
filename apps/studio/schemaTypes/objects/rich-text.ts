@@ -1,4 +1,5 @@
 import { CalendarIcon } from "@sanity/icons/Calendar";
+import { DocumentPdfIcon } from "@sanity/icons/DocumentPdf";
 import { ImageIcon } from "@sanity/icons/Image";
 import { InfoOutlineIcon } from "@sanity/icons/InfoOutline";
 import { PinIcon } from "@sanity/icons/Pin";
@@ -157,6 +158,22 @@ const resourceCard = defineArrayMember({
   },
 });
 
+const fileAttachment = defineArrayMember({
+  name: "fileAttachment",
+  title: "File (PDF)",
+  type: "file",
+  icon: DocumentPdfIcon,
+  fields: [
+    defineField({
+      name: "title",
+      title: "What is it?",
+      type: "string",
+      description: 'Shown as the link text, e.g. "May 2025 newsletter".',
+      validation: (rule) => rule.required(),
+    }),
+  ],
+});
+
 /** Full rich text: articles, pages, monthly updates, newsletter sections. */
 export const richText = defineType({
   name: "richText",
@@ -165,6 +182,7 @@ export const richText = defineType({
   of: [
     block,
     defineArrayMember({ type: "imageWithAlt" }),
+    fileAttachment,
     callout,
     eventCard,
     resourceCard,

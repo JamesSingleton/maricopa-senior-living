@@ -25,6 +25,13 @@
             "type": "string"
           },
           "optional": true
+        },
+        "showLatest": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "boolean"
+          },
+          "optional": true
         }
       }
     }
@@ -956,6 +963,66 @@
     }
   },
   {
+    "name": "whatsNewBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "whatsNewBlock"
+          }
+        },
+        "heading": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "buttonLabel": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "topicsBlock",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "topicsBlock"
+          }
+        },
+        "heading": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "intro": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
     "name": "heroBlock",
     "type": "type",
     "value": {
@@ -1043,6 +1110,36 @@
             "rest": {
               "type": "inline",
               "name": "heroBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "topicsBlock"
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "whatsNewBlock"
             }
           },
           {
@@ -2463,6 +2560,51 @@
           {
             "type": "object",
             "attributes": {
+              "asset": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "sanity.fileAsset.reference"
+                },
+                "optional": true
+              },
+              "media": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "unknown"
+                },
+                "optional": true
+              },
+              "title": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": false
+              },
+              "_type": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string",
+                  "value": "fileAttachment"
+                }
+              }
+            },
+            "rest": {
+              "type": "object",
+              "attributes": {
+                "_key": {
+                  "type": "objectAttribute",
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "attributes": {
               "tone": {
                 "type": "objectAttribute",
                 "value": {
@@ -2604,6 +2746,10 @@
               },
               {
                 "type": "string",
+                "value": "section"
+              },
+              {
+                "type": "string",
                 "value": "external"
               },
               {
@@ -2650,6 +2796,51 @@
               {
                 "type": "inline",
                 "name": "newsletterEdition.reference"
+              }
+            ]
+          },
+          "optional": true
+        },
+        "section": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "/resources"
+              },
+              {
+                "type": "string",
+                "value": "/topics"
+              },
+              {
+                "type": "string",
+                "value": "/whats-new"
+              },
+              {
+                "type": "string",
+                "value": "/events"
+              },
+              {
+                "type": "string",
+                "value": "/newsletter"
+              },
+              {
+                "type": "string",
+                "value": "/articles"
+              },
+              {
+                "type": "string",
+                "value": "/links"
+              },
+              {
+                "type": "string",
+                "value": "/about"
+              },
+              {
+                "type": "string",
+                "value": "/search"
               }
             ]
           },

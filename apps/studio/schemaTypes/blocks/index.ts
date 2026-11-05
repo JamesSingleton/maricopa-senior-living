@@ -1,4 +1,6 @@
+import { BellIcon } from "@sanity/icons/Bell";
 import { BlockContentIcon } from "@sanity/icons/BlockContent";
+import { ThLargeIcon } from "@sanity/icons/ThLarge";
 import { CalendarIcon } from "@sanity/icons/Calendar";
 import { CreditCardIcon } from "@sanity/icons/CreditCard";
 import { DocumentPdfIcon } from "@sanity/icons/DocumentPdf";
@@ -424,6 +426,26 @@ export const fileBlock = block("fileBlock", "File to download", DocumentPdfIcon,
   }),
 ]);
 
+export const topicsBlock = block("topicsBlock", "Topic tiles", ThLargeIcon, [
+  heading,
+  intro,
+]);
+
+export const whatsNewBlock = block(
+  "whatsNewBlock",
+  "This month's What's New",
+  BellIcon,
+  [
+    heading,
+    defineField({
+      name: "buttonLabel",
+      title: "Button text",
+      type: "string",
+      initialValue: "Read this month's What's New",
+    }),
+  ],
+);
+
 export const newsletterSignupBlock = block(
   "newsletterSignupBlock",
   "Newsletter sign-up",
@@ -437,12 +459,20 @@ export const newsletterSignupBlock = block(
       initialValue:
         "Get “Keeping you informed…still” every month. It's free, quick and easy!",
     }),
+    defineField({
+      name: "showLatest",
+      title: "Show the latest issue",
+      type: "boolean",
+      initialValue: true,
+    }),
   ],
 );
 
 /** Every block, in the order shown in the "Add" menu. */
 export const pageBlocks = [
   heroBlock,
+  topicsBlock,
+  whatsNewBlock,
   textBlock,
   imageBlock,
   buttonsBlock,
@@ -477,7 +507,7 @@ export const pageBuilder = defineType({
         {
           name: "lists",
           title: "Lists from the website",
-          of: ["resourceListBlock", "eventListBlock", "articleListBlock", "linkListBlock"],
+          of: ["topicsBlock", "whatsNewBlock", "resourceListBlock", "eventListBlock", "articleListBlock", "linkListBlock"],
         },
         {
           name: "actions",

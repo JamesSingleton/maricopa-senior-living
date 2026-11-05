@@ -15,89 +15,11 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
-export type TimeValue =
-  | "00:00"
-  | "00:30"
-  | "01:00"
-  | "01:30"
-  | "02:00"
-  | "02:30"
-  | "03:00"
-  | "03:30"
-  | "04:00"
-  | "04:30"
-  | "05:00"
-  | "05:30"
-  | "06:00"
-  | "06:30"
-  | "07:00"
-  | "07:30"
-  | "08:00"
-  | "08:30"
-  | "09:00"
-  | "09:30"
-  | "10:00"
-  | "10:30"
-  | "11:00"
-  | "11:30"
-  | "12:00"
-  | "12:30"
-  | "13:00"
-  | "13:30"
-  | "14:00"
-  | "14:30"
-  | "15:00"
-  | "15:30"
-  | "16:00"
-  | "16:30"
-  | "17:00"
-  | "17:30"
-  | "18:00"
-  | "18:30"
-  | "19:00"
-  | "19:30"
-  | "20:00"
-  | "20:30"
-  | "21:00"
-  | "21:30"
-  | "22:00"
-  | "22:30"
-  | "23:00"
-  | "23:30";
-
-export type CategoryReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "category";
-};
-
-export type TagReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "tag";
-};
-
-export type PageReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "page";
-};
-
-export type Link = {
-  _type: "link";
-  reference?: CategoryReference | TagReference | PageReference;
+export type NewsletterSignupBlock = {
+  _type: "newsletterSignupBlock";
+  heading?: string;
   text?: string;
-  url?: string;
-};
-
-export type SanityImageAssetReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+  showLatest?: boolean;
 };
 
 export type SanityFileAssetReference = {
@@ -107,46 +29,249 @@ export type SanityFileAssetReference = {
   [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
 };
 
-export type BlockContent = Array<
-  | {
-      children?: Array<{
-        marks?: Array<string>;
-        text?: string;
-        _type: "span";
-        _key: string;
-      }>;
-      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
-      listItem?: "bullet" | "number";
-      markDefs?: Array<{
-        href?: string;
-        _type: "link";
-        _key: string;
-      }>;
-      level?: number;
-      _type: "block";
+export type FileBlock = {
+  _type: "fileBlock";
+  heading?: string;
+  intro?: string;
+  file: {
+    asset?: SanityFileAssetReference;
+    media?: unknown;
+    _type: "file";
+  };
+  buttonLabel?: string;
+};
+
+export type VideoBlock = {
+  _type: "videoBlock";
+  heading?: string;
+  url: string;
+  caption: string;
+};
+
+export type FaqBlock = {
+  _type: "faqBlock";
+  heading?: string;
+  items: Array<{
+    question: string;
+    answer: SimpleText;
+    _type: "faqItem";
+    _key: string;
+  }>;
+};
+
+export type DonateBlock = {
+  _type: "donateBlock";
+  heading?: string;
+  text?: string;
+};
+
+export type ContactBlock = {
+  _type: "contactBlock";
+  heading?: string;
+  intro?: string;
+  useSiteContact?: boolean;
+  phone?: PhoneNumber;
+  email?: string;
+  address?: string;
+};
+
+export type QuickContactsBlock = {
+  _type: "quickContactsBlock";
+  heading?: string;
+  contacts: Array<{
+    name: string;
+    number: PhoneNumber;
+    note?: string;
+    _type: "quickContact";
+    _key: string;
+  }>;
+};
+
+export type TopicReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "topic";
+};
+
+export type HelpfulLinkReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "helpfulLink";
+};
+
+export type LinkListBlock = {
+  _type: "linkListBlock";
+  heading?: string;
+  intro?: string;
+  mode?: "topic" | "manual";
+  topic?: TopicReference;
+  links?: Array<
+    {
       _key: string;
-    }
-  | {
-      asset: SanityImageAssetReference;
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      alt: string;
-      _type: "image";
+    } & HelpfulLinkReference
+  >;
+  limit?: number;
+};
+
+export type ArticleListBlock = {
+  _type: "articleListBlock";
+  heading?: string;
+  mode?: "latest" | "joans-corner" | "topic";
+  topic?: TopicReference;
+  limit?: number;
+};
+
+export type EventListBlock = {
+  _type: "eventListBlock";
+  heading?: string;
+  intro?: string;
+  mode?: "all" | "msl" | "topic";
+  topic?: TopicReference;
+  limit?: number;
+};
+
+export type ResourceReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "resource";
+};
+
+export type ResourceListBlock = {
+  _type: "resourceListBlock";
+  heading?: string;
+  intro?: string;
+  mode?: "topic" | "manual";
+  topic?: TopicReference;
+  resources?: Array<
+    {
       _key: string;
-    }
-  | {
-      asset: SanityFileAssetReference;
-      media?: unknown;
-      description: string;
-      _type: "attachment";
+    } & ResourceReference
+  >;
+  limit?: number;
+};
+
+export type CalloutBlock = {
+  _type: "calloutBlock";
+  tone?: "info" | "warning";
+  text: string;
+  link?: Link;
+};
+
+export type ButtonsBlock = {
+  _type: "buttonsBlock";
+  heading?: string;
+  intro?: string;
+  buttons: Array<
+    {
       _key: string;
-    }
+    } & Link
+  >;
+};
+
+export type ImageBlock = {
+  _type: "imageBlock";
+  heading?: string;
+  images: Array<
+    {
+      _key: string;
+    } & ImageWithAlt
+  >;
+};
+
+export type TextBlock = {
+  _type: "textBlock";
+  heading?: string;
+  body: RichText;
+};
+
+export type WhatsNewBlock = {
+  _type: "whatsNewBlock";
+  heading?: string;
+  buttonLabel?: string;
+};
+
+export type TopicsBlock = {
+  _type: "topicsBlock";
+  heading?: string;
+  intro?: string;
+};
+
+export type HeroBlock = {
+  _type: "heroBlock";
+  heading: string;
+  text?: string;
+  image?: ImageWithAlt;
+  showSearch?: boolean;
+  buttons?: Array<
+    {
+      _key: string;
+    } & Link
+  >;
+};
+
+export type PageBuilder = Array<
+  | ({
+      _key: string;
+    } & HeroBlock)
+  | ({
+      _key: string;
+    } & TopicsBlock)
+  | ({
+      _key: string;
+    } & WhatsNewBlock)
+  | ({
+      _key: string;
+    } & TextBlock)
+  | ({
+      _key: string;
+    } & ImageBlock)
+  | ({
+      _key: string;
+    } & ButtonsBlock)
+  | ({
+      _key: string;
+    } & CalloutBlock)
+  | ({
+      _key: string;
+    } & ResourceListBlock)
+  | ({
+      _key: string;
+    } & EventListBlock)
+  | ({
+      _key: string;
+    } & ArticleListBlock)
+  | ({
+      _key: string;
+    } & LinkListBlock)
+  | ({
+      _key: string;
+    } & QuickContactsBlock)
+  | ({
+      _key: string;
+    } & ContactBlock)
+  | ({
+      _key: string;
+    } & DonateBlock)
+  | ({
+      _key: string;
+    } & FaqBlock)
+  | ({
+      _key: string;
+    } & VideoBlock)
+  | ({
+      _key: string;
+    } & FileBlock)
+  | ({
+      _key: string;
+    } & NewsletterSignupBlock)
 >;
 
-export type DayAndTime = {
-  _type: "dayAndTime";
-  day?:
+export type OpeningHours = {
+  _type: "openingHours";
+  day:
     | "Monday"
     | "Tuesday"
     | "Wednesday"
@@ -154,8 +279,294 @@ export type DayAndTime = {
     | "Friday"
     | "Saturday"
     | "Sunday";
-  opensAt?: TimeValue;
-  closesAt?: TimeValue;
+  opens:
+    | "00:00"
+    | "00:30"
+    | "01:00"
+    | "01:30"
+    | "02:00"
+    | "02:30"
+    | "03:00"
+    | "03:30"
+    | "04:00"
+    | "04:30"
+    | "05:00"
+    | "05:30"
+    | "06:00"
+    | "06:30"
+    | "07:00"
+    | "07:30"
+    | "08:00"
+    | "08:30"
+    | "09:00"
+    | "09:30"
+    | "10:00"
+    | "10:30"
+    | "11:00"
+    | "11:30"
+    | "12:00"
+    | "12:30"
+    | "13:00"
+    | "13:30"
+    | "14:00"
+    | "14:30"
+    | "15:00"
+    | "15:30"
+    | "16:00"
+    | "16:30"
+    | "17:00"
+    | "17:30"
+    | "18:00"
+    | "18:30"
+    | "19:00"
+    | "19:30"
+    | "20:00"
+    | "20:30"
+    | "21:00"
+    | "21:30"
+    | "22:00"
+    | "22:30"
+    | "23:00"
+    | "23:30";
+  closes:
+    | "00:00"
+    | "00:30"
+    | "01:00"
+    | "01:30"
+    | "02:00"
+    | "02:30"
+    | "03:00"
+    | "03:30"
+    | "04:00"
+    | "04:30"
+    | "05:00"
+    | "05:30"
+    | "06:00"
+    | "06:30"
+    | "07:00"
+    | "07:30"
+    | "08:00"
+    | "08:30"
+    | "09:00"
+    | "09:30"
+    | "10:00"
+    | "10:30"
+    | "11:00"
+    | "11:30"
+    | "12:00"
+    | "12:30"
+    | "13:00"
+    | "13:30"
+    | "14:00"
+    | "14:30"
+    | "15:00"
+    | "15:30"
+    | "16:00"
+    | "16:30"
+    | "17:00"
+    | "17:30"
+    | "18:00"
+    | "18:30"
+    | "19:00"
+    | "19:30"
+    | "20:00"
+    | "20:30"
+    | "21:00"
+    | "21:30"
+    | "22:00"
+    | "22:30"
+    | "23:00"
+    | "23:30";
+};
+
+export type PhoneNumber = {
+  _type: "phoneNumber";
+  label?: string;
+  number: string;
+};
+
+export type SanityImageAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
+
+export type ImageWithAlt = {
+  _type: "imageWithAlt";
+  asset?: SanityImageAssetReference;
+  media?: unknown;
+  hotspot?: SanityImageHotspot;
+  crop?: SanityImageCrop;
+  alt?: string;
+  caption?: string;
+};
+
+export type PageReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "page";
+};
+
+export type ArticleReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "article";
+};
+
+export type EventReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "event";
+};
+
+export type MonthlyUpdateReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "monthlyUpdate";
+};
+
+export type NewsletterEditionReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "newsletterEdition";
+};
+
+export type SimpleText = Array<{
+  children?: Array<{
+    marks?: Array<string>;
+    text?: string;
+    _type: "span";
+    _key: string;
+  }>;
+  style?: "normal";
+  listItem?: "bullet" | "number";
+  markDefs?: Array<
+    | {
+        href: string;
+        _type: "link";
+        _key: string;
+      }
+    | {
+        reference:
+          | PageReference
+          | ArticleReference
+          | ResourceReference
+          | EventReference
+          | TopicReference
+          | MonthlyUpdateReference
+          | NewsletterEditionReference;
+        _type: "internalLink";
+        _key: string;
+      }
+  >;
+  level?: number;
+  _type: "block";
+  _key: string;
+}>;
+
+export type RichText = Array<
+  | {
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h2" | "h3" | "blockquote";
+      listItem?: "bullet" | "number";
+      markDefs?: Array<
+        | {
+            href: string;
+            _type: "link";
+            _key: string;
+          }
+        | {
+            reference:
+              | PageReference
+              | ArticleReference
+              | ResourceReference
+              | EventReference
+              | TopicReference
+              | MonthlyUpdateReference
+              | NewsletterEditionReference;
+            _type: "internalLink";
+            _key: string;
+          }
+      >;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }
+  | ({
+      _key: string;
+    } & ImageWithAlt)
+  | {
+      asset?: SanityFileAssetReference;
+      media?: unknown;
+      title: string;
+      _type: "fileAttachment";
+      _key: string;
+    }
+  | {
+      tone?: "info" | "warning";
+      text: string;
+      _type: "callout";
+      _key: string;
+    }
+  | {
+      event: EventReference;
+      _type: "eventCard";
+      _key: string;
+    }
+  | {
+      resource: ResourceReference;
+      _type: "resourceCard";
+      _key: string;
+    }
+>;
+
+export type Link = {
+  _type: "link";
+  label: string;
+  kind: "internal" | "section" | "external" | "phone" | "email";
+  reference?:
+    | PageReference
+    | ArticleReference
+    | ResourceReference
+    | EventReference
+    | TopicReference
+    | MonthlyUpdateReference
+    | NewsletterEditionReference;
+  section?:
+    | "/resources"
+    | "/topics"
+    | "/whats-new"
+    | "/events"
+    | "/newsletter"
+    | "/articles"
+    | "/links"
+    | "/about"
+    | "/search";
+  url?: string;
+  phone?: string;
+  email?: string;
+};
+
+export type Redirect = {
+  _id: string;
+  _type: "redirect";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  source: string;
+  destination: string;
+  permanent?: boolean;
 };
 
 export type Navigation = {
@@ -164,21 +575,36 @@ export type Navigation = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  headerPrimary?: Array<{
-    link?: Link;
-    children?: Array<{
-      link?: Link;
-      _type: "item";
+  main?: Array<
+    {
       _key: string;
-    }>;
-    _type: "item";
-    _key: string;
-  }>;
+    } & Link
+  >;
   footer?: Array<
     {
       _key: string;
     } & Link
   >;
+};
+
+export type Settings = {
+  _id: string;
+  _type: "settings";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  siteTitle: string;
+  tagline?: string;
+  description?: string;
+  heroImage?: ImageWithAlt;
+  contactEmail?: string;
+  contactPhone?: PhoneNumber;
+  mailingAddress?: string;
+  donateUrl?: string;
+  nonprofitStatement?: string;
+  newsletterTitle?: string;
+  newsletterDedication?: string;
+  subscribeInstructions?: string;
 };
 
 export type Home = {
@@ -187,16 +613,334 @@ export type Home = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  image?: {
-    asset?: SanityImageAssetReference;
+  howTo?: string;
+  title?: string;
+  sections: PageBuilder;
+};
+
+export type HelpfulLink = {
+  _id: string;
+  _type: "helpfulLink";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  howTo?: string;
+  title: string;
+  url: string;
+  source: string;
+  summary: string;
+  topics?: Array<
+    {
+      _key: string;
+    } & TopicReference
+  >;
+  publishedAt?: string;
+  needsReview?: boolean;
+  legacyId?: string;
+};
+
+export type MonthlyUpdate = {
+  _id: string;
+  _type: "monthlyUpdate";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  howTo?: string;
+  month:
+    | "2027-02"
+    | "2027-01"
+    | "2026-12"
+    | "2026-11"
+    | "2026-10"
+    | "2026-09"
+    | "2026-08"
+    | "2026-07"
+    | "2026-06"
+    | "2026-05"
+    | "2026-04"
+    | "2026-03"
+    | "2026-02"
+    | "2026-01"
+    | "2025-12"
+    | "2025-11"
+    | "2025-10"
+    | "2025-09"
+    | "2025-08"
+    | "2025-07"
+    | "2025-06"
+    | "2025-05"
+    | "2025-04"
+    | "2025-03"
+    | "2025-02"
+    | "2025-01"
+    | "2024-12"
+    | "2024-11";
+  title?: string;
+  intro: string;
+  body: RichText;
+};
+
+export type Page = {
+  _id: string;
+  _type: "page";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  howTo?: string;
+  title: string;
+  slug: Slug;
+  section: "general" | "about";
+  description?: string;
+  sections: PageBuilder;
+};
+
+export type AuthorReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "author";
+};
+
+export type Article = {
+  _id: string;
+  _type: "article";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  howTo?: string;
+  title: string;
+  slug: Slug;
+  author: AuthorReference;
+  publishedAt: string;
+  series?: "none" | "joans-corner" | "rons-ramblings";
+  summary: string;
+  topics?: Array<
+    {
+      _key: string;
+    } & TopicReference
+  >;
+  mainImage?: ImageWithAlt;
+  body: RichText;
+  needsReview?: boolean;
+  legacyId?: string;
+};
+
+export type Resource = {
+  _id: string;
+  _type: "resource";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  howTo?: string;
+  title: string;
+  slug: Slug;
+  summary: string;
+  topics?: Array<
+    {
+      _key: string;
+    } & TopicReference
+  >;
+  serviceArea: "maricopa" | "pinal" | "arizona" | "national";
+  isGovernment?: boolean;
+  phones?: Array<
+    {
+      _key: string;
+    } & PhoneNumber
+  >;
+  email?: string;
+  website?: string;
+  address?: string;
+  hours?: Array<
+    {
+      _key: string;
+    } & OpeningHours
+  >;
+  hoursNote?: string;
+  description?: SimpleText;
+  eligibility?: string;
+  cost?: string;
+  attachments?: Array<{
+    asset?: SanityFileAssetReference;
     media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt: string;
-    caption?: string;
-    _type: "image";
+    title: string;
+    _type: "file";
+    _key: string;
+  }>;
+  lastVerified?: string;
+  needsReview?: boolean;
+  legacyId?: string;
+};
+
+export type Event = {
+  _id: string;
+  _type: "event";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  howTo?: string;
+  title: string;
+  slug: Slug;
+  start: string;
+  end?: string;
+  allDay?: boolean;
+  repeat?: {
+    frequency?: "none" | "weekly" | "monthlyWeekday" | "monthlyDate";
+    until?: string;
+    skipDates?: Array<string>;
   };
-  content?: BlockContent;
+  location: string;
+  address?: string;
+  summary: string;
+  topics?: Array<
+    {
+      _key: string;
+    } & TopicReference
+  >;
+  hostedByMsl?: boolean;
+  registration?: {
+    required?: boolean;
+    link?: Link;
+  };
+  cost?: string;
+  flyer?: ImageWithAlt;
+  details?: RichText;
+};
+
+export type NewsletterEdition = {
+  _id: string;
+  _type: "newsletterEdition";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  howTo?: string;
+  month:
+    | "2027-02"
+    | "2027-01"
+    | "2026-12"
+    | "2026-11"
+    | "2026-10"
+    | "2026-09"
+    | "2026-08"
+    | "2026-07"
+    | "2026-06"
+    | "2026-05"
+    | "2026-04"
+    | "2026-03"
+    | "2026-02"
+    | "2026-01"
+    | "2025-12"
+    | "2025-11"
+    | "2025-10"
+    | "2025-09"
+    | "2025-08"
+    | "2025-07"
+    | "2025-06"
+    | "2025-05"
+    | "2025-04"
+    | "2025-03"
+    | "2025-02"
+    | "2025-01"
+    | "2024-12"
+    | "2024-11";
+  coverImage?: ImageWithAlt;
+  coverMessage?: string;
+  sections: Array<
+    | {
+        heading?: string;
+        includeEvents?: boolean;
+        hiddenEvents?: Array<
+          {
+            _key: string;
+          } & EventReference
+        >;
+        extraRows?: Array<{
+          when: string;
+          what: string;
+          where?: string;
+          _type: "row";
+          _key: string;
+        }>;
+        _type: "comingUpSection";
+        _key: string;
+      }
+    | {
+        heading: string;
+        article?: ArticleReference;
+        byline?: string;
+        body?: RichText;
+        image?: ImageWithAlt;
+        _type: "storySection";
+        _key: string;
+      }
+    | {
+        heading: string;
+        pages: Array<
+          {
+            _key: string;
+          } & ImageWithAlt
+        >;
+        _type: "flyerSection";
+        _key: string;
+      }
+    | {
+        heading: string;
+        body?: RichText;
+        _type: "funSection";
+        _key: string;
+      }
+  >;
+  uploadedPdf?: {
+    asset?: SanityFileAssetReference;
+    media?: unknown;
+    _type: "file";
+  };
+};
+
+export type Topic = {
+  _id: string;
+  _type: "topic";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  slug: Slug;
+  description: string;
+  icon:
+    | "heart-pulse"
+    | "brain"
+    | "hand-heart"
+    | "house"
+    | "piggy-bank"
+    | "scale"
+    | "flower"
+    | "shield-check"
+    | "sun"
+    | "utensils"
+    | "bus"
+    | "users"
+    | "medal"
+    | "paw-print";
+  order: number;
+  legacyCategories?: Array<string>;
+};
+
+export type Slug = {
+  _type: "slug";
+  current: string;
+  source?: string;
+};
+
+export type Author = {
+  _id: string;
+  _type: "author";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name: string;
+  slug: Slug;
+  image?: ImageWithAlt;
+  bio?: string;
+  tribute?: string;
 };
 
 export type SanityImageCrop = {
@@ -213,348 +957,6 @@ export type SanityImageHotspot = {
   y: number;
   height: number;
   width: number;
-};
-
-export type Category = {
-  _id: string;
-  _type: "category";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  slug: Slug;
-  description: BlockContent;
-  highlight?: boolean;
-};
-
-export type Slug = {
-  _type: "slug";
-  current: string;
-  source?: string;
-};
-
-export type Tag = {
-  _id: string;
-  _type: "tag";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  slug: Slug;
-  description: BlockContent;
-  highlight?: boolean;
-};
-
-export type Service = {
-  _id: string;
-  _type: "service";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  categories: Array<
-    {
-      _key: string;
-    } & CategoryReference
-  >;
-  tags?: Array<
-    {
-      _key: string;
-    } & TagReference
-  >;
-  description?: BlockContent;
-  audience?: BlockContent;
-  website?: string;
-  phone?: string;
-  address?: string;
-  businessHours?: Array<
-    {
-      _key: string;
-    } & DayAndTime
-  >;
-  notes?: BlockContent;
-  attachments?: Array<{
-    asset?: SanityFileAssetReference;
-    media?: unknown;
-    name: string;
-    _type: "file";
-    _key: string;
-  }>;
-};
-
-export type AuthorReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "author";
-};
-
-export type Post = {
-  _id: string;
-  _type: "post";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  slug: Slug;
-  author: AuthorReference;
-  mainImage?: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt: string;
-    _type: "image";
-  };
-  categories: Array<
-    {
-      _key: string;
-    } & CategoryReference
-  >;
-  tags?: Array<
-    {
-      _key: string;
-    } & TagReference
-  >;
-  publishedAt: string;
-  isArchived?: boolean;
-  body: BlockContent;
-};
-
-export type Page = {
-  _id: string;
-  _type: "page";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  slug: Slug;
-  body: BlockContent;
-};
-
-export type Author = {
-  _id: string;
-  _type: "author";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name: string;
-  slug: Slug;
-  image: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  };
-  bio?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal";
-    listItem?: never;
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }>;
-};
-
-export type SanityVideoMetadataPlayback = {
-  _type: "sanity.videoMetadata.playback";
-  policy?: string;
-};
-
-export type SanityVideoMetadata = {
-  _type: "sanity.videoMetadata";
-  duration?: number;
-  framerate?: number;
-  aspectRatio?: number;
-  hasAudio?: boolean;
-  codec?: string;
-  bitrate?: number;
-};
-
-export type SanityVideoAsset = {
-  _id: string;
-  _type: "sanity.videoAsset";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  originalFilename?: string;
-  label?: string;
-  title?: string;
-  description?: string;
-  altText?: string;
-  creditLine?: string;
-  metadata?: SanityVideoMetadata;
-  sha1hash?: string;
-  extension?: string;
-  mimeType?: string;
-  size?: number;
-  assetId?: string;
-  uploadId?: string;
-  path?: string;
-  url?: string;
-};
-
-export type SanityVideo = {
-  _type: "sanity.video";
-  asset?: unknown;
-  media?: unknown;
-};
-
-export type SanityAssistInstructionTask = {
-  _type: "sanity.assist.instructionTask";
-  path?: string;
-  instructionKey?: string;
-  started?: string;
-  updated?: string;
-  info?: string;
-};
-
-export type SanityAssistTaskStatus = {
-  _type: "sanity.assist.task.status";
-  tasks?: Array<
-    {
-      _key: string;
-    } & SanityAssistInstructionTask
-  >;
-};
-
-export type SanityAssistSchemaTypeAnnotations = {
-  _type: "sanity.assist.schemaType.annotations";
-  title?: string;
-  fields?: Array<
-    {
-      _key: string;
-    } & SanityAssistSchemaTypeField
-  >;
-};
-
-export type SanityAssistOutputType = {
-  _type: "sanity.assist.output.type";
-  type?: string;
-};
-
-export type SanityAssistOutputField = {
-  _type: "sanity.assist.output.field";
-  path?: string;
-};
-
-export type AssistInstructionContextReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "assist.instruction.context";
-};
-
-export type SanityAssistInstructionContext = {
-  _type: "sanity.assist.instruction.context";
-  reference: AssistInstructionContextReference;
-};
-
-export type AssistInstructionContext = {
-  _id: string;
-  _type: "assist.instruction.context";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  context?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal";
-    listItem?: never;
-    markDefs?: null;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }>;
-};
-
-export type SanityAssistInstructionUserInput = {
-  _type: "sanity.assist.instruction.userInput";
-  message: string;
-  description?: string;
-};
-
-export type SanityAssistInstructionPrompt = Array<{
-  children?: Array<
-    | {
-        marks?: Array<string>;
-        text?: string;
-        _type: "span";
-        _key: string;
-      }
-    | ({
-        _key: string;
-      } & SanityAssistInstructionFieldRef)
-    | ({
-        _key: string;
-      } & SanityAssistInstructionContext)
-    | ({
-        _key: string;
-      } & SanityAssistInstructionUserInput)
-  >;
-  style?: "normal";
-  listItem?: never;
-  markDefs?: null;
-  level?: number;
-  _type: "block";
-  _key: string;
-}>;
-
-export type SanityAssistInstructionFieldRef = {
-  _type: "sanity.assist.instruction.fieldRef";
-  path?: string;
-};
-
-export type SanityAssistInstruction = {
-  _type: "sanity.assist.instruction";
-  prompt?: SanityAssistInstructionPrompt;
-  icon?: string;
-  title?: string;
-  userId?: string;
-  createdById?: string;
-  output?: Array<
-    | ({
-        _key: string;
-      } & SanityAssistOutputField)
-    | ({
-        _key: string;
-      } & SanityAssistOutputType)
-  >;
-};
-
-export type SanityAssistSchemaTypeField = {
-  _type: "sanity.assist.schemaType.field";
-  path?: string;
-  instructions?: Array<
-    {
-      _key: string;
-    } & SanityAssistInstruction
-  >;
-};
-
-export type MediaTag = {
-  _id: string;
-  _type: "media.tag";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: Slug;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -655,45 +1057,58 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
-  | TimeValue
-  | CategoryReference
-  | TagReference
-  | PageReference
-  | Link
-  | SanityImageAssetReference
+  | NewsletterSignupBlock
   | SanityFileAssetReference
-  | BlockContent
-  | DayAndTime
+  | FileBlock
+  | VideoBlock
+  | FaqBlock
+  | DonateBlock
+  | ContactBlock
+  | QuickContactsBlock
+  | TopicReference
+  | HelpfulLinkReference
+  | LinkListBlock
+  | ArticleListBlock
+  | EventListBlock
+  | ResourceReference
+  | ResourceListBlock
+  | CalloutBlock
+  | ButtonsBlock
+  | ImageBlock
+  | TextBlock
+  | WhatsNewBlock
+  | TopicsBlock
+  | HeroBlock
+  | PageBuilder
+  | OpeningHours
+  | PhoneNumber
+  | SanityImageAssetReference
+  | ImageWithAlt
+  | PageReference
+  | ArticleReference
+  | EventReference
+  | MonthlyUpdateReference
+  | NewsletterEditionReference
+  | SimpleText
+  | RichText
+  | Link
+  | Redirect
   | Navigation
+  | Settings
   | Home
+  | HelpfulLink
+  | MonthlyUpdate
+  | Page
+  | AuthorReference
+  | Article
+  | Resource
+  | Event
+  | NewsletterEdition
+  | Topic
+  | Slug
+  | Author
   | SanityImageCrop
   | SanityImageHotspot
-  | Category
-  | Slug
-  | Tag
-  | Service
-  | AuthorReference
-  | Post
-  | Page
-  | Author
-  | SanityVideoMetadataPlayback
-  | SanityVideoMetadata
-  | SanityVideoAsset
-  | SanityVideo
-  | SanityAssistInstructionTask
-  | SanityAssistTaskStatus
-  | SanityAssistSchemaTypeAnnotations
-  | SanityAssistOutputType
-  | SanityAssistOutputField
-  | AssistInstructionContextReference
-  | SanityAssistInstructionContext
-  | AssistInstructionContext
-  | SanityAssistInstructionUserInput
-  | SanityAssistInstructionPrompt
-  | SanityAssistInstructionFieldRef
-  | SanityAssistInstruction
-  | SanityAssistSchemaTypeField
-  | MediaTag
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -705,1145 +1120,4759 @@ export type AllSanitySchemaTypes =
 
 // Source: ../../packages/sanity/src/queries.ts
 // Variable: queryImageType
-// Query: *[_type == "post" && defined(mainImage)][0].mainImage{      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }
+// Query: *[_type == "article" && defined(mainImage)][0].mainImage{      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right }  }
 export type QueryImageTypeResult = {
   id: string | null;
   preview: string | null;
-  alt: string;
+  alt: string | "";
+  caption: string | null;
   hotspot: {
     x: number;
     y: number;
   } | null;
   crop: {
+    top: number;
     bottom: number;
     left: number;
     right: number;
-    top: number;
   } | null;
 } | null;
 
 // Source: ../../packages/sanity/src/queries.ts
-// Variable: querySlugPageData
-// Query: *[_type == "page" && slug.current == $slug][0]{    ...,    "slug": slug.current,      pageBuilder[]{    ...,    _type,  }  }
-export type QuerySlugPageDataResult = {
-  _id: string;
-  _type: "page";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  slug: string;
-  body: BlockContent;
-  pageBuilder: null;
-} | null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryNavbarData
-// Query: *[_type == "navbar" && _id == "navbar"][0]{    _id,    columns[]{      _key,      _type == "navbarColumn" => {        "type": "column",        title,        links[]{          _key,          name,          icon,          description,          "openInNewTab": url.openInNewTab,          "href": select(            url.type == "internal" => url.internal->slug.current,            url.type == "external" => url.external,            url.href          )        }      },      _type == "navbarLink" => {        "type": "link",        name,        description,        "openInNewTab": url.openInNewTab,        "href": select(          url.type == "internal" => url.internal->slug.current,          url.type == "external" => url.external,          url.href        )      }    },      buttons[]{    text,    variant,    _key,    _type,    "openInNewTab": url.openInNewTab,    "href": select(      url.type == "internal" => url.internal->slug.current,      url.type == "external" => url.external,      url.href    ),  },  }
-export type QueryNavbarDataResult = null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryGlobalSeoSettings
-// Query: *[_type == "settings"][0]{    _id,    _type,    siteTitle,    logo {        "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }    },    siteDescription,    socialLinks{      linkedin,      facebook,      twitter,      instagram,      youtube    }  }
-export type QueryGlobalSeoSettingsResult = null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryBlogIndexPageData
-// Query: *[_type == "blogIndex"][0]{    ...,    _id,    _type,    title,    description,    "displayFeaturedBlogs" : displayFeaturedBlogs == "yes",    "featuredBlogsCount" : featuredBlogsCount,      pageBuilder[]{    ...,    _type,  },    "slug": slug.current  }
-export type QueryBlogIndexPageDataResult = null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryBlogIndexPageBlogs
-// Query: *[_type == "blog" && (seoHideFromLists != true)] | order(orderRank asc) [$start...$end]{      _type,  _id,  title,  description,  "slug":slug.current,  orderRank,    image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  },  publishedAt,    authors[0]->{    _id,    name,    position,      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }  }  }
-export type QueryBlogIndexPageBlogsResult = Array<never>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryAllBlogDataForSearch
-// Query: *[_type == "blog" && defined(slug.current) && (seoHideFromLists != true)]{      _type,  _id,  title,  description,  "slug":slug.current,  orderRank,    image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  },  publishedAt,    authors[0]->{    _id,    name,    position,      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }  }  }
-export type QueryAllBlogDataForSearchResult = Array<never>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryBlogIndexPageBlogsCount
-// Query: count(*[_type == "blog" && (seoHideFromLists != true)])
-export type QueryBlogIndexPageBlogsCountResult = number;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryBlogSlugPageData
-// Query: *[_type == "blog" && slug.current == $slug][0]{    ...,    "slug": slug.current,      authors[0]->{    _id,    name,    position,      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }  },      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  },      richText[]{    ...,    _type == "block" => {      ...,        markDefs[]{    ...,      ...customLink{    openInNewTab,    "href": select(      type == "internal" => internal->slug.current,      type == "external" => external,      "#"    ),  }  }    },    _type == "image" => {        "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  },      "caption": caption    }  },      pageBuilder[]{    ...,    _type,  }  }
-export type QueryBlogSlugPageDataResult = null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryBlogPaths
-// Query: *[_type == "blog" && defined(slug.current)].slug.current
-export type QueryBlogPathsResult = Array<never>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: highlightedCategories
-// Query: *[_type == "category" && highlight == true]{    _id,    title,    "slug": slug.current  } | order(title asc)
-export type HighlightedCategoriesResult = Array<{
-  _id: string;
-  title: string;
-  slug: string;
-}>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: highlightedTags
-// Query: *[_type == "tag" && highlight == true]{    _id,    title,    "slug": slug.current  } | order(title asc)
-export type HighlightedTagsResult = Array<{
-  _id: string;
-  title: string;
-  slug: string;
-}>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryArticleSlugPageData
-// Query: *[_type == "post" && slug.current == $slug && isArchived != true][0]{      _id,  _updatedAt,  _type,  title,    "excerpt": select(    length(pt::text(body)) > 160 =>      array::join(string::split(pt::text(body), "")[0...160], "") + "…",    pt::text(body)  ),  "slug": slug.current,  "author": author->{      name,    image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  },  "slug": slug.current,  },  mainImage {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  "tags": tags[]->{    _id,    title,    "slug": slug.current,  } {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  },  publishedAt,  "body": body[]{      ...,  _type == "block" => {    ...  },  _type == "image" => {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  },    "caption": caption  },  _type == "attachment" => {    ...,    asset->  }  },  }
-export type QueryArticleSlugPageDataResult = {
-  _id: string;
-  _updatedAt: string;
-  _type: "post";
-  title: string;
-  excerpt: string;
-  slug: string;
-  author: {
-    name: string;
-    image: {
-      id: string | null;
-      preview: string | null;
-      alt: string | "";
-      hotspot: {
-        x: number;
-        y: number;
-      } | null;
-      crop: {
-        bottom: number;
-        left: number;
-        right: number;
-        top: number;
-      } | null;
-    };
-    slug: string;
-  };
-  mainImage: {
-    id: string | null;
-    preview: string | null;
-    alt: string;
-    hotspot: {
-      x: number;
-      y: number;
-    } | null;
-    crop: {
-      bottom: number;
-      left: number;
-      right: number;
-      top: number;
-    } | null;
-  } | null;
-  categories: Array<{
-    _id: string;
-    title: string;
-    slug: string;
-  }>;
-  tags: Array<{
-    _id: string;
-    title: string;
-    slug: string;
-    rank: 2;
-  }> | null;
-  publishedAt: string;
-  body: Array<
-    | {
-        asset: {
-          _id: string;
-          _type: "sanity.fileAsset";
-          _createdAt: string;
-          _updatedAt: string;
-          _rev: string;
-          originalFilename?: string;
-          label?: string;
-          title?: string;
-          description?: string;
-          altText?: string;
-          sha1hash: string;
-          extension: string;
-          mimeType: string;
-          size: number;
-          assetId: string;
-          uploadId?: string;
-          path: string;
-          url: string;
-          source?: SanityAssetSourceData;
-        };
-        media?: unknown;
-        description: string;
-        _type: "attachment";
-        _key: string;
-      }
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?:
-          | "blockquote"
-          | "h1"
-          | "h2"
-          | "h3"
-          | "h4"
-          | "h5"
-          | "h6"
-          | "normal";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }
-    | {
-        asset: SanityImageAssetReference;
-        media?: unknown;
-        hotspot: {
-          x: number;
-          y: number;
-        } | null;
-        crop: {
-          bottom: number;
-          left: number;
-          right: number;
-          top: number;
-        } | null;
-        alt: string;
-        _type: "image";
-        _key: string;
-        id: string;
-        preview: string | null;
-        caption: null;
-      }
-  >;
-} | null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryArticlePaths
-// Query: *[_type == "post" && defined(slug.current) && isArchived != true]{    "slug": slug.current,    _updatedAt  }
-export type QueryArticlePathsResult = Array<{
-  slug: string;
-  _updatedAt: string;
-}>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: rightSidebarNonProfitQuery
-// Query: *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{    title,    "description": description[]{        ...,  _type == "block" => {    ...  },  _type == "image" => {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  },    "caption": caption  },  _type == "attachment" => {    ...,    asset->  }    },    "slug": slug.current  }
-export type RightSidebarNonProfitQueryResult = {
-  title: string;
-  description: Array<
-    | {
-        asset: {
-          _id: string;
-          _type: "sanity.fileAsset";
-          _createdAt: string;
-          _updatedAt: string;
-          _rev: string;
-          originalFilename?: string;
-          label?: string;
-          title?: string;
-          description?: string;
-          altText?: string;
-          sha1hash: string;
-          extension: string;
-          mimeType: string;
-          size: number;
-          assetId: string;
-          uploadId?: string;
-          path: string;
-          url: string;
-          source?: SanityAssetSourceData;
-        };
-        media?: unknown;
-        description: string;
-        _type: "attachment";
-        _key: string;
-      }
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?:
-          | "blockquote"
-          | "h1"
-          | "h2"
-          | "h3"
-          | "h4"
-          | "h5"
-          | "h6"
-          | "normal";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }
-    | {
-        asset: SanityImageAssetReference;
-        media?: unknown;
-        hotspot: {
-          x: number;
-          y: number;
-        } | null;
-        crop: {
-          bottom: number;
-          left: number;
-          right: number;
-          top: number;
-        } | null;
-        alt: string;
-        _type: "image";
-        _key: string;
-        id: string;
-        preview: string | null;
-        caption: null;
-      }
-  >;
-  slug: string;
-} | null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: rightSidebarWhatsNewQuery
-// Query: *[    _type == "post"    && isArchived != true    && references(*[_type == "category" && slug.current == "whats-new"][0]._id)  ] | order(publishedAt desc)[0]{      _id,  title,  "slug": slug.current,  publishedAt,    "excerpt": select(    length(pt::text(body)) > 160 =>      array::join(string::split(pt::text(body), "")[0...160], "") + "…",    pt::text(body)  ),    "author": author->{        name,    image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }    }  }
-export type RightSidebarWhatsNewQueryResult = {
-  _id: string;
-  title: string;
-  slug: string;
-  publishedAt: string;
-  excerpt: string;
-  author: {
-    name: string;
-    image: {
-      id: string | null;
-      preview: string | null;
-      alt: string | "";
-      hotspot: {
-        x: number;
-        y: number;
-      } | null;
-      crop: {
-        bottom: number;
-        left: number;
-        right: number;
-        top: number;
-      } | null;
-    };
-  };
-} | null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: rightSidebarSeniorCenterQuery
-// Query: *[    _type == "post"    && isArchived != true    && references(*[_type == "category" && slug.current == "city-of-maricopa-community-senior-center"][0]._id)  ] | order(publishedAt desc)[0...2]{      _id,  title,  "slug": slug.current,  publishedAt,    "excerpt": select(    length(pt::text(body)) > 160 =>      array::join(string::split(pt::text(body), "")[0...160], "") + "…",    pt::text(body)  )  }
-export type RightSidebarSeniorCenterQueryResult = Array<{
-  _id: string;
-  title: string;
-  slug: string;
-  publishedAt: string;
-  excerpt: string;
-}>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: rightSidebarNewsletterQuery
-// Query: *[    _type == "post"    && isArchived != true    && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"][0]._id)  ] | order(publishedAt desc)[0]{      _id,  title,  "slug": slug.current,  publishedAt,    "excerpt": select(    length(pt::text(body)) > 160 =>      array::join(string::split(pt::text(body), "")[0...160], "") + "…",    pt::text(body)  )  }
-export type RightSidebarNewsletterQueryResult = {
-  _id: string;
-  title: string;
-  slug: string;
-  publishedAt: string;
-  excerpt: string;
-} | null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryHomePageData
-// Query: *[_type == "home"][0]{    _id,    _type,    image {        "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  },      "caption": caption    },    "content": content[]{      ...,      _type == "image" => {          "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  },        "caption": caption      },      _type == "attachment" => {        ...,        asset->      }    }  }
-export type QueryHomePageDataResult = {
-  _id: string;
-  _type: "home";
-  image: {
-    id: string | null;
-    preview: string | null;
-    alt: string;
-    hotspot: {
-      x: number;
-      y: number;
-    } | null;
-    crop: {
-      bottom: number;
-      left: number;
-      right: number;
-      top: number;
-    } | null;
-    caption: string | null;
-  } | null;
-  content: Array<
-    | {
-        asset: {
-          _id: string;
-          _type: "sanity.fileAsset";
-          _createdAt: string;
-          _updatedAt: string;
-          _rev: string;
-          originalFilename?: string;
-          label?: string;
-          title?: string;
-          description?: string;
-          altText?: string;
-          sha1hash: string;
-          extension: string;
-          mimeType: string;
-          size: number;
-          assetId: string;
-          uploadId?: string;
-          path: string;
-          url: string;
-          source?: SanityAssetSourceData;
-        };
-        media?: unknown;
-        description: string;
-        _type: "attachment";
-        _key: string;
-      }
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?:
-          | "blockquote"
-          | "h1"
-          | "h2"
-          | "h3"
-          | "h4"
-          | "h5"
-          | "h6"
-          | "normal";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }
-    | {
-        asset: SanityImageAssetReference;
-        media?: unknown;
-        hotspot: {
-          x: number;
-          y: number;
-        } | null;
-        crop: {
-          bottom: number;
-          left: number;
-          right: number;
-          top: number;
-        } | null;
-        alt: string;
-        _type: "image";
-        _key: string;
-        id: string;
-        preview: string | null;
-        caption: null;
-      }
-  > | null;
-} | null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryAllPosts
-// Query: *[_type == "post" && isArchived != true] | order(publishedAt desc){      _id,  _updatedAt,  _type,  title,    "excerpt": select(    length(pt::text(body)) > 160 =>      array::join(string::split(pt::text(body), "")[0...160], "") + "…",    pt::text(body)  ),  "slug": slug.current,  "author": author->{      name,    image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  },  "slug": slug.current,  },  mainImage {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  "tags": tags[]->{    _id,    title,    "slug": slug.current,  } {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  },  publishedAt,  "body": body[]{      ...,  _type == "block" => {    ...  },  _type == "image" => {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  },    "caption": caption  },  _type == "attachment" => {    ...,    asset->  }  },  }
-export type QueryAllPostsResult = Array<{
-  _id: string;
-  _updatedAt: string;
-  _type: "post";
-  title: string;
-  excerpt: string;
-  slug: string;
-  author: {
-    name: string;
-    image: {
-      id: string | null;
-      preview: string | null;
-      alt: string | "";
-      hotspot: {
-        x: number;
-        y: number;
-      } | null;
-      crop: {
-        bottom: number;
-        left: number;
-        right: number;
-        top: number;
-      } | null;
-    };
-    slug: string;
-  };
-  mainImage: {
-    id: string | null;
-    preview: string | null;
-    alt: string;
-    hotspot: {
-      x: number;
-      y: number;
-    } | null;
-    crop: {
-      bottom: number;
-      left: number;
-      right: number;
-      top: number;
-    } | null;
-  } | null;
-  categories: Array<{
-    _id: string;
-    title: string;
-    slug: string;
-  }>;
-  tags: Array<{
-    _id: string;
-    title: string;
-    slug: string;
-    rank: 2;
-  }> | null;
-  publishedAt: string;
-  body: Array<
-    | {
-        asset: {
-          _id: string;
-          _type: "sanity.fileAsset";
-          _createdAt: string;
-          _updatedAt: string;
-          _rev: string;
-          originalFilename?: string;
-          label?: string;
-          title?: string;
-          description?: string;
-          altText?: string;
-          sha1hash: string;
-          extension: string;
-          mimeType: string;
-          size: number;
-          assetId: string;
-          uploadId?: string;
-          path: string;
-          url: string;
-          source?: SanityAssetSourceData;
-        };
-        media?: unknown;
-        description: string;
-        _type: "attachment";
-        _key: string;
-      }
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?:
-          | "blockquote"
-          | "h1"
-          | "h2"
-          | "h3"
-          | "h4"
-          | "h5"
-          | "h6"
-          | "normal";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }
-    | {
-        asset: SanityImageAssetReference;
-        media?: unknown;
-        hotspot: {
-          x: number;
-          y: number;
-        } | null;
-        crop: {
-          bottom: number;
-          left: number;
-          right: number;
-          top: number;
-        } | null;
-        alt: string;
-        _type: "image";
-        _key: string;
-        id: string;
-        preview: string | null;
-        caption: null;
-      }
-  >;
-}>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryAllPostSlugs
-// Query: *[_type == "post" && defined(slug.current) && isArchived != true][].slug.current
-export type QueryAllPostSlugsResult = Array<string>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryRecentArticleSlugs
-// Query: *[_type == "post" && defined(slug.current) && isArchived != true] | order(_updatedAt desc) [0...100]{"slug": slug.current}
-export type QueryRecentArticleSlugsResult = Array<{
-  slug: string;
-}>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryAllPageSlugs
-// Query: *[_type == "page" && defined(slug.current)]{"slug": slug.current}
-export type QueryAllPageSlugsResult = Array<{
-  slug: string;
-}>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryPostBySlug
-// Query: *[_type == "post" && slug.current == $slug && isArchived != true]{      _id,  _updatedAt,  _type,  title,    "excerpt": select(    length(pt::text(body)) > 160 =>      array::join(string::split(pt::text(body), "")[0...160], "") + "…",    pt::text(body)  ),  "slug": slug.current,  "author": author->{      name,    image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  },  "slug": slug.current,  },  mainImage {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  "tags": tags[]->{    _id,    title,    "slug": slug.current,  } {    ...,    "rank": select(      count(tags[title == "Local Resources"]) > 0 => 1,      2    )  },  publishedAt,  "body": body[]{      ...,  _type == "block" => {    ...  },  _type == "image" => {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  },    "caption": caption  },  _type == "attachment" => {    ...,    asset->  }  },  }[0]
-export type QueryPostBySlugResult = {
-  _id: string;
-  _updatedAt: string;
-  _type: "post";
-  title: string;
-  excerpt: string;
-  slug: string;
-  author: {
-    name: string;
-    image: {
-      id: string | null;
-      preview: string | null;
-      alt: string | "";
-      hotspot: {
-        x: number;
-        y: number;
-      } | null;
-      crop: {
-        bottom: number;
-        left: number;
-        right: number;
-        top: number;
-      } | null;
-    };
-    slug: string;
-  };
-  mainImage: {
-    id: string | null;
-    preview: string | null;
-    alt: string;
-    hotspot: {
-      x: number;
-      y: number;
-    } | null;
-    crop: {
-      bottom: number;
-      left: number;
-      right: number;
-      top: number;
-    } | null;
-  } | null;
-  categories: Array<{
-    _id: string;
-    title: string;
-    slug: string;
-  }>;
-  tags: Array<{
-    _id: string;
-    title: string;
-    slug: string;
-    rank: 2;
-  }> | null;
-  publishedAt: string;
-  body: Array<
-    | {
-        asset: {
-          _id: string;
-          _type: "sanity.fileAsset";
-          _createdAt: string;
-          _updatedAt: string;
-          _rev: string;
-          originalFilename?: string;
-          label?: string;
-          title?: string;
-          description?: string;
-          altText?: string;
-          sha1hash: string;
-          extension: string;
-          mimeType: string;
-          size: number;
-          assetId: string;
-          uploadId?: string;
-          path: string;
-          url: string;
-          source?: SanityAssetSourceData;
-        };
-        media?: unknown;
-        description: string;
-        _type: "attachment";
-        _key: string;
-      }
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?:
-          | "blockquote"
-          | "h1"
-          | "h2"
-          | "h3"
-          | "h4"
-          | "h5"
-          | "h6"
-          | "normal";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }
-    | {
-        asset: SanityImageAssetReference;
-        media?: unknown;
-        hotspot: {
-          x: number;
-          y: number;
-        } | null;
-        crop: {
-          bottom: number;
-          left: number;
-          right: number;
-          top: number;
-        } | null;
-        alt: string;
-        _type: "image";
-        _key: string;
-        id: string;
-        preview: string | null;
-        caption: null;
-      }
-  >;
-} | null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryAllCategories
-// Query: *[_type == "category"][].slug.current
-export type QueryAllCategoriesResult = Array<string>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryCategoryPaths
-// Query: *[_type == "category" && defined(slug.current)]{"category": slug.current}
-export type QueryCategoryPathsResult = Array<{
-  category: string;
-}>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryCategoryBySlug
-// Query: *[_type == "category" && slug.current == $slug]{    title,    "slug": slug.current,    "description": description[]{        ...,  _type == "block" => {    ...  },  _type == "image" => {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  },    "caption": caption  },  _type == "attachment" => {    ...,    asset->  }    },    "excerpt": select(    length(pt::text(description)) > 160 =>      array::join(string::split(pt::text(description), "")[0...160], "") + "…",    pt::text(description)  ),    "combinedList": [      ...(*[_type == "service" && references(^._id)]{          _id,  _type,  title,  description,  audience,  website,  phone,  address,  businessHours,  notes,  attachments,  "tags": tags[]->{    _id,    title,    "slug": slug.current,  }      }),      ...(*[_type == "post" && references(^._id) && isArchived != true]{          _id,  _updatedAt,  _type,  title,    "excerpt": select(    length(pt::text(body)) > 160 =>      array::join(string::split(pt::text(body), "")[0...160], "") + "…",    pt::text(body)  ),  "slug": slug.current,  "author": author->{    name,      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  publishedAt,        "tags": tags[]->{ title }      })    ] {      ...,      "rank": select(        count(tags[title == "Local Resources"]) > 0 => 1,        2      )    } | order(rank, title asc),  }[0]
-export type QueryCategoryBySlugResult = {
-  title: string;
-  slug: string;
-  description: Array<
-    | {
-        asset: {
-          _id: string;
-          _type: "sanity.fileAsset";
-          _createdAt: string;
-          _updatedAt: string;
-          _rev: string;
-          originalFilename?: string;
-          label?: string;
-          title?: string;
-          description?: string;
-          altText?: string;
-          sha1hash: string;
-          extension: string;
-          mimeType: string;
-          size: number;
-          assetId: string;
-          uploadId?: string;
-          path: string;
-          url: string;
-          source?: SanityAssetSourceData;
-        };
-        media?: unknown;
-        description: string;
-        _type: "attachment";
-        _key: string;
-      }
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?:
-          | "blockquote"
-          | "h1"
-          | "h2"
-          | "h3"
-          | "h4"
-          | "h5"
-          | "h6"
-          | "normal";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }
-    | {
-        asset: SanityImageAssetReference;
-        media?: unknown;
-        hotspot: {
-          x: number;
-          y: number;
-        } | null;
-        crop: {
-          bottom: number;
-          left: number;
-          right: number;
-          top: number;
-        } | null;
-        alt: string;
-        _type: "image";
-        _key: string;
-        id: string;
-        preview: string | null;
-        caption: null;
-      }
-  >;
-  excerpt: string;
-  combinedList: Array<
-    | {
-        _id: string;
-        _updatedAt: string;
-        _type: "post";
-        title: string;
-        excerpt: string;
-        slug: string;
-        author: {
-          name: string;
-          image: {
-            id: string | null;
-            preview: string | null;
-            alt: string | "";
-            hotspot: {
-              x: number;
-              y: number;
-            } | null;
-            crop: {
-              bottom: number;
-              left: number;
-              right: number;
-              top: number;
-            } | null;
-          };
-        };
-        categories: Array<{
-          _id: string;
-          title: string;
-          slug: string;
-        }>;
-        publishedAt: string;
-        tags: Array<{
-          title: string;
-        }> | null;
-        rank: 1 | 2;
-      }
-    | {
-        _id: string;
-        _type: "service";
-        title: string;
-        description: BlockContent | null;
-        audience: BlockContent | null;
-        website: string | null;
-        phone: string | null;
-        address: string | null;
-        businessHours: Array<
-          {
-            _key: string;
-          } & DayAndTime
-        > | null;
-        notes: BlockContent | null;
-        attachments: Array<{
-          asset?: SanityFileAssetReference;
-          media?: unknown;
-          name: string;
-          _type: "file";
-          _key: string;
-        }> | null;
-        tags: Array<{
-          _id: string;
-          title: string;
-          slug: string;
-        }> | null;
-        rank: 1 | 2;
-      }
-  >;
-} | null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryAllTags
-// Query: *[_type == "tag" && defined(slug.current)][].slug.current
-export type QueryAllTagsResult = Array<string>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryTagPaths
-// Query: *[_type == "tag" && defined(slug.current)]{"tag": slug.current}
-export type QueryTagPathsResult = Array<{
-  tag: string;
-}>;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryTagBySlug
-// Query: *[_type == "tag" && slug.current == $slug]{    title,    "slug": slug.current,    "description": description[]{        ...,  _type == "block" => {    ...  },  _type == "image" => {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  },    "caption": caption  },  _type == "attachment" => {    ...,    asset->  }    },    "excerpt": select(    length(pt::text(description)) > 160 =>      array::join(string::split(pt::text(description), "")[0...160], "") + "…",    pt::text(description)  ),    "posts": *[_type == "post" && references(^._id) && isArchived != true] | order(publishedAt desc){        _id,  _updatedAt,  _type,  title,    "excerpt": select(    length(pt::text(body)) > 160 =>      array::join(string::split(pt::text(body), "")[0...160], "") + "…",    pt::text(body)  ),  "slug": slug.current,  "author": author->{    name,      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  publishedAt    },    "services": *[_type == "service" && references(^._id)] | order(title asc){        _id,  _type,  title,  description,  audience,  website,  phone,  address,  businessHours,  notes,  attachments,  "tags": tags[]->{    _id,    title,    "slug": slug.current,  }    },  }[0]
-export type QueryTagBySlugResult = {
-  title: string;
-  slug: string;
-  description: Array<
-    | {
-        asset: {
-          _id: string;
-          _type: "sanity.fileAsset";
-          _createdAt: string;
-          _updatedAt: string;
-          _rev: string;
-          originalFilename?: string;
-          label?: string;
-          title?: string;
-          description?: string;
-          altText?: string;
-          sha1hash: string;
-          extension: string;
-          mimeType: string;
-          size: number;
-          assetId: string;
-          uploadId?: string;
-          path: string;
-          url: string;
-          source?: SanityAssetSourceData;
-        };
-        media?: unknown;
-        description: string;
-        _type: "attachment";
-        _key: string;
-      }
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?:
-          | "blockquote"
-          | "h1"
-          | "h2"
-          | "h3"
-          | "h4"
-          | "h5"
-          | "h6"
-          | "normal";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }
-    | {
-        asset: SanityImageAssetReference;
-        media?: unknown;
-        hotspot: {
-          x: number;
-          y: number;
-        } | null;
-        crop: {
-          bottom: number;
-          left: number;
-          right: number;
-          top: number;
-        } | null;
-        alt: string;
-        _type: "image";
-        _key: string;
-        id: string;
-        preview: string | null;
-        caption: null;
-      }
-  >;
-  excerpt: string;
-  posts: Array<{
-    _id: string;
-    _updatedAt: string;
-    _type: "post";
-    title: string;
-    excerpt: string;
-    slug: string;
-    author: {
-      name: string;
-      image: {
+// Variable: querySettings
+// Query: *[_id == "settings"][0]{    siteTitle,    tagline,    description,    heroImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    contactEmail,    contactPhone { label, number },    mailingAddress,    donateUrl,    nonprofitStatement,    newsletterTitle,    newsletterDedication,    subscribeInstructions  }
+export type QuerySettingsResult =
+  | {
+      siteTitle: null;
+      tagline: null;
+      description: null;
+      heroImage: null;
+      contactEmail: null;
+      contactPhone: null;
+      mailingAddress: null;
+      donateUrl: null;
+      nonprofitStatement: null;
+      newsletterTitle: null;
+      newsletterDedication: null;
+      subscribeInstructions: null;
+    }
+  | {
+      siteTitle: null;
+      tagline: null;
+      description: string;
+      heroImage: null;
+      contactEmail: null;
+      contactPhone: null;
+      mailingAddress: null;
+      donateUrl: null;
+      nonprofitStatement: null;
+      newsletterTitle: null;
+      newsletterDedication: null;
+      subscribeInstructions: null;
+    }
+  | {
+      siteTitle: null;
+      tagline: null;
+      description: SimpleText | null;
+      heroImage: null;
+      contactEmail: null;
+      contactPhone: null;
+      mailingAddress: null;
+      donateUrl: null;
+      nonprofitStatement: null;
+      newsletterTitle: null;
+      newsletterDedication: null;
+      subscribeInstructions: null;
+    }
+  | {
+      siteTitle: null;
+      tagline: null;
+      description: string | null;
+      heroImage: null;
+      contactEmail: null;
+      contactPhone: null;
+      mailingAddress: null;
+      donateUrl: null;
+      nonprofitStatement: null;
+      newsletterTitle: null;
+      newsletterDedication: null;
+      subscribeInstructions: null;
+    }
+  | {
+      siteTitle: string;
+      tagline: string | null;
+      description: string | null;
+      heroImage: {
         id: string | null;
         preview: string | null;
         alt: string | "";
+        caption: string | null;
         hotspot: {
           x: number;
           y: number;
         } | null;
         crop: {
+          top: number;
           bottom: number;
           left: number;
           right: number;
-          top: number;
         } | null;
-      };
-    };
-    categories: Array<{
-      _id: string;
-      title: string;
-      slug: string;
-    }>;
-    publishedAt: string;
-  }>;
-  services: Array<{
-    _id: string;
-    _type: "service";
-    title: string;
-    description: BlockContent | null;
-    audience: BlockContent | null;
-    website: string | null;
-    phone: string | null;
-    address: string | null;
-    businessHours: Array<
-      {
-        _key: string;
-      } & DayAndTime
-    > | null;
-    notes: BlockContent | null;
-    attachments: Array<{
-      asset?: SanityFileAssetReference;
-      media?: unknown;
-      name: string;
-      _type: "file";
-      _key: string;
-    }> | null;
-    tags: Array<{
-      _id: string;
-      title: string;
-      slug: string;
-    }> | null;
-  }>;
-} | null;
+      } | null;
+      contactEmail: string | null;
+      contactPhone: {
+        label: string | null;
+        number: string;
+      } | null;
+      mailingAddress: string | null;
+      donateUrl: string | null;
+      nonprofitStatement: string | null;
+      newsletterTitle: string | null;
+      newsletterDedication: string | null;
+      subscribeInstructions: string | null;
+    }
+  | null;
 
 // Source: ../../packages/sanity/src/queries.ts
-// Variable: querySearch
-// Query: *[    (      (_type == "post" && isArchived != true) || _type == "service"    ) && (      title match $searchTerm + "*"      || pt::text(body) match $searchTerm + "*"      || pt::text(description) match $searchTerm + "*"      || tags[]->title match $searchTerm + "*"      || categories[]->title match $searchTerm + "*"    )  ]  | score(      boost(title match $searchTerm + "*", 4),      pt::text(description) match $searchTerm + "*",      pt::text(body) match $searchTerm + "*"    )  | order(_score desc, _updatedAt desc)[0...50]{    _type == "post" => {        _id,  _updatedAt,  _type,  title,    "excerpt": select(    length(pt::text(body)) > 160 =>      array::join(string::split(pt::text(body), "")[0...160], "") + "…",    pt::text(body)  ),  "slug": slug.current,  "author": author->{    name,      image {      "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    ""  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }  }  },  "categories": categories[]->{    _id,    title,    "slug": slug.current,  },  publishedAt    },    _type == "service" => {        _id,  _type,  title,  description,  audience,  website,  phone,  address,  businessHours,  notes,  attachments,  "tags": tags[]->{    _id,    title,    "slug": slug.current,  }    }  }
-export type QuerySearchResult = Array<
+// Variable: queryNavigation
+// Query: *[_id == "navigation"][0]{    main[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } },    footer[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  }
+export type QueryNavigationResult =
   | {
-      _id: string;
-      _updatedAt: string;
-      _type: "post";
-      title: string;
-      excerpt: string;
-      slug: string;
-      author: {
-        name: string;
+      main: null;
+      footer: null;
+    }
+  | {
+      main: Array<{
+        _key: string;
+        label: string;
+        kind: "email" | "external" | "internal" | "phone" | "section";
+        section:
+          | "/about"
+          | "/articles"
+          | "/events"
+          | "/links"
+          | "/newsletter"
+          | "/resources"
+          | "/search"
+          | "/topics"
+          | "/whats-new"
+          | null;
+        url: string | null;
+        phone: string | null;
+        email: string | null;
+        target:
+          | {
+              _type: "article";
+              slug: string;
+              section: null;
+              month: null;
+              title: string;
+            }
+          | {
+              _type: "event";
+              slug: string;
+              section: null;
+              month: null;
+              title: string;
+            }
+          | {
+              _type: "monthlyUpdate";
+              slug: null;
+              section: null;
+              month:
+                | "2024-11"
+                | "2024-12"
+                | "2025-01"
+                | "2025-02"
+                | "2025-03"
+                | "2025-04"
+                | "2025-05"
+                | "2025-06"
+                | "2025-07"
+                | "2025-08"
+                | "2025-09"
+                | "2025-10"
+                | "2025-11"
+                | "2025-12"
+                | "2026-01"
+                | "2026-02"
+                | "2026-03"
+                | "2026-04"
+                | "2026-05"
+                | "2026-06"
+                | "2026-07"
+                | "2026-08"
+                | "2026-09"
+                | "2026-10"
+                | "2026-11"
+                | "2026-12"
+                | "2027-01"
+                | "2027-02";
+              title: string | null;
+            }
+          | {
+              _type: "newsletterEdition";
+              slug: null;
+              section: null;
+              month:
+                | "2024-11"
+                | "2024-12"
+                | "2025-01"
+                | "2025-02"
+                | "2025-03"
+                | "2025-04"
+                | "2025-05"
+                | "2025-06"
+                | "2025-07"
+                | "2025-08"
+                | "2025-09"
+                | "2025-10"
+                | "2025-11"
+                | "2025-12"
+                | "2026-01"
+                | "2026-02"
+                | "2026-03"
+                | "2026-04"
+                | "2026-05"
+                | "2026-06"
+                | "2026-07"
+                | "2026-08"
+                | "2026-09"
+                | "2026-10"
+                | "2026-11"
+                | "2026-12"
+                | "2027-01"
+                | "2027-02";
+              title: null;
+            }
+          | {
+              _type: "page";
+              slug: string;
+              section: "about" | "general";
+              month: null;
+              title: string;
+            }
+          | {
+              _type: "resource";
+              slug: string;
+              section: null;
+              month: null;
+              title: string;
+            }
+          | {
+              _type: "topic";
+              slug: string;
+              section: null;
+              month: null;
+              title: string;
+            }
+          | null;
+      }> | null;
+      footer: Array<{
+        _key: string;
+        label: string;
+        kind: "email" | "external" | "internal" | "phone" | "section";
+        section:
+          | "/about"
+          | "/articles"
+          | "/events"
+          | "/links"
+          | "/newsletter"
+          | "/resources"
+          | "/search"
+          | "/topics"
+          | "/whats-new"
+          | null;
+        url: string | null;
+        phone: string | null;
+        email: string | null;
+        target:
+          | {
+              _type: "article";
+              slug: string;
+              section: null;
+              month: null;
+              title: string;
+            }
+          | {
+              _type: "event";
+              slug: string;
+              section: null;
+              month: null;
+              title: string;
+            }
+          | {
+              _type: "monthlyUpdate";
+              slug: null;
+              section: null;
+              month:
+                | "2024-11"
+                | "2024-12"
+                | "2025-01"
+                | "2025-02"
+                | "2025-03"
+                | "2025-04"
+                | "2025-05"
+                | "2025-06"
+                | "2025-07"
+                | "2025-08"
+                | "2025-09"
+                | "2025-10"
+                | "2025-11"
+                | "2025-12"
+                | "2026-01"
+                | "2026-02"
+                | "2026-03"
+                | "2026-04"
+                | "2026-05"
+                | "2026-06"
+                | "2026-07"
+                | "2026-08"
+                | "2026-09"
+                | "2026-10"
+                | "2026-11"
+                | "2026-12"
+                | "2027-01"
+                | "2027-02";
+              title: string | null;
+            }
+          | {
+              _type: "newsletterEdition";
+              slug: null;
+              section: null;
+              month:
+                | "2024-11"
+                | "2024-12"
+                | "2025-01"
+                | "2025-02"
+                | "2025-03"
+                | "2025-04"
+                | "2025-05"
+                | "2025-06"
+                | "2025-07"
+                | "2025-08"
+                | "2025-09"
+                | "2025-10"
+                | "2025-11"
+                | "2025-12"
+                | "2026-01"
+                | "2026-02"
+                | "2026-03"
+                | "2026-04"
+                | "2026-05"
+                | "2026-06"
+                | "2026-07"
+                | "2026-08"
+                | "2026-09"
+                | "2026-10"
+                | "2026-11"
+                | "2026-12"
+                | "2027-01"
+                | "2027-02";
+              title: null;
+            }
+          | {
+              _type: "page";
+              slug: string;
+              section: "about" | "general";
+              month: null;
+              title: string;
+            }
+          | {
+              _type: "resource";
+              slug: string;
+              section: null;
+              month: null;
+              title: string;
+            }
+          | {
+              _type: "topic";
+              slug: string;
+              section: null;
+              month: null;
+              title: string;
+            }
+          | null;
+      }> | null;
+    }
+  | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryHome
+// Query: *[_id == "home"][0]{    sections[]{   ...,  _key,  _type,  _type == "heroBlock" => { image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } }, buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } } },  _type == "textBlock" => { body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } } },  _type == "imageBlock" => { images[]{ _key,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },  _type == "buttonsBlock" => { buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } } },  _type == "calloutBlock" => { link{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } } },  _type == "resourceListBlock" => {    "topicSlug": topic->slug.current,    "topicTitle": topic->title,    "picked": resources[]->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } }  },  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "linkListBlock" => {    "topicId": topic._ref,    "topicSlug": topic->slug.current,    "picked": links[]->{   _id,  title,  url,  source,  summary,  publishedAt }  },  _type == "faqBlock" => { items[]{ _key, question, answer } },  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } } }  }
+export type QueryHomeResult =
+  | {
+      sections: Array<
+        | {
+            _key: string;
+            _type: "articleListBlock";
+            heading?: string;
+            mode?: "joans-corner" | "latest" | "topic";
+            topic?: TopicReference;
+            limit?: number;
+            topicId: string | null;
+            topicSlug: string | null;
+          }
+        | {
+            _key: string;
+            _type: "buttonsBlock";
+            heading?: string;
+            intro?: string;
+            buttons: Array<{
+              _key: string;
+              label: string;
+              kind: "email" | "external" | "internal" | "phone" | "section";
+              section:
+                | "/about"
+                | "/articles"
+                | "/events"
+                | "/links"
+                | "/newsletter"
+                | "/resources"
+                | "/search"
+                | "/topics"
+                | "/whats-new"
+                | null;
+              url: string | null;
+              phone: string | null;
+              email: string | null;
+              target:
+                | {
+                    _type: "article";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "event";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "monthlyUpdate";
+                    slug: null;
+                    section: null;
+                    month:
+                      | "2024-11"
+                      | "2024-12"
+                      | "2025-01"
+                      | "2025-02"
+                      | "2025-03"
+                      | "2025-04"
+                      | "2025-05"
+                      | "2025-06"
+                      | "2025-07"
+                      | "2025-08"
+                      | "2025-09"
+                      | "2025-10"
+                      | "2025-11"
+                      | "2025-12"
+                      | "2026-01"
+                      | "2026-02"
+                      | "2026-03"
+                      | "2026-04"
+                      | "2026-05"
+                      | "2026-06"
+                      | "2026-07"
+                      | "2026-08"
+                      | "2026-09"
+                      | "2026-10"
+                      | "2026-11"
+                      | "2026-12"
+                      | "2027-01"
+                      | "2027-02";
+                    title: string | null;
+                  }
+                | {
+                    _type: "newsletterEdition";
+                    slug: null;
+                    section: null;
+                    month:
+                      | "2024-11"
+                      | "2024-12"
+                      | "2025-01"
+                      | "2025-02"
+                      | "2025-03"
+                      | "2025-04"
+                      | "2025-05"
+                      | "2025-06"
+                      | "2025-07"
+                      | "2025-08"
+                      | "2025-09"
+                      | "2025-10"
+                      | "2025-11"
+                      | "2025-12"
+                      | "2026-01"
+                      | "2026-02"
+                      | "2026-03"
+                      | "2026-04"
+                      | "2026-05"
+                      | "2026-06"
+                      | "2026-07"
+                      | "2026-08"
+                      | "2026-09"
+                      | "2026-10"
+                      | "2026-11"
+                      | "2026-12"
+                      | "2027-01"
+                      | "2027-02";
+                    title: null;
+                  }
+                | {
+                    _type: "page";
+                    slug: string;
+                    section: "about" | "general";
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "resource";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "topic";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | null;
+            }>;
+          }
+        | {
+            _key: string;
+            _type: "calloutBlock";
+            tone?: "info" | "warning";
+            text: string;
+            link: {
+              _key: null;
+              label: string;
+              kind: "email" | "external" | "internal" | "phone" | "section";
+              section:
+                | "/about"
+                | "/articles"
+                | "/events"
+                | "/links"
+                | "/newsletter"
+                | "/resources"
+                | "/search"
+                | "/topics"
+                | "/whats-new"
+                | null;
+              url: string | null;
+              phone: string | null;
+              email: string | null;
+              target:
+                | {
+                    _type: "article";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "event";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "monthlyUpdate";
+                    slug: null;
+                    section: null;
+                    month:
+                      | "2024-11"
+                      | "2024-12"
+                      | "2025-01"
+                      | "2025-02"
+                      | "2025-03"
+                      | "2025-04"
+                      | "2025-05"
+                      | "2025-06"
+                      | "2025-07"
+                      | "2025-08"
+                      | "2025-09"
+                      | "2025-10"
+                      | "2025-11"
+                      | "2025-12"
+                      | "2026-01"
+                      | "2026-02"
+                      | "2026-03"
+                      | "2026-04"
+                      | "2026-05"
+                      | "2026-06"
+                      | "2026-07"
+                      | "2026-08"
+                      | "2026-09"
+                      | "2026-10"
+                      | "2026-11"
+                      | "2026-12"
+                      | "2027-01"
+                      | "2027-02";
+                    title: string | null;
+                  }
+                | {
+                    _type: "newsletterEdition";
+                    slug: null;
+                    section: null;
+                    month:
+                      | "2024-11"
+                      | "2024-12"
+                      | "2025-01"
+                      | "2025-02"
+                      | "2025-03"
+                      | "2025-04"
+                      | "2025-05"
+                      | "2025-06"
+                      | "2025-07"
+                      | "2025-08"
+                      | "2025-09"
+                      | "2025-10"
+                      | "2025-11"
+                      | "2025-12"
+                      | "2026-01"
+                      | "2026-02"
+                      | "2026-03"
+                      | "2026-04"
+                      | "2026-05"
+                      | "2026-06"
+                      | "2026-07"
+                      | "2026-08"
+                      | "2026-09"
+                      | "2026-10"
+                      | "2026-11"
+                      | "2026-12"
+                      | "2027-01"
+                      | "2027-02";
+                    title: null;
+                  }
+                | {
+                    _type: "page";
+                    slug: string;
+                    section: "about" | "general";
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "resource";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "topic";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | null;
+            } | null;
+          }
+        | {
+            _key: string;
+            _type: "contactBlock";
+            heading?: string;
+            intro?: string;
+            useSiteContact?: boolean;
+            phone?: PhoneNumber;
+            email?: string;
+            address?: string;
+          }
+        | {
+            _key: string;
+            _type: "donateBlock";
+            heading?: string;
+            text?: string;
+          }
+        | {
+            _key: string;
+            _type: "eventListBlock";
+            heading?: string;
+            intro?: string;
+            mode?: "all" | "msl" | "topic";
+            topic?: TopicReference;
+            limit?: number;
+            topicId: string | null;
+            topicSlug: string | null;
+          }
+        | {
+            _key: string;
+            _type: "faqBlock";
+            heading?: string;
+            items: Array<{
+              _key: string;
+              question: string;
+              answer: SimpleText;
+            }>;
+          }
+        | {
+            _key: string;
+            _type: "fileBlock";
+            heading?: string;
+            intro?: string;
+            file: {
+              url: string;
+              size: number;
+              extension: string;
+              originalFilename: string | null;
+            } | null;
+            buttonLabel?: string;
+          }
+        | {
+            _key: string;
+            _type: "heroBlock";
+            heading: string;
+            text?: string;
+            image: {
+              id: string | null;
+              preview: string | null;
+              alt: string | "";
+              caption: string | null;
+              hotspot: {
+                x: number;
+                y: number;
+              } | null;
+              crop: {
+                top: number;
+                bottom: number;
+                left: number;
+                right: number;
+              } | null;
+            } | null;
+            showSearch?: boolean;
+            buttons: Array<{
+              _key: string;
+              label: string;
+              kind: "email" | "external" | "internal" | "phone" | "section";
+              section:
+                | "/about"
+                | "/articles"
+                | "/events"
+                | "/links"
+                | "/newsletter"
+                | "/resources"
+                | "/search"
+                | "/topics"
+                | "/whats-new"
+                | null;
+              url: string | null;
+              phone: string | null;
+              email: string | null;
+              target:
+                | {
+                    _type: "article";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "event";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "monthlyUpdate";
+                    slug: null;
+                    section: null;
+                    month:
+                      | "2024-11"
+                      | "2024-12"
+                      | "2025-01"
+                      | "2025-02"
+                      | "2025-03"
+                      | "2025-04"
+                      | "2025-05"
+                      | "2025-06"
+                      | "2025-07"
+                      | "2025-08"
+                      | "2025-09"
+                      | "2025-10"
+                      | "2025-11"
+                      | "2025-12"
+                      | "2026-01"
+                      | "2026-02"
+                      | "2026-03"
+                      | "2026-04"
+                      | "2026-05"
+                      | "2026-06"
+                      | "2026-07"
+                      | "2026-08"
+                      | "2026-09"
+                      | "2026-10"
+                      | "2026-11"
+                      | "2026-12"
+                      | "2027-01"
+                      | "2027-02";
+                    title: string | null;
+                  }
+                | {
+                    _type: "newsletterEdition";
+                    slug: null;
+                    section: null;
+                    month:
+                      | "2024-11"
+                      | "2024-12"
+                      | "2025-01"
+                      | "2025-02"
+                      | "2025-03"
+                      | "2025-04"
+                      | "2025-05"
+                      | "2025-06"
+                      | "2025-07"
+                      | "2025-08"
+                      | "2025-09"
+                      | "2025-10"
+                      | "2025-11"
+                      | "2025-12"
+                      | "2026-01"
+                      | "2026-02"
+                      | "2026-03"
+                      | "2026-04"
+                      | "2026-05"
+                      | "2026-06"
+                      | "2026-07"
+                      | "2026-08"
+                      | "2026-09"
+                      | "2026-10"
+                      | "2026-11"
+                      | "2026-12"
+                      | "2027-01"
+                      | "2027-02";
+                    title: null;
+                  }
+                | {
+                    _type: "page";
+                    slug: string;
+                    section: "about" | "general";
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "resource";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "topic";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | null;
+            }> | null;
+          }
+        | {
+            _key: string;
+            _type: "imageBlock";
+            heading?: string;
+            images: Array<{
+              _key: string;
+              id: string | null;
+              preview: string | null;
+              alt: string | "";
+              caption: string | null;
+              hotspot: {
+                x: number;
+                y: number;
+              } | null;
+              crop: {
+                top: number;
+                bottom: number;
+                left: number;
+                right: number;
+              } | null;
+            }>;
+          }
+        | {
+            _key: string;
+            _type: "linkListBlock";
+            heading?: string;
+            intro?: string;
+            mode?: "manual" | "topic";
+            topic?: TopicReference;
+            links?: Array<
+              {
+                _key: string;
+              } & HelpfulLinkReference
+            >;
+            limit?: number;
+            topicId: string | null;
+            topicSlug: string | null;
+            picked: Array<{
+              _id: string;
+              title: string;
+              url: string;
+              source: string;
+              summary: string;
+              publishedAt: string | null;
+            }> | null;
+          }
+        | {
+            _key: string;
+            _type: "newsletterSignupBlock";
+            heading?: string;
+            text?: string;
+            showLatest?: boolean;
+          }
+        | {
+            _key: string;
+            _type: "quickContactsBlock";
+            heading?: string;
+            contacts: Array<{
+              name: string;
+              number: PhoneNumber;
+              note?: string;
+              _type: "quickContact";
+              _key: string;
+            }>;
+          }
+        | {
+            _key: string;
+            _type: "resourceListBlock";
+            heading?: string;
+            intro?: string;
+            mode?: "manual" | "topic";
+            topic?: TopicReference;
+            resources?: Array<
+              {
+                _key: string;
+              } & ResourceReference
+            >;
+            limit?: number;
+            topicSlug: string | null;
+            topicTitle: string | null;
+            picked: Array<{
+              _id: string;
+              title: string;
+              slug: string;
+              summary: string;
+              serviceArea: "arizona" | "maricopa" | "national" | "pinal";
+              phones: Array<{
+                _key: string;
+                label: string | null;
+                number: string;
+              }> | null;
+              website: string | null;
+              address: string | null;
+              topics: Array<{
+                title: string;
+                slug: string;
+              }> | null;
+            }> | null;
+          }
+        | {
+            _key: string;
+            _type: "textBlock";
+            heading?: string;
+            body: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: "span";
+                    _key: string;
+                  }>;
+                  style?: "blockquote" | "h2" | "h3" | "normal";
+                  listItem?: "bullet" | "number";
+                  markDefs: Array<
+                    | {
+                        reference:
+                          | ArticleReference
+                          | EventReference
+                          | MonthlyUpdateReference
+                          | NewsletterEditionReference
+                          | PageReference
+                          | ResourceReference
+                          | TopicReference;
+                        _type: "internalLink";
+                        _key: string;
+                        target:
+                          | {
+                              _type: "article";
+                              slug: string;
+                              section: null;
+                              month: null;
+                              title: string;
+                            }
+                          | {
+                              _type: "event";
+                              slug: string;
+                              section: null;
+                              month: null;
+                              title: string;
+                            }
+                          | {
+                              _type: "monthlyUpdate";
+                              slug: null;
+                              section: null;
+                              month:
+                                | "2024-11"
+                                | "2024-12"
+                                | "2025-01"
+                                | "2025-02"
+                                | "2025-03"
+                                | "2025-04"
+                                | "2025-05"
+                                | "2025-06"
+                                | "2025-07"
+                                | "2025-08"
+                                | "2025-09"
+                                | "2025-10"
+                                | "2025-11"
+                                | "2025-12"
+                                | "2026-01"
+                                | "2026-02"
+                                | "2026-03"
+                                | "2026-04"
+                                | "2026-05"
+                                | "2026-06"
+                                | "2026-07"
+                                | "2026-08"
+                                | "2026-09"
+                                | "2026-10"
+                                | "2026-11"
+                                | "2026-12"
+                                | "2027-01"
+                                | "2027-02";
+                              title: string | null;
+                            }
+                          | {
+                              _type: "newsletterEdition";
+                              slug: null;
+                              section: null;
+                              month:
+                                | "2024-11"
+                                | "2024-12"
+                                | "2025-01"
+                                | "2025-02"
+                                | "2025-03"
+                                | "2025-04"
+                                | "2025-05"
+                                | "2025-06"
+                                | "2025-07"
+                                | "2025-08"
+                                | "2025-09"
+                                | "2025-10"
+                                | "2025-11"
+                                | "2025-12"
+                                | "2026-01"
+                                | "2026-02"
+                                | "2026-03"
+                                | "2026-04"
+                                | "2026-05"
+                                | "2026-06"
+                                | "2026-07"
+                                | "2026-08"
+                                | "2026-09"
+                                | "2026-10"
+                                | "2026-11"
+                                | "2026-12"
+                                | "2027-01"
+                                | "2027-02";
+                              title: null;
+                            }
+                          | {
+                              _type: "page";
+                              slug: string;
+                              section: "about" | "general";
+                              month: null;
+                              title: string;
+                            }
+                          | {
+                              _type: "resource";
+                              slug: string;
+                              section: null;
+                              month: null;
+                              title: string;
+                            }
+                          | {
+                              _type: "topic";
+                              slug: string;
+                              section: null;
+                              month: null;
+                              title: string;
+                            };
+                      }
+                    | {
+                        href: string;
+                        _type: "link";
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: "block";
+                  _key: string;
+                }
+              | {
+                  tone?: "info" | "warning";
+                  text: string;
+                  _type: "callout";
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  event: {
+                    _id: string;
+                    title: string;
+                    slug: string;
+                    start: string;
+                    end: string | null;
+                    allDay: boolean | null;
+                    repeat: {
+                      frequency:
+                        | "monthlyDate"
+                        | "monthlyWeekday"
+                        | "none"
+                        | "weekly"
+                        | null;
+                      until: string | null;
+                      skipDates: Array<string> | null;
+                    } | null;
+                    location: string;
+                    hostedByMsl: boolean | null;
+                    summary: string;
+                  };
+                  _type: "eventCard";
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: SanityFileAssetReference;
+                  media?: unknown;
+                  title: string;
+                  _type: "fileAttachment";
+                  _key: string;
+                  markDefs: null;
+                  file: {
+                    url: string;
+                    size: number;
+                    extension: string;
+                    originalFilename: string | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: "imageWithAlt";
+                  asset?: SanityImageAssetReference;
+                  media?: unknown;
+                  hotspot: {
+                    x: number;
+                    y: number;
+                  } | null;
+                  crop: {
+                    top: number;
+                    bottom: number;
+                    left: number;
+                    right: number;
+                  } | null;
+                  alt: string | "";
+                  caption: string | null;
+                  markDefs: null;
+                  id: string | null;
+                  preview: string | null;
+                }
+              | {
+                  resource: {
+                    _id: string;
+                    title: string;
+                    slug: string;
+                    summary: string;
+                    serviceArea: "arizona" | "maricopa" | "national" | "pinal";
+                    phones: Array<{
+                      _key: string;
+                      label: string | null;
+                      number: string;
+                    }> | null;
+                    website: string | null;
+                    address: string | null;
+                    topics: Array<{
+                      title: string;
+                      slug: string;
+                    }> | null;
+                  };
+                  _type: "resourceCard";
+                  _key: string;
+                  markDefs: null;
+                }
+            >;
+          }
+        | {
+            _key: string;
+            _type: "topicsBlock";
+            heading?: string;
+            intro?: string;
+          }
+        | {
+            _key: string;
+            _type: "videoBlock";
+            heading?: string;
+            url: string;
+            caption: string;
+          }
+        | {
+            _key: string;
+            _type: "whatsNewBlock";
+            heading?: string;
+            buttonLabel?: string;
+          }
+      >;
+    }
+  | {
+      sections: Array<
+        | {
+            heading?: string;
+            includeEvents?: boolean;
+            hiddenEvents?: Array<
+              {
+                _key: string;
+              } & EventReference
+            >;
+            extraRows?: Array<{
+              when: string;
+              what: string;
+              where?: string;
+              _type: "row";
+              _key: string;
+            }>;
+            _type: "comingUpSection";
+            _key: string;
+          }
+        | {
+            heading: string;
+            pages: Array<
+              {
+                _key: string;
+              } & ImageWithAlt
+            >;
+            _type: "flyerSection";
+            _key: string;
+          }
+        | {
+            heading: string;
+            body?: RichText;
+            _type: "funSection";
+            _key: string;
+          }
+        | {
+            heading: string;
+            article?: ArticleReference;
+            byline?: string;
+            body?: RichText;
+            image?: ImageWithAlt;
+            _type: "storySection";
+            _key: string;
+          }
+      >;
+    }
+  | {
+      sections: null;
+    }
+  | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryTopics
+// Query: *[_type == "topic"] | order(order asc){    _id,    title,    "slug": slug.current,    description,    icon,    "resourceCount": count(*[_type == "resource" && references(^._id)])  }
+export type QueryTopicsResult = Array<{
+  _id: string;
+  title: string;
+  slug: string;
+  description: string;
+  icon:
+    | "brain"
+    | "bus"
+    | "flower"
+    | "hand-heart"
+    | "heart-pulse"
+    | "house"
+    | "medal"
+    | "paw-print"
+    | "piggy-bank"
+    | "scale"
+    | "shield-check"
+    | "sun"
+    | "users"
+    | "utensils";
+  resourceCount: number;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryPage
+// Query: *[_type == "page" && slug.current == $slug && section == $section][0]{    _id,    title,    description,    section,    "slug": slug.current,    sections[]{   ...,  _key,  _type,  _type == "heroBlock" => { image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } }, buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } } },  _type == "textBlock" => { body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } } },  _type == "imageBlock" => { images[]{ _key,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },  _type == "buttonsBlock" => { buttons[]{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } } },  _type == "calloutBlock" => { link{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } } },  _type == "resourceListBlock" => {    "topicSlug": topic->slug.current,    "topicTitle": topic->title,    "picked": resources[]->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } }  },  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },  _type == "linkListBlock" => {    "topicId": topic._ref,    "topicSlug": topic->slug.current,    "picked": links[]->{   _id,  title,  url,  source,  summary,  publishedAt }  },  _type == "faqBlock" => { items[]{ _key, question, answer } },  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } } }  }
+export type QueryPageResult = {
+  _id: string;
+  title: string;
+  description: string | null;
+  section: "about" | "general";
+  slug: string;
+  sections: Array<
+    | {
+        _key: string;
+        _type: "articleListBlock";
+        heading?: string;
+        mode?: "joans-corner" | "latest" | "topic";
+        topic?: TopicReference;
+        limit?: number;
+        topicId: string | null;
+        topicSlug: string | null;
+      }
+    | {
+        _key: string;
+        _type: "buttonsBlock";
+        heading?: string;
+        intro?: string;
+        buttons: Array<{
+          _key: string;
+          label: string;
+          kind: "email" | "external" | "internal" | "phone" | "section";
+          section:
+            | "/about"
+            | "/articles"
+            | "/events"
+            | "/links"
+            | "/newsletter"
+            | "/resources"
+            | "/search"
+            | "/topics"
+            | "/whats-new"
+            | null;
+          url: string | null;
+          phone: string | null;
+          email: string | null;
+          target:
+            | {
+                _type: "article";
+                slug: string;
+                section: null;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "event";
+                slug: string;
+                section: null;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "monthlyUpdate";
+                slug: null;
+                section: null;
+                month:
+                  | "2024-11"
+                  | "2024-12"
+                  | "2025-01"
+                  | "2025-02"
+                  | "2025-03"
+                  | "2025-04"
+                  | "2025-05"
+                  | "2025-06"
+                  | "2025-07"
+                  | "2025-08"
+                  | "2025-09"
+                  | "2025-10"
+                  | "2025-11"
+                  | "2025-12"
+                  | "2026-01"
+                  | "2026-02"
+                  | "2026-03"
+                  | "2026-04"
+                  | "2026-05"
+                  | "2026-06"
+                  | "2026-07"
+                  | "2026-08"
+                  | "2026-09"
+                  | "2026-10"
+                  | "2026-11"
+                  | "2026-12"
+                  | "2027-01"
+                  | "2027-02";
+                title: string | null;
+              }
+            | {
+                _type: "newsletterEdition";
+                slug: null;
+                section: null;
+                month:
+                  | "2024-11"
+                  | "2024-12"
+                  | "2025-01"
+                  | "2025-02"
+                  | "2025-03"
+                  | "2025-04"
+                  | "2025-05"
+                  | "2025-06"
+                  | "2025-07"
+                  | "2025-08"
+                  | "2025-09"
+                  | "2025-10"
+                  | "2025-11"
+                  | "2025-12"
+                  | "2026-01"
+                  | "2026-02"
+                  | "2026-03"
+                  | "2026-04"
+                  | "2026-05"
+                  | "2026-06"
+                  | "2026-07"
+                  | "2026-08"
+                  | "2026-09"
+                  | "2026-10"
+                  | "2026-11"
+                  | "2026-12"
+                  | "2027-01"
+                  | "2027-02";
+                title: null;
+              }
+            | {
+                _type: "page";
+                slug: string;
+                section: "about" | "general";
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "resource";
+                slug: string;
+                section: null;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "topic";
+                slug: string;
+                section: null;
+                month: null;
+                title: string;
+              }
+            | null;
+        }>;
+      }
+    | {
+        _key: string;
+        _type: "calloutBlock";
+        tone?: "info" | "warning";
+        text: string;
+        link: {
+          _key: null;
+          label: string;
+          kind: "email" | "external" | "internal" | "phone" | "section";
+          section:
+            | "/about"
+            | "/articles"
+            | "/events"
+            | "/links"
+            | "/newsletter"
+            | "/resources"
+            | "/search"
+            | "/topics"
+            | "/whats-new"
+            | null;
+          url: string | null;
+          phone: string | null;
+          email: string | null;
+          target:
+            | {
+                _type: "article";
+                slug: string;
+                section: null;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "event";
+                slug: string;
+                section: null;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "monthlyUpdate";
+                slug: null;
+                section: null;
+                month:
+                  | "2024-11"
+                  | "2024-12"
+                  | "2025-01"
+                  | "2025-02"
+                  | "2025-03"
+                  | "2025-04"
+                  | "2025-05"
+                  | "2025-06"
+                  | "2025-07"
+                  | "2025-08"
+                  | "2025-09"
+                  | "2025-10"
+                  | "2025-11"
+                  | "2025-12"
+                  | "2026-01"
+                  | "2026-02"
+                  | "2026-03"
+                  | "2026-04"
+                  | "2026-05"
+                  | "2026-06"
+                  | "2026-07"
+                  | "2026-08"
+                  | "2026-09"
+                  | "2026-10"
+                  | "2026-11"
+                  | "2026-12"
+                  | "2027-01"
+                  | "2027-02";
+                title: string | null;
+              }
+            | {
+                _type: "newsletterEdition";
+                slug: null;
+                section: null;
+                month:
+                  | "2024-11"
+                  | "2024-12"
+                  | "2025-01"
+                  | "2025-02"
+                  | "2025-03"
+                  | "2025-04"
+                  | "2025-05"
+                  | "2025-06"
+                  | "2025-07"
+                  | "2025-08"
+                  | "2025-09"
+                  | "2025-10"
+                  | "2025-11"
+                  | "2025-12"
+                  | "2026-01"
+                  | "2026-02"
+                  | "2026-03"
+                  | "2026-04"
+                  | "2026-05"
+                  | "2026-06"
+                  | "2026-07"
+                  | "2026-08"
+                  | "2026-09"
+                  | "2026-10"
+                  | "2026-11"
+                  | "2026-12"
+                  | "2027-01"
+                  | "2027-02";
+                title: null;
+              }
+            | {
+                _type: "page";
+                slug: string;
+                section: "about" | "general";
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "resource";
+                slug: string;
+                section: null;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "topic";
+                slug: string;
+                section: null;
+                month: null;
+                title: string;
+              }
+            | null;
+        } | null;
+      }
+    | {
+        _key: string;
+        _type: "contactBlock";
+        heading?: string;
+        intro?: string;
+        useSiteContact?: boolean;
+        phone?: PhoneNumber;
+        email?: string;
+        address?: string;
+      }
+    | {
+        _key: string;
+        _type: "donateBlock";
+        heading?: string;
+        text?: string;
+      }
+    | {
+        _key: string;
+        _type: "eventListBlock";
+        heading?: string;
+        intro?: string;
+        mode?: "all" | "msl" | "topic";
+        topic?: TopicReference;
+        limit?: number;
+        topicId: string | null;
+        topicSlug: string | null;
+      }
+    | {
+        _key: string;
+        _type: "faqBlock";
+        heading?: string;
+        items: Array<{
+          _key: string;
+          question: string;
+          answer: SimpleText;
+        }>;
+      }
+    | {
+        _key: string;
+        _type: "fileBlock";
+        heading?: string;
+        intro?: string;
+        file: {
+          url: string;
+          size: number;
+          extension: string;
+          originalFilename: string | null;
+        } | null;
+        buttonLabel?: string;
+      }
+    | {
+        _key: string;
+        _type: "heroBlock";
+        heading: string;
+        text?: string;
         image: {
           id: string | null;
           preview: string | null;
           alt: string | "";
+          caption: string | null;
           hotspot: {
             x: number;
             y: number;
           } | null;
           crop: {
+            top: number;
             bottom: number;
             left: number;
             right: number;
-            top: number;
           } | null;
-        };
-      };
-      categories: Array<{
-        _id: string;
-        title: string;
-        slug: string;
-      }>;
-      publishedAt: string;
-    }
-  | {
-      _id: string;
-      _type: "service";
-      title: string;
-      description: BlockContent | null;
-      audience: BlockContent | null;
-      website: string | null;
-      phone: string | null;
-      address: string | null;
-      businessHours: Array<
-        {
+        } | null;
+        showSearch?: boolean;
+        buttons: Array<{
           _key: string;
-        } & DayAndTime
-      > | null;
-      notes: BlockContent | null;
-      attachments: Array<{
+          label: string;
+          kind: "email" | "external" | "internal" | "phone" | "section";
+          section:
+            | "/about"
+            | "/articles"
+            | "/events"
+            | "/links"
+            | "/newsletter"
+            | "/resources"
+            | "/search"
+            | "/topics"
+            | "/whats-new"
+            | null;
+          url: string | null;
+          phone: string | null;
+          email: string | null;
+          target:
+            | {
+                _type: "article";
+                slug: string;
+                section: null;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "event";
+                slug: string;
+                section: null;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "monthlyUpdate";
+                slug: null;
+                section: null;
+                month:
+                  | "2024-11"
+                  | "2024-12"
+                  | "2025-01"
+                  | "2025-02"
+                  | "2025-03"
+                  | "2025-04"
+                  | "2025-05"
+                  | "2025-06"
+                  | "2025-07"
+                  | "2025-08"
+                  | "2025-09"
+                  | "2025-10"
+                  | "2025-11"
+                  | "2025-12"
+                  | "2026-01"
+                  | "2026-02"
+                  | "2026-03"
+                  | "2026-04"
+                  | "2026-05"
+                  | "2026-06"
+                  | "2026-07"
+                  | "2026-08"
+                  | "2026-09"
+                  | "2026-10"
+                  | "2026-11"
+                  | "2026-12"
+                  | "2027-01"
+                  | "2027-02";
+                title: string | null;
+              }
+            | {
+                _type: "newsletterEdition";
+                slug: null;
+                section: null;
+                month:
+                  | "2024-11"
+                  | "2024-12"
+                  | "2025-01"
+                  | "2025-02"
+                  | "2025-03"
+                  | "2025-04"
+                  | "2025-05"
+                  | "2025-06"
+                  | "2025-07"
+                  | "2025-08"
+                  | "2025-09"
+                  | "2025-10"
+                  | "2025-11"
+                  | "2025-12"
+                  | "2026-01"
+                  | "2026-02"
+                  | "2026-03"
+                  | "2026-04"
+                  | "2026-05"
+                  | "2026-06"
+                  | "2026-07"
+                  | "2026-08"
+                  | "2026-09"
+                  | "2026-10"
+                  | "2026-11"
+                  | "2026-12"
+                  | "2027-01"
+                  | "2027-02";
+                title: null;
+              }
+            | {
+                _type: "page";
+                slug: string;
+                section: "about" | "general";
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "resource";
+                slug: string;
+                section: null;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "topic";
+                slug: string;
+                section: null;
+                month: null;
+                title: string;
+              }
+            | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "imageBlock";
+        heading?: string;
+        images: Array<{
+          _key: string;
+          id: string | null;
+          preview: string | null;
+          alt: string | "";
+          caption: string | null;
+          hotspot: {
+            x: number;
+            y: number;
+          } | null;
+          crop: {
+            top: number;
+            bottom: number;
+            left: number;
+            right: number;
+          } | null;
+        }>;
+      }
+    | {
+        _key: string;
+        _type: "linkListBlock";
+        heading?: string;
+        intro?: string;
+        mode?: "manual" | "topic";
+        topic?: TopicReference;
+        links?: Array<
+          {
+            _key: string;
+          } & HelpfulLinkReference
+        >;
+        limit?: number;
+        topicId: string | null;
+        topicSlug: string | null;
+        picked: Array<{
+          _id: string;
+          title: string;
+          url: string;
+          source: string;
+          summary: string;
+          publishedAt: string | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "newsletterSignupBlock";
+        heading?: string;
+        text?: string;
+        showLatest?: boolean;
+      }
+    | {
+        _key: string;
+        _type: "quickContactsBlock";
+        heading?: string;
+        contacts: Array<{
+          name: string;
+          number: PhoneNumber;
+          note?: string;
+          _type: "quickContact";
+          _key: string;
+        }>;
+      }
+    | {
+        _key: string;
+        _type: "resourceListBlock";
+        heading?: string;
+        intro?: string;
+        mode?: "manual" | "topic";
+        topic?: TopicReference;
+        resources?: Array<
+          {
+            _key: string;
+          } & ResourceReference
+        >;
+        limit?: number;
+        topicSlug: string | null;
+        topicTitle: string | null;
+        picked: Array<{
+          _id: string;
+          title: string;
+          slug: string;
+          summary: string;
+          serviceArea: "arizona" | "maricopa" | "national" | "pinal";
+          phones: Array<{
+            _key: string;
+            label: string | null;
+            number: string;
+          }> | null;
+          website: string | null;
+          address: string | null;
+          topics: Array<{
+            title: string;
+            slug: string;
+          }> | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "textBlock";
+        heading?: string;
+        body: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h2" | "h3" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs: Array<
+                | {
+                    reference:
+                      | ArticleReference
+                      | EventReference
+                      | MonthlyUpdateReference
+                      | NewsletterEditionReference
+                      | PageReference
+                      | ResourceReference
+                      | TopicReference;
+                    _type: "internalLink";
+                    _key: string;
+                    target:
+                      | {
+                          _type: "article";
+                          slug: string;
+                          section: null;
+                          month: null;
+                          title: string;
+                        }
+                      | {
+                          _type: "event";
+                          slug: string;
+                          section: null;
+                          month: null;
+                          title: string;
+                        }
+                      | {
+                          _type: "monthlyUpdate";
+                          slug: null;
+                          section: null;
+                          month:
+                            | "2024-11"
+                            | "2024-12"
+                            | "2025-01"
+                            | "2025-02"
+                            | "2025-03"
+                            | "2025-04"
+                            | "2025-05"
+                            | "2025-06"
+                            | "2025-07"
+                            | "2025-08"
+                            | "2025-09"
+                            | "2025-10"
+                            | "2025-11"
+                            | "2025-12"
+                            | "2026-01"
+                            | "2026-02"
+                            | "2026-03"
+                            | "2026-04"
+                            | "2026-05"
+                            | "2026-06"
+                            | "2026-07"
+                            | "2026-08"
+                            | "2026-09"
+                            | "2026-10"
+                            | "2026-11"
+                            | "2026-12"
+                            | "2027-01"
+                            | "2027-02";
+                          title: string | null;
+                        }
+                      | {
+                          _type: "newsletterEdition";
+                          slug: null;
+                          section: null;
+                          month:
+                            | "2024-11"
+                            | "2024-12"
+                            | "2025-01"
+                            | "2025-02"
+                            | "2025-03"
+                            | "2025-04"
+                            | "2025-05"
+                            | "2025-06"
+                            | "2025-07"
+                            | "2025-08"
+                            | "2025-09"
+                            | "2025-10"
+                            | "2025-11"
+                            | "2025-12"
+                            | "2026-01"
+                            | "2026-02"
+                            | "2026-03"
+                            | "2026-04"
+                            | "2026-05"
+                            | "2026-06"
+                            | "2026-07"
+                            | "2026-08"
+                            | "2026-09"
+                            | "2026-10"
+                            | "2026-11"
+                            | "2026-12"
+                            | "2027-01"
+                            | "2027-02";
+                          title: null;
+                        }
+                      | {
+                          _type: "page";
+                          slug: string;
+                          section: "about" | "general";
+                          month: null;
+                          title: string;
+                        }
+                      | {
+                          _type: "resource";
+                          slug: string;
+                          section: null;
+                          month: null;
+                          title: string;
+                        }
+                      | {
+                          _type: "topic";
+                          slug: string;
+                          section: null;
+                          month: null;
+                          title: string;
+                        };
+                  }
+                | {
+                    href: string;
+                    _type: "link";
+                    _key: string;
+                  }
+              > | null;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              tone?: "info" | "warning";
+              text: string;
+              _type: "callout";
+              _key: string;
+              markDefs: null;
+            }
+          | {
+              event: {
+                _id: string;
+                title: string;
+                slug: string;
+                start: string;
+                end: string | null;
+                allDay: boolean | null;
+                repeat: {
+                  frequency:
+                    "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
+                  until: string | null;
+                  skipDates: Array<string> | null;
+                } | null;
+                location: string;
+                hostedByMsl: boolean | null;
+                summary: string;
+              };
+              _type: "eventCard";
+              _key: string;
+              markDefs: null;
+            }
+          | {
+              asset?: SanityFileAssetReference;
+              media?: unknown;
+              title: string;
+              _type: "fileAttachment";
+              _key: string;
+              markDefs: null;
+              file: {
+                url: string;
+                size: number;
+                extension: string;
+                originalFilename: string | null;
+              } | null;
+            }
+          | {
+              _key: string;
+              _type: "imageWithAlt";
+              asset?: SanityImageAssetReference;
+              media?: unknown;
+              hotspot: {
+                x: number;
+                y: number;
+              } | null;
+              crop: {
+                top: number;
+                bottom: number;
+                left: number;
+                right: number;
+              } | null;
+              alt: string | "";
+              caption: string | null;
+              markDefs: null;
+              id: string | null;
+              preview: string | null;
+            }
+          | {
+              resource: {
+                _id: string;
+                title: string;
+                slug: string;
+                summary: string;
+                serviceArea: "arizona" | "maricopa" | "national" | "pinal";
+                phones: Array<{
+                  _key: string;
+                  label: string | null;
+                  number: string;
+                }> | null;
+                website: string | null;
+                address: string | null;
+                topics: Array<{
+                  title: string;
+                  slug: string;
+                }> | null;
+              };
+              _type: "resourceCard";
+              _key: string;
+              markDefs: null;
+            }
+        >;
+      }
+    | {
+        _key: string;
+        _type: "topicsBlock";
+        heading?: string;
+        intro?: string;
+      }
+    | {
+        _key: string;
+        _type: "videoBlock";
+        heading?: string;
+        url: string;
+        caption: string;
+      }
+    | {
+        _key: string;
+        _type: "whatsNewBlock";
+        heading?: string;
+        buttonLabel?: string;
+      }
+  >;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryAboutPages
+// Query: *[_type == "page" && section == "about"] | order(title asc){    _id, title, "slug": slug.current, description  }
+export type QueryAboutPagesResult = Array<{
+  _id: string;
+  title: string;
+  slug: string;
+  description: string | null;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryPagePaths
+// Query: *[_type == "page" && defined(slug.current)]{ "slug": slug.current, section }
+export type QueryPagePathsResult = Array<{
+  slug: string;
+  section: "about" | "general";
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryTopic
+// Query: *[_type == "topic" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    description,    icon,    "resources": *[_type == "resource" && references(^._id)] | order(title asc){   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } },    "links": *[_type == "helpfulLink" && references(^._id)] | order(publishedAt desc)[0...12]{   _id,  title,  url,  source,  summary,  publishedAt },    "linkCount": count(*[_type == "helpfulLink" && references(^._id)]),    "articles": *[_type == "article" && references(^._id)] | order(publishedAt desc)[0...6]{   _id,  title,  "slug": slug.current,  summary,  publishedAt,  series,  "author": author->{ name, "slug": slug.current },  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } }  }
+export type QueryTopicResult = {
+  _id: string;
+  title: string;
+  slug: string;
+  description: string;
+  icon:
+    | "brain"
+    | "bus"
+    | "flower"
+    | "hand-heart"
+    | "heart-pulse"
+    | "house"
+    | "medal"
+    | "paw-print"
+    | "piggy-bank"
+    | "scale"
+    | "shield-check"
+    | "sun"
+    | "users"
+    | "utensils";
+  resources: Array<{
+    _id: string;
+    title: string;
+    slug: string;
+    summary: string;
+    serviceArea: "arizona" | "maricopa" | "national" | "pinal";
+    phones: Array<{
+      _key: string;
+      label: string | null;
+      number: string;
+    }> | null;
+    website: string | null;
+    address: string | null;
+    topics: Array<{
+      title: string;
+      slug: string;
+    }> | null;
+  }>;
+  links: Array<{
+    _id: string;
+    title: string;
+    url: string;
+    source: string;
+    summary: string;
+    publishedAt: string | null;
+  }>;
+  linkCount: number;
+  articles: Array<{
+    _id: string;
+    title: string;
+    slug: string;
+    summary: string;
+    publishedAt: string;
+    series: "joans-corner" | "none" | "rons-ramblings" | null;
+    author: {
+      name: string;
+      slug: string;
+    };
+    mainImage: {
+      id: string | null;
+      preview: string | null;
+      alt: string | "";
+      caption: string | null;
+      hotspot: {
+        x: number;
+        y: number;
+      } | null;
+      crop: {
+        top: number;
+        bottom: number;
+        left: number;
+        right: number;
+      } | null;
+    } | null;
+  }>;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryResourcesCount
+// Query: count(*[  _type == "resource"  && ($topic == "" || $topic in topics[]->slug.current)  && ($area == "" || serviceArea == $area)  && ($q == "" || title match $q + "*" || summary match $q + "*" || pt::text(description) match $q + "*")])
+export type QueryResourcesCountResult = number;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryResourcesForPrint
+// Query: *[  _type == "resource"  && ($topic == "" || $topic in topics[]->slug.current)  && ($area == "" || serviceArea == $area)  && ($q == "" || title match $q + "*" || summary match $q + "*" || pt::text(description) match $q + "*")] | order(title asc){      _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current },    hours[]{ day, opens, closes },    hoursNote  }
+export type QueryResourcesForPrintResult = Array<{
+  _id: string;
+  title: string;
+  slug: string;
+  summary: string;
+  serviceArea: "arizona" | "maricopa" | "national" | "pinal";
+  phones: Array<{
+    _key: string;
+    label: string | null;
+    number: string;
+  }> | null;
+  website: string | null;
+  address: string | null;
+  topics: Array<{
+    title: string;
+    slug: string;
+  }> | null;
+  hours: Array<{
+    day:
+      | "Friday"
+      | "Monday"
+      | "Saturday"
+      | "Sunday"
+      | "Thursday"
+      | "Tuesday"
+      | "Wednesday";
+    opens:
+      | "00:00"
+      | "00:30"
+      | "01:00"
+      | "01:30"
+      | "02:00"
+      | "02:30"
+      | "03:00"
+      | "03:30"
+      | "04:00"
+      | "04:30"
+      | "05:00"
+      | "05:30"
+      | "06:00"
+      | "06:30"
+      | "07:00"
+      | "07:30"
+      | "08:00"
+      | "08:30"
+      | "09:00"
+      | "09:30"
+      | "10:00"
+      | "10:30"
+      | "11:00"
+      | "11:30"
+      | "12:00"
+      | "12:30"
+      | "13:00"
+      | "13:30"
+      | "14:00"
+      | "14:30"
+      | "15:00"
+      | "15:30"
+      | "16:00"
+      | "16:30"
+      | "17:00"
+      | "17:30"
+      | "18:00"
+      | "18:30"
+      | "19:00"
+      | "19:30"
+      | "20:00"
+      | "20:30"
+      | "21:00"
+      | "21:30"
+      | "22:00"
+      | "22:30"
+      | "23:00"
+      | "23:30";
+    closes:
+      | "00:00"
+      | "00:30"
+      | "01:00"
+      | "01:30"
+      | "02:00"
+      | "02:30"
+      | "03:00"
+      | "03:30"
+      | "04:00"
+      | "04:30"
+      | "05:00"
+      | "05:30"
+      | "06:00"
+      | "06:30"
+      | "07:00"
+      | "07:30"
+      | "08:00"
+      | "08:30"
+      | "09:00"
+      | "09:30"
+      | "10:00"
+      | "10:30"
+      | "11:00"
+      | "11:30"
+      | "12:00"
+      | "12:30"
+      | "13:00"
+      | "13:30"
+      | "14:00"
+      | "14:30"
+      | "15:00"
+      | "15:30"
+      | "16:00"
+      | "16:30"
+      | "17:00"
+      | "17:30"
+      | "18:00"
+      | "18:30"
+      | "19:00"
+      | "19:30"
+      | "20:00"
+      | "20:30"
+      | "21:00"
+      | "21:30"
+      | "22:00"
+      | "22:30"
+      | "23:00"
+      | "23:30";
+  }> | null;
+  hoursNote: string | null;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryResource
+// Query: *[_type == "resource" && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current },    email,    isGovernment,    hours[]{ _key, day, opens, closes },    hoursNote,    description[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } },    eligibility,    cost,    attachments[]{ _key, title, "file": asset->{ url, size, extension } },    lastVerified,    _updatedAt  }
+export type QueryResourceResult = {
+  _id: string;
+  title: string;
+  slug: string;
+  summary: string;
+  serviceArea: "arizona" | "maricopa" | "national" | "pinal";
+  phones: Array<{
+    _key: string;
+    label: string | null;
+    number: string;
+  }> | null;
+  website: string | null;
+  address: string | null;
+  topics: Array<{
+    title: string;
+    slug: string;
+  }> | null;
+  email: string | null;
+  isGovernment: boolean | null;
+  hours: Array<{
+    _key: string;
+    day:
+      | "Friday"
+      | "Monday"
+      | "Saturday"
+      | "Sunday"
+      | "Thursday"
+      | "Tuesday"
+      | "Wednesday";
+    opens:
+      | "00:00"
+      | "00:30"
+      | "01:00"
+      | "01:30"
+      | "02:00"
+      | "02:30"
+      | "03:00"
+      | "03:30"
+      | "04:00"
+      | "04:30"
+      | "05:00"
+      | "05:30"
+      | "06:00"
+      | "06:30"
+      | "07:00"
+      | "07:30"
+      | "08:00"
+      | "08:30"
+      | "09:00"
+      | "09:30"
+      | "10:00"
+      | "10:30"
+      | "11:00"
+      | "11:30"
+      | "12:00"
+      | "12:30"
+      | "13:00"
+      | "13:30"
+      | "14:00"
+      | "14:30"
+      | "15:00"
+      | "15:30"
+      | "16:00"
+      | "16:30"
+      | "17:00"
+      | "17:30"
+      | "18:00"
+      | "18:30"
+      | "19:00"
+      | "19:30"
+      | "20:00"
+      | "20:30"
+      | "21:00"
+      | "21:30"
+      | "22:00"
+      | "22:30"
+      | "23:00"
+      | "23:30";
+    closes:
+      | "00:00"
+      | "00:30"
+      | "01:00"
+      | "01:30"
+      | "02:00"
+      | "02:30"
+      | "03:00"
+      | "03:30"
+      | "04:00"
+      | "04:30"
+      | "05:00"
+      | "05:30"
+      | "06:00"
+      | "06:30"
+      | "07:00"
+      | "07:30"
+      | "08:00"
+      | "08:30"
+      | "09:00"
+      | "09:30"
+      | "10:00"
+      | "10:30"
+      | "11:00"
+      | "11:30"
+      | "12:00"
+      | "12:30"
+      | "13:00"
+      | "13:30"
+      | "14:00"
+      | "14:30"
+      | "15:00"
+      | "15:30"
+      | "16:00"
+      | "16:30"
+      | "17:00"
+      | "17:30"
+      | "18:00"
+      | "18:30"
+      | "19:00"
+      | "19:30"
+      | "20:00"
+      | "20:30"
+      | "21:00"
+      | "21:30"
+      | "22:00"
+      | "22:30"
+      | "23:00"
+      | "23:30";
+  }> | null;
+  hoursNote: string | null;
+  description: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal";
+    listItem?: "bullet" | "number";
+    markDefs: Array<
+      | {
+          reference:
+            | ArticleReference
+            | EventReference
+            | MonthlyUpdateReference
+            | NewsletterEditionReference
+            | PageReference
+            | ResourceReference
+            | TopicReference;
+          _type: "internalLink";
+          _key: string;
+          target:
+            | {
+                _type: "article";
+                slug: string;
+                section: null;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "event";
+                slug: string;
+                section: null;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "monthlyUpdate";
+                slug: null;
+                section: null;
+                month:
+                  | "2024-11"
+                  | "2024-12"
+                  | "2025-01"
+                  | "2025-02"
+                  | "2025-03"
+                  | "2025-04"
+                  | "2025-05"
+                  | "2025-06"
+                  | "2025-07"
+                  | "2025-08"
+                  | "2025-09"
+                  | "2025-10"
+                  | "2025-11"
+                  | "2025-12"
+                  | "2026-01"
+                  | "2026-02"
+                  | "2026-03"
+                  | "2026-04"
+                  | "2026-05"
+                  | "2026-06"
+                  | "2026-07"
+                  | "2026-08"
+                  | "2026-09"
+                  | "2026-10"
+                  | "2026-11"
+                  | "2026-12"
+                  | "2027-01"
+                  | "2027-02";
+                title: string | null;
+              }
+            | {
+                _type: "newsletterEdition";
+                slug: null;
+                section: null;
+                month:
+                  | "2024-11"
+                  | "2024-12"
+                  | "2025-01"
+                  | "2025-02"
+                  | "2025-03"
+                  | "2025-04"
+                  | "2025-05"
+                  | "2025-06"
+                  | "2025-07"
+                  | "2025-08"
+                  | "2025-09"
+                  | "2025-10"
+                  | "2025-11"
+                  | "2025-12"
+                  | "2026-01"
+                  | "2026-02"
+                  | "2026-03"
+                  | "2026-04"
+                  | "2026-05"
+                  | "2026-06"
+                  | "2026-07"
+                  | "2026-08"
+                  | "2026-09"
+                  | "2026-10"
+                  | "2026-11"
+                  | "2026-12"
+                  | "2027-01"
+                  | "2027-02";
+                title: null;
+              }
+            | {
+                _type: "page";
+                slug: string;
+                section: "about" | "general";
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "resource";
+                slug: string;
+                section: null;
+                month: null;
+                title: string;
+              }
+            | {
+                _type: "topic";
+                slug: string;
+                section: null;
+                month: null;
+                title: string;
+              };
+        }
+      | {
+          href: string;
+          _type: "link";
+          _key: string;
+        }
+    > | null;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }> | null;
+  eligibility: string | null;
+  cost: string | null;
+  attachments: Array<{
+    _key: string;
+    title: string;
+    file: {
+      url: string;
+      size: number;
+      extension: string;
+    } | null;
+  }> | null;
+  lastVerified: string | null;
+  _updatedAt: string;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryResourcePaths
+// Query: *[_type == "resource" && defined(slug.current)].slug.current
+export type QueryResourcePathsResult = Array<string>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryLinksCount
+// Query: count(*[  _type == "helpfulLink" && ($topic == "" || $topic in topics[]->slug.current)])
+export type QueryLinksCountResult = number;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryLinksByTopic
+// Query: *[_type == "helpfulLink" && references($topicId)] | order(publishedAt desc)[0...30]{   _id,  title,  url,  source,  summary,  publishedAt }
+export type QueryLinksByTopicResult = Array<{
+  _id: string;
+  title: string;
+  url: string;
+  source: string;
+  summary: string;
+  publishedAt: string | null;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryResourcesByTopicSlug
+// Query: *[_type == "resource" && $topic in topics[]->slug.current] | order(title asc)[0...30]{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } }
+export type QueryResourcesByTopicSlugResult = Array<{
+  _id: string;
+  title: string;
+  slug: string;
+  summary: string;
+  serviceArea: "arizona" | "maricopa" | "national" | "pinal";
+  phones: Array<{
+    _key: string;
+    label: string | null;
+    number: string;
+  }> | null;
+  website: string | null;
+  address: string | null;
+  topics: Array<{
+    title: string;
+    slug: string;
+  }> | null;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryArticlesCount
+// Query: count(*[  _type == "article"  && ($series == "" || series == $series)  && ($topicId == "" || references($topicId))])
+export type QueryArticlesCountResult = number;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryArticle
+// Query: *[_type == "article" && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  summary,  publishedAt,  series,  "author": author->{ name, "slug": slug.current },  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    "author": author->{ name, "slug": slug.current, bio, image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },    "topics": topics[]->{ title, "slug": slug.current },    body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } },    _updatedAt  }
+export type QueryArticleResult = {
+  _id: string;
+  title: string;
+  slug: string;
+  summary: string;
+  publishedAt: string;
+  series: "joans-corner" | "none" | "rons-ramblings" | null;
+  author: {
+    name: string;
+    slug: string;
+    bio: string | null;
+    image: {
+      id: string | null;
+      preview: string | null;
+      alt: string | "";
+      caption: string | null;
+      hotspot: {
+        x: number;
+        y: number;
+      } | null;
+      crop: {
+        top: number;
+        bottom: number;
+        left: number;
+        right: number;
+      } | null;
+    } | null;
+  };
+  mainImage: {
+    id: string | null;
+    preview: string | null;
+    alt: string | "";
+    caption: string | null;
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      top: number;
+      bottom: number;
+      left: number;
+      right: number;
+    } | null;
+  } | null;
+  topics: Array<{
+    title: string;
+    slug: string;
+  }> | null;
+  body: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h2" | "h3" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs: Array<
+          | {
+              reference:
+                | ArticleReference
+                | EventReference
+                | MonthlyUpdateReference
+                | NewsletterEditionReference
+                | PageReference
+                | ResourceReference
+                | TopicReference;
+              _type: "internalLink";
+              _key: string;
+              target:
+                | {
+                    _type: "article";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "event";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "monthlyUpdate";
+                    slug: null;
+                    section: null;
+                    month:
+                      | "2024-11"
+                      | "2024-12"
+                      | "2025-01"
+                      | "2025-02"
+                      | "2025-03"
+                      | "2025-04"
+                      | "2025-05"
+                      | "2025-06"
+                      | "2025-07"
+                      | "2025-08"
+                      | "2025-09"
+                      | "2025-10"
+                      | "2025-11"
+                      | "2025-12"
+                      | "2026-01"
+                      | "2026-02"
+                      | "2026-03"
+                      | "2026-04"
+                      | "2026-05"
+                      | "2026-06"
+                      | "2026-07"
+                      | "2026-08"
+                      | "2026-09"
+                      | "2026-10"
+                      | "2026-11"
+                      | "2026-12"
+                      | "2027-01"
+                      | "2027-02";
+                    title: string | null;
+                  }
+                | {
+                    _type: "newsletterEdition";
+                    slug: null;
+                    section: null;
+                    month:
+                      | "2024-11"
+                      | "2024-12"
+                      | "2025-01"
+                      | "2025-02"
+                      | "2025-03"
+                      | "2025-04"
+                      | "2025-05"
+                      | "2025-06"
+                      | "2025-07"
+                      | "2025-08"
+                      | "2025-09"
+                      | "2025-10"
+                      | "2025-11"
+                      | "2025-12"
+                      | "2026-01"
+                      | "2026-02"
+                      | "2026-03"
+                      | "2026-04"
+                      | "2026-05"
+                      | "2026-06"
+                      | "2026-07"
+                      | "2026-08"
+                      | "2026-09"
+                      | "2026-10"
+                      | "2026-11"
+                      | "2026-12"
+                      | "2027-01"
+                      | "2027-02";
+                    title: null;
+                  }
+                | {
+                    _type: "page";
+                    slug: string;
+                    section: "about" | "general";
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "resource";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "topic";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  };
+            }
+          | {
+              href: string;
+              _type: "link";
+              _key: string;
+            }
+        > | null;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        tone?: "info" | "warning";
+        text: string;
+        _type: "callout";
+        _key: string;
+        markDefs: null;
+      }
+    | {
+        event: {
+          _id: string;
+          title: string;
+          slug: string;
+          start: string;
+          end: string | null;
+          allDay: boolean | null;
+          repeat: {
+            frequency:
+              "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
+            until: string | null;
+            skipDates: Array<string> | null;
+          } | null;
+          location: string;
+          hostedByMsl: boolean | null;
+          summary: string;
+        };
+        _type: "eventCard";
+        _key: string;
+        markDefs: null;
+      }
+    | {
         asset?: SanityFileAssetReference;
         media?: unknown;
-        name: string;
-        _type: "file";
-        _key: string;
-      }> | null;
-      tags: Array<{
-        _id: string;
         title: string;
-        slug: string;
+        _type: "fileAttachment";
+        _key: string;
+        markDefs: null;
+        file: {
+          url: string;
+          size: number;
+          extension: string;
+          originalFilename: string | null;
+        } | null;
+      }
+    | {
+        _key: string;
+        _type: "imageWithAlt";
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot: {
+          x: number;
+          y: number;
+        } | null;
+        crop: {
+          top: number;
+          bottom: number;
+          left: number;
+          right: number;
+        } | null;
+        alt: string | "";
+        caption: string | null;
+        markDefs: null;
+        id: string | null;
+        preview: string | null;
+      }
+    | {
+        resource: {
+          _id: string;
+          title: string;
+          slug: string;
+          summary: string;
+          serviceArea: "arizona" | "maricopa" | "national" | "pinal";
+          phones: Array<{
+            _key: string;
+            label: string | null;
+            number: string;
+          }> | null;
+          website: string | null;
+          address: string | null;
+          topics: Array<{
+            title: string;
+            slug: string;
+          }> | null;
+        };
+        _type: "resourceCard";
+        _key: string;
+        markDefs: null;
+      }
+  >;
+  _updatedAt: string;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryArticlePaths
+// Query: *[_type == "article" && defined(slug.current)] | order(publishedAt desc)[0...200].slug.current
+export type QueryArticlePathsResult = Array<string>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryWriter
+// Query: *[_type == "author" && slug.current == $slug][0]{    name,    "slug": slug.current,    bio,    tribute,    image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    "articles": *[_type == "article" && references(^._id)] | order(publishedAt desc){   _id,  title,  "slug": slug.current,  summary,  publishedAt,  series,  "author": author->{ name, "slug": slug.current },  mainImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } }  }
+export type QueryWriterResult = {
+  name: string;
+  slug: string;
+  bio: string | null;
+  tribute: string | null;
+  image: {
+    id: string | null;
+    preview: string | null;
+    alt: string | "";
+    caption: string | null;
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      top: number;
+      bottom: number;
+      left: number;
+      right: number;
+    } | null;
+  } | null;
+  articles: Array<{
+    _id: string;
+    title: string;
+    slug: string;
+    summary: string;
+    publishedAt: string;
+    series: "joans-corner" | "none" | "rons-ramblings" | null;
+    author: {
+      name: string;
+      slug: string;
+    };
+    mainImage: {
+      id: string | null;
+      preview: string | null;
+      alt: string | "";
+      caption: string | null;
+      hotspot: {
+        x: number;
+        y: number;
+      } | null;
+      crop: {
+        top: number;
+        bottom: number;
+        left: number;
+        right: number;
+      } | null;
+    } | null;
+  }>;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryEventsInRange
+// Query: *[    _type == "event"    && dateTime(start) <= dateTime($to)    && (      dateTime(coalesce(end, start)) >= dateTime($from)      || (repeat.frequency in ["weekly", "monthlyWeekday", "monthlyDate"] && repeat.until >= string::split($from, "T")[0])    )    && ($topicId == "" || references($topicId))    && ($mslOnly == false || hostedByMsl == true)  ] | order(start asc){   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary }
+export type QueryEventsInRangeResult = Array<{
+  _id: string;
+  title: string;
+  slug: string;
+  start: string;
+  end: string | null;
+  allDay: boolean | null;
+  repeat: {
+    frequency: "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
+    until: string | null;
+    skipDates: Array<string> | null;
+  } | null;
+  location: string;
+  hostedByMsl: boolean | null;
+  summary: string;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryEvent
+// Query: *[_type == "event" && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary,    address,    cost,    registration { required, link{   _key,  label,  kind,  section,  url,  phone,  email,  "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } } },    flyer {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    details[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } },    "topics": topics[]->{ title, "slug": slug.current }  }
+export type QueryEventResult = {
+  _id: string;
+  title: string;
+  slug: string;
+  start: string;
+  end: string | null;
+  allDay: boolean | null;
+  repeat: {
+    frequency: "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
+    until: string | null;
+    skipDates: Array<string> | null;
+  } | null;
+  location: string;
+  hostedByMsl: boolean | null;
+  summary: string;
+  address: string | null;
+  cost: string | null;
+  registration: {
+    required: boolean | null;
+    link: {
+      _key: null;
+      label: string;
+      kind: "email" | "external" | "internal" | "phone" | "section";
+      section:
+        | "/about"
+        | "/articles"
+        | "/events"
+        | "/links"
+        | "/newsletter"
+        | "/resources"
+        | "/search"
+        | "/topics"
+        | "/whats-new"
+        | null;
+      url: string | null;
+      phone: string | null;
+      email: string | null;
+      target:
+        | {
+            _type: "article";
+            slug: string;
+            section: null;
+            month: null;
+            title: string;
+          }
+        | {
+            _type: "event";
+            slug: string;
+            section: null;
+            month: null;
+            title: string;
+          }
+        | {
+            _type: "monthlyUpdate";
+            slug: null;
+            section: null;
+            month:
+              | "2024-11"
+              | "2024-12"
+              | "2025-01"
+              | "2025-02"
+              | "2025-03"
+              | "2025-04"
+              | "2025-05"
+              | "2025-06"
+              | "2025-07"
+              | "2025-08"
+              | "2025-09"
+              | "2025-10"
+              | "2025-11"
+              | "2025-12"
+              | "2026-01"
+              | "2026-02"
+              | "2026-03"
+              | "2026-04"
+              | "2026-05"
+              | "2026-06"
+              | "2026-07"
+              | "2026-08"
+              | "2026-09"
+              | "2026-10"
+              | "2026-11"
+              | "2026-12"
+              | "2027-01"
+              | "2027-02";
+            title: string | null;
+          }
+        | {
+            _type: "newsletterEdition";
+            slug: null;
+            section: null;
+            month:
+              | "2024-11"
+              | "2024-12"
+              | "2025-01"
+              | "2025-02"
+              | "2025-03"
+              | "2025-04"
+              | "2025-05"
+              | "2025-06"
+              | "2025-07"
+              | "2025-08"
+              | "2025-09"
+              | "2025-10"
+              | "2025-11"
+              | "2025-12"
+              | "2026-01"
+              | "2026-02"
+              | "2026-03"
+              | "2026-04"
+              | "2026-05"
+              | "2026-06"
+              | "2026-07"
+              | "2026-08"
+              | "2026-09"
+              | "2026-10"
+              | "2026-11"
+              | "2026-12"
+              | "2027-01"
+              | "2027-02";
+            title: null;
+          }
+        | {
+            _type: "page";
+            slug: string;
+            section: "about" | "general";
+            month: null;
+            title: string;
+          }
+        | {
+            _type: "resource";
+            slug: string;
+            section: null;
+            month: null;
+            title: string;
+          }
+        | {
+            _type: "topic";
+            slug: string;
+            section: null;
+            month: null;
+            title: string;
+          }
+        | null;
+    } | null;
+  } | null;
+  flyer: {
+    id: string | null;
+    preview: string | null;
+    alt: string | "";
+    caption: string | null;
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      top: number;
+      bottom: number;
+      left: number;
+      right: number;
+    } | null;
+  } | null;
+  details: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h2" | "h3" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs: Array<
+          | {
+              reference:
+                | ArticleReference
+                | EventReference
+                | MonthlyUpdateReference
+                | NewsletterEditionReference
+                | PageReference
+                | ResourceReference
+                | TopicReference;
+              _type: "internalLink";
+              _key: string;
+              target:
+                | {
+                    _type: "article";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "event";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "monthlyUpdate";
+                    slug: null;
+                    section: null;
+                    month:
+                      | "2024-11"
+                      | "2024-12"
+                      | "2025-01"
+                      | "2025-02"
+                      | "2025-03"
+                      | "2025-04"
+                      | "2025-05"
+                      | "2025-06"
+                      | "2025-07"
+                      | "2025-08"
+                      | "2025-09"
+                      | "2025-10"
+                      | "2025-11"
+                      | "2025-12"
+                      | "2026-01"
+                      | "2026-02"
+                      | "2026-03"
+                      | "2026-04"
+                      | "2026-05"
+                      | "2026-06"
+                      | "2026-07"
+                      | "2026-08"
+                      | "2026-09"
+                      | "2026-10"
+                      | "2026-11"
+                      | "2026-12"
+                      | "2027-01"
+                      | "2027-02";
+                    title: string | null;
+                  }
+                | {
+                    _type: "newsletterEdition";
+                    slug: null;
+                    section: null;
+                    month:
+                      | "2024-11"
+                      | "2024-12"
+                      | "2025-01"
+                      | "2025-02"
+                      | "2025-03"
+                      | "2025-04"
+                      | "2025-05"
+                      | "2025-06"
+                      | "2025-07"
+                      | "2025-08"
+                      | "2025-09"
+                      | "2025-10"
+                      | "2025-11"
+                      | "2025-12"
+                      | "2026-01"
+                      | "2026-02"
+                      | "2026-03"
+                      | "2026-04"
+                      | "2026-05"
+                      | "2026-06"
+                      | "2026-07"
+                      | "2026-08"
+                      | "2026-09"
+                      | "2026-10"
+                      | "2026-11"
+                      | "2026-12"
+                      | "2027-01"
+                      | "2027-02";
+                    title: null;
+                  }
+                | {
+                    _type: "page";
+                    slug: string;
+                    section: "about" | "general";
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "resource";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "topic";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  };
+            }
+          | {
+              href: string;
+              _type: "link";
+              _key: string;
+            }
+        > | null;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        tone?: "info" | "warning";
+        text: string;
+        _type: "callout";
+        _key: string;
+        markDefs: null;
+      }
+    | {
+        event: {
+          _id: string;
+          title: string;
+          slug: string;
+          start: string;
+          end: string | null;
+          allDay: boolean | null;
+          repeat: {
+            frequency:
+              "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
+            until: string | null;
+            skipDates: Array<string> | null;
+          } | null;
+          location: string;
+          hostedByMsl: boolean | null;
+          summary: string;
+        };
+        _type: "eventCard";
+        _key: string;
+        markDefs: null;
+      }
+    | {
+        asset?: SanityFileAssetReference;
+        media?: unknown;
+        title: string;
+        _type: "fileAttachment";
+        _key: string;
+        markDefs: null;
+        file: {
+          url: string;
+          size: number;
+          extension: string;
+          originalFilename: string | null;
+        } | null;
+      }
+    | {
+        _key: string;
+        _type: "imageWithAlt";
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot: {
+          x: number;
+          y: number;
+        } | null;
+        crop: {
+          top: number;
+          bottom: number;
+          left: number;
+          right: number;
+        } | null;
+        alt: string | "";
+        caption: string | null;
+        markDefs: null;
+        id: string | null;
+        preview: string | null;
+      }
+    | {
+        resource: {
+          _id: string;
+          title: string;
+          slug: string;
+          summary: string;
+          serviceArea: "arizona" | "maricopa" | "national" | "pinal";
+          phones: Array<{
+            _key: string;
+            label: string | null;
+            number: string;
+          }> | null;
+          website: string | null;
+          address: string | null;
+          topics: Array<{
+            title: string;
+            slug: string;
+          }> | null;
+        };
+        _type: "resourceCard";
+        _key: string;
+        markDefs: null;
+      }
+  > | null;
+  topics: Array<{
+    title: string;
+    slug: string;
+  }> | null;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryEventPaths
+// Query: *[_type == "event" && defined(slug.current)] | order(start desc)[0...200].slug.current
+export type QueryEventPathsResult = Array<string>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryMonthlyUpdate
+// Query: *[_type == "monthlyUpdate" && month == $month][0]{    _id, month, title, intro, body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } }, _updatedAt  }
+export type QueryMonthlyUpdateResult = {
+  _id: string;
+  month:
+    | "2024-11"
+    | "2024-12"
+    | "2025-01"
+    | "2025-02"
+    | "2025-03"
+    | "2025-04"
+    | "2025-05"
+    | "2025-06"
+    | "2025-07"
+    | "2025-08"
+    | "2025-09"
+    | "2025-10"
+    | "2025-11"
+    | "2025-12"
+    | "2026-01"
+    | "2026-02"
+    | "2026-03"
+    | "2026-04"
+    | "2026-05"
+    | "2026-06"
+    | "2026-07"
+    | "2026-08"
+    | "2026-09"
+    | "2026-10"
+    | "2026-11"
+    | "2026-12"
+    | "2027-01"
+    | "2027-02";
+  title: string | null;
+  intro: string;
+  body: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h2" | "h3" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs: Array<
+          | {
+              reference:
+                | ArticleReference
+                | EventReference
+                | MonthlyUpdateReference
+                | NewsletterEditionReference
+                | PageReference
+                | ResourceReference
+                | TopicReference;
+              _type: "internalLink";
+              _key: string;
+              target:
+                | {
+                    _type: "article";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "event";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "monthlyUpdate";
+                    slug: null;
+                    section: null;
+                    month:
+                      | "2024-11"
+                      | "2024-12"
+                      | "2025-01"
+                      | "2025-02"
+                      | "2025-03"
+                      | "2025-04"
+                      | "2025-05"
+                      | "2025-06"
+                      | "2025-07"
+                      | "2025-08"
+                      | "2025-09"
+                      | "2025-10"
+                      | "2025-11"
+                      | "2025-12"
+                      | "2026-01"
+                      | "2026-02"
+                      | "2026-03"
+                      | "2026-04"
+                      | "2026-05"
+                      | "2026-06"
+                      | "2026-07"
+                      | "2026-08"
+                      | "2026-09"
+                      | "2026-10"
+                      | "2026-11"
+                      | "2026-12"
+                      | "2027-01"
+                      | "2027-02";
+                    title: string | null;
+                  }
+                | {
+                    _type: "newsletterEdition";
+                    slug: null;
+                    section: null;
+                    month:
+                      | "2024-11"
+                      | "2024-12"
+                      | "2025-01"
+                      | "2025-02"
+                      | "2025-03"
+                      | "2025-04"
+                      | "2025-05"
+                      | "2025-06"
+                      | "2025-07"
+                      | "2025-08"
+                      | "2025-09"
+                      | "2025-10"
+                      | "2025-11"
+                      | "2025-12"
+                      | "2026-01"
+                      | "2026-02"
+                      | "2026-03"
+                      | "2026-04"
+                      | "2026-05"
+                      | "2026-06"
+                      | "2026-07"
+                      | "2026-08"
+                      | "2026-09"
+                      | "2026-10"
+                      | "2026-11"
+                      | "2026-12"
+                      | "2027-01"
+                      | "2027-02";
+                    title: null;
+                  }
+                | {
+                    _type: "page";
+                    slug: string;
+                    section: "about" | "general";
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "resource";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  }
+                | {
+                    _type: "topic";
+                    slug: string;
+                    section: null;
+                    month: null;
+                    title: string;
+                  };
+            }
+          | {
+              href: string;
+              _type: "link";
+              _key: string;
+            }
+        > | null;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        tone?: "info" | "warning";
+        text: string;
+        _type: "callout";
+        _key: string;
+        markDefs: null;
+      }
+    | {
+        event: {
+          _id: string;
+          title: string;
+          slug: string;
+          start: string;
+          end: string | null;
+          allDay: boolean | null;
+          repeat: {
+            frequency:
+              "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
+            until: string | null;
+            skipDates: Array<string> | null;
+          } | null;
+          location: string;
+          hostedByMsl: boolean | null;
+          summary: string;
+        };
+        _type: "eventCard";
+        _key: string;
+        markDefs: null;
+      }
+    | {
+        asset?: SanityFileAssetReference;
+        media?: unknown;
+        title: string;
+        _type: "fileAttachment";
+        _key: string;
+        markDefs: null;
+        file: {
+          url: string;
+          size: number;
+          extension: string;
+          originalFilename: string | null;
+        } | null;
+      }
+    | {
+        _key: string;
+        _type: "imageWithAlt";
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot: {
+          x: number;
+          y: number;
+        } | null;
+        crop: {
+          top: number;
+          bottom: number;
+          left: number;
+          right: number;
+        } | null;
+        alt: string | "";
+        caption: string | null;
+        markDefs: null;
+        id: string | null;
+        preview: string | null;
+      }
+    | {
+        resource: {
+          _id: string;
+          title: string;
+          slug: string;
+          summary: string;
+          serviceArea: "arizona" | "maricopa" | "national" | "pinal";
+          phones: Array<{
+            _key: string;
+            label: string | null;
+            number: string;
+          }> | null;
+          website: string | null;
+          address: string | null;
+          topics: Array<{
+            title: string;
+            slug: string;
+          }> | null;
+        };
+        _type: "resourceCard";
+        _key: string;
+        markDefs: null;
+      }
+  >;
+  _updatedAt: string;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryCurrentMonthlyUpdate
+// Query: *[_type == "monthlyUpdate" && month <= $month] | order(month desc)[0]{    _id, month, title, intro  }
+export type QueryCurrentMonthlyUpdateResult = {
+  _id: string;
+  month:
+    | "2024-11"
+    | "2024-12"
+    | "2025-01"
+    | "2025-02"
+    | "2025-03"
+    | "2025-04"
+    | "2025-05"
+    | "2025-06"
+    | "2025-07"
+    | "2025-08"
+    | "2025-09"
+    | "2025-10"
+    | "2025-11"
+    | "2025-12"
+    | "2026-01"
+    | "2026-02"
+    | "2026-03"
+    | "2026-04"
+    | "2026-05"
+    | "2026-06"
+    | "2026-07"
+    | "2026-08"
+    | "2026-09"
+    | "2026-10"
+    | "2026-11"
+    | "2026-12"
+    | "2027-01"
+    | "2027-02";
+  title: string | null;
+  intro: string;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryMonthlyUpdateList
+// Query: *[_type == "monthlyUpdate" && month <= $month] | order(month desc){ month, title, intro }
+export type QueryMonthlyUpdateListResult = Array<{
+  month:
+    | "2024-11"
+    | "2024-12"
+    | "2025-01"
+    | "2025-02"
+    | "2025-03"
+    | "2025-04"
+    | "2025-05"
+    | "2025-06"
+    | "2025-07"
+    | "2025-08"
+    | "2025-09"
+    | "2025-10"
+    | "2025-11"
+    | "2025-12"
+    | "2026-01"
+    | "2026-02"
+    | "2026-03"
+    | "2026-04"
+    | "2026-05"
+    | "2026-06"
+    | "2026-07"
+    | "2026-08"
+    | "2026-09"
+    | "2026-10"
+    | "2026-11"
+    | "2026-12"
+    | "2027-01"
+    | "2027-02";
+  title: string | null;
+  intro: string;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryNewsletter
+// Query: *[_type == "newsletterEdition" && month == $month][0]{    _id,    month,    coverImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    coverMessage,    sections[]{   _key,  _type,  heading,  _type == "comingUpSection" => {    includeEvents,    "hiddenEventIds": hiddenEvents[]._ref,    extraRows[]{ _key, when, what, where }  },  _type == "storySection" => {    byline,    image {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } },    "article": article->{ title, "slug": slug.current, "author": author->name, body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } } }  },  _type == "flyerSection" => { pages[]{ _key,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } } },  _type == "funSection" => { body[]{   ...,  markDefs[]{    ...,    _type == "internalLink" => { "target": reference->{   _type,  "slug": slug.current,  section,  month,  title } }  },  _type == "imageWithAlt" => { _key, _type,   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },  _type == "fileAttachment" => {    _key,    _type,    title,    "file": asset->{ url, size, extension, originalFilename }  },  _type == "eventCard" => { _key, _type, "event": event->{   _id,  title,  "slug": slug.current,  start,  end,  allDay,  repeat { frequency, until, skipDates },  location,  hostedByMsl,  summary } },  _type == "resourceCard" => { _key, _type, "resource": resource->{   _id,  title,  "slug": slug.current,  summary,  serviceArea,  phones[]{ _key, label, number },  website,  address,  "topics": topics[]->{ title, "slug": slug.current } } } } } },    "uploadedPdf": uploadedPdf.asset->{ url, size },    _updatedAt  }
+export type QueryNewsletterResult = {
+  _id: string;
+  month:
+    | "2024-11"
+    | "2024-12"
+    | "2025-01"
+    | "2025-02"
+    | "2025-03"
+    | "2025-04"
+    | "2025-05"
+    | "2025-06"
+    | "2025-07"
+    | "2025-08"
+    | "2025-09"
+    | "2025-10"
+    | "2025-11"
+    | "2025-12"
+    | "2026-01"
+    | "2026-02"
+    | "2026-03"
+    | "2026-04"
+    | "2026-05"
+    | "2026-06"
+    | "2026-07"
+    | "2026-08"
+    | "2026-09"
+    | "2026-10"
+    | "2026-11"
+    | "2026-12"
+    | "2027-01"
+    | "2027-02";
+  coverImage: {
+    id: string | null;
+    preview: string | null;
+    alt: string | "";
+    caption: string | null;
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      top: number;
+      bottom: number;
+      left: number;
+      right: number;
+    } | null;
+  } | null;
+  coverMessage: string | null;
+  sections: Array<
+    | {
+        _key: string;
+        _type: "comingUpSection";
+        heading: string | null;
+        includeEvents: boolean | null;
+        hiddenEventIds: Array<string> | null;
+        extraRows: Array<{
+          _key: string;
+          when: string;
+          what: string;
+          where: string | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "flyerSection";
+        heading: string;
+        pages: Array<{
+          _key: string;
+          id: string | null;
+          preview: string | null;
+          alt: string | "";
+          caption: string | null;
+          hotspot: {
+            x: number;
+            y: number;
+          } | null;
+          crop: {
+            top: number;
+            bottom: number;
+            left: number;
+            right: number;
+          } | null;
+        }>;
+      }
+    | {
+        _key: string;
+        _type: "funSection";
+        heading: string;
+        body: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h2" | "h3" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs: Array<
+                | {
+                    reference:
+                      | ArticleReference
+                      | EventReference
+                      | MonthlyUpdateReference
+                      | NewsletterEditionReference
+                      | PageReference
+                      | ResourceReference
+                      | TopicReference;
+                    _type: "internalLink";
+                    _key: string;
+                    target:
+                      | {
+                          _type: "article";
+                          slug: string;
+                          section: null;
+                          month: null;
+                          title: string;
+                        }
+                      | {
+                          _type: "event";
+                          slug: string;
+                          section: null;
+                          month: null;
+                          title: string;
+                        }
+                      | {
+                          _type: "monthlyUpdate";
+                          slug: null;
+                          section: null;
+                          month:
+                            | "2024-11"
+                            | "2024-12"
+                            | "2025-01"
+                            | "2025-02"
+                            | "2025-03"
+                            | "2025-04"
+                            | "2025-05"
+                            | "2025-06"
+                            | "2025-07"
+                            | "2025-08"
+                            | "2025-09"
+                            | "2025-10"
+                            | "2025-11"
+                            | "2025-12"
+                            | "2026-01"
+                            | "2026-02"
+                            | "2026-03"
+                            | "2026-04"
+                            | "2026-05"
+                            | "2026-06"
+                            | "2026-07"
+                            | "2026-08"
+                            | "2026-09"
+                            | "2026-10"
+                            | "2026-11"
+                            | "2026-12"
+                            | "2027-01"
+                            | "2027-02";
+                          title: string | null;
+                        }
+                      | {
+                          _type: "newsletterEdition";
+                          slug: null;
+                          section: null;
+                          month:
+                            | "2024-11"
+                            | "2024-12"
+                            | "2025-01"
+                            | "2025-02"
+                            | "2025-03"
+                            | "2025-04"
+                            | "2025-05"
+                            | "2025-06"
+                            | "2025-07"
+                            | "2025-08"
+                            | "2025-09"
+                            | "2025-10"
+                            | "2025-11"
+                            | "2025-12"
+                            | "2026-01"
+                            | "2026-02"
+                            | "2026-03"
+                            | "2026-04"
+                            | "2026-05"
+                            | "2026-06"
+                            | "2026-07"
+                            | "2026-08"
+                            | "2026-09"
+                            | "2026-10"
+                            | "2026-11"
+                            | "2026-12"
+                            | "2027-01"
+                            | "2027-02";
+                          title: null;
+                        }
+                      | {
+                          _type: "page";
+                          slug: string;
+                          section: "about" | "general";
+                          month: null;
+                          title: string;
+                        }
+                      | {
+                          _type: "resource";
+                          slug: string;
+                          section: null;
+                          month: null;
+                          title: string;
+                        }
+                      | {
+                          _type: "topic";
+                          slug: string;
+                          section: null;
+                          month: null;
+                          title: string;
+                        };
+                  }
+                | {
+                    href: string;
+                    _type: "link";
+                    _key: string;
+                  }
+              > | null;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              tone?: "info" | "warning";
+              text: string;
+              _type: "callout";
+              _key: string;
+              markDefs: null;
+            }
+          | {
+              event: {
+                _id: string;
+                title: string;
+                slug: string;
+                start: string;
+                end: string | null;
+                allDay: boolean | null;
+                repeat: {
+                  frequency:
+                    "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
+                  until: string | null;
+                  skipDates: Array<string> | null;
+                } | null;
+                location: string;
+                hostedByMsl: boolean | null;
+                summary: string;
+              };
+              _type: "eventCard";
+              _key: string;
+              markDefs: null;
+            }
+          | {
+              asset?: SanityFileAssetReference;
+              media?: unknown;
+              title: string;
+              _type: "fileAttachment";
+              _key: string;
+              markDefs: null;
+              file: {
+                url: string;
+                size: number;
+                extension: string;
+                originalFilename: string | null;
+              } | null;
+            }
+          | {
+              _key: string;
+              _type: "imageWithAlt";
+              asset?: SanityImageAssetReference;
+              media?: unknown;
+              hotspot: {
+                x: number;
+                y: number;
+              } | null;
+              crop: {
+                top: number;
+                bottom: number;
+                left: number;
+                right: number;
+              } | null;
+              alt: string | "";
+              caption: string | null;
+              markDefs: null;
+              id: string | null;
+              preview: string | null;
+            }
+          | {
+              resource: {
+                _id: string;
+                title: string;
+                slug: string;
+                summary: string;
+                serviceArea: "arizona" | "maricopa" | "national" | "pinal";
+                phones: Array<{
+                  _key: string;
+                  label: string | null;
+                  number: string;
+                }> | null;
+                website: string | null;
+                address: string | null;
+                topics: Array<{
+                  title: string;
+                  slug: string;
+                }> | null;
+              };
+              _type: "resourceCard";
+              _key: string;
+              markDefs: null;
+            }
+        > | null;
+      }
+    | {
+        _key: string;
+        _type: "storySection";
+        heading: string;
+        byline: string | null;
+        image: {
+          id: string | null;
+          preview: string | null;
+          alt: string | "";
+          caption: string | null;
+          hotspot: {
+            x: number;
+            y: number;
+          } | null;
+          crop: {
+            top: number;
+            bottom: number;
+            left: number;
+            right: number;
+          } | null;
+        } | null;
+        body: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h2" | "h3" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs: Array<
+                | {
+                    reference:
+                      | ArticleReference
+                      | EventReference
+                      | MonthlyUpdateReference
+                      | NewsletterEditionReference
+                      | PageReference
+                      | ResourceReference
+                      | TopicReference;
+                    _type: "internalLink";
+                    _key: string;
+                    target:
+                      | {
+                          _type: "article";
+                          slug: string;
+                          section: null;
+                          month: null;
+                          title: string;
+                        }
+                      | {
+                          _type: "event";
+                          slug: string;
+                          section: null;
+                          month: null;
+                          title: string;
+                        }
+                      | {
+                          _type: "monthlyUpdate";
+                          slug: null;
+                          section: null;
+                          month:
+                            | "2024-11"
+                            | "2024-12"
+                            | "2025-01"
+                            | "2025-02"
+                            | "2025-03"
+                            | "2025-04"
+                            | "2025-05"
+                            | "2025-06"
+                            | "2025-07"
+                            | "2025-08"
+                            | "2025-09"
+                            | "2025-10"
+                            | "2025-11"
+                            | "2025-12"
+                            | "2026-01"
+                            | "2026-02"
+                            | "2026-03"
+                            | "2026-04"
+                            | "2026-05"
+                            | "2026-06"
+                            | "2026-07"
+                            | "2026-08"
+                            | "2026-09"
+                            | "2026-10"
+                            | "2026-11"
+                            | "2026-12"
+                            | "2027-01"
+                            | "2027-02";
+                          title: string | null;
+                        }
+                      | {
+                          _type: "newsletterEdition";
+                          slug: null;
+                          section: null;
+                          month:
+                            | "2024-11"
+                            | "2024-12"
+                            | "2025-01"
+                            | "2025-02"
+                            | "2025-03"
+                            | "2025-04"
+                            | "2025-05"
+                            | "2025-06"
+                            | "2025-07"
+                            | "2025-08"
+                            | "2025-09"
+                            | "2025-10"
+                            | "2025-11"
+                            | "2025-12"
+                            | "2026-01"
+                            | "2026-02"
+                            | "2026-03"
+                            | "2026-04"
+                            | "2026-05"
+                            | "2026-06"
+                            | "2026-07"
+                            | "2026-08"
+                            | "2026-09"
+                            | "2026-10"
+                            | "2026-11"
+                            | "2026-12"
+                            | "2027-01"
+                            | "2027-02";
+                          title: null;
+                        }
+                      | {
+                          _type: "page";
+                          slug: string;
+                          section: "about" | "general";
+                          month: null;
+                          title: string;
+                        }
+                      | {
+                          _type: "resource";
+                          slug: string;
+                          section: null;
+                          month: null;
+                          title: string;
+                        }
+                      | {
+                          _type: "topic";
+                          slug: string;
+                          section: null;
+                          month: null;
+                          title: string;
+                        };
+                  }
+                | {
+                    href: string;
+                    _type: "link";
+                    _key: string;
+                  }
+              > | null;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              tone?: "info" | "warning";
+              text: string;
+              _type: "callout";
+              _key: string;
+              markDefs: null;
+            }
+          | {
+              event: {
+                _id: string;
+                title: string;
+                slug: string;
+                start: string;
+                end: string | null;
+                allDay: boolean | null;
+                repeat: {
+                  frequency:
+                    "monthlyDate" | "monthlyWeekday" | "none" | "weekly" | null;
+                  until: string | null;
+                  skipDates: Array<string> | null;
+                } | null;
+                location: string;
+                hostedByMsl: boolean | null;
+                summary: string;
+              };
+              _type: "eventCard";
+              _key: string;
+              markDefs: null;
+            }
+          | {
+              asset?: SanityFileAssetReference;
+              media?: unknown;
+              title: string;
+              _type: "fileAttachment";
+              _key: string;
+              markDefs: null;
+              file: {
+                url: string;
+                size: number;
+                extension: string;
+                originalFilename: string | null;
+              } | null;
+            }
+          | {
+              _key: string;
+              _type: "imageWithAlt";
+              asset?: SanityImageAssetReference;
+              media?: unknown;
+              hotspot: {
+                x: number;
+                y: number;
+              } | null;
+              crop: {
+                top: number;
+                bottom: number;
+                left: number;
+                right: number;
+              } | null;
+              alt: string | "";
+              caption: string | null;
+              markDefs: null;
+              id: string | null;
+              preview: string | null;
+            }
+          | {
+              resource: {
+                _id: string;
+                title: string;
+                slug: string;
+                summary: string;
+                serviceArea: "arizona" | "maricopa" | "national" | "pinal";
+                phones: Array<{
+                  _key: string;
+                  label: string | null;
+                  number: string;
+                }> | null;
+                website: string | null;
+                address: string | null;
+                topics: Array<{
+                  title: string;
+                  slug: string;
+                }> | null;
+              };
+              _type: "resourceCard";
+              _key: string;
+              markDefs: null;
+            }
+        > | null;
+        article: {
+          title: string;
+          slug: string;
+          author: string;
+          body: Array<
+            | {
+                children?: Array<{
+                  marks?: Array<string>;
+                  text?: string;
+                  _type: "span";
+                  _key: string;
+                }>;
+                style?: "blockquote" | "h2" | "h3" | "normal";
+                listItem?: "bullet" | "number";
+                markDefs: Array<
+                  | {
+                      reference:
+                        | ArticleReference
+                        | EventReference
+                        | MonthlyUpdateReference
+                        | NewsletterEditionReference
+                        | PageReference
+                        | ResourceReference
+                        | TopicReference;
+                      _type: "internalLink";
+                      _key: string;
+                      target:
+                        | {
+                            _type: "article";
+                            slug: string;
+                            section: null;
+                            month: null;
+                            title: string;
+                          }
+                        | {
+                            _type: "event";
+                            slug: string;
+                            section: null;
+                            month: null;
+                            title: string;
+                          }
+                        | {
+                            _type: "monthlyUpdate";
+                            slug: null;
+                            section: null;
+                            month:
+                              | "2024-11"
+                              | "2024-12"
+                              | "2025-01"
+                              | "2025-02"
+                              | "2025-03"
+                              | "2025-04"
+                              | "2025-05"
+                              | "2025-06"
+                              | "2025-07"
+                              | "2025-08"
+                              | "2025-09"
+                              | "2025-10"
+                              | "2025-11"
+                              | "2025-12"
+                              | "2026-01"
+                              | "2026-02"
+                              | "2026-03"
+                              | "2026-04"
+                              | "2026-05"
+                              | "2026-06"
+                              | "2026-07"
+                              | "2026-08"
+                              | "2026-09"
+                              | "2026-10"
+                              | "2026-11"
+                              | "2026-12"
+                              | "2027-01"
+                              | "2027-02";
+                            title: string | null;
+                          }
+                        | {
+                            _type: "newsletterEdition";
+                            slug: null;
+                            section: null;
+                            month:
+                              | "2024-11"
+                              | "2024-12"
+                              | "2025-01"
+                              | "2025-02"
+                              | "2025-03"
+                              | "2025-04"
+                              | "2025-05"
+                              | "2025-06"
+                              | "2025-07"
+                              | "2025-08"
+                              | "2025-09"
+                              | "2025-10"
+                              | "2025-11"
+                              | "2025-12"
+                              | "2026-01"
+                              | "2026-02"
+                              | "2026-03"
+                              | "2026-04"
+                              | "2026-05"
+                              | "2026-06"
+                              | "2026-07"
+                              | "2026-08"
+                              | "2026-09"
+                              | "2026-10"
+                              | "2026-11"
+                              | "2026-12"
+                              | "2027-01"
+                              | "2027-02";
+                            title: null;
+                          }
+                        | {
+                            _type: "page";
+                            slug: string;
+                            section: "about" | "general";
+                            month: null;
+                            title: string;
+                          }
+                        | {
+                            _type: "resource";
+                            slug: string;
+                            section: null;
+                            month: null;
+                            title: string;
+                          }
+                        | {
+                            _type: "topic";
+                            slug: string;
+                            section: null;
+                            month: null;
+                            title: string;
+                          };
+                    }
+                  | {
+                      href: string;
+                      _type: "link";
+                      _key: string;
+                    }
+                > | null;
+                level?: number;
+                _type: "block";
+                _key: string;
+              }
+            | {
+                tone?: "info" | "warning";
+                text: string;
+                _type: "callout";
+                _key: string;
+                markDefs: null;
+              }
+            | {
+                event: {
+                  _id: string;
+                  title: string;
+                  slug: string;
+                  start: string;
+                  end: string | null;
+                  allDay: boolean | null;
+                  repeat: {
+                    frequency:
+                      | "monthlyDate"
+                      | "monthlyWeekday"
+                      | "none"
+                      | "weekly"
+                      | null;
+                    until: string | null;
+                    skipDates: Array<string> | null;
+                  } | null;
+                  location: string;
+                  hostedByMsl: boolean | null;
+                  summary: string;
+                };
+                _type: "eventCard";
+                _key: string;
+                markDefs: null;
+              }
+            | {
+                asset?: SanityFileAssetReference;
+                media?: unknown;
+                title: string;
+                _type: "fileAttachment";
+                _key: string;
+                markDefs: null;
+                file: {
+                  url: string;
+                  size: number;
+                  extension: string;
+                  originalFilename: string | null;
+                } | null;
+              }
+            | {
+                _key: string;
+                _type: "imageWithAlt";
+                asset?: SanityImageAssetReference;
+                media?: unknown;
+                hotspot: {
+                  x: number;
+                  y: number;
+                } | null;
+                crop: {
+                  top: number;
+                  bottom: number;
+                  left: number;
+                  right: number;
+                } | null;
+                alt: string | "";
+                caption: string | null;
+                markDefs: null;
+                id: string | null;
+                preview: string | null;
+              }
+            | {
+                resource: {
+                  _id: string;
+                  title: string;
+                  slug: string;
+                  summary: string;
+                  serviceArea: "arizona" | "maricopa" | "national" | "pinal";
+                  phones: Array<{
+                    _key: string;
+                    label: string | null;
+                    number: string;
+                  }> | null;
+                  website: string | null;
+                  address: string | null;
+                  topics: Array<{
+                    title: string;
+                    slug: string;
+                  }> | null;
+                };
+                _type: "resourceCard";
+                _key: string;
+                markDefs: null;
+              }
+          >;
+        } | null;
+      }
+  >;
+  uploadedPdf: {
+    url: string;
+    size: number;
+  } | null;
+  _updatedAt: string;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: queryNewsletterList
+// Query: *[_type == "newsletterEdition" && month <= $month] | order(month desc){    month,    coverImage {   "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(alt, ""),  caption,  hotspot { x, y },  crop { top, bottom, left, right } },    "hasSections": count(sections) > 0,    "uploadedPdf": uploadedPdf.asset->{ url, size }  }
+export type QueryNewsletterListResult = Array<{
+  month:
+    | "2024-11"
+    | "2024-12"
+    | "2025-01"
+    | "2025-02"
+    | "2025-03"
+    | "2025-04"
+    | "2025-05"
+    | "2025-06"
+    | "2025-07"
+    | "2025-08"
+    | "2025-09"
+    | "2025-10"
+    | "2025-11"
+    | "2025-12"
+    | "2026-01"
+    | "2026-02"
+    | "2026-03"
+    | "2026-04"
+    | "2026-05"
+    | "2026-06"
+    | "2026-07"
+    | "2026-08"
+    | "2026-09"
+    | "2026-10"
+    | "2026-11"
+    | "2026-12"
+    | "2027-01"
+    | "2027-02";
+  coverImage: {
+    id: string | null;
+    preview: string | null;
+    alt: string | "";
+    caption: string | null;
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      top: number;
+      bottom: number;
+      left: number;
+      right: number;
+    } | null;
+  } | null;
+  hasSections: boolean;
+  uploadedPdf: {
+    url: string;
+    size: number;
+  } | null;
+}>;
+
+// Source: ../../packages/sanity/src/queries.ts
+// Variable: querySearch
+// Query: *[    _type in ["resource", "helpfulLink", "article", "event", "page"]    && (      title match $q + "*"      || summary match $q + "*"      || pt::text(description) match $q + "*"      || pt::text(body) match $q + "*"      || topics[]->title match $q + "*"    )  ]  | score(      boost(title match $q + "*", 5),      boost(_type == "resource", 2),      summary match $q + "*"    )  | order(_score desc)[0...40]{    _type,    _id,    title,    "slug": slug.current,    summary,    section,    url,    source,    start,    phones[]{ _key, label, number }  }
+export type QuerySearchResult = Array<
+  | {
+      _type: "article";
+      _id: string;
+      title: string;
+      slug: string;
+      summary: string;
+      section: null;
+      url: null;
+      source: null;
+      start: null;
+      phones: null;
+    }
+  | {
+      _type: "event";
+      _id: string;
+      title: string;
+      slug: string;
+      summary: string;
+      section: null;
+      url: null;
+      source: null;
+      start: string;
+      phones: null;
+    }
+  | {
+      _type: "helpfulLink";
+      _id: string;
+      title: string;
+      slug: null;
+      summary: string;
+      section: null;
+      url: string;
+      source: string;
+      start: null;
+      phones: null;
+    }
+  | {
+      _type: "page";
+      _id: string;
+      title: string;
+      slug: string;
+      summary: null;
+      section: "about" | "general";
+      url: null;
+      source: null;
+      start: null;
+      phones: null;
+    }
+  | {
+      _type: "resource";
+      _id: string;
+      title: string;
+      slug: string;
+      summary: string;
+      section: null;
+      url: null;
+      source: null;
+      start: null;
+      phones: Array<{
+        _key: string;
+        label: string | null;
+        number: string;
       }> | null;
     }
 >;
 
 // Source: ../../packages/sanity/src/queries.ts
+// Variable: queryRedirect
+// Query: *[_type == "redirect" && source == $source][0]{ destination, permanent }
+export type QueryRedirectResult = {
+  destination: string;
+  permanent: boolean | null;
+} | null;
+
+// Source: ../../packages/sanity/src/queries.ts
 // Variable: querySitemap
-// Query: {    "pages": *[_type == "page" && defined(slug.current)]{      "slug": slug.current,      _updatedAt    },    "articles": *[_type == "post" && defined(slug.current) && isArchived != true]{      "slug": slug.current,      _updatedAt    },    "categories": *[_type == "category" && defined(slug.current) && count(*[references(^._id)]) > 0]{      "slug": slug.current,      _updatedAt    },    "tags": *[_type == "tag" && defined(slug.current) && count(*[references(^._id)]) > 0]{      "slug": slug.current,      _updatedAt    }  }
+// Query: {    "pages": *[_type == "page" && defined(slug.current)]{ "slug": slug.current, section, _updatedAt },    "resources": *[_type == "resource" && defined(slug.current)]{ "slug": slug.current, _updatedAt },    "articles": *[_type == "article" && defined(slug.current)]{ "slug": slug.current, _updatedAt },    "events": *[_type == "event" && defined(slug.current)]{ "slug": slug.current, _updatedAt },    "topics": *[_type == "topic" && defined(slug.current)]{ "slug": slug.current, _updatedAt },    "months": *[_type == "monthlyUpdate"]{ month, _updatedAt },    "newsletters": *[_type == "newsletterEdition"]{ month, _updatedAt },    "writers": *[_type == "author" && defined(slug.current)]{ "slug": slug.current, _updatedAt }  }
 export type QuerySitemapResult = {
   pages: Array<{
+    slug: string;
+    section: "about" | "general";
+    _updatedAt: string;
+  }>;
+  resources: Array<{
     slug: string;
     _updatedAt: string;
   }>;
@@ -1851,211 +5880,118 @@ export type QuerySitemapResult = {
     slug: string;
     _updatedAt: string;
   }>;
-  categories: Array<{
+  events: Array<{
     slug: string;
     _updatedAt: string;
   }>;
-  tags: Array<{
+  topics: Array<{
+    slug: string;
+    _updatedAt: string;
+  }>;
+  months: Array<{
+    month:
+      | "2024-11"
+      | "2024-12"
+      | "2025-01"
+      | "2025-02"
+      | "2025-03"
+      | "2025-04"
+      | "2025-05"
+      | "2025-06"
+      | "2025-07"
+      | "2025-08"
+      | "2025-09"
+      | "2025-10"
+      | "2025-11"
+      | "2025-12"
+      | "2026-01"
+      | "2026-02"
+      | "2026-03"
+      | "2026-04"
+      | "2026-05"
+      | "2026-06"
+      | "2026-07"
+      | "2026-08"
+      | "2026-09"
+      | "2026-10"
+      | "2026-11"
+      | "2026-12"
+      | "2027-01"
+      | "2027-02";
+    _updatedAt: string;
+  }>;
+  newsletters: Array<{
+    month:
+      | "2024-11"
+      | "2024-12"
+      | "2025-01"
+      | "2025-02"
+      | "2025-03"
+      | "2025-04"
+      | "2025-05"
+      | "2025-06"
+      | "2025-07"
+      | "2025-08"
+      | "2025-09"
+      | "2025-10"
+      | "2025-11"
+      | "2025-12"
+      | "2026-01"
+      | "2026-02"
+      | "2026-03"
+      | "2026-04"
+      | "2026-05"
+      | "2026-06"
+      | "2026-07"
+      | "2026-08"
+      | "2026-09"
+      | "2026-10"
+      | "2026-11"
+      | "2026-12"
+      | "2027-01"
+      | "2027-02";
+    _updatedAt: string;
+  }>;
+  writers: Array<{
     slug: string;
     _updatedAt: string;
   }>;
 };
 
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryNavigation
-// Query: *[_type == "navigation"][0]{    "headerPrimary": headerPrimary[]{      _key,      "link": link{        url,        text,        reference->{          _id,          _type,          title,          "slug": slug.current        }      },      children[]{        _key,        link{          url,          text,          reference->{            _id,            _type,            title,            "slug": slug.current          }        }      }    },    "footer": footer[]{      _key,      url,      text,      reference->{        _id,        _type,        title,        "slug": slug.current      }    },  }
-export type QueryNavigationResult = {
-  headerPrimary: Array<{
-    _key: string;
-    link: {
-      url: string | null;
-      text: string | null;
-      reference:
-        | {
-            _id: string;
-            _type: "category";
-            title: string;
-            slug: string;
-          }
-        | {
-            _id: string;
-            _type: "page";
-            title: string;
-            slug: string;
-          }
-        | {
-            _id: string;
-            _type: "tag";
-            title: string;
-            slug: string;
-          }
-        | null;
-    } | null;
-    children: Array<{
-      _key: string;
-      link: {
-        url: string | null;
-        text: string | null;
-        reference:
-          | {
-              _id: string;
-              _type: "category";
-              title: string;
-              slug: string;
-            }
-          | {
-              _id: string;
-              _type: "page";
-              title: string;
-              slug: string;
-            }
-          | {
-              _id: string;
-              _type: "tag";
-              title: string;
-              slug: string;
-            }
-          | null;
-      } | null;
-    }> | null;
-  }> | null;
-  footer: Array<{
-    _key: string;
-    url: string | null;
-    text: string | null;
-    reference:
-      | {
-          _id: string;
-          _type: "category";
-          title: string;
-          slug: string;
-        }
-      | {
-          _id: string;
-          _type: "page";
-          title: string;
-          slug: string;
-        }
-      | {
-          _id: string;
-          _type: "tag";
-          title: string;
-          slug: string;
-        }
-      | null;
-  }> | null;
-} | null;
-
-// Source: ../../packages/sanity/src/queries.ts
-// Variable: queryPageBySlug
-// Query: *[_type == "page" && slug.current == $slug][0]{    title,    "slug": slug.current,    "excerpt": select(    length(pt::text(description)) > 160 =>      array::join(string::split(pt::text(description), "")[0...160], "") + "…",    pt::text(description)  ),    "body": body[]{      ...,      _type == "attachment" => {        ...,        asset->      }    },  }
-export type QueryPageBySlugResult = {
-  title: string;
-  slug: string;
-  excerpt: string;
-  body: Array<
-    | {
-        asset: {
-          _id: string;
-          _type: "sanity.fileAsset";
-          _createdAt: string;
-          _updatedAt: string;
-          _rev: string;
-          originalFilename?: string;
-          label?: string;
-          title?: string;
-          description?: string;
-          altText?: string;
-          sha1hash: string;
-          extension: string;
-          mimeType: string;
-          size: number;
-          assetId: string;
-          uploadId?: string;
-          path: string;
-          url: string;
-          source?: SanityAssetSourceData;
-        };
-        media?: unknown;
-        description: string;
-        _type: "attachment";
-        _key: string;
-      }
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?:
-          | "blockquote"
-          | "h1"
-          | "h2"
-          | "h3"
-          | "h4"
-          | "h5"
-          | "h6"
-          | "normal";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }
-    | {
-        asset: SanityImageAssetReference;
-        media?: unknown;
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        alt: string;
-        _type: "image";
-        _key: string;
-      }
-  >;
-} | null;
-
 // Query TypeMap
 declare global {
   interface SanityQueries {
-    '\n  *[_type == "post" && defined(mainImage)][0].mainImage{\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n': QueryImageTypeResult;
-    '\n  *[_type == "page" && slug.current == $slug][0]{\n    ...,\n    "slug": slug.current,\n    \n  pageBuilder[]{\n    ...,\n    _type,\n\n  }\n\n  }\n  ': QuerySlugPageDataResult;
-    '\n  *[_type == "navbar" && _id == "navbar"][0]{\n    _id,\n    columns[]{\n      _key,\n      _type == "navbarColumn" => {\n        "type": "column",\n        title,\n        links[]{\n          _key,\n          name,\n          icon,\n          description,\n          "openInNewTab": url.openInNewTab,\n          "href": select(\n            url.type == "internal" => url.internal->slug.current,\n            url.type == "external" => url.external,\n            url.href\n          )\n        }\n      },\n      _type == "navbarLink" => {\n        "type": "link",\n        name,\n        description,\n        "openInNewTab": url.openInNewTab,\n        "href": select(\n          url.type == "internal" => url.internal->slug.current,\n          url.type == "external" => url.external,\n          url.href\n        )\n      }\n    },\n    \n  buttons[]{\n    text,\n    variant,\n    _key,\n    _type,\n    "openInNewTab": url.openInNewTab,\n    "href": select(\n      url.type == "internal" => url.internal->slug.current,\n      url.type == "external" => url.external,\n      url.href\n    ),\n  }\n,\n  }\n': QueryNavbarDataResult;
-    '\n  *[_type == "settings"][0]{\n    _id,\n    _type,\n    siteTitle,\n    logo {\n      \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n    },\n    siteDescription,\n    socialLinks{\n      linkedin,\n      facebook,\n      twitter,\n      instagram,\n      youtube\n    }\n  }\n': QueryGlobalSeoSettingsResult;
-    '\n  *[_type == "blogIndex"][0]{\n    ...,\n    _id,\n    _type,\n    title,\n    description,\n    "displayFeaturedBlogs" : displayFeaturedBlogs == "yes",\n    "featuredBlogsCount" : featuredBlogsCount,\n    \n  pageBuilder[]{\n    ...,\n    _type,\n\n  }\n,\n    "slug": slug.current\n  }\n': QueryBlogIndexPageDataResult;
-    '\n  *[_type == "blog" && (seoHideFromLists != true)] | order(orderRank asc) [$start...$end]{\n    \n  _type,\n  _id,\n  title,\n  description,\n  "slug":slug.current,\n  orderRank,\n  \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n,\n  publishedAt,\n  \n  authors[0]->{\n    _id,\n    name,\n    position,\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n  }\n\n\n  }\n': QueryBlogIndexPageBlogsResult;
-    '\n  *[_type == "blog" && defined(slug.current) && (seoHideFromLists != true)]{\n    \n  _type,\n  _id,\n  title,\n  description,\n  "slug":slug.current,\n  orderRank,\n  \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n,\n  publishedAt,\n  \n  authors[0]->{\n    _id,\n    name,\n    position,\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n  }\n\n\n  }\n': QueryAllBlogDataForSearchResult;
-    '\n  count(*[_type == "blog" && (seoHideFromLists != true)])\n': QueryBlogIndexPageBlogsCountResult;
-    '\n  *[_type == "blog" && slug.current == $slug][0]{\n    ...,\n    "slug": slug.current,\n    \n  authors[0]->{\n    _id,\n    name,\n    position,\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n  }\n,\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n,\n    \n  richText[]{\n    ...,\n    _type == "block" => {\n      ...,\n      \n  markDefs[]{\n    ...,\n    \n  ...customLink{\n    openInNewTab,\n    "href": select(\n      type == "internal" => internal->slug.current,\n      type == "external" => external,\n      "#"\n    ),\n  }\n\n  }\n\n    },\n    _type == "image" => {\n      \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n      "caption": caption\n    }\n  }\n,\n    \n  pageBuilder[]{\n    ...,\n    _type,\n\n  }\n\n  }\n': QueryBlogSlugPageDataResult;
-    '\n  *[_type == "blog" && defined(slug.current)].slug.current\n': QueryBlogPathsResult;
-    '\n  *[_type == "category" && highlight == true]{\n    _id,\n    title,\n    "slug": slug.current\n  } | order(title asc)\n': HighlightedCategoriesResult;
-    '\n  *[_type == "tag" && highlight == true]{\n    _id,\n    title,\n    "slug": slug.current\n  } | order(title asc)\n': HighlightedTagsResult;
-    '\n  *[_type == "post" && slug.current == $slug && isArchived != true][0]{\n    \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  \n  "excerpt": select(\n    length(pt::text(body)) > 160 =>\n      array::join(string::split(pt::text(body), "")[0...160], "") + "\u2026",\n    pt::text(body)\n  )\n,\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n,\n  "slug": slug.current,\n\n  },\n  mainImage {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    \n  ...,\n  _type == "block" => {\n    ...\n  },\n  _type == "image" => {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n    "caption": caption\n  },\n  _type == "attachment" => {\n    ...,\n    asset->\n  }\n\n  },\n\n  }\n': QueryArticleSlugPageDataResult;
-    '\n  *[_type == "post" && defined(slug.current) && isArchived != true]{\n    "slug": slug.current,\n    _updatedAt\n  }\n': QueryArticlePathsResult;
-    '\n  *[_type == "category" && slug.current == "maricopa-senior-living-an-arizona-501-c3-nonprofit"][0]{\n    title,\n    "description": description[]{\n      \n  ...,\n  _type == "block" => {\n    ...\n  },\n  _type == "image" => {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n    "caption": caption\n  },\n  _type == "attachment" => {\n    ...,\n    asset->\n  }\n\n    },\n    "slug": slug.current\n  }\n': RightSidebarNonProfitQueryResult;
-    '\n  *[\n    _type == "post"\n    && isArchived != true\n    && references(*[_type == "category" && slug.current == "whats-new"][0]._id)\n  ] | order(publishedAt desc)[0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  publishedAt,\n  \n  "excerpt": select(\n    length(pt::text(body)) > 160 =>\n      array::join(string::split(pt::text(body), "")[0...160], "") + "\u2026",\n    pt::text(body)\n  )\n\n,\n    "author": author->{\n      \n  name,\n  \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n\n    }\n  }\n': RightSidebarWhatsNewQueryResult;
-    '\n  *[\n    _type == "post"\n    && isArchived != true\n    && references(*[_type == "category" && slug.current == "city-of-maricopa-community-senior-center"][0]._id)\n  ] | order(publishedAt desc)[0...2]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  publishedAt,\n  \n  "excerpt": select(\n    length(pt::text(body)) > 160 =>\n      array::join(string::split(pt::text(body), "")[0...160], "") + "\u2026",\n    pt::text(body)\n  )\n\n\n  }\n': RightSidebarSeniorCenterQueryResult;
-    '\n  *[\n    _type == "post"\n    && isArchived != true\n    && references(*[_type == "category" && slug.current == "keeping-you-informed-still-newsletter"][0]._id)\n  ] | order(publishedAt desc)[0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  publishedAt,\n  \n  "excerpt": select(\n    length(pt::text(body)) > 160 =>\n      array::join(string::split(pt::text(body), "")[0...160], "") + "\u2026",\n    pt::text(body)\n  )\n\n\n  }\n': RightSidebarNewsletterQueryResult;
-    '\n  *[_type == "home"][0]{\n    _id,\n    _type,\n    image {\n      \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n      "caption": caption\n    },\n    "content": content[]{\n      ...,\n      _type == "image" => {\n        \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n        "caption": caption\n      },\n      _type == "attachment" => {\n        ...,\n        asset->\n      }\n    }\n  }\n': QueryHomePageDataResult;
-    '\n  *[_type == "post" && isArchived != true] | order(publishedAt desc){\n    \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  \n  "excerpt": select(\n    length(pt::text(body)) > 160 =>\n      array::join(string::split(pt::text(body), "")[0...160], "") + "\u2026",\n    pt::text(body)\n  )\n,\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n,\n  "slug": slug.current,\n\n  },\n  mainImage {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    \n  ...,\n  _type == "block" => {\n    ...\n  },\n  _type == "image" => {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n    "caption": caption\n  },\n  _type == "attachment" => {\n    ...,\n    asset->\n  }\n\n  },\n\n  }\n': QueryAllPostsResult;
-    '\n  *[_type == "post" && defined(slug.current) && isArchived != true][].slug.current\n': QueryAllPostSlugsResult;
-    '\n  *[_type == "post" && defined(slug.current) && isArchived != true] | order(_updatedAt desc) [0...100]{"slug": slug.current}\n': QueryRecentArticleSlugsResult;
-    '\n  *[_type == "page" && defined(slug.current)]{"slug": slug.current}\n': QueryAllPageSlugsResult;
-    '\n  *[_type == "post" && slug.current == $slug && isArchived != true]{\n    \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  \n  "excerpt": select(\n    length(pt::text(body)) > 160 =>\n      array::join(string::split(pt::text(body), "")[0...160], "") + "\u2026",\n    pt::text(body)\n  )\n,\n  "slug": slug.current,\n  "author": author->{\n    \n  name,\n  \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n,\n  "slug": slug.current,\n\n  },\n  mainImage {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  } {\n    ...,\n    "rank": select(\n      count(tags[title == "Local Resources"]) > 0 => 1,\n      2\n    )\n  },\n  publishedAt,\n  "body": body[]{\n    \n  ...,\n  _type == "block" => {\n    ...\n  },\n  _type == "image" => {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n    "caption": caption\n  },\n  _type == "attachment" => {\n    ...,\n    asset->\n  }\n\n  },\n\n  }[0]\n': QueryPostBySlugResult;
-    '\n  *[_type == "category"][].slug.current\n': QueryAllCategoriesResult;
-    '\n  *[_type == "category" && defined(slug.current)]{"category": slug.current}\n': QueryCategoryPathsResult;
-    '\n  *[_type == "category" && slug.current == $slug]{\n    title,\n    "slug": slug.current,\n    "description": description[]{\n      \n  ...,\n  _type == "block" => {\n    ...\n  },\n  _type == "image" => {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n    "caption": caption\n  },\n  _type == "attachment" => {\n    ...,\n    asset->\n  }\n\n    },\n    "excerpt": select(\n    length(pt::text(description)) > 160 =>\n      array::join(string::split(pt::text(description), "")[0...160], "") + "\u2026",\n    pt::text(description)\n  ),\n    "combinedList": [\n      ...(*[_type == "service" && references(^._id)]{\n        \n  _id,\n  _type,\n  title,\n  description,\n  audience,\n  website,\n  phone,\n  address,\n  businessHours,\n  notes,\n  attachments,\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  }\n\n      }),\n      ...(*[_type == "post" && references(^._id) && isArchived != true]{\n        \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  \n  "excerpt": select(\n    length(pt::text(body)) > 160 =>\n      array::join(string::split(pt::text(body), "")[0...160], "") + "\u2026",\n    pt::text(body)\n  )\n,\n  "slug": slug.current,\n  "author": author->{\n    name,\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  publishedAt\n,\n        "tags": tags[]->{ title }\n      })\n    ] {\n      ...,\n      "rank": select(\n        count(tags[title == "Local Resources"]) > 0 => 1,\n        2\n      )\n    } | order(rank, title asc),\n  }[0]\n': QueryCategoryBySlugResult;
-    '\n  *[_type == "tag" && defined(slug.current)][].slug.current\n': QueryAllTagsResult;
-    '\n  *[_type == "tag" && defined(slug.current)]{"tag": slug.current}\n': QueryTagPathsResult;
-    '\n  *[_type == "tag" && slug.current == $slug]{\n    title,\n    "slug": slug.current,\n    "description": description[]{\n      \n  ...,\n  _type == "block" => {\n    ...\n  },\n  _type == "image" => {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n    "caption": caption\n  },\n  _type == "attachment" => {\n    ...,\n    asset->\n  }\n\n    },\n    "excerpt": select(\n    length(pt::text(description)) > 160 =>\n      array::join(string::split(pt::text(description), "")[0...160], "") + "\u2026",\n    pt::text(description)\n  ),\n    "posts": *[_type == "post" && references(^._id) && isArchived != true] | order(publishedAt desc){\n      \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  \n  "excerpt": select(\n    length(pt::text(body)) > 160 =>\n      array::join(string::split(pt::text(body), "")[0...160], "") + "\u2026",\n    pt::text(body)\n  )\n,\n  "slug": slug.current,\n  "author": author->{\n    name,\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  publishedAt\n\n    },\n    "services": *[_type == "service" && references(^._id)] | order(title asc){\n      \n  _id,\n  _type,\n  title,\n  description,\n  audience,\n  website,\n  phone,\n  address,\n  businessHours,\n  notes,\n  attachments,\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  }\n\n    },\n  }[0]\n': QueryTagBySlugResult;
-    '\n  *[\n    (\n      (_type == "post" && isArchived != true) || _type == "service"\n    ) && (\n      title match $searchTerm + "*"\n      || pt::text(body) match $searchTerm + "*"\n      || pt::text(description) match $searchTerm + "*"\n      || tags[]->title match $searchTerm + "*"\n      || categories[]->title match $searchTerm + "*"\n    )\n  ]\n  | score(\n      boost(title match $searchTerm + "*", 4),\n      pt::text(description) match $searchTerm + "*",\n      pt::text(body) match $searchTerm + "*"\n    )\n  | order(_score desc, _updatedAt desc)[0...50]{\n    _type == "post" => {\n      \n  _id,\n  _updatedAt,\n  _type,\n  title,\n  \n  "excerpt": select(\n    length(pt::text(body)) > 160 =>\n      array::join(string::split(pt::text(body), "")[0...160], "") + "\u2026",\n    pt::text(body)\n  )\n,\n  "slug": slug.current,\n  "author": author->{\n    name,\n    \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    ""\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n\n  },\n  "categories": categories[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  },\n  publishedAt\n\n    },\n    _type == "service" => {\n      \n  _id,\n  _type,\n  title,\n  description,\n  audience,\n  website,\n  phone,\n  address,\n  businessHours,\n  notes,\n  attachments,\n  "tags": tags[]->{\n    _id,\n    title,\n    "slug": slug.current,\n  }\n\n    }\n  }\n': QuerySearchResult;
-    '\n  {\n    "pages": *[_type == "page" && defined(slug.current)]{\n      "slug": slug.current,\n      _updatedAt\n    },\n    "articles": *[_type == "post" && defined(slug.current) && isArchived != true]{\n      "slug": slug.current,\n      _updatedAt\n    },\n    "categories": *[_type == "category" && defined(slug.current) && count(*[references(^._id)]) > 0]{\n      "slug": slug.current,\n      _updatedAt\n    },\n    "tags": *[_type == "tag" && defined(slug.current) && count(*[references(^._id)]) > 0]{\n      "slug": slug.current,\n      _updatedAt\n    }\n  }\n': QuerySitemapResult;
-    '\n  *[_type == "navigation"][0]{\n    "headerPrimary": headerPrimary[]{\n      _key,\n      "link": link{\n        url,\n        text,\n        reference->{\n          _id,\n          _type,\n          title,\n          "slug": slug.current\n        }\n      },\n      children[]{\n        _key,\n        link{\n          url,\n          text,\n          reference->{\n            _id,\n            _type,\n            title,\n            "slug": slug.current\n          }\n        }\n      }\n    },\n    "footer": footer[]{\n      _key,\n      url,\n      text,\n      reference->{\n        _id,\n        _type,\n        title,\n        "slug": slug.current\n      }\n    },\n  }\n': QueryNavigationResult;
-    '\n  *[_type == "page" && slug.current == $slug][0]{\n    title,\n    "slug": slug.current,\n    "excerpt": select(\n    length(pt::text(description)) > 160 =>\n      array::join(string::split(pt::text(description), "")[0...160], "") + "\u2026",\n    pt::text(description)\n  ),\n    "body": body[]{\n      ...,\n      _type == "attachment" => {\n        ...,\n        asset->\n      }\n    },\n  }\n': QueryPageBySlugResult;
+    '\n  *[_type == "article" && defined(mainImage)][0].mainImage{\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n\n  }\n': QueryImageTypeResult;
+    '\n  *[_id == "settings"][0]{\n    siteTitle,\n    tagline,\n    description,\n    heroImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    contactEmail,\n    contactPhone { label, number },\n    mailingAddress,\n    donateUrl,\n    nonprofitStatement,\n    newsletterTitle,\n    newsletterDedication,\n    subscribeInstructions\n  }\n': QuerySettingsResult;
+    '\n  *[_id == "navigation"][0]{\n    main[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n },\n    footer[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n }\n  }\n': QueryNavigationResult;
+    '\n  *[_id == "home"][0]{\n    sections[]{ \n  ...,\n  _key,\n  _type,\n  _type == "heroBlock" => { image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }, buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n  _type == "textBlock" => { body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } },\n  _type == "imageBlock" => { images[]{ _key, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n  _type == "buttonsBlock" => { buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n  _type == "calloutBlock" => { link{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n  _type == "resourceListBlock" => {\n    "topicSlug": topic->slug.current,\n    "topicTitle": topic->title,\n    "picked": resources[]->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n }\n  },\n  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "linkListBlock" => {\n    "topicId": topic._ref,\n    "topicSlug": topic->slug.current,\n    "picked": links[]->{ \n  _id,\n  title,\n  url,\n  source,\n  summary,\n  publishedAt\n }\n  },\n  _type == "faqBlock" => { items[]{ _key, question, answer } },\n  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } }\n }\n  }\n': QueryHomeResult;
+    '\n  *[_type == "topic"] | order(order asc){\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    icon,\n    "resourceCount": count(*[_type == "resource" && references(^._id)])\n  }\n': QueryTopicsResult;
+    '\n  *[_type == "page" && slug.current == $slug && section == $section][0]{\n    _id,\n    title,\n    description,\n    section,\n    "slug": slug.current,\n    sections[]{ \n  ...,\n  _key,\n  _type,\n  _type == "heroBlock" => { image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }, buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n  _type == "textBlock" => { body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } },\n  _type == "imageBlock" => { images[]{ _key, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n  _type == "buttonsBlock" => { buttons[]{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n  _type == "calloutBlock" => { link{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n  _type == "resourceListBlock" => {\n    "topicSlug": topic->slug.current,\n    "topicTitle": topic->title,\n    "picked": resources[]->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n }\n  },\n  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },\n  _type == "linkListBlock" => {\n    "topicId": topic._ref,\n    "topicSlug": topic->slug.current,\n    "picked": links[]->{ \n  _id,\n  title,\n  url,\n  source,\n  summary,\n  publishedAt\n }\n  },\n  _type == "faqBlock" => { items[]{ _key, question, answer } },\n  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } }\n }\n  }\n': QueryPageResult;
+    '\n  *[_type == "page" && section == "about"] | order(title asc){\n    _id, title, "slug": slug.current, description\n  }\n': QueryAboutPagesResult;
+    '\n  *[_type == "page" && defined(slug.current)]{ "slug": slug.current, section }\n': QueryPagePathsResult;
+    '\n  *[_type == "topic" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    icon,\n    "resources": *[_type == "resource" && references(^._id)] | order(title asc){ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n },\n    "links": *[_type == "helpfulLink" && references(^._id)] | order(publishedAt desc)[0...12]{ \n  _id,\n  title,\n  url,\n  source,\n  summary,\n  publishedAt\n },\n    "linkCount": count(*[_type == "helpfulLink" && references(^._id)]),\n    "articles": *[_type == "article" && references(^._id)] | order(publishedAt desc)[0...6]{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  publishedAt,\n  series,\n  "author": author->{ name, "slug": slug.current },\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }\n }\n  }\n': QueryTopicResult;
+    'count(*[\n  _type == "resource"\n  && ($topic == "" || $topic in topics[]->slug.current)\n  && ($area == "" || serviceArea == $area)\n  && ($q == "" || title match $q + "*" || summary match $q + "*" || pt::text(description) match $q + "*")\n])': QueryResourcesCountResult;
+    '\n  *[\n  _type == "resource"\n  && ($topic == "" || $topic in topics[]->slug.current)\n  && ($area == "" || serviceArea == $area)\n  && ($q == "" || title match $q + "*" || summary match $q + "*" || pt::text(description) match $q + "*")\n] | order(title asc){\n    \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n,\n    hours[]{ day, opens, closes },\n    hoursNote\n  }\n': QueryResourcesForPrintResult;
+    '\n  *[_type == "resource" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n,\n    email,\n    isGovernment,\n    hours[]{ _key, day, opens, closes },\n    hoursNote,\n    description[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    eligibility,\n    cost,\n    attachments[]{ _key, title, "file": asset->{ url, size, extension } },\n    lastVerified,\n    _updatedAt\n  }\n': QueryResourceResult;
+    '\n  *[_type == "resource" && defined(slug.current)].slug.current\n': QueryResourcePathsResult;
+    'count(*[\n  _type == "helpfulLink" && ($topic == "" || $topic in topics[]->slug.current)\n])': QueryLinksCountResult;
+    '\n  *[_type == "helpfulLink" && references($topicId)] | order(publishedAt desc)[0...30]{ \n  _id,\n  title,\n  url,\n  source,\n  summary,\n  publishedAt\n }\n': QueryLinksByTopicResult;
+    '\n  *[_type == "resource" && $topic in topics[]->slug.current] | order(title asc)[0...30]{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n }\n': QueryResourcesByTopicSlugResult;
+    'count(*[\n  _type == "article"\n  && ($series == "" || series == $series)\n  && ($topicId == "" || references($topicId))\n])': QueryArticlesCountResult;
+    '\n  *[_type == "article" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  publishedAt,\n  series,\n  "author": author->{ name, "slug": slug.current },\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }\n,\n    "author": author->{ name, "slug": slug.current, bio, image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n    "topics": topics[]->{ title, "slug": slug.current },\n    body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    _updatedAt\n  }\n': QueryArticleResult;
+    '\n  *[_type == "article" && defined(slug.current)] | order(publishedAt desc)[0...200].slug.current\n': QueryArticlePathsResult;
+    '\n  *[_type == "author" && slug.current == $slug][0]{\n    name,\n    "slug": slug.current,\n    bio,\n    tribute,\n    image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    "articles": *[_type == "article" && references(^._id)] | order(publishedAt desc){ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  publishedAt,\n  series,\n  "author": author->{ name, "slug": slug.current },\n  mainImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n }\n }\n  }\n': QueryWriterResult;
+    '\n  *[\n    _type == "event"\n    && dateTime(start) <= dateTime($to)\n    && (\n      dateTime(coalesce(end, start)) >= dateTime($from)\n      || (repeat.frequency in ["weekly", "monthlyWeekday", "monthlyDate"] && repeat.until >= string::split($from, "T")[0])\n    )\n    && ($topicId == "" || references($topicId))\n    && ($mslOnly == false || hostedByMsl == true)\n  ] | order(start asc){ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n }\n': QueryEventsInRangeResult;
+    '\n  *[_type == "event" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n,\n    address,\n    cost,\n    registration { required, link{ \n  _key,\n  label,\n  kind,\n  section,\n  url,\n  phone,\n  email,\n  "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n }\n } },\n    flyer { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    details[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    "topics": topics[]->{ title, "slug": slug.current }\n  }\n': QueryEventResult;
+    '\n  *[_type == "event" && defined(slug.current)] | order(start desc)[0...200].slug.current\n': QueryEventPathsResult;
+    '\n  *[_type == "monthlyUpdate" && month == $month][0]{\n    _id, month, title, intro, body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n }, _updatedAt\n  }\n': QueryMonthlyUpdateResult;
+    '\n  *[_type == "monthlyUpdate" && month <= $month] | order(month desc)[0]{\n    _id, month, title, intro\n  }\n': QueryCurrentMonthlyUpdateResult;
+    '\n  *[_type == "monthlyUpdate" && month <= $month] | order(month desc){ month, title, intro }\n': QueryMonthlyUpdateListResult;
+    '\n  *[_type == "newsletterEdition" && month == $month][0]{\n    _id,\n    month,\n    coverImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    coverMessage,\n    sections[]{ \n  _key,\n  _type,\n  heading,\n  _type == "comingUpSection" => {\n    includeEvents,\n    "hiddenEventIds": hiddenEvents[]._ref,\n    extraRows[]{ _key, when, what, where }\n  },\n  _type == "storySection" => {\n    byline,\n    image { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n },\n    "article": article->{ title, "slug": slug.current, "author": author->name, body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } }\n  },\n  _type == "flyerSection" => { pages[]{ _key, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n } },\n  _type == "funSection" => { body[]{ \n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => { "target": reference->{ \n  _type,\n  "slug": slug.current,\n  section,\n  month,\n  title\n } }\n  },\n  _type == "imageWithAlt" => { _key, _type, \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n  _type == "fileAttachment" => {\n    _key,\n    _type,\n    title,\n    "file": asset->{ url, size, extension, originalFilename }\n  },\n  _type == "eventCard" => { _key, _type, "event": event->{ \n  _id,\n  title,\n  "slug": slug.current,\n  start,\n  end,\n  allDay,\n  repeat { frequency, until, skipDates },\n  location,\n  hostedByMsl,\n  summary\n } },\n  _type == "resourceCard" => { _key, _type, "resource": resource->{ \n  _id,\n  title,\n  "slug": slug.current,\n  summary,\n  serviceArea,\n  phones[]{ _key, label, number },\n  website,\n  address,\n  "topics": topics[]->{ title, "slug": slug.current }\n } }\n } }\n },\n    "uploadedPdf": uploadedPdf.asset->{ url, size },\n    _updatedAt\n  }\n': QueryNewsletterResult;
+    '\n  *[_type == "newsletterEdition" && month <= $month] | order(month desc){\n    month,\n    coverImage { \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(alt, ""),\n  caption,\n  hotspot { x, y },\n  crop { top, bottom, left, right }\n },\n    "hasSections": count(sections) > 0,\n    "uploadedPdf": uploadedPdf.asset->{ url, size }\n  }\n': QueryNewsletterListResult;
+    '\n  *[\n    _type in ["resource", "helpfulLink", "article", "event", "page"]\n    && (\n      title match $q + "*"\n      || summary match $q + "*"\n      || pt::text(description) match $q + "*"\n      || pt::text(body) match $q + "*"\n      || topics[]->title match $q + "*"\n    )\n  ]\n  | score(\n      boost(title match $q + "*", 5),\n      boost(_type == "resource", 2),\n      summary match $q + "*"\n    )\n  | order(_score desc)[0...40]{\n    _type,\n    _id,\n    title,\n    "slug": slug.current,\n    summary,\n    section,\n    url,\n    source,\n    start,\n    phones[]{ _key, label, number }\n  }\n': QuerySearchResult;
+    '\n  *[_type == "redirect" && source == $source][0]{ destination, permanent }\n': QueryRedirectResult;
+    '\n  {\n    "pages": *[_type == "page" && defined(slug.current)]{ "slug": slug.current, section, _updatedAt },\n    "resources": *[_type == "resource" && defined(slug.current)]{ "slug": slug.current, _updatedAt },\n    "articles": *[_type == "article" && defined(slug.current)]{ "slug": slug.current, _updatedAt },\n    "events": *[_type == "event" && defined(slug.current)]{ "slug": slug.current, _updatedAt },\n    "topics": *[_type == "topic" && defined(slug.current)]{ "slug": slug.current, _updatedAt },\n    "months": *[_type == "monthlyUpdate"]{ month, _updatedAt },\n    "newsletters": *[_type == "newsletterEdition"]{ month, _updatedAt },\n    "writers": *[_type == "author" && defined(slug.current)]{ "slug": slug.current, _updatedAt }\n  }\n': QuerySitemapResult;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

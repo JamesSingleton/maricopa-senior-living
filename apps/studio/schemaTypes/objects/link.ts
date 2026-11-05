@@ -12,6 +12,19 @@ export const LINKABLE_TYPES = [
   { type: "newsletterEdition" },
 ];
 
+/** Fixed sections of the website (routes, not documents). */
+export const SITE_SECTIONS = [
+  { title: "Find Help (resources)", value: "/resources" },
+  { title: "Topics", value: "/topics" },
+  { title: "What's New", value: "/whats-new" },
+  { title: "Events calendar", value: "/events" },
+  { title: "Newsletter", value: "/newsletter" },
+  { title: "Articles", value: "/articles" },
+  { title: "Helpful links", value: "/links" },
+  { title: "About Maricopa Senior Living", value: "/about" },
+  { title: "Search", value: "/search" },
+];
+
 /**
  * A link that is either a page on this site (picked from a list, so it never
  * breaks when a web address changes) or another website / phone / email.
@@ -38,6 +51,7 @@ export const link = defineType({
         layout: "radio",
         list: [
           { title: "A page on this website", value: "internal" },
+          { title: "A section of this website", value: "section" },
           { title: "Another website", value: "external" },
           { title: "A phone number", value: "phone" },
           { title: "An email address", value: "email" },
@@ -55,6 +69,19 @@ export const link = defineType({
         rule.custom((value, { parent }) =>
           (parent as { kind?: string })?.kind === "internal" && !value
             ? "Pick the page this link goes to."
+            : true,
+        ),
+    }),
+    defineField({
+      name: "section",
+      title: "Section",
+      type: "string",
+      options: { list: SITE_SECTIONS },
+      hidden: ({ parent }) => parent?.kind !== "section",
+      validation: (rule) =>
+        rule.custom((value, { parent }) =>
+          (parent as { kind?: string })?.kind === "section" && !value
+            ? "Pick a section."
             : true,
         ),
     }),
@@ -97,14 +124,17 @@ export const link = defineType({
       label: "label",
       kind: "kind",
       ref: "reference.title",
+      section: "section",
       url: "url",
       phone: "phone",
       email: "email",
     },
-    prepare: ({ label, kind, ref, url, phone, email }) => ({
+    prepare: ({ label, kind, ref, section, url, phone, email }) => ({
       title: label,
       subtitle:
-        { internal: ref, external: url, phone, email }[kind as string] ?? "",
+        { internal: ref, section, external: url, phone, email }[
+          kind as string
+        ] ?? "",
     }),
   },
 });
