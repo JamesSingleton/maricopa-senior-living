@@ -7,6 +7,7 @@ import {
   queryTopic,
   queryTopics,
 } from "@maricopa-senior-living/sanity/queries";
+import { MapPin } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -20,6 +21,14 @@ import { seoMetadata } from "@/lib/seo";
 import { topicLd } from "@/lib/structured-data";
 
 type Params = Promise<{ slug: string }>;
+
+/** Nearest first, so a long topic reads as four short lists. */
+const AREAS = [
+  { value: "maricopa", label: "In Maricopa" },
+  { value: "pinal", label: "Pinal County" },
+  { value: "arizona", label: "Across Arizona" },
+  { value: "national", label: "National" },
+];
 
 export async function generateStaticParams() {
   const { data } = await cachedSanityStaticParams({ query: queryTopics });
@@ -71,6 +80,12 @@ async function TopicPageContent({ params }: { params: Params }) {
     });
     if (!topic) notFound();
     const resources = topic.resources ?? [];
+    const groups = AREAS.map((area) => ({
+      ...area,
+      items: resources.filter(
+        (r) => (r.serviceArea ?? "maricopa") === area.value,
+      ),
+    })).filter((group) => group.items.length);
     return (
       <>
         <JsonLd
@@ -114,19 +129,62 @@ async function TopicPageContent({ params }: { params: Params }) {
         <div className="container-page flex flex-col gap-12 py-8">
           {resources.length ? (
             <section id="resources" aria-labelledby="resources-h">
-              <h2 id="resources-h">Places to call or visit</h2>
-              <ul className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {resources.map((resource) => (
-                  <li key={resource._id}>
-                    <ResourceCard resource={resource} />
-                  </li>
-                ))}
-              </ul>
+              <h2 id="resources-h" className="ruled">
+                Places to call or visit
+              </h2>
+              <p className="muted mt-2 measure">
+                Closest to home first: Maricopa, then Pinal County, then
+                statewide and national services.
+              </p>
+              {groups.length > 1 ? (
+                <nav
+                  aria-label="Jump to an area"
+                  className="no-print mt-4 flex flex-wrap gap-2"
+                >
+                  {groups.map((group) => (
+                    <a
+                      key={group.value}
+                      href={`#area-${group.value}`}
+                      className="chip"
+                    >
+                      {group.label} ({group.items.length})
+                    </a>
+                  ))}
+                </nav>
+              ) : null}
+              {groups.map((group) => (
+                <div
+                  key={group.value}
+                  id={`area-${group.value}`}
+                  className="mt-8 scroll-mt-4"
+                >
+                  <h3 className="ruled flex items-center gap-3 text-[1.5rem]">
+                    <MapPin
+                      className="size-6 text-[var(--msl-clay)]"
+                      aria-hidden="true"
+                    />
+                    {group.label}
+                    <span className="muted text-base font-normal">
+                      {group.items.length}{" "}
+                      {group.items.length === 1 ? "place" : "places"}
+                    </span>
+                  </h3>
+                  <ul className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    {group.items.map((resource) => (
+                      <li key={resource._id}>
+                        <ResourceCard resource={resource} hideArea />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </section>
           ) : null}
           {topic.links?.length ? (
             <section id="links" aria-labelledby="links-h">
-              <h2 id="links-h">Helpful reading from other websites</h2>
+              <h2 id="links-h" className="ruled">
+                Helpful reading from other websites
+              </h2>
               <ul className="mt-4 grid gap-4 md:grid-cols-2">
                 {topic.links.map((link) => (
                   <li key={link._id}>
@@ -148,7 +206,9 @@ async function TopicPageContent({ params }: { params: Params }) {
           ) : null}
           {topic.articles?.length ? (
             <section id="articles" aria-labelledby="articles-h">
-              <h2 id="articles-h">Articles from Maricopa Senior Living</h2>
+              <h2 id="articles-h" className="ruled">
+                Articles from Maricopa Senior Living
+              </h2>
               <ul className="mt-4 grid gap-4 md:grid-cols-3">
                 {topic.articles.map((article) => (
                   <li key={article._id}>

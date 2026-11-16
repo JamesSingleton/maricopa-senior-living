@@ -4,11 +4,11 @@ import {
 } from "@maricopa-senior-living/sanity/live";
 import { queryPage } from "@maricopa-senior-living/sanity/queries";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 import { PageBuilder } from "@/components/page-builder";
 import { PageHeader } from "@/components/page-header";
 import { draftAware } from "./draft";
-import { redirectOrNotFound } from "./redirects";
 import { seoMetadata } from "./seo";
 
 export async function pageMetadata(slug: string): Promise<Metadata> {
@@ -27,7 +27,7 @@ export async function pageMetadata(slug: string): Promise<Metadata> {
     : {};
 }
 
-/** A page built from sections in the Studio. Unknown paths try redirects. */
+/** A page built from sections in the Studio. */
 export function renderCmsPage(slug: string) {
   return draftAware(async ({ perspective, stega }) => {
     const { data: page } = await cachedSanity({
@@ -36,7 +36,7 @@ export function renderCmsPage(slug: string) {
       perspective,
       stega,
     });
-    if (!page) return redirectOrNotFound(`/${slug}`);
+    if (!page) notFound();
     const firstIsHero = page.sections?.[0]?._type === "heroBlock";
     return (
       <>

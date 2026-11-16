@@ -84,7 +84,8 @@ export const settings = defineType({
   readOnly: adminOnly,
   groups: [
     { name: "site", title: "Site", default: true },
-    { name: "contact", title: "Contact & donate" },
+    { name: "contact", title: "Contact" },
+    { name: "nonprofit", title: "Nonprofit & donations" },
     { name: "newsletter", title: "Newsletter" },
   ],
   fields: [
@@ -158,29 +159,84 @@ export const settings = defineType({
       of: [defineArrayMember({ type: "url" })],
     }),
     defineField({
+      name: "nonprofitStatement",
+      title: "Nonprofit statement",
+      type: "string",
+      group: "nonprofit",
+      description: "One line shown in the footer of every page.",
+      initialValue: "Maricopa Senior Living is an Arizona 501(c)(3) nonprofit.",
+    }),
+    defineField({
+      name: "mission",
+      title: "Mission",
+      type: "text",
+      rows: 3,
+      group: "nonprofit",
+      description:
+        "One or two sentences on what Maricopa Senior Living is for. Used on the Donate page and by search engines.",
+      validation: (rule) => rule.max(400),
+    }),
+    defineField({
       name: "ein",
       title: "EIN (tax ID)",
       type: "string",
-      group: "contact",
-      description: "Optional. Lets donors confirm the 501(c)(3) status.",
-      validation: (rule) =>
+      group: "nonprofit",
+      description:
+        "Shown in the footer and on the Donate page so donors can confirm the 501(c)(3) status.",
+      validation: (rule) => [
         rule.custom((value) =>
           !value || /^\d{2}-?\d{7}$/.test(value)
             ? true
             : "Use the 9-digit EIN, e.g. 12-3456789.",
         ),
+        rule
+          .custom((value) =>
+            value
+              ? true
+              : "Add the EIN: donors, grant makers and Google all look for it.",
+          )
+          .warning(),
+      ],
+    }),
+    defineField({
+      name: "foundedYear",
+      title: "Year founded",
+      type: "number",
+      group: "nonprofit",
+      validation: (rule) =>
+        rule.integer().min(1950).max(new Date().getFullYear()),
     }),
     defineField({
       name: "donateUrl",
       title: "Donate link",
       type: "url",
-      group: "contact",
+      group: "nonprofit",
+      description: "Where the Donate buttons go (PayPal).",
     }),
     defineField({
-      name: "nonprofitStatement",
+      name: "taxDeductibleNote",
+      title: "Tax-deductible note",
       type: "string",
-      group: "contact",
-      initialValue: "Maricopa Senior Living is an Arizona 501(c)(3) nonprofit.",
+      group: "nonprofit",
+      initialValue:
+        "Donations are tax-deductible to the extent allowed by law.",
+    }),
+    defineField({
+      name: "donateByMail",
+      title: "Giving by check",
+      type: "text",
+      rows: 3,
+      group: "nonprofit",
+      description:
+        'For example "Make checks payable to Maricopa Senior Living and mail to…". Leave empty to hide.',
+    }),
+    defineField({
+      name: "charityProfileUrl",
+      title: "Charity profile (Candid / GuideStar)",
+      type: "url",
+      group: "nonprofit",
+      description:
+        "Optional. A public profile where donors can check the nonprofit's standing.",
     }),
     defineField({
       name: "newsletterTitle",

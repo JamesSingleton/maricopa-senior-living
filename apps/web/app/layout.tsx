@@ -7,7 +7,7 @@ import {
 } from "@maricopa-senior-living/sanity/live";
 import { querySettings } from "@maricopa-senior-living/sanity/queries";
 import type { Metadata, Viewport } from "next";
-import { Onest } from "next/font/google";
+import { Atkinson_Hyperlegible_Next, Source_Serif_4 } from "next/font/google";
 import { draftMode } from "next/headers";
 import PlausibleProvider from "next-plausible";
 import { VisualEditing } from "next-sanity/visual-editing";
@@ -18,11 +18,17 @@ import { baseUrl } from "@/lib/constants";
 import { draftAware } from "@/lib/draft";
 import { imageUrl } from "@/lib/structured-data";
 
-// Onest: open, high x-height sans with metrics Next knows (no fallback
-// warning), used for headings and text alike.
-const sans = Onest({
+// Atkinson Hyperlegible was drawn by the Braille Institute for low-vision
+// readers (unmistakable I/l/1, open counters); Source Serif gives headings
+// a steady, newspaper-like voice.
+const sans = Atkinson_Hyperlegible_Next({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+});
+const display = Source_Serif_4({
+  subsets: ["latin"],
+  variable: "--font-display",
   display: "swap",
 });
 
@@ -55,7 +61,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#1e2a23",
+  themeColor: "#17302a",
 };
 
 export default async function RootLayout({
@@ -65,7 +71,7 @@ export default async function RootLayout({
 }) {
   const { isEnabled: isDraftMode } = await draftMode();
   return (
-    <html lang="en" className={sans.variable}>
+    <html lang="en" className={`${sans.variable} ${display.variable}`}>
       <body className="flex min-h-dvh flex-col">
         <PlausibleProvider src="https://plausible.io/js/pa-_c-PnIRRG3vdbjzqvT4GH.js">
           <a href="#main" className="skip-link">

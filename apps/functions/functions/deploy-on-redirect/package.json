@@ -1,8 +1,0 @@
-{
-  "name": "deploy-on-redirect",
-  "private": true,
-  "type": "module",
-  "dependencies": {
-    "@sanity/functions": "^1.11.0"
-  }
-}

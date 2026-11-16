@@ -78,10 +78,17 @@ export type ResourceCardData = {
   topics?: { title: string | null; slug: string | null }[] | null;
 };
 
-export function ResourceCard({ resource }: { resource: ResourceCardData }) {
+export function ResourceCard({
+  resource,
+  hideArea = false,
+}: {
+  resource: ResourceCardData;
+  /** When the list is already grouped under an area heading. */
+  hideArea?: boolean;
+}) {
   return (
     <article className="card flex h-full flex-col gap-3">
-      {resource.serviceArea ? (
+      {resource.serviceArea && !hideArea ? (
         <p className="pill self-start">
           <MapPin className="size-4" aria-hidden="true" />
           {AREA_LABEL[resource.serviceArea]}

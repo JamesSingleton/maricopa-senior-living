@@ -23,41 +23,6 @@ function frameAncestors() {
   return origins.join(" ");
 }
 
-/**
- * Redirect documents (old /category, /tag and /articles URLs from the
- * previous site) loaded at build time, so they are real 301s handled before
- * routing. Changing redirects in the Studio takes effect on the next deploy.
- */
-async function sanityRedirects() {
-  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-  const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
-  const token = process.env.SANITY_API_READ_TOKEN;
-  if (!projectId || !dataset) return [];
-  const query = encodeURIComponent(
-    '*[_type == "redirect" && defined(source) && defined(destination)]{source, destination, permanent}',
-  );
-  try {
-    const response = await fetch(
-      `https://${projectId}.api.sanity.io/v2025-02-19/data/query/${dataset}?query=${query}&perspective=published`,
-      { headers: token ? { Authorization: `Bearer ${token}` } : {} },
-    );
-    const { result } = (await response.json()) as {
-      result?: { source: string; destination: string; permanent?: boolean }[];
-    };
-    return (result ?? [])
-      .filter((r) => r.source.startsWith("/") && r.source !== r.destination)
-      .map((r) => ({
-        // Escape characters path-to-regexp treats as patterns.
-        source: r.source.replace(/[()?+*:]/g, (c) => `\\${c}`),
-        destination: r.destination,
-        permanent: r.permanent !== false,
-      }));
-  } catch (error) {
-    console.warn("Could not load redirects from Sanity", error);
-    return [];
-  }
-}
-
 // https://nextjs.org/docs/advanced-features/security-headers
 // The Studio is no longer embedded, so 'unsafe-eval' is only needed by the
 // Next dev server. YouTube (privacy mode) is the only embed the site allows.
@@ -127,6 +92,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Fixed redirects. The ones Ron manages in the Studio are in proxy.ts.
   async redirects() {
     return [
       // Ron's old bookmark: the Studio moved out of the website.
@@ -136,7 +102,6 @@ const nextConfig: NextConfig = {
       // Nonprofit pages used to live under /about/; they're top-level now.
       { source: "/about/who-we-are", destination: "/about", permanent: true },
       { source: "/about/:slug", destination: "/:slug", permanent: true },
-      ...(await sanityRedirects()),
     ];
   },
   async headers() {

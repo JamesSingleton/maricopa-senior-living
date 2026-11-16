@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 
+import { isCurrent } from "./nav-links";
+
 type Item = { label: string; href: string };
 
 /**
@@ -47,7 +49,7 @@ export function MobileMenu({ items }: { items: Item[] }) {
         id={id}
         aria-label="Main"
         hidden={!open}
-        className="absolute inset-x-0 top-full z-40 border-b border-[var(--msl-line)] bg-[var(--msl-paper)] shadow-lg"
+        className="absolute inset-x-0 top-full z-40 border-b-4 border-[var(--msl-green)] bg-[var(--msl-paper)]"
       >
         <form
           action="/search"
@@ -73,14 +75,13 @@ export function MobileMenu({ items }: { items: Item[] }) {
         </form>
         <ul className="container-page flex flex-col py-3">
           {items.map((item) => {
-            const current =
-              pathname === item.href || pathname.startsWith(`${item.href}/`);
+            const current = isCurrent(pathname, item.href);
             return (
               <li key={item.href}>
                 <Link
                   href={item.href}
                   aria-current={current ? "page" : undefined}
-                  className="flex min-h-[3.25rem] items-center rounded-[var(--msl-radius-sm)] px-4 text-lg font-semibold text-[var(--msl-ink)] no-underline hover:bg-[var(--msl-cream-2)] aria-[current=page]:bg-[var(--msl-yellow)]"
+                  className="flex min-h-[3.25rem] items-center px-4 text-lg font-semibold text-[var(--msl-ink)] no-underline hover:bg-[var(--msl-cream-2)] aria-[current=page]:bg-[var(--msl-yellow)]"
                 >
                   {item.label}
                 </Link>

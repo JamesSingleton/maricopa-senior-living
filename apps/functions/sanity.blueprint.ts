@@ -39,15 +39,5 @@ export default defineBlueprint({
         resource: { type: "dataset", id: `${projectId}.${dataset}` },
       },
     }),
-    // Redirects are built into the website, so redeploy when they change.
-    defineDocumentFunction({
-      name: "deploy-on-redirect",
-      project: projectId,
-      event: {
-        on: ["create", "update", "delete"],
-        filter: '_type == "redirect"',
-        resource: { type: "dataset", id: `${projectId}.${dataset}` },
-      },
-    }),
   ],
 });

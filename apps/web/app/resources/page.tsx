@@ -13,15 +13,31 @@ import { Suspense } from "react";
 
 import { ResourceCard, type ResourceCardData } from "@/components/cards";
 import { PageHeader, Pager } from "@/components/page-header";
-import { TopicIcon } from "@/components/topic-icon";
+import { TopicTiles } from "@/components/topic-tiles";
 import { Loading } from "@/lib/draft";
 import { firstParam, pageParam, type SearchParams } from "@/lib/params";
 
-export const metadata: Metadata = {
-  title: "Find help",
-  description:
-    "Local services and organizations for seniors and caregivers in Maricopa, Arizona, sorted by topic.",
-};
+const DESCRIPTION =
+  "Local services and organizations for seniors and caregivers in Maricopa, Arizona, sorted by topic.";
+
+/**
+ * Filtered, searched and paged views are endless near-duplicates, so only
+ * the plain page is indexed; the rest point back to it.
+ */
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}): Promise<Metadata> {
+  const params = await searchParams;
+  const filtered = Object.values(params).some(Boolean);
+  return {
+    title: "Find help",
+    description: DESCRIPTION,
+    alternates: { canonical: "/resources" },
+    robots: filtered ? { index: false, follow: true } : undefined,
+  };
+}
 
 const PAGE_SIZE = 24;
 const AREAS = [
@@ -101,24 +117,9 @@ async function Results({ searchParams }: { searchParams: SearchParams }) {
       {!topic && !q && !area ? (
         <section aria-labelledby="topics-heading">
           <h2 id="topics-heading">Browse by topic</h2>
-          <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {(topics ?? []).map((t) => (
-              <li key={t._id}>
-                <Link
-                  href={`/topics/${t.slug}`}
-                  className="card card-link flex items-center gap-4"
-                >
-                  <TopicIcon name={t.icon} />
-                  <span>
-                    <span className="card-title block">{t.title}</span>
-                    <span className="block text-base muted">
-                      {t.resourceCount} resources
-                    </span>
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <div className="mt-5">
+            <TopicTiles topics={topics ?? []} />
+          </div>
         </section>
       ) : null}
 

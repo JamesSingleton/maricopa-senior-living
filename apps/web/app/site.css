@@ -1,37 +1,44 @@
 /*
  * Maricopa Senior Living — design system.
  *
- * Direction: deep green + warm cream + one bright yellow accent, Onest type,
- * generous rounded cards, pill buttons and dark "feature" bands.
- * Built for older readers: 19–20px body text, contrast ≥ 7:1 for body text
- * (yellow is only ever a background behind dark text), tap targets ≥ 52px,
- * and a strong two-tone focus ring.
+ * Direction: a modern printed directory. Flat blocks of colour that meet
+ * edge to edge, large serif headlines, thick rules and numbered lists, the
+ * way good hospital or transit signage works. No gradients, shadows, pills
+ * or decorative stripes: the only things that stand out are headings and
+ * phone numbers.
+ *
+ * Built for older readers: 19–20px text in Atkinson Hyperlegible (drawn for
+ * low vision), contrast of 7:1 or better for body text, tap targets of
+ * 52px or more, and a strong two-tone focus ring.
  */
 
 :root {
-  --msl-cream: #fffeee;
-  --msl-cream-2: #f6f4dc;
-  --msl-paper: #ffffff;
-  --msl-green: #1e2a23; /* ink + dark bands */
-  --msl-green-2: #2b3b31;
-  --msl-green-3: #3d5244;
-  --msl-sage: #e7ecd9;
-  --msl-yellow: #ffff48;
-  --msl-yellow-2: #f2f23a;
-  --msl-ink: #1e2a23;
-  --msl-ink-soft: #46554b; /* 7.6:1 on cream */
-  --msl-line: #e3e2c8;
-  --msl-line-strong: #7a8270; /* control borders: 4:1, passes WCAG 1.4.11 */
-  --msl-link: #1e2a23;
+  --msl-cream: #f4ecdc; /* sand: the page */
+  --msl-cream-2: #e9dec7;
+  --msl-paper: #fffdf8;
+  --msl-green: #14211d; /* ink: text and dark blocks */
+  --msl-green-2: #22332d;
+  --msl-green-3: #46584f;
+  --msl-sage: #dbe2c9;
+  --msl-sky: #f1d6bd;
+  --msl-yellow: #f2b233; /* gold: only ever behind ink text */
+  --msl-yellow-2: #e3a11c;
+  --msl-clay: #b3401c; /* terracotta: 5.7:1 with white, 5.1:1 on sand */
+  --msl-clay-2: #93320f;
+  --msl-ink: #14211d;
+  --msl-ink-soft: #3f4c46; /* 7.6:1 on sand */
+  --msl-line: #cfc3a8;
+  --msl-line-strong: #7d745f; /* control borders: 4:1, passes WCAG 1.4.11 */
+  --msl-link: #14211d;
   --msl-call: #1a5c31; /* green "Call" buttons, 8:1 with white */
-  --msl-warning-bg: #fff6c7;
-  --msl-warning-line: #9a6b00;
-  --msl-radius-sm: 14px;
-  --msl-radius: 24px;
-  --msl-radius-lg: 32px;
-  --msl-shadow: 0 1px 2px rgb(30 42 35 / 0.06), 0 8px 24px rgb(30 42 35 / 0.06);
-  --msl-max: 1240px;
-  --msl-measure: 66ch;
+  --msl-warning-bg: #ffe9a8;
+  --msl-warning-line: #7a4f00;
+  --msl-radius-sm: 3px;
+  --msl-radius: 3px;
+  --msl-radius-lg: 3px;
+  --msl-shadow: none;
+  --msl-max: 1280px;
+  --msl-measure: 64ch;
 
   /* shadcn tokens used by packages/ui components */
   --background: var(--msl-cream);
@@ -41,6 +48,7 @@
   --muted-foreground: var(--msl-ink-soft);
   --border: var(--msl-line);
   --ring: var(--msl-green);
+  --radius: 3px;
 }
 
 @layer base {
@@ -65,47 +73,45 @@
 
   h1,
   h2,
-  h3,
-  .font-heading {
-    font-family: var(--font-sans), system-ui, sans-serif;
+  .font-display {
+    font-family: var(--font-display), Georgia, serif;
+    font-weight: 600;
     color: inherit;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
+    line-height: 1.04;
+    letter-spacing: -0.025em;
     text-wrap: balance;
   }
 
   h1 {
-    font-size: clamp(2.1rem, 1.3rem + 3vw, 3.4rem);
-    font-weight: 600;
+    font-size: clamp(2.5rem, 1.2rem + 5vw, 5rem);
   }
 
   h2 {
-    font-size: clamp(1.55rem, 1.2rem + 1.4vw, 2.2rem);
-    font-weight: 600;
+    font-size: clamp(1.9rem, 1.3rem + 2.2vw, 3rem);
   }
 
   h3 {
-    font-size: 1.2rem;
-    font-weight: 600;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.25;
   }
 
   a {
     color: var(--msl-link);
     text-decoration: underline;
-    text-decoration-thickness: 0.08em;
+    text-decoration-thickness: 0.09em;
     text-underline-offset: 0.2em;
   }
 
   a:hover {
-    text-decoration-thickness: 0.16em;
+    text-decoration-thickness: 0.18em;
   }
 
-  /* Two-tone ring: visible on cream and on the dark green bands. */
+  /* Two-tone ring: visible on sand, white, gold and the dark blocks. */
   :focus-visible {
     outline: 3px solid var(--msl-green);
-    outline-offset: 3px;
-    box-shadow: 0 0 0 6px var(--msl-yellow);
-    border-radius: 10px;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 7px var(--msl-yellow);
   }
 
   ::selection {
@@ -131,12 +137,12 @@
     width: 100%;
     max-width: var(--msl-max);
     margin-inline: auto;
-    padding-inline: 1rem;
+    padding-inline: 1.1rem;
   }
 
   @media (min-width: 48rem) {
     .container-page {
-      padding-inline: 2rem;
+      padding-inline: 2.5rem;
     }
   }
 
@@ -145,7 +151,17 @@
   }
 
   .section {
-    padding-block: 3.5rem;
+    padding-block: clamp(3rem, 6vw, 5.5rem);
+  }
+
+  /* A thick rule above a section heading, as in a printed directory. */
+  .ruled {
+    border-top: 4px solid var(--msl-green);
+    padding-top: 1.25rem;
+  }
+
+  .band-dark .ruled {
+    border-top-color: var(--msl-yellow);
   }
 
   .band-dark {
@@ -158,11 +174,36 @@
   }
 
   .band-dark .muted {
-    color: #d6dccf;
+    color: #d5dbd0;
   }
 
   .band-dark .eyebrow {
     color: var(--msl-yellow);
+  }
+
+  .band-clay {
+    background: var(--msl-clay);
+    color: #fff;
+  }
+
+  .band-clay a:not(.btn),
+  .band-clay .eyebrow,
+  .band-clay .muted {
+    color: #fff;
+  }
+
+  .band-gold {
+    background: var(--msl-yellow);
+    color: var(--msl-green);
+  }
+
+  .band-gold .eyebrow,
+  .band-gold .muted {
+    color: var(--msl-green);
+  }
+
+  .band-gold .ruled {
+    border-top-color: var(--msl-green);
   }
 
   .band-sage {
@@ -178,29 +219,98 @@
     color: var(--msl-green);
     font-weight: 700;
     padding: 0.75rem 1.25rem;
-    border-radius: 999px;
   }
 
   .skip-link:focus {
     top: 1rem;
   }
 
-  /* ---- Type helpers ---------------------------------------------------- */
+  /* ---- Directory index --------------------------------------------------- */
 
-  /* "✦ About us" style label */
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45em;
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    color: var(--msl-ink-soft);
+  /* Numbered list of topics: one wide, easy-to-hit row each. */
+  .index {
+    counter-reset: index;
+    border-bottom: 1px solid var(--msl-green);
   }
 
-  .eyebrow::before {
-    content: "✦";
-    font-size: 0.8em;
+  .index-row {
+    counter-increment: index;
+    display: grid;
+    grid-template-columns: 3.2rem 1fr auto;
+    align-items: start;
+    column-gap: 1rem;
+    min-height: 100%;
+    padding: 1.1rem 0.75rem 1.2rem 0.5rem;
+    border-top: 1px solid var(--msl-green);
+    color: inherit;
+    text-decoration: none;
+    transition: background-color 0.12s;
+  }
+
+  .index-row::before {
+    content: counter(index, decimal-leading-zero);
+    font-family: var(--font-display), Georgia, serif;
+    font-size: 1.9rem;
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--msl-clay);
+  }
+
+  @media (max-width: 40rem) {
+    .index-row {
+      grid-template-columns: 2.6rem 1fr auto;
+      column-gap: 0.75rem;
+      padding-inline: 0;
+    }
+
+    .block-link {
+      gap: 1rem;
+    }
+  }
+
+  .index-row:hover {
+    background: var(--msl-yellow);
+    text-decoration: none;
+  }
+
+  .index-row:hover::before {
+    color: var(--msl-green);
+  }
+
+  .index-title {
+    font-family: var(--font-display), Georgia, serif;
+    font-size: 1.55rem;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+  }
+
+  /* Solid colour panel that is one big link. */
+  .block-link {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2.5rem;
+    min-height: 100%;
+    padding: clamp(1.4rem, 3vw, 2.25rem);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .block-link:hover .index-title {
+    text-decoration: underline;
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.18em;
+  }
+
+  /* ---- Type helpers ---------------------------------------------------- */
+
+  .eyebrow {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--msl-clay);
   }
 
   .muted {
@@ -208,8 +318,8 @@
   }
 
   .lead {
-    font-size: 1.15rem;
-    line-height: 1.55;
+    font-size: 1.2rem;
+    line-height: 1.5;
   }
 
   /* ---- Buttons ----------------------------------------------------------- */
@@ -218,21 +328,21 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
+    gap: 0.7rem;
     min-height: 3.1rem;
-    padding: 0.45rem 1.35rem;
-    border-radius: 999px;
+    padding: 0.5rem 1.4rem;
+    border-radius: var(--msl-radius);
     border: 2px solid var(--msl-green);
     background: var(--msl-green);
     color: #fff;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 1rem;
     line-height: 1.2;
     text-decoration: none;
     cursor: pointer;
     transition:
-      background-color 0.15s,
-      color 0.15s;
+      background-color 0.12s,
+      color 0.12s;
   }
 
   .btn:hover {
@@ -240,63 +350,71 @@
     text-decoration: none;
   }
 
-  /* With an arrow circle at the end. */
-  .btn:has(.btn-arrow) {
-    padding-right: 0.45rem;
+  .btn-clay {
+    background: var(--msl-clay);
+    border-color: var(--msl-clay);
   }
 
+  .btn-clay:hover {
+    background: var(--msl-clay-2);
+    border-color: var(--msl-clay-2);
+  }
+
+  /* A plain arrow after the label; it slides a little on hover. */
   .btn-arrow {
-    display: grid;
-    place-items: center;
-    width: 2.1rem;
-    height: 2.1rem;
-    border-radius: 999px;
-    background: var(--msl-yellow);
-    color: var(--msl-green);
+    display: inline-grid;
     flex-shrink: 0;
+    transition: transform 0.12s;
+  }
+
+  .btn:hover .btn-arrow {
+    transform: translateX(3px);
   }
 
   .btn-sm {
     min-height: 2.75rem; /* 52px+ at 19px base */
-    padding-inline: 1rem;
+    padding-inline: 1.1rem;
     font-size: 0.95rem;
   }
 
   .btn-secondary {
-    background: var(--msl-paper);
+    background: transparent;
     color: var(--msl-green);
-    border-color: var(--msl-line-strong);
-  }
-
-  .btn-secondary:hover {
-    background: var(--msl-cream-2);
     border-color: var(--msl-green);
   }
 
-  .btn-secondary .btn-arrow {
+  .btn-secondary:hover {
     background: var(--msl-green);
     color: #fff;
   }
 
-  /* On light backgrounds the yellow alone is too close to cream, so the
-     button gets a green outline (14:1); on dark bands yellow stands out. */
-  .btn-yellow {
-    background: var(--msl-yellow);
-    border-color: var(--msl-green);
+  .band-dark .btn-secondary,
+  .band-clay .btn-secondary {
+    color: #fff;
+    border-color: #fff;
+  }
+
+  .band-dark .btn-secondary:hover,
+  .band-clay .btn-secondary:hover {
+    background: #fff;
     color: var(--msl-green);
   }
 
-  .band-dark .btn-yellow {
+  .btn-yellow {
+    background: var(--msl-yellow);
     border-color: var(--msl-yellow);
+    color: var(--msl-green);
   }
 
   .btn-yellow:hover {
     background: var(--msl-yellow-2);
+    border-color: var(--msl-yellow-2);
   }
 
-  .btn-yellow .btn-arrow {
+  .band-gold .btn-yellow {
     background: var(--msl-green);
-    color: var(--msl-yellow);
+    border-color: var(--msl-green);
+    color: #fff;
   }
 
   .btn-call {
@@ -312,43 +430,43 @@
 
   /* ---- Cards ------------------------------------------------------------- */
 
+  /* Flat white sheet on the sand page: no border, no shadow. */
   .card {
     background: var(--msl-paper);
-    border: 1px solid var(--msl-line);
     border-radius: var(--msl-radius);
     padding: 1.5rem;
-    box-shadow: var(--msl-shadow);
   }
 
   .card-soft {
     background: var(--msl-cream-2);
-    border-color: transparent;
-    box-shadow: none;
   }
 
   .card-dark {
     background: var(--msl-green-2);
-    border-color: var(--msl-green-3);
     color: #fff;
-    box-shadow: none;
+  }
+
+  .band-gold .card {
+    background: var(--msl-paper);
   }
 
   .card-link {
     display: block;
     text-decoration: none;
     color: inherit;
-    transition: border-color 0.15s;
+    transition: background-color 0.12s;
   }
 
   .card-link:hover {
-    border-color: var(--msl-green);
+    background: #fff;
     text-decoration: none;
   }
 
   .card-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    line-height: 1.3;
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.25;
     letter-spacing: -0.01em;
   }
 
@@ -361,11 +479,8 @@
     text-decoration: underline;
   }
 
-  /* Number + label chip, e.g. "222 local resources" */
   .stat {
-    border-radius: var(--msl-radius-sm);
     background: var(--msl-paper);
-    border: 1px solid var(--msl-line);
     padding: 0.9rem 1.1rem;
   }
 
@@ -373,29 +488,51 @@
     display: block;
     font-size: 1.5rem;
     font-weight: 700;
-    letter-spacing: -0.02em;
   }
 
+  /* Square gold block behind an icon. */
   .icon-circle {
     display: grid;
     place-items: center;
     width: 3.25rem;
     height: 3.25rem;
-    border-radius: 999px;
+    border-radius: var(--msl-radius);
     background: var(--msl-yellow);
     color: var(--msl-green);
     flex-shrink: 0;
   }
 
+  /* Small label, e.g. "Pinal County". */
   .pill {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    padding: 0.2rem 0.75rem;
-    border-radius: 999px;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--msl-radius);
     background: var(--msl-sage);
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 700;
+  }
+
+  /* Tappable choice, e.g. a popular search or "jump to" link. */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.3rem 1rem;
+    border: 2px solid currentColor;
+    border-radius: var(--msl-radius);
+    font-weight: 700;
+    font-size: 1rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .chip:hover {
+    background: var(--msl-yellow);
+    border-color: var(--msl-yellow);
+    color: var(--msl-green);
+    text-decoration: none;
   }
 
   /* ---- Forms ------------------------------------------------------------- */
@@ -403,25 +540,21 @@
   .input {
     width: 100%;
     min-height: 3.1rem;
-    padding: 0.5rem 1.2rem;
-    border: 2px solid var(--msl-line-strong);
-    border-radius: 999px;
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--msl-green);
+    border-radius: var(--msl-radius);
     background: #fff;
     color: var(--msl-ink);
     font-size: 1.05rem;
   }
 
-  .input:hover {
-    border-color: var(--msl-ink-soft);
-  }
-
-  select.input {
-    border-radius: var(--msl-radius-sm);
+  .input::placeholder {
+    color: #5c6660;
   }
 
   .label {
     display: block;
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 0.4rem;
   }
 
@@ -438,6 +571,7 @@
 
   .prose-msl h2 {
     margin-top: 1.6em;
+    font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.2rem);
   }
 
   .prose-msl h3 {
@@ -450,7 +584,7 @@
   }
 
   .prose-msl ul {
-    list-style: disc;
+    list-style: square;
   }
 
   .prose-msl ol {
@@ -462,10 +596,10 @@
   }
 
   .prose-msl blockquote {
-    border-left: 6px solid var(--msl-yellow);
-    background: var(--msl-cream-2);
-    border-radius: 0 var(--msl-radius-sm) var(--msl-radius-sm) 0;
-    padding: 0.75rem 1rem;
+    font-family: var(--font-display), Georgia, serif;
+    font-size: 1.35rem;
+    line-height: 1.4;
+    padding-block: 0.5rem;
   }
 
   /* Pictures in text all fill the column, so flyers line up instead of
@@ -478,8 +612,6 @@
 
   .prose-msl img {
     height: auto;
-    border-radius: var(--msl-radius-sm);
-    border: 1px solid var(--msl-line);
   }
 }
 

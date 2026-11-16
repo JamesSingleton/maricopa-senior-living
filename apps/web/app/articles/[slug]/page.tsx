@@ -9,6 +9,7 @@ import {
 } from "@maricopa-senior-living/sanity/queries";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { JsonLd } from "@/components/json-ld";
@@ -17,7 +18,6 @@ import { RichText } from "@/components/rich-text";
 import { SanityImage } from "@/components/sanity-image";
 import { formatLongDate } from "@/lib/dates";
 import { draftAware, Loading } from "@/lib/draft";
-import { redirectOrNotFound } from "@/lib/redirects";
 import { seoMetadata } from "@/lib/seo";
 import { articleLd } from "@/lib/structured-data";
 
@@ -74,7 +74,7 @@ async function ArticlePageContent({ params }: { params: Params }) {
       stega,
     });
     // Old article URLs that became helpful links, About pages, etc.
-    if (!article) return redirectOrNotFound(`/articles/${slug}`);
+    if (!article) notFound();
     return (
       <article>
         <JsonLd
@@ -113,7 +113,7 @@ async function ArticlePageContent({ params }: { params: Params }) {
             <SanityImage
               image={article.mainImage}
               width={1200}
-              className="mb-8 h-auto w-full max-w-3xl rounded-md"
+              className="mb-8 h-auto w-full max-w-3xl"
             />
           ) : null}
           <RichText value={article.body} />

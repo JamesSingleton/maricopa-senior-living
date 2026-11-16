@@ -53,12 +53,12 @@ unless `BLUEPRINT_DATASET` is set.
 - `invalidate-tags` — refreshes the website's cache when content changes.
 - `auto-redirect` — when a published web address (slug) changes, adds a
   Redirect from the old address and fixes older redirects.
-- `deploy-on-redirect` — redeploys the website when a Redirect changes
-  (redirects are built into the site). Needs the Vercel deploy hook:
+
+The website reads Redirects at request time (`apps/web/proxy.ts`, refreshed
+every minute), so changing one never needs a redeploy.
 
 ```bash
 cd apps/functions
-npx sanity@latest functions env add deploy-on-redirect DEPLOY_HOOK_URL https://api.vercel.com/v1/integrations/deploy/…
 pnpm run blueprints:plan     # review what will change on Sanity
 pnpm run blueprints:deploy   # deploy the Functions to Sanity
 ```

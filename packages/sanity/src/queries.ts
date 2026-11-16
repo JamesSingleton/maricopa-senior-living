@@ -136,7 +136,14 @@ const pageBuilderFields = /* groq */ `
     "picked": links[]->{ ${linkCardFields} }
   },
   _type == "faqBlock" => { items[]{ _key, question, answer, "answerText": pt::text(answer) } },
-  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } }
+  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } },
+  _type == "peopleBlock" => { people[]{ _key, name, role, bio, image { ${imageFields} } } },
+  _type == "documentsBlock" => {
+    documents[]{ _key, title, "file": asset->{ url, size, extension } }
+  },
+  _type == "supportersBlock" => {
+    supporters[]{ _key, name, url, "logoId": logo.asset._ref }
+  }
 `;
 
 // ---------------------------------------------------------------------------
@@ -158,6 +165,11 @@ export const querySettings = defineQuery(`
     "shareImageId": shareImage.asset._ref,
     donateUrl,
     nonprofitStatement,
+    mission,
+    foundedYear,
+    taxDeductibleNote,
+    donateByMail,
+    charityProfileUrl,
     newsletterTitle,
     newsletterDedication,
     subscribeInstructions
@@ -452,7 +464,7 @@ export const queryNewsletterList = defineQuery(`
 `);
 
 // ---------------------------------------------------------------------------
-// Search, redirects, sitemap
+// Search, sitemap
 // ---------------------------------------------------------------------------
 
 /** Callers must skip empty terms — an empty term matches everything. */
@@ -483,10 +495,6 @@ export const querySearch = defineQuery(`
     start,
     phones[]{ ${phoneFields} }
   }
-`);
-
-export const queryRedirect = defineQuery(`
-  *[_type == "redirect" && source == $source][0]{ destination, permanent }
 `);
 
 export const querySitemap = defineQuery(`

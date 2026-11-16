@@ -56,7 +56,7 @@ const components: PortableTextComponents = {
           <SanityImage
             image={value}
             width={1200}
-            className="h-auto max-w-full rounded-md"
+            className="h-auto max-w-full"
             sizes="(min-width: 1024px) 720px, 100vw"
           />
           {value.caption ? (
@@ -96,10 +96,10 @@ const components: PortableTextComponents = {
       value: { tone?: string | null; text?: string | null };
     }) => (
       <aside
-        className={`rounded-[var(--msl-radius)] border-l-8 p-4 ${
+        className={`p-5 ${
           value.tone === "warning"
-            ? "border-[var(--msl-warning-line)] bg-[var(--msl-warning-bg)]"
-            : "border-[var(--msl-link)] bg-[var(--msl-sky)]"
+            ? "bg-[var(--msl-warning-bg)]"
+            : "bg-[var(--msl-sage)]"
         }`}
       >
         {value.tone === "warning" ? (

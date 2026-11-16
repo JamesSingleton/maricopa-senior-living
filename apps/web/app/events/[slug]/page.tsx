@@ -121,7 +121,7 @@ async function EventPageContent({ params }: { params: Params }) {
             {statusNote ? (
               <p
                 role="status"
-                className="rounded-[var(--msl-radius)] border-l-8 border-[var(--msl-warning-line)] bg-[var(--msl-warning-bg)] p-5 text-xl font-semibold"
+                className="bg-[var(--msl-warning-bg)] p-5 text-xl font-semibold"
               >
                 {statusNote}
               </p>
@@ -219,7 +219,7 @@ async function EventPageContent({ params }: { params: Params }) {
                 <SanityImage
                   image={event.flyer}
                   width={700}
-                  className="h-auto w-full rounded-md"
+                  className="h-auto w-full"
                 />
                 <figcaption className="mt-2 text-base muted">
                   Event flyer

@@ -76,11 +76,11 @@ export function NewsletterEdition({
   return (
     <div className="newsletter flex flex-col gap-10">
       <header className="card border-[var(--msl-sand-strong)] bg-[var(--msl-sand)] text-center">
-        <p className="font-heading text-4xl font-semibold">{title}</p>
+        <p className="font-display text-4xl">{title}</p>
         <p className="mt-1 text-lg">
           Maricopa Senior Living's monthly newsletter
         </p>
-        <p className="mt-3 font-heading text-3xl">{monthLabel(month)}</p>
+        <p className="mt-3 font-display text-3xl">{monthLabel(month)}</p>
         {settings?.newsletterDedication ? (
           <p className="mt-2 italic">{settings.newsletterDedication}</p>
         ) : null}
@@ -88,12 +88,12 @@ export function NewsletterEdition({
           <SanityImage
             image={edition.coverImage}
             width={imageWidth}
-            className="mx-auto mt-5 h-auto max-h-[28rem] w-auto rounded-md"
+            className="mx-auto mt-5 h-auto max-h-[28rem] w-auto"
             queryParams={{ q: print ? 60 : 75 }}
           />
         ) : null}
         {edition.coverMessage ? (
-          <p className="mt-4 font-heading text-2xl">{edition.coverMessage}</p>
+          <p className="mt-4 font-display text-2xl">{edition.coverMessage}</p>
         ) : null}
         {sections.length > 1 ? (
           <nav aria-label="In this issue" className="mt-6 text-left">
@@ -207,7 +207,7 @@ export function NewsletterEdition({
                   <SanityImage
                     image={section.image}
                     width={imageWidth}
-                    className="mt-4 h-auto max-w-full rounded-md"
+                    className="mt-4 h-auto max-w-full"
                     queryParams={{ q: print ? 60 : 75 }}
                   />
                 ) : null}
@@ -227,7 +227,7 @@ export function NewsletterEdition({
                         key={page._key}
                         image={page}
                         width={imageWidth}
-                        className="print-break mx-auto h-auto max-w-full rounded-md border border-[var(--msl-line)]"
+                        className="print-break mx-auto h-auto max-w-full border border-[var(--msl-line)]"
                         queryParams={{ q: print ? 60 : 75 }}
                       />
                     ) : null,

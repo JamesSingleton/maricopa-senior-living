@@ -1,15 +1,21 @@
 import { HomeIcon } from "@sanity/icons/Home";
+import { TagsIcon } from "@sanity/icons/Tags";
 import { visionTool } from "@sanity/vision";
 import { defineConfig, defineSingleton } from "sanity";
 import { presentationTool } from "sanity/presentation";
 import { structureTool } from "sanity/structure";
 
 import { StartHere } from "./components/StartHere";
+import { TopicsTool } from "./components/TopicsTool";
 import { ADMIN_ONLY_TYPES, isAdmin } from "./lib/access";
 import { presentationResolve } from "./presentation/resolve";
 import { schemaTypes } from "./schemaTypes";
 import { structure } from "./structure";
-import { newsletterNextTemplate, startNextMonthTemplate } from "./templates";
+import {
+  newsletterNextTemplate,
+  pageTemplates,
+  startNextMonthTemplate,
+} from "./templates";
 
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID ?? "bksfw1p8";
 // Never fall back to production: a missing env var must not point Ron's
@@ -40,6 +46,7 @@ export default defineConfig({
       ...previous,
       startNextMonthTemplate,
       newsletterNextTemplate,
+      ...pageTemplates,
     ],
   },
   tools: (previous, { currentUser }) => [
@@ -53,6 +60,12 @@ export default defineConfig({
     ...(isAdmin(currentUser)
       ? previous
       : previous.filter((tool) => tool.name !== "vision")),
+    {
+      name: "topics",
+      title: "Topics",
+      icon: TagsIcon,
+      component: TopicsTool,
+    },
   ],
   document: {
     // Fixed-ID documents: no "Create new", no Duplicate, edited in place.

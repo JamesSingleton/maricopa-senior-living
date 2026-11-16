@@ -356,7 +356,182 @@ export const donateBlock = block("donateBlock", "Donate", CreditCardIcon, [
     description:
       "Why giving matters. The button uses the donate link in Site settings.",
   }),
+  defineField({
+    name: "showDetails",
+    title: "Show how to give",
+    type: "boolean",
+    initialValue: false,
+    description:
+      "Also shows the tax-deductible note, the EIN and how to give by mail, from Site settings. Turn on for the Donate page; leave off for the small band on the home page.",
+  }),
 ]);
+
+/** Board members, officers, volunteers. */
+export const peopleBlock = block(
+  "peopleBlock",
+  "People (board, volunteers)",
+  UsersIcon,
+  [
+    heading,
+    intro,
+    defineField({
+      name: "people",
+      type: "array",
+      validation: (rule) => rule.required().min(1),
+      of: [
+        defineArrayMember({
+          name: "person",
+          type: "object",
+          fields: [
+            defineField({
+              name: "name",
+              type: "string",
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: "role",
+              type: "string",
+              description: 'For example "President", "Treasurer", "Volunteer".',
+            }),
+            defineField({
+              name: "image",
+              title: "Photo",
+              type: "imageWithAlt",
+            }),
+            defineField({
+              name: "bio",
+              title: "About",
+              type: "text",
+              rows: 3,
+            }),
+          ],
+          preview: {
+            select: { title: "name", subtitle: "role", media: "image" },
+          },
+        }),
+      ],
+    }),
+  ],
+);
+
+/** Public paperwork donors and grant makers ask for. */
+export const documentsBlock = block(
+  "documentsBlock",
+  "Documents to download",
+  DocumentPdfIcon,
+  [
+    heading,
+    intro,
+    defineField({
+      name: "documents",
+      type: "array",
+      description:
+        "For example the IRS determination letter, Form 990s, annual reports or bylaws.",
+      validation: (rule) => rule.required().min(1),
+      of: [
+        defineArrayMember({
+          name: "documentFile",
+          title: "Document",
+          type: "file",
+          options: { accept: "application/pdf" },
+          fields: [
+            defineField({
+              name: "title",
+              type: "string",
+              description: 'For example "Form 990 (2025)".',
+              validation: (rule) => rule.required(),
+            }),
+          ],
+        }),
+      ],
+    }),
+  ],
+);
+
+/** Sponsors, grant makers and partner organizations. */
+export const supportersBlock = block(
+  "supportersBlock",
+  "Supporters & partners",
+  UsersIcon,
+  [
+    heading,
+    intro,
+    defineField({
+      name: "supporters",
+      type: "array",
+      validation: (rule) => rule.required().min(1),
+      of: [
+        defineArrayMember({
+          name: "supporter",
+          type: "object",
+          fields: [
+            defineField({
+              name: "name",
+              type: "string",
+              validation: (rule) => rule.required(),
+            }),
+            defineField({ name: "logo", type: "image" }),
+            defineField({
+              name: "url",
+              title: "Website",
+              type: "url",
+              validation: (rule) => rule.uri({ scheme: ["http", "https"] }),
+            }),
+          ],
+          preview: {
+            select: { title: "name", subtitle: "url", media: "logo" },
+          },
+        }),
+      ],
+    }),
+  ],
+);
+
+/** A few big numbers: what the nonprofit does, at a glance. */
+export const impactBlock = block(
+  "impactBlock",
+  "Numbers at a glance",
+  InfoOutlineIcon,
+  [
+    heading,
+    defineField({
+      name: "showSiteNumbers",
+      title: "Count the website automatically",
+      type: "boolean",
+      initialValue: true,
+      description:
+        "Adds live counts of resources, helpful links and topics, so they never go out of date.",
+    }),
+    defineField({
+      name: "stats",
+      title: "Your own numbers",
+      type: "array",
+      validation: (rule) => rule.max(4),
+      of: [
+        defineArrayMember({
+          name: "stat",
+          type: "object",
+          fields: [
+            defineField({
+              name: "value",
+              type: "string",
+              description: 'For example "2014" or "1,200+".',
+              validation: (rule) => rule.required().max(12),
+            }),
+            defineField({
+              name: "label",
+              type: "string",
+              description:
+                'For example "founded" or "newsletter readers each month".',
+              validation: (rule) => rule.required().max(60),
+            }),
+          ],
+          preview: { select: { title: "value", subtitle: "label" } },
+        }),
+      ],
+    }),
+  ],
+);
 
 export const faqBlock = block(
   "faqBlock",
@@ -494,6 +669,10 @@ export const pageBlocks = [
   quickContactsBlock,
   contactBlock,
   donateBlock,
+  peopleBlock,
+  documentsBlock,
+  supportersBlock,
+  impactBlock,
   faqBlock,
   videoBlock,
   fileBlock,
@@ -540,9 +719,19 @@ export const pageBuilder = defineType({
             "buttonsBlock",
             "quickContactsBlock",
             "contactBlock",
-            "donateBlock",
             "fileBlock",
             "newsletterSignupBlock",
+          ],
+        },
+        {
+          name: "nonprofit",
+          title: "About the nonprofit",
+          of: [
+            "donateBlock",
+            "peopleBlock",
+            "documentsBlock",
+            "supportersBlock",
+            "impactBlock",
           ],
         },
       ],

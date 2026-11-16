@@ -2,6 +2,7 @@ import { BellIcon } from "@sanity/icons/Bell";
 import { CalendarIcon } from "@sanity/icons/Calendar";
 import { ClockIcon } from "@sanity/icons/Clock";
 import { CogIcon } from "@sanity/icons/Cog";
+import { TagsIcon } from "@sanity/icons/Tags";
 import { WarningOutlineIcon } from "@sanity/icons/WarningOutline";
 import type { StructureResolver } from "sanity/structure";
 
@@ -11,6 +12,13 @@ const REVIEW_TYPES = [
   { type: "resource", title: "Resources" },
   { type: "helpfulLink", title: "Helpful links" },
   { type: "article", title: "Articles" },
+];
+
+const IN_TOPIC = [
+  { id: "resources", type: "resource", title: "Resources (places to call)" },
+  { id: "links", type: "helpfulLink", title: "Helpful links" },
+  { id: "articles", type: "article", title: "Articles" },
+  { id: "events", type: "event", title: "Events" },
 ];
 
 /**
@@ -26,6 +34,26 @@ export const structure: StructureResolver = (S, { currentUser }) => {
 
   const list = (type: string, title: string) =>
     S.documentTypeListItem(type).title(title);
+
+  /** Everything filed under one topic, split by kind. */
+  const topicLists = (topicId: string) =>
+    S.list()
+      .id(topicId)
+      .title("In this topic")
+      .items(
+        IN_TOPIC.map(({ id, type, title }) =>
+          S.listItem()
+            .title(title)
+            .id(id)
+            .schemaType(type)
+            .child(
+              S.documentTypeList(type)
+                .title(title)
+                .filter("_type == $type && references($topicId)")
+                .params({ type, topicId }),
+            ),
+        ),
+      );
 
   return S.list()
     .title("Maricopa Senior Living")
@@ -69,6 +97,38 @@ export const structure: StructureResolver = (S, { currentUser }) => {
       singleton("home"),
       list("author", "Writers"),
       S.divider(),
+      // Path used by the Topics screen: by-topic;<topic id>;<list id>
+      S.listItem()
+        .title("Browse by topic")
+        .id("by-topic")
+        .icon(TagsIcon)
+        .child(
+          S.list()
+            .title("Browse by topic")
+            .items([
+              S.listItem()
+                .title("No topic yet")
+                .id("no-topic")
+                .icon(WarningOutlineIcon)
+                .child(
+                  S.documentList()
+                    .title("Published without a topic")
+                    .filter(
+                      '_type in ["resource", "helpfulLink", "article"] && count(topics) < 1',
+                    ),
+                ),
+              S.divider(),
+              S.documentTypeListItem("topic")
+                .title("All topics")
+                .id("all")
+                .child(
+                  S.documentTypeList("topic")
+                    .title("Choose a topic")
+                    .defaultOrdering([{ field: "order", direction: "asc" }])
+                    .child((topicId) => topicLists(topicId)),
+                ),
+            ]),
+        ),
       S.listItem()
         .title("Needs review")
         .icon(WarningOutlineIcon)

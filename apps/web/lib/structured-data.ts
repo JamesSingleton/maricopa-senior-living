@@ -65,6 +65,9 @@ export type SettingsForLd = {
   profiles?: string[] | null;
   ein?: string | null;
   logoId?: string | null;
+  mission?: string | null;
+  foundedYear?: number | null;
+  charityProfileUrl?: string | null;
 } | null;
 
 /** The nonprofit itself, plus the website with its search box. */
@@ -78,7 +81,10 @@ export function siteGraph(settings: SettingsForLd) {
         "@id": ORG_ID,
         name,
         url: baseUrl,
-        description: settings?.description ?? undefined,
+        description: settings?.mission ?? settings?.description ?? undefined,
+        foundingDate: settings?.foundedYear
+          ? String(settings.foundedYear)
+          : undefined,
         logo: imageUrl(settings?.logoId, 512),
         email: settings?.contactEmail ?? undefined,
         telephone: settings?.contactPhone?.number ?? undefined,
@@ -86,7 +92,17 @@ export function siteGraph(settings: SettingsForLd) {
         areaServed: { "@type": "City", name: "Maricopa, Arizona" },
         nonprofitStatus: "Nonprofit501c3",
         taxID: settings?.ein ?? undefined,
-        sameAs: settings?.profiles ?? undefined,
+        sameAs: [
+          ...(settings?.profiles ?? []),
+          ...(settings?.charityProfileUrl ? [settings.charityProfileUrl] : []),
+        ],
+        potentialAction: settings?.donateUrl
+          ? {
+              "@type": "DonateAction",
+              target: settings.donateUrl,
+              recipient: { "@id": ORG_ID },
+            }
+          : undefined,
       },
       {
         "@type": "WebSite",

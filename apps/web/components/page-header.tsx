@@ -21,9 +21,9 @@ export function PageHeader({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="bg-gradient-to-b from-[var(--msl-cream-2)] to-[var(--msl-cream)]">
+    <div className="band-dark">
       {crumbs.length ? <JsonLd data={breadcrumbs(crumbs)} /> : null}
-      <div className="container-page pb-10 pt-8 md:pb-14 md:pt-10">
+      <div className="container-page pb-10 pt-8 md:pb-12 md:pt-10">
         {crumbs.length ? (
           <nav aria-label="You are here" className="no-print mb-6 text-base">
             <ol className="flex flex-wrap gap-x-2 gap-y-1">
@@ -33,7 +33,7 @@ export function PageHeader({
               {crumbs.map((crumb) => (
                 <li
                   key={crumb.href}
-                  className="before:mr-2 before:text-[var(--msl-ink-soft)] before:content-['/']"
+                  className="before:mr-2 before:content-['/']"
                 >
                   <Link href={crumb.href}>{crumb.label}</Link>
                 </li>
@@ -42,8 +42,10 @@ export function PageHeader({
           </nav>
         ) : null}
         {eyebrow ? <p className="eyebrow mb-3">{eyebrow}</p> : null}
-        <h1 className="max-w-4xl">{title}</h1>
-        {intro ? <p className="lead muted mt-4 measure">{intro}</p> : null}
+        <h1 className="max-w-5xl text-[clamp(2.3rem,1.3rem+3.6vw,4.2rem)]">
+          {title}
+        </h1>
+        {intro ? <p className="lead mt-5 measure">{intro}</p> : null}
         {children}
       </div>
     </div>
