@@ -4,31 +4,42 @@ import type { MetadataRoute } from "next";
 
 import { baseUrl } from "@/lib/constants";
 
-type Entry = { slug: string | null; _updatedAt: string };
-
-/**
- * Public URLs with their real last-edit dates. Archived posts and empty
- * tags/categories are left out; search results are not indexable pages.
- */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { data } = await cachedSanityMetadata({
     query: querySitemap,
     perspective: "published",
   });
-
-  const toEntries = (entries: Entry[] | undefined, prefix: string) =>
-    (entries ?? [])
-      .filter((entry): entry is Entry & { slug: string } => Boolean(entry.slug))
-      .map((entry) => ({
-        url: `${baseUrl}${prefix}/${entry.slug.replace(/^\//, "")}`,
-        lastModified: entry._updatedAt,
-      }));
+  const entry = (path: string, lastModified?: string | null) => ({
+    url: `${baseUrl}${path}`,
+    ...(lastModified ? { lastModified } : {}),
+  });
+  const each = <T extends { _updatedAt?: string | null }>(
+    items: T[] | null | undefined,
+    path: (item: T) => string | null,
+  ) =>
+    (items ?? []).flatMap((item) => {
+      const p = path(item);
+      return p ? [entry(p, item._updatedAt)] : [];
+    });
 
   return [
-    { url: baseUrl },
-    ...toEntries(data?.pages, ""),
-    ...toEntries(data?.articles, "/articles"),
-    ...toEntries(data?.categories, "/category"),
-    ...toEntries(data?.tags, "/tag"),
+    entry("/"),
+    entry("/resources"),
+    entry("/events"),
+    entry("/whats-new"),
+    entry("/newsletter"),
+    entry("/articles"),
+    entry("/links"),
+    entry("/about"),
+    ...each(data?.pages, (p) => (p.slug ? `/${p.slug}` : null)),
+    ...each(data?.topics, (t) => (t.slug ? `/topics/${t.slug}` : null)),
+    ...each(data?.resources, (r) => (r.slug ? `/resources/${r.slug}` : null)),
+    ...each(data?.articles, (a) => (a.slug ? `/articles/${a.slug}` : null)),
+    ...each(data?.events, (e) => (e.slug ? `/events/${e.slug}` : null)),
+    ...each(data?.months, (m) => (m.month ? `/whats-new/${m.month}` : null)),
+    ...each(data?.newsletters, (n) =>
+      n.month ? `/newsletter/${n.month}` : null,
+    ),
+    ...each(data?.writers, (w) => (w.slug ? `/writers/${w.slug}` : null)),
   ];
 }

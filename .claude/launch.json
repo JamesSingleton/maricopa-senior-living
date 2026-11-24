@@ -1,0 +1,47 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "studio",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--filter",
+        "./apps/studio",
+        "exec",
+        "sanity",
+        "dev",
+        "--port",
+        "3333"
+      ],
+      "port": 3333
+    },
+    {
+      "name": "web",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--filter",
+        "./apps/web",
+        "exec",
+        "next",
+        "dev",
+        "-p",
+        "3000"
+      ],
+      "port": 3000
+    },
+    {
+      "name": "web-start",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--filter",
+        "./apps/web",
+        "exec",
+        "next",
+        "start",
+        "-p",
+        "3002"
+      ],
+      "port": 3002
+    }
+  ]
+}

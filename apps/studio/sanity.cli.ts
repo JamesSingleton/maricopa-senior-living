@@ -1,7 +1,8 @@
 import { defineCliConfig } from "sanity/cli";
 
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID;
-const dataset = process.env.SANITY_STUDIO_DATASET;
+// Never fall back to production (see sanity.config.ts).
+const dataset = process.env.SANITY_STUDIO_DATASET ?? "development";
 
 export default defineCliConfig({
   api: {

@@ -1,114 +1,182 @@
-import {
-  BookMarked,
-  CogIcon,
-  File,
-  FileText,
-  type LucideIcon,
-  PanelBottomIcon,
-  PanelsTopLeftIcon,
-  PanelTopIcon,
-  Settings2,
-  TagIcon,
-  TagsIcon,
-  User,
-} from "lucide-react";
-import type {
-  StructureBuilder,
-  StructureResolverContext,
-} from "sanity/structure";
+import { BellIcon } from "@sanity/icons/Bell";
+import { CalendarIcon } from "@sanity/icons/Calendar";
+import { ClockIcon } from "@sanity/icons/Clock";
+import { CogIcon } from "@sanity/icons/Cog";
+import { TagsIcon } from "@sanity/icons/Tags";
+import { WarningOutlineIcon } from "@sanity/icons/WarningOutline";
+import type { StructureResolver } from "sanity/structure";
 
-import type { SchemaType, SingletonType } from "./schemaTypes";
-import { getTitleCase } from "./utils/helper";
+import { isAdmin } from "./lib/access";
 
-type Base<T = SchemaType> = {
-  id?: string;
-  type: T;
-  preview?: boolean;
-  title?: string;
-  icon?: LucideIcon;
-};
+const REVIEW_TYPES = [
+  { type: "resource", title: "Resources" },
+  { type: "helpfulLink", title: "Helpful links" },
+  { type: "article", title: "Articles" },
+];
 
-type CreateSingleton = {
-  S: StructureBuilder;
-} & Base<SingletonType>;
+const IN_TOPIC = [
+  { id: "resources", type: "resource", title: "Resources (places to call)" },
+  { id: "links", type: "helpfulLink", title: "Helpful links" },
+  { id: "articles", type: "article", title: "Articles" },
+  { id: "events", type: "event", title: "Events" },
+];
 
-type CreateList = {
-  S: StructureBuilder;
-} & Base;
+/**
+ * Ron's Studio: his everyday jobs first, in plain words. Site structure is
+ * tucked under "Site setup", visible only to administrators.
+ */
+export const structure: StructureResolver = (S, { currentUser }) => {
+  const admin = isAdmin(currentUser);
 
-const createSingleton = ({ S, type, title, icon }: CreateSingleton) => {
-  const newTitle = title ?? getTitleCase(type);
-  return S.listItem()
-    .title(newTitle)
-    .icon(icon ?? File)
-    .child(S.document().schemaType(type).documentId(type));
-};
+  // Registered in sanity.config.ts `document.singletons`.
+  const singleton = (id: "home" | "settings" | "navigation") =>
+    S.listItem().singleton(id);
 
-const createList = ({ S, type, icon, title, id }: CreateList) => {
-  const newTitle = title ?? getTitleCase(type);
-  return S.documentTypeListItem(type)
-    .id(id ?? type)
-    .title(newTitle)
-    .icon(icon ?? File);
-};
+  const list = (type: string, title: string) =>
+    S.documentTypeListItem(type).title(title);
 
-export const structure = (
-  S: StructureBuilder,
-  context: StructureResolverContext,
-) => {
+  /** Everything filed under one topic, split by kind. */
+  const topicLists = (topicId: string) =>
+    S.list()
+      .id(topicId)
+      .title("In this topic")
+      .items(
+        IN_TOPIC.map(({ id, type, title }) =>
+          S.listItem()
+            .title(title)
+            .id(id)
+            .schemaType(type)
+            .child(
+              S.documentTypeList(type)
+                .title(title)
+                .filter("_type == $type && references($topicId)")
+                .params({ type, topicId }),
+            ),
+        ),
+      );
+
   return S.list()
-    .title("Content")
+    .title("Maricopa Senior Living")
     .items([
-      // createSingleton({ S, type: 'homePage', icon: HomeIcon }),
-      S.divider(),
-      // createHierarchicalPageStructure(S, context),
-      // createSlugBasedStructure(S, "page"),
-      // createSlugBasedStructure(S, 'page'),
-      // createIndexListWithOrderableItems({
-      //   S,
-      //   index: { type: 'blogIndex', icon: BookMarked },
-      //   list: { type: 'blog', title: 'Blogs', icon: FileText },
-      //   context,
-      // }),
-      // createList({
-      //   S,
-      //   type: 'faq',
-      //   title: 'FAQs',
-      //   icon: MessageCircle,
-      // }),
-      createList({ S, type: "author", title: "Authors", icon: User }),
-      createList({ S, type: "category", title: "Categories", icon: TagIcon }),
-      createList({ S, type: "page", title: "Pages", icon: PanelsTopLeftIcon }),
-      createList({ S, type: "post", title: "Posts", icon: FileText }),
-      createList({ S, type: "service", title: "Services", icon: BookMarked }),
-      createList({ S, type: "tag", title: "Tags", icon: TagsIcon }),
-      S.divider(),
+      list("monthlyUpdate", "What's New (monthly)").icon(BellIcon),
       S.listItem()
-        .title("Site Configuration")
-        .icon(Settings2)
+        .title("Events")
+        .icon(CalendarIcon)
         .child(
           S.list()
-            .title("Site Configuration")
+            .title("Events")
             .items([
-              createSingleton({
-                S,
-                type: "navbar",
-                title: "Navigation",
-                icon: PanelTopIcon,
-              }),
-              createSingleton({
-                S,
-                type: "footer",
-                title: "Footer",
-                icon: PanelBottomIcon,
-              }),
-              createSingleton({
-                S,
-                type: "settings",
-                title: "Global Settings",
-                icon: CogIcon,
-              }),
+              S.listItem()
+                .title("Upcoming & repeating")
+                .child(
+                  S.documentTypeList("event")
+                    .title("Upcoming & repeating")
+                    .filter(
+                      '_type == "event" && (dateTime(coalesce(end, start)) >= dateTime(now()) || (defined(repeat.until) && repeat.until >= now()))',
+                    )
+                    .defaultOrdering([{ field: "start", direction: "asc" }]),
+                ),
+              S.listItem()
+                .title("Past events")
+                .child(
+                  S.documentTypeList("event")
+                    .title("Past events")
+                    .filter(
+                      '_type == "event" && dateTime(coalesce(end, start)) < dateTime(now()) && !(defined(repeat.until) && repeat.until >= now())',
+                    )
+                    .defaultOrdering([{ field: "start", direction: "desc" }]),
+                ),
             ]),
         ),
+      list("resource", "Resources"),
+      list("helpfulLink", "Helpful links"),
+      list("article", "Articles"),
+      list("newsletterEdition", "Newsletters"),
+      S.divider(),
+      list("page", "Pages"),
+      singleton("home"),
+      list("author", "Writers"),
+      S.divider(),
+      // Path used by the Topics screen: by-topic;<topic id>;<list id>
+      S.listItem()
+        .title("Browse by topic")
+        .id("by-topic")
+        .icon(TagsIcon)
+        .child(
+          S.list()
+            .title("Browse by topic")
+            .items([
+              S.listItem()
+                .title("No topic yet")
+                .id("no-topic")
+                .icon(WarningOutlineIcon)
+                .child(
+                  S.documentList()
+                    .title("Published without a topic")
+                    .filter(
+                      '_type in ["resource", "helpfulLink", "article"] && count(topics) < 1',
+                    ),
+                ),
+              S.divider(),
+              S.documentTypeListItem("topic")
+                .title("All topics")
+                .id("all")
+                .child(
+                  S.documentTypeList("topic")
+                    .title("Choose a topic")
+                    .defaultOrdering([{ field: "order", direction: "asc" }])
+                    .child((topicId) => topicLists(topicId)),
+                ),
+            ]),
+        ),
+      S.listItem()
+        .title("Needs review")
+        .icon(WarningOutlineIcon)
+        .child(
+          S.list()
+            .title("Brought over from the old site — please check")
+            .items(
+              REVIEW_TYPES.map(({ type, title }) =>
+                S.listItem()
+                  .title(title)
+                  .id(`review-${type}`)
+                  .schemaType(type)
+                  .child(
+                    S.documentTypeList(type)
+                      .title(`${title} to check`)
+                      .filter(`_type == "${type}" && needsReview == true`),
+                  ),
+              ),
+            ),
+        ),
+      S.listItem()
+        .title("Due for checking")
+        .icon(ClockIcon)
+        .child(
+          S.documentTypeList("resource")
+            .title("Resources not checked in a year")
+            .filter(
+              '_type == "resource" && (!defined(lastVerified) || lastVerified < string::split(string(dateTime(now()) - 60*60*24*365), "T")[0])',
+            )
+            .defaultOrdering([{ field: "lastVerified", direction: "asc" }]),
+        ),
+      ...(admin
+        ? [
+            S.divider(),
+            S.listItem()
+              .title("Site setup (admin)")
+              .icon(CogIcon)
+              .child(
+                S.list()
+                  .title("Site setup")
+                  .items([
+                    singleton("settings"),
+                    singleton("navigation"),
+                    list("topic", "Topics"),
+                    list("redirect", "Redirects"),
+                  ]),
+              ),
+          ]
+        : []),
     ]);
 };

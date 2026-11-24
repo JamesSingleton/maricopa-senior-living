@@ -1,0 +1,655 @@
+/*
+ * Maricopa Senior Living — design system.
+ *
+ * Direction: a modern printed directory. Flat blocks of colour that meet
+ * edge to edge, large serif headlines, thick rules and numbered lists, the
+ * way good hospital or transit signage works. No gradients, shadows, pills
+ * or decorative stripes: the only things that stand out are headings and
+ * phone numbers.
+ *
+ * Built for older readers: 19–20px text in Atkinson Hyperlegible (drawn for
+ * low vision), contrast of 7:1 or better for body text, tap targets of
+ * 52px or more, and a strong two-tone focus ring.
+ */
+
+:root {
+  --msl-cream: #f4ecdc; /* sand: the page */
+  --msl-cream-2: #e9dec7;
+  --msl-paper: #fffdf8;
+  --msl-green: #14211d; /* ink: text and dark blocks */
+  --msl-green-2: #22332d;
+  --msl-green-3: #46584f;
+  --msl-sage: #dbe2c9;
+  --msl-sky: #f1d6bd;
+  --msl-yellow: #f2b233; /* gold: only ever behind ink text */
+  --msl-yellow-2: #e3a11c;
+  --msl-clay: #b3401c; /* terracotta: 5.7:1 with white, 5.1:1 on sand */
+  --msl-clay-2: #93320f;
+  --msl-ink: #14211d;
+  --msl-ink-soft: #3f4c46; /* 7.6:1 on sand */
+  --msl-line: #cfc3a8;
+  --msl-line-strong: #7d745f; /* control borders: 4:1, passes WCAG 1.4.11 */
+  --msl-link: #14211d;
+  --msl-call: #1a5c31; /* green "Call" buttons, 8:1 with white */
+  --msl-warning-bg: #ffe9a8;
+  --msl-warning-line: #7a4f00;
+  --msl-radius-sm: 3px;
+  --msl-radius: 3px;
+  --msl-radius-lg: 3px;
+  --msl-shadow: none;
+  --msl-max: 1280px;
+  --msl-measure: 64ch;
+
+  /* shadcn tokens used by packages/ui components */
+  --background: var(--msl-cream);
+  --foreground: var(--msl-ink);
+  --primary: var(--msl-green);
+  --primary-foreground: #ffffff;
+  --muted-foreground: var(--msl-ink-soft);
+  --border: var(--msl-line);
+  --ring: var(--msl-green);
+  --radius: 3px;
+}
+
+@layer base {
+  html {
+    font-size: 118.75%; /* 19px base */
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 1rem;
+  }
+
+  @media (min-width: 64rem) {
+    html {
+      font-size: 125%; /* 20px on larger screens */
+    }
+  }
+
+  body {
+    background: var(--msl-cream);
+    color: var(--msl-ink);
+    font-family: var(--font-sans), system-ui, sans-serif;
+    line-height: 1.6;
+  }
+
+  h1,
+  h2,
+  .font-display {
+    font-family: var(--font-display), Georgia, serif;
+    font-weight: 600;
+    color: inherit;
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 1.2rem + 5vw, 5rem);
+  }
+
+  h2 {
+    font-size: clamp(1.9rem, 1.3rem + 2.2vw, 3rem);
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  a {
+    color: var(--msl-link);
+    text-decoration: underline;
+    text-decoration-thickness: 0.09em;
+    text-underline-offset: 0.2em;
+  }
+
+  a:hover {
+    text-decoration-thickness: 0.18em;
+  }
+
+  /* Two-tone ring: visible on sand, white, gold and the dark blocks. */
+  :focus-visible {
+    outline: 3px solid var(--msl-green);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 7px var(--msl-yellow);
+  }
+
+  ::selection {
+    background: var(--msl-yellow);
+    color: var(--msl-green);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* ---- Layout ---------------------------------------------------------- */
+
+  .container-page {
+    width: 100%;
+    max-width: var(--msl-max);
+    margin-inline: auto;
+    padding-inline: 1.1rem;
+  }
+
+  @media (min-width: 48rem) {
+    .container-page {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  .measure {
+    max-width: var(--msl-measure);
+  }
+
+  .section {
+    padding-block: clamp(3rem, 6vw, 5.5rem);
+  }
+
+  /* A thick rule above a section heading, as in a printed directory. */
+  .ruled {
+    border-top: 4px solid var(--msl-green);
+    padding-top: 1.25rem;
+  }
+
+  .band-dark .ruled {
+    border-top-color: var(--msl-yellow);
+  }
+
+  .band-dark {
+    background: var(--msl-green);
+    color: #fff;
+  }
+
+  .band-dark a:not(.btn) {
+    color: #fff;
+  }
+
+  .band-dark .muted {
+    color: #d5dbd0;
+  }
+
+  .band-dark .eyebrow {
+    color: var(--msl-yellow);
+  }
+
+  .band-clay {
+    background: var(--msl-clay);
+    color: #fff;
+  }
+
+  .band-clay a:not(.btn),
+  .band-clay .eyebrow,
+  .band-clay .muted {
+    color: #fff;
+  }
+
+  .band-gold {
+    background: var(--msl-yellow);
+    color: var(--msl-green);
+  }
+
+  .band-gold .eyebrow,
+  .band-gold .muted {
+    color: var(--msl-green);
+  }
+
+  .band-gold .ruled {
+    border-top-color: var(--msl-green);
+  }
+
+  .band-sage {
+    background: var(--msl-sage);
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -10rem;
+    z-index: 100;
+    background: var(--msl-yellow);
+    color: var(--msl-green);
+    font-weight: 700;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .skip-link:focus {
+    top: 1rem;
+  }
+
+  /* ---- Directory index --------------------------------------------------- */
+
+  /* Numbered list of topics: one wide, easy-to-hit row each. */
+  .index {
+    counter-reset: index;
+    border-bottom: 1px solid var(--msl-green);
+  }
+
+  .index-row {
+    counter-increment: index;
+    display: grid;
+    grid-template-columns: 3.2rem 1fr auto;
+    align-items: start;
+    column-gap: 1rem;
+    min-height: 100%;
+    padding: 1.1rem 0.75rem 1.2rem 0.5rem;
+    border-top: 1px solid var(--msl-green);
+    color: inherit;
+    text-decoration: none;
+    transition: background-color 0.12s;
+  }
+
+  .index-row::before {
+    content: counter(index, decimal-leading-zero);
+    font-family: var(--font-display), Georgia, serif;
+    font-size: 1.9rem;
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--msl-clay);
+  }
+
+  @media (max-width: 40rem) {
+    .index-row {
+      grid-template-columns: 2.6rem 1fr auto;
+      column-gap: 0.75rem;
+      padding-inline: 0;
+    }
+
+    .block-link {
+      gap: 1rem;
+    }
+  }
+
+  .index-row:hover {
+    background: var(--msl-yellow);
+    text-decoration: none;
+  }
+
+  .index-row:hover::before {
+    color: var(--msl-green);
+  }
+
+  .index-title {
+    font-family: var(--font-display), Georgia, serif;
+    font-size: 1.55rem;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+  }
+
+  /* Solid colour panel that is one big link. */
+  .block-link {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2.5rem;
+    min-height: 100%;
+    padding: clamp(1.4rem, 3vw, 2.25rem);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .block-link:hover .index-title {
+    text-decoration: underline;
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.18em;
+  }
+
+  /* ---- Type helpers ---------------------------------------------------- */
+
+  .eyebrow {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--msl-clay);
+  }
+
+  .muted {
+    color: var(--msl-ink-soft);
+  }
+
+  .lead {
+    font-size: 1.2rem;
+    line-height: 1.5;
+  }
+
+  /* ---- Buttons ----------------------------------------------------------- */
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    min-height: 3.1rem;
+    padding: 0.5rem 1.4rem;
+    border-radius: var(--msl-radius);
+    border: 2px solid var(--msl-green);
+    background: var(--msl-green);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color 0.12s,
+      color 0.12s;
+  }
+
+  .btn:hover {
+    background: var(--msl-green-2);
+    text-decoration: none;
+  }
+
+  .btn-clay {
+    background: var(--msl-clay);
+    border-color: var(--msl-clay);
+  }
+
+  .btn-clay:hover {
+    background: var(--msl-clay-2);
+    border-color: var(--msl-clay-2);
+  }
+
+  /* A plain arrow after the label; it slides a little on hover. */
+  .btn-arrow {
+    display: inline-grid;
+    flex-shrink: 0;
+    transition: transform 0.12s;
+  }
+
+  .btn:hover .btn-arrow {
+    transform: translateX(3px);
+  }
+
+  .btn-sm {
+    min-height: 2.75rem; /* 52px+ at 19px base */
+    padding-inline: 1.1rem;
+    font-size: 0.95rem;
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--msl-green);
+    border-color: var(--msl-green);
+  }
+
+  .btn-secondary:hover {
+    background: var(--msl-green);
+    color: #fff;
+  }
+
+  .band-dark .btn-secondary,
+  .band-clay .btn-secondary {
+    color: #fff;
+    border-color: #fff;
+  }
+
+  .band-dark .btn-secondary:hover,
+  .band-clay .btn-secondary:hover {
+    background: #fff;
+    color: var(--msl-green);
+  }
+
+  .btn-yellow {
+    background: var(--msl-yellow);
+    border-color: var(--msl-yellow);
+    color: var(--msl-green);
+  }
+
+  .btn-yellow:hover {
+    background: var(--msl-yellow-2);
+    border-color: var(--msl-yellow-2);
+  }
+
+  .band-gold .btn-yellow {
+    background: var(--msl-green);
+    border-color: var(--msl-green);
+    color: #fff;
+  }
+
+  .btn-call {
+    white-space: nowrap;
+    background: var(--msl-call);
+    border-color: var(--msl-call);
+  }
+
+  .btn-call:hover {
+    background: #154a28;
+    border-color: #154a28;
+  }
+
+  /* ---- Cards ------------------------------------------------------------- */
+
+  /* Flat white sheet on the sand page: no border, no shadow. */
+  .card {
+    background: var(--msl-paper);
+    border-radius: var(--msl-radius);
+    padding: 1.5rem;
+  }
+
+  .card-soft {
+    background: var(--msl-cream-2);
+  }
+
+  .card-dark {
+    background: var(--msl-green-2);
+    color: #fff;
+  }
+
+  .band-gold .card {
+    background: var(--msl-paper);
+  }
+
+  .card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    transition: background-color 0.12s;
+  }
+
+  .card-link:hover {
+    background: #fff;
+    text-decoration: none;
+  }
+
+  .card-title {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+
+  .card-title a {
+    text-decoration: none;
+  }
+
+  .card-title a:hover,
+  .card-link:hover .card-title {
+    text-decoration: underline;
+  }
+
+  .stat {
+    background: var(--msl-paper);
+    padding: 0.9rem 1.1rem;
+  }
+
+  .stat strong {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  /* Square gold block behind an icon. */
+  .icon-circle {
+    display: grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: var(--msl-radius);
+    background: var(--msl-yellow);
+    color: var(--msl-green);
+    flex-shrink: 0;
+  }
+
+  /* Small label, e.g. "Pinal County". */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--msl-radius);
+    background: var(--msl-sage);
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  /* Tappable choice, e.g. a popular search or "jump to" link. */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.3rem 1rem;
+    border: 2px solid currentColor;
+    border-radius: var(--msl-radius);
+    font-weight: 700;
+    font-size: 1rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .chip:hover {
+    background: var(--msl-yellow);
+    border-color: var(--msl-yellow);
+    color: var(--msl-green);
+    text-decoration: none;
+  }
+
+  /* ---- Forms ------------------------------------------------------------- */
+
+  .input {
+    width: 100%;
+    min-height: 3.1rem;
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--msl-green);
+    border-radius: var(--msl-radius);
+    background: #fff;
+    color: var(--msl-ink);
+    font-size: 1.05rem;
+  }
+
+  .input::placeholder {
+    color: #5c6660;
+  }
+
+  .label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+
+  /* ---- Rich text --------------------------------------------------------- */
+
+  .prose-msl {
+    max-width: var(--msl-measure);
+    font-size: 1.05rem;
+  }
+
+  .prose-msl > * + * {
+    margin-top: 1em;
+  }
+
+  .prose-msl h2 {
+    margin-top: 1.6em;
+    font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.2rem);
+  }
+
+  .prose-msl h3 {
+    margin-top: 1.3em;
+  }
+
+  .prose-msl ul,
+  .prose-msl ol {
+    padding-left: 1.5em;
+  }
+
+  .prose-msl ul {
+    list-style: square;
+  }
+
+  .prose-msl ol {
+    list-style: decimal;
+  }
+
+  .prose-msl li + li {
+    margin-top: 0.4em;
+  }
+
+  .prose-msl blockquote {
+    font-family: var(--font-display), Georgia, serif;
+    font-size: 1.35rem;
+    line-height: 1.4;
+    padding-block: 0.5rem;
+  }
+
+  /* Pictures in text all fill the column, so flyers line up instead of
+     showing at whatever size they were uploaded. */
+  .prose-msl figure,
+  .prose-msl img {
+    width: 100%;
+    max-width: 36rem;
+  }
+
+  .prose-msl img {
+    height: auto;
+  }
+}
+
+/* ---- Print (resource lists, newsletter) --------------------------------- */
+
+@media print {
+  html {
+    font-size: 11pt;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  .no-print,
+  .site-header,
+  .site-footer,
+  .skip-link {
+    display: none !important;
+  }
+
+  a {
+    color: #000;
+    text-decoration: none;
+  }
+
+  .card {
+    border: 1px solid #999;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  .band-dark {
+    background: #fff;
+    color: #000;
+  }
+
+  .print-break {
+    break-before: page;
+  }
+}

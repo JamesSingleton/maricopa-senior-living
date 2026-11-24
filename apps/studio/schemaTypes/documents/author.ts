@@ -1,57 +1,55 @@
-import { defineField, defineType } from "sanity";
+import { UserIcon } from "@sanity/icons/User";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
-import { createSlug, isUnique } from "../../utils/slug";
+import { slugField } from "../../utils/slug";
 
 export const author = defineType({
   name: "author",
-  title: "Author",
+  title: "Writer",
   type: "document",
+  icon: UserIcon,
   fields: [
     defineField({
       name: "name",
-      title: "Name",
       type: "string",
       validation: (rule) => rule.required(),
     }),
+    slugField({ source: "name", prefix: "/writers" }),
     defineField({
-      name: "slug",
-      title: "Slug",
-      type: "slug",
-      options: {
-        source: "name",
-        slugify: createSlug,
-        maxLength: 96,
-        isUnique,
-      },
-      validation: (rule) => rule.required(),
+      name: "role",
+      type: "string",
+      description:
+        'For example "Founder, Maricopa Senior Living" or "Columnist".',
     }),
     defineField({
-      name: "image",
-      title: "Image",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
-      validation: (rule) => rule.required(),
+      name: "credentials",
+      type: "string",
+      description:
+        'Professional letters or training, e.g. "CDP — Certified Dementia Practitioner".',
     }),
+    defineField({ name: "image", title: "Photo", type: "imageWithAlt" }),
     defineField({
       name: "bio",
-      title: "Bio",
+      type: "text",
+      rows: 3,
+      description: "A sentence or two about this writer.",
+    }),
+    defineField({
+      name: "profiles",
+      title: "Profile links",
       type: "array",
-      of: [
-        {
-          title: "Block",
-          type: "block",
-          styles: [{ title: "Normal", value: "normal" }],
-          lists: [],
-        },
-      ],
+      description:
+        "Optional pages about this writer elsewhere (LinkedIn, a business website).",
+      of: [defineArrayMember({ type: "url" })],
+    }),
+    defineField({
+      name: "tribute",
+      title: "In memory",
+      type: "text",
+      rows: 3,
+      description:
+        "For writers who have passed away. Shown at the top of their page.",
     }),
   ],
-  preview: {
-    select: {
-      title: "name",
-      media: "image",
-    },
-  },
+  preview: { select: { title: "name", media: "image" } },
 });

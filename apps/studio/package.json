@@ -8,28 +8,23 @@
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "build": "sanity build",
-    "deploy:schema": "sanity schema deploy --manifest-dir ./dist/static",
+    "deploy:schema": "sanity schema deploy",
     "deploy": "sanity deploy",
     "type": "sanity schema extract --enforce-required-fields && sanity typegen generate",
     "check:types": "tsc --noEmit"
   },
   "dependencies": {
-    "@sanity/assist": "^6.2.1",
     "@sanity/client": "catalog:",
-    "@sanity/functions": "^1.8.0",
-    "@sanity/icons": "^5.2.2",
-    "@sanity/ui": "^3.5.5",
+    "@sanity/icons": "^5.4.0",
+    "@sanity/ui": "^4.4.12",
     "@sanity/vision": "catalog:",
-    "lucide-react": "^1.47.0",
     "react": "catalog:",
     "react-dom": "catalog:",
     "sanity": "catalog:",
-    "sanity-plugin-media": "^6.3.0",
     "slugify": "^1.6.9",
-    "styled-components": "^6.5.3"
+    "styled-components": "^6.6.0"
   },
   "devDependencies": {
-    "@sanity/blueprints": "^0.23.6",
     "@types/node": "catalog:",
     "@types/react": "catalog:"
   }

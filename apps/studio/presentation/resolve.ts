@@ -3,57 +3,44 @@ import {
   type PresentationPluginOptions,
 } from "sanity/presentation";
 
+/** Public URL for each document type; must match the website's routes. */
+const at = (title: string, href: string) => ({ locations: [{ title, href }] });
+
 export const presentationResolve: PresentationPluginOptions["resolve"] = {
   locations: {
     home: defineLocations({
       select: { title: "title" },
-      resolve: () => ({
-        locations: [{ title: "Home", href: "/" }],
-      }),
+      resolve: () => at("Home", "/"),
     }),
     page: defineLocations({
       select: { title: "title", slug: "slug.current" },
-      resolve: (doc) => ({
-        locations: [
-          {
-            title: doc?.title || "Untitled",
-            href: doc?.slug ? `/${doc.slug}` : "/",
-          },
-        ],
-      }),
+      resolve: (doc) => at(doc?.title ?? "Page", `/${doc?.slug}`),
     }),
-    post: defineLocations({
+    article: defineLocations({
       select: { title: "title", slug: "slug.current" },
-      resolve: (doc) => ({
-        locations: [
-          {
-            title: doc?.title || "Untitled",
-            href: doc?.slug ? `/articles/${doc.slug}` : "/articles",
-          },
-        ],
-      }),
+      resolve: (doc) => at(doc?.title ?? "Article", `/articles/${doc?.slug}`),
     }),
-    category: defineLocations({
+    resource: defineLocations({
       select: { title: "title", slug: "slug.current" },
-      resolve: (doc) => ({
-        locations: [
-          {
-            title: doc?.title || "Untitled",
-            href: doc?.slug ? `/category/${doc.slug}` : "/",
-          },
-        ],
-      }),
+      resolve: (doc) => at(doc?.title ?? "Resource", `/resources/${doc?.slug}`),
     }),
-    tag: defineLocations({
+    event: defineLocations({
       select: { title: "title", slug: "slug.current" },
-      resolve: (doc) => ({
-        locations: [
-          {
-            title: doc?.title || "Untitled",
-            href: doc?.slug ? `/tag/${doc.slug}` : "/",
-          },
-        ],
-      }),
+      resolve: (doc) => at(doc?.title ?? "Event", `/events/${doc?.slug}`),
+    }),
+    topic: defineLocations({
+      select: { title: "title", slug: "slug.current" },
+      resolve: (doc) => at(doc?.title ?? "Topic", `/topics/${doc?.slug}`),
+    }),
+    monthlyUpdate: defineLocations({
+      select: { month: "publishMonth" },
+      resolve: (doc) =>
+        at("What's New", `/whats-new/${String(doc?.month ?? "").slice(0, 7)}`),
+    }),
+    newsletterEdition: defineLocations({
+      select: { month: "publishMonth" },
+      resolve: (doc) =>
+        at("Newsletter", `/newsletter/${String(doc?.month ?? "").slice(0, 7)}`),
     }),
   },
 };

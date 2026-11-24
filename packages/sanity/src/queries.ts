@@ -1,656 +1,511 @@
 import { defineQuery } from "next-sanity";
 
+/*
+ * Queries for the rebuilt site. Fragments are plain strings so TypeGen can
+ * evaluate them (it can't run helper functions).
+ */
+
 const imageFields = /* groq */ `
   "id": asset._ref,
   "preview": asset->metadata.lqip,
-  "alt": coalesce(
-    alt,
-    asset->altText,
-    caption,
-    ""
-  ),
-  hotspot {
-    x,
-    y
-  },
-  crop {
-    bottom,
-    left,
-    right,
-    top
-  }
-`;
-// Base fragments for reusable query parts
-const imageFragment = /* groq */ `
-  image {
-    ${imageFields}
-  }
+  "alt": coalesce(alt, ""),
+  caption,
+  hotspot { x, y },
+  crop { top, bottom, left, right }
 `;
 
-const customLinkFragment = /* groq */ `
-  ...customLink{
-    openInNewTab,
-    "href": select(
-      type == "internal" => internal->slug.current,
-      type == "external" => external,
-      "#"
-    ),
-  }
-`;
-
-const buttonsFragment = /* groq */ `
-  buttons[]{
-    text,
-    variant,
-    _key,
-    _type,
-    "openInNewTab": url.openInNewTab,
-    "href": select(
-      url.type == "internal" => url.internal->slug.current,
-      url.type == "external" => url.external,
-      url.href
-    ),
-  }
-`;
-
-const markDefsFragment = /* groq */ `
-  markDefs[]{
-    ...,
-    ${customLinkFragment}
-  }
-`;
-
-const richTextFragment = /* groq */ `
-  richText[]{
-    ...,
-    _type == "block" => {
-      ...,
-      ${markDefsFragment}
-    },
-    _type == "image" => {
-      ${imageFields},
-      "caption": caption
-    }
-  }
-`;
-
-const blockContentFragment = /* groq */ `
-  ...,
-  _type == "block" => {
-    ...
-  },
-  _type == "image" => {
-    ${imageFields},
-    "caption": caption
-  },
-  _type == "attachment" => {
-    ...,
-    asset->
-  }
-`;
-
-const blogAuthorFragment = /* groq */ `
-  authors[0]->{
-    _id,
-    name,
-    position,
-    ${imageFragment}
-  }
-`;
-
-const blogCardFragment = /* groq */ `
-  _type,
-  _id,
-  title,
-  description,
-  "slug":slug.current,
-  orderRank,
-  ${imageFragment},
-  publishedAt,
-  ${blogAuthorFragment}
-`;
-
-/**
- * Query to extract a single image from a page document
- * This is used as a type reference only and not for actual data fetching
- * Helps with TypeScript inference for image objects
- */
+/** Used only for TypeScript inference of image objects (see image.ts). */
 export const queryImageType = defineQuery(`
-  *[_type == "post" && defined(mainImage)][0].mainImage{
+  *[_type == "article" && defined(mainImage)][0].mainImage{
     ${imageFields}
   }
 `);
 
-const pageBuilderFragment = /* groq */ `
-  pageBuilder[]{
-    ...,
-    _type,
+/** Enough of any linkable document to build its URL. */
+/** "2026-11" from a publishMonth date, for /whats-new and /newsletter URLs. */
+const monthKey = /* groq */ `string::split(publishMonth, "-")[0] + "-" + string::split(publishMonth, "-")[1]`;
 
-  }
-`;
-
-export const querySlugPageData = defineQuery(`
-  *[_type == "page" && slug.current == $slug][0]{
-    ...,
-    "slug": slug.current,
-    ${pageBuilderFragment}
-  }
-  `);
-
-export const queryNavbarData = defineQuery(`
-  *[_type == "navbar" && _id == "navbar"][0]{
-    _id,
-    columns[]{
-      _key,
-      _type == "navbarColumn" => {
-        "type": "column",
-        title,
-        links[]{
-          _key,
-          name,
-          icon,
-          description,
-          "openInNewTab": url.openInNewTab,
-          "href": select(
-            url.type == "internal" => url.internal->slug.current,
-            url.type == "external" => url.external,
-            url.href
-          )
-        }
-      },
-      _type == "navbarLink" => {
-        "type": "link",
-        name,
-        description,
-        "openInNewTab": url.openInNewTab,
-        "href": select(
-          url.type == "internal" => url.internal->slug.current,
-          url.type == "external" => url.external,
-          url.href
-        )
-      }
-    },
-    ${buttonsFragment},
-  }
-`);
-
-export const queryGlobalSeoSettings = defineQuery(`
-  *[_type == "settings"][0]{
-    _id,
-    _type,
-    siteTitle,
-    logo {
-      ${imageFields}
-    },
-    siteDescription,
-    socialLinks{
-      linkedin,
-      facebook,
-      twitter,
-      instagram,
-      youtube
-    }
-  }
-`);
-
-export const queryBlogIndexPageData = defineQuery(`
-  *[_type == "blogIndex"][0]{
-    ...,
-    _id,
-    _type,
-    title,
-    description,
-    "displayFeaturedBlogs" : displayFeaturedBlogs == "yes",
-    "featuredBlogsCount" : featuredBlogsCount,
-    ${pageBuilderFragment},
-    "slug": slug.current
-  }
-`);
-
-export const queryBlogIndexPageBlogs = defineQuery(`
-  *[_type == "blog" && (seoHideFromLists != true)] | order(orderRank asc) [$start...$end]{
-    ${blogCardFragment}
-  }
-`);
-
-export const queryAllBlogDataForSearch = defineQuery(`
-  *[_type == "blog" && defined(slug.current) && (seoHideFromLists != true)]{
-    ${blogCardFragment}
-  }
-`);
-
-export const queryBlogIndexPageBlogsCount = defineQuery(`
-  count(*[_type == "blog" && (seoHideFromLists != true)])
-`);
-export const queryBlogSlugPageData = defineQuery(`
-  *[_type == "blog" && slug.current == $slug][0]{
-    ...,
-    "slug": slug.current,
-    ${blogAuthorFragment},
-    ${imageFragment},
-    ${richTextFragment},
-    ${pageBuilderFragment}
-  }
-`);
-
-export const queryBlogPaths = defineQuery(`
-  *[_type == "blog" && defined(slug.current)].slug.current
-`);
-
-const authorFields = /* groq */ `
-  name,
-  ${imageFragment},
-  "slug": slug.current,
-`;
-
-/**
- * First 160 characters of the plain text; "…" only when actually cut.
- * Written out per field because TypeGen can't evaluate helper functions.
- */
-const bodyExcerpt = /* groq */ `select(
-    length(pt::text(body)) > 160 =>
-      array::join(string::split(pt::text(body), "")[0...160], "") + "…",
-    pt::text(body)
-  )`;
-
-const descriptionExcerpt = /* groq */ `select(
-    length(pt::text(description)) > 160 =>
-      array::join(string::split(pt::text(description), "")[0...160], "") + "…",
-    pt::text(description)
-  )`;
-
-const bodyExcerptFragment = /* groq */ `
-  "excerpt": ${bodyExcerpt}
-`;
-
-/** Post fields for cards and lists — no body, so long lists stay small. */
-const postCardFields = /* groq */ `
-  _id,
-  _updatedAt,
+const targetFields = /* groq */ `
   _type,
-  title,
-  ${bodyExcerptFragment},
   "slug": slug.current,
-  "author": author->{
-    name,
-    ${imageFragment}
-  },
-  "categories": categories[]->{
-    _id,
-    title,
-    "slug": slug.current,
-  },
+  "month": ${monthKey},
+  title
+`;
+
+const linkFields = /* groq */ `
+  _key,
+  label,
+  kind,
+  section,
+  url,
+  phone,
+  email,
+  "target": reference->{ ${targetFields} }
+`;
+
+const phoneFields = /* groq */ `_key, label, number`;
+
+const addressFields = /* groq */ `street, city, state, zip, note`;
+
+/** Optional "Search & sharing" overrides. */
+const seoFields = /* groq */ `"seo": seo{ title, description, "imageId": image.asset._ref, noIndex }`;
+
+const eventCardFields = /* groq */ `
+  _id,
+  title,
+  "slug": slug.current,
+  start,
+  end,
+  allDay,
+  repeat { frequency, until, skipDates },
+  location,
+  hostedByMsl,
+  summary,
+  status,
+  attendance
+`;
+
+const resourceCardFields = /* groq */ `
+  _id,
+  title,
+  "slug": slug.current,
+  summary,
+  serviceArea,
+  phones[]{ ${phoneFields} },
+  website,
+  address{ ${addressFields} },
+  "topics": topics[]->{ title, "slug": slug.current }
+`;
+
+const linkCardFields = /* groq */ `
+  _id,
+  title,
+  url,
+  source,
+  summary,
   publishedAt
 `;
 
-/** Service fields DirectoryCard renders. */
-const serviceCardFields = /* groq */ `
-  _id,
-  _type,
-  title,
-  description,
-  audience,
-  website,
-  phone,
-  address,
-  businessHours,
-  notes,
-  attachments,
-  "tags": tags[]->{
-    _id,
-    title,
-    "slug": slug.current,
-  }
-`;
-
-const rightSidebarAuthorFields = /* groq */ `
-  name,
-  ${imageFragment}
-`;
-
-const rightSidebarPostListFields = /* groq */ `
+const articleCardFields = /* groq */ `
   _id,
   title,
   "slug": slug.current,
+  summary,
   publishedAt,
-  ${bodyExcerptFragment}
+  series,
+  "author": author->{ name, "slug": slug.current },
+  mainImage { ${imageFields} }
 `;
 
-/** Category slugs for the right sidebar — verify in Sanity Studio if a section is empty. */
-const RIGHT_SIDEBAR_WHATS_NEW_CATEGORY_SLUG = "whats-new";
-const RIGHT_SIDEBAR_SENIOR_CENTER_CATEGORY_SLUG =
-  "city-of-maricopa-community-senior-center";
-const RIGHT_SIDEBAR_NEWSLETTER_CATEGORY_SLUG =
-  "keeping-you-informed-still-newsletter";
-const RIGHT_SIDEBAR_NONPROFIT_CATEGORY_SLUG =
-  "maricopa-senior-living-an-arizona-501-c3-nonprofit";
-
-const postFields = /* groq */ `
-  _id,
-  _updatedAt,
-  _type,
-  title,
-  ${bodyExcerptFragment},
-  "slug": slug.current,
-  "author": author->{
-    ${authorFields}
-  },
-  mainImage {
-    ${imageFields}
-  },
-  "categories": categories[]->{
-    _id,
-    title,
-    "slug": slug.current,
-  },
-  "tags": tags[]->{
-    _id,
-    title,
-    "slug": slug.current,
-  } {
+const richTextFields = /* groq */ `
+  ...,
+  markDefs[]{
     ...,
-    "rank": select(
-      count(tags[title == "Local Resources"]) > 0 => 1,
-      2
-    )
+    _type == "internalLink" => { "target": reference->{ ${targetFields} } }
   },
-  publishedAt,
-  "body": body[]{
-    ${blockContentFragment}
+  _type == "imageWithAlt" => { _key, _type, ${imageFields} },
+  _type == "fileAttachment" => {
+    _key,
+    _type,
+    title,
+    "file": asset->{ url, size, extension, originalFilename }
   },
+  _type == "eventCard" => { _key, _type, "event": event->{ ${eventCardFields} } },
+  _type == "resourceCard" => { _key, _type, "resource": resource->{ ${resourceCardFields} } }
 `;
 
-/** Highlighted taxonomies only — no live counts (those tag every referencing post). */
-export const highlightedCategories = defineQuery(`
-  *[_type == "category" && highlight == true]{
-    _id,
-    title,
-    "slug": slug.current
-  } | order(title asc)
-`);
-
-export const highlightedTags = defineQuery(`
-  *[_type == "tag" && highlight == true]{
-    _id,
-    title,
-    "slug": slug.current
-  } | order(title asc)
-`);
-
-export const queryArticleSlugPageData = defineQuery(`
-  *[_type == "post" && slug.current == $slug && isArchived != true][0]{
-    ${postFields}
+const pageBuilderFields = /* groq */ `
+  ...,
+  _key,
+  _type,
+  _type == "heroBlock" => { image { ${imageFields} }, buttons[]{ ${linkFields} } },
+  _type == "textBlock" => { body[]{ ${richTextFields} } },
+  _type == "imageBlock" => { images[]{ _key, ${imageFields} } },
+  _type == "buttonsBlock" => { buttons[]{ ${linkFields} } },
+  _type == "calloutBlock" => { link{ ${linkFields} } },
+  _type == "resourceListBlock" => {
+    "topicSlug": topic->slug.current,
+    "topicTitle": topic->title,
+    "picked": resources[]->{ ${resourceCardFields} }
+  },
+  _type == "eventListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },
+  _type == "articleListBlock" => { "topicId": topic._ref, "topicSlug": topic->slug.current },
+  _type == "linkListBlock" => {
+    "topicId": topic._ref,
+    "topicSlug": topic->slug.current,
+    "picked": links[]->{ ${linkCardFields} }
+  },
+  _type == "faqBlock" => { items[]{ _key, question, answer, "answerText": pt::text(answer) } },
+  _type == "fileBlock" => { "file": file.asset->{ url, size, extension, originalFilename } },
+  _type == "peopleBlock" => { people[]{ _key, name, role, bio, image { ${imageFields} } } },
+  _type == "documentsBlock" => {
+    documents[]{ _key, title, "file": asset->{ url, size, extension } }
+  },
+  _type == "supportersBlock" => {
+    supporters[]{ _key, name, url, "logoId": logo.asset._ref }
   }
-`);
+`;
 
-export const queryArticlePaths = defineQuery(`
-  *[_type == "post" && defined(slug.current) && isArchived != true]{
-    "slug": slug.current,
-    _updatedAt
-  }
-`);
+// ---------------------------------------------------------------------------
+// Site-wide
+// ---------------------------------------------------------------------------
 
-/** Per-widget sidebar queries so each cache entry only carries its own sync tags. */
-export const rightSidebarNonProfitQuery = defineQuery(/* groq */ `
-  *[_type == "category" && slug.current == "${RIGHT_SIDEBAR_NONPROFIT_CATEGORY_SLUG}"][0]{
-    title,
-    "description": description[]{
-      ${blockContentFragment}
-    },
-    "slug": slug.current
-  }
-`);
-
-export const rightSidebarWhatsNewQuery = defineQuery(/* groq */ `
-  *[
-    _type == "post"
-    && isArchived != true
-    && references(*[_type == "category" && slug.current == "${RIGHT_SIDEBAR_WHATS_NEW_CATEGORY_SLUG}"][0]._id)
-  ] | order(publishedAt desc)[0]{
-    ${rightSidebarPostListFields},
-    "author": author->{
-      ${rightSidebarAuthorFields}
-    }
-  }
-`);
-
-export const rightSidebarSeniorCenterQuery = defineQuery(/* groq */ `
-  *[
-    _type == "post"
-    && isArchived != true
-    && references(*[_type == "category" && slug.current == "${RIGHT_SIDEBAR_SENIOR_CENTER_CATEGORY_SLUG}"][0]._id)
-  ] | order(publishedAt desc)[0...2]{
-    ${rightSidebarPostListFields}
-  }
-`);
-
-export const rightSidebarNewsletterQuery = defineQuery(/* groq */ `
-  *[
-    _type == "post"
-    && isArchived != true
-    && references(*[_type == "category" && slug.current == "${RIGHT_SIDEBAR_NEWSLETTER_CATEGORY_SLUG}"][0]._id)
-  ] | order(publishedAt desc)[0]{
-    ${rightSidebarPostListFields}
-  }
-`);
-
-export const queryHomePageData = defineQuery(`
-  *[_type == "home"][0]{
-    _id,
-    _type,
-    image {
-      ${imageFields},
-      "caption": caption
-    },
-    "content": content[]{
-      ...,
-      _type == "image" => {
-        ${imageFields},
-        "caption": caption
-      },
-      _type == "attachment" => {
-        ...,
-        asset->
-      }
-    }
-  }
-`);
-
-export const queryAllPosts = defineQuery(`
-  *[_type == "post" && isArchived != true] | order(publishedAt desc){
-    ${postFields}
-  }
-`);
-
-export const queryAllPostSlugs = defineQuery(`
-  *[_type == "post" && defined(slug.current) && isArchived != true][].slug.current
-`);
-
-export const queryRecentArticleSlugs = defineQuery(`
-  *[_type == "post" && defined(slug.current) && isArchived != true] | order(_updatedAt desc) [0...100]{"slug": slug.current}
-`);
-
-export const queryAllPageSlugs = defineQuery(`
-  *[_type == "page" && defined(slug.current)]{"slug": slug.current}
-`);
-
-export const queryPostBySlug = defineQuery(`
-  *[_type == "post" && slug.current == $slug && isArchived != true]{
-    ${postFields}
-  }[0]
-`);
-
-export const queryAllCategories = defineQuery(`
-  *[_type == "category"][].slug.current
-`);
-
-export const queryCategoryPaths = defineQuery(`
-  *[_type == "category" && defined(slug.current)]{"category": slug.current}
-`);
-
-/**
- * Services tagged "Local Resources" are listed first. Posts carry their tags
- * only so the same ranking applies to them.
- */
-export const queryCategoryBySlug = defineQuery(`
-  *[_type == "category" && slug.current == $slug]{
-    title,
-    "slug": slug.current,
-    "description": description[]{
-      ${blockContentFragment}
-    },
-    "excerpt": ${descriptionExcerpt},
-    "combinedList": [
-      ...(*[_type == "service" && references(^._id)]{
-        ${serviceCardFields}
-      }),
-      ...(*[_type == "post" && references(^._id) && isArchived != true]{
-        ${postCardFields},
-        "tags": tags[]->{ title }
-      })
-    ] {
-      ...,
-      "rank": select(
-        count(tags[title == "Local Resources"]) > 0 => 1,
-        2
-      )
-    } | order(rank, title asc),
-  }[0]
-`);
-
-export const queryAllTags = defineQuery(`
-  *[_type == "tag" && defined(slug.current)][].slug.current
-`);
-
-export const queryTagPaths = defineQuery(`
-  *[_type == "tag" && defined(slug.current)]{"tag": slug.current}
-`);
-
-export const queryTagBySlug = defineQuery(`
-  *[_type == "tag" && slug.current == $slug]{
-    title,
-    "slug": slug.current,
-    "description": description[]{
-      ${blockContentFragment}
-    },
-    "excerpt": ${descriptionExcerpt},
-    "posts": *[_type == "post" && references(^._id) && isArchived != true] | order(publishedAt desc){
-      ${postCardFields}
-    },
-    "services": *[_type == "service" && references(^._id)] | order(title asc){
-      ${serviceCardFields}
-    },
-  }[0]
-`);
-
-/**
- * Site search over posts and resources: titles, body/description text, and
- * tag/category names. Prefix matching (`term*`) — GROQ ignores a leading `*`.
- * Callers must skip empty terms, which would match every document.
- * `score()` cannot dereference, so tags/categories filter but do not rank.
- */
-export const querySearch = defineQuery(`
-  *[
-    (
-      (_type == "post" && isArchived != true) || _type == "service"
-    ) && (
-      title match $searchTerm + "*"
-      || pt::text(body) match $searchTerm + "*"
-      || pt::text(description) match $searchTerm + "*"
-      || tags[]->title match $searchTerm + "*"
-      || categories[]->title match $searchTerm + "*"
-    )
-  ]
-  | score(
-      boost(title match $searchTerm + "*", 4),
-      pt::text(description) match $searchTerm + "*",
-      pt::text(body) match $searchTerm + "*"
-    )
-  | order(_score desc, _updatedAt desc)[0...50]{
-    _type == "post" => {
-      ${postCardFields}
-    },
-    _type == "service" => {
-      ${serviceCardFields}
-    }
-  }
-`);
-
-/** Every public URL with its last edit, for sitemap.xml. Empty taxonomies are skipped. */
-export const querySitemap = defineQuery(`
-  {
-    "pages": *[_type == "page" && defined(slug.current)]{
-      "slug": slug.current,
-      _updatedAt
-    },
-    "articles": *[_type == "post" && defined(slug.current) && isArchived != true]{
-      "slug": slug.current,
-      _updatedAt
-    },
-    "categories": *[_type == "category" && defined(slug.current) && count(*[references(^._id)]) > 0]{
-      "slug": slug.current,
-      _updatedAt
-    },
-    "tags": *[_type == "tag" && defined(slug.current) && count(*[references(^._id)]) > 0]{
-      "slug": slug.current,
-      _updatedAt
-    }
+export const querySettings = defineQuery(`
+  *[_type == "settings" && _id == "settings"][0]{
+    siteTitle,
+    tagline,
+    description,
+    heroImage { ${imageFields} },
+    contactEmail,
+    contactPhone { label, number },
+    mailingAddress{ ${addressFields} },
+    profiles,
+    ein,
+    "logoId": logo.asset._ref,
+    "shareImageId": shareImage.asset._ref,
+    donateUrl,
+    nonprofitStatement,
+    mission,
+    foundedYear,
+    taxDeductibleNote,
+    donateByMail,
+    charityProfileUrl,
+    newsletterTitle,
+    newsletterDedication,
+    subscribeInstructions
   }
 `);
 
 export const queryNavigation = defineQuery(`
-  *[_type == "navigation"][0]{
-    "headerPrimary": headerPrimary[]{
-      _key,
-      "link": link{
-        url,
-        text,
-        reference->{
-          _id,
-          _type,
-          title,
-          "slug": slug.current
-        }
-      },
-      children[]{
-        _key,
-        link{
-          url,
-          text,
-          reference->{
-            _id,
-            _type,
-            title,
-            "slug": slug.current
-          }
-        }
-      }
-    },
-    "footer": footer[]{
-      _key,
-      url,
-      text,
-      reference->{
-        _id,
-        _type,
-        title,
-        "slug": slug.current
-      }
-    },
+  *[_type == "navigation" && _id == "navigation"][0]{
+    main[]{ ${linkFields} },
+    footer[]{ ${linkFields} }
   }
 `);
 
-export const queryPageBySlug = defineQuery(`
-  *[_type == "page" && slug.current == $slug][0]{
+export const queryHome = defineQuery(`
+  *[_type == "home" && _id == "home"][0]{
+    sections[]{ ${pageBuilderFields} }
+  }
+`);
+
+/** Numbers for the home page hero. */
+export const queryStats = defineQuery(`
+  {
+    "resources": count(*[_type == "resource"]),
+    "topics": count(*[_type == "topic"]),
+    "links": count(*[_type == "helpfulLink"])
+  }
+`);
+
+export const queryTopics = defineQuery(`
+  *[_type == "topic"] | order(order asc){
+    _id,
     title,
     "slug": slug.current,
-    "excerpt": ${descriptionExcerpt},
-    "body": body[]{
-      ...,
-      _type == "attachment" => {
-        ...,
-        asset->
-      }
-    },
+    description,
+    icon,
+    "resourceCount": count(*[_type == "resource" && references(^._id)])
+  }
+`);
+
+// ---------------------------------------------------------------------------
+// Pages
+// ---------------------------------------------------------------------------
+
+export const queryPage = defineQuery(`
+  *[_type == "page" && slug.current == $slug][0]{
+    _id,
+    title,
+    description,
+    "slug": slug.current,
+    ${seoFields},
+    sections[]{ ${pageBuilderFields} }
+  }
+`);
+
+export const queryPagePaths = defineQuery(`
+  *[_type == "page" && defined(slug.current)].slug.current
+`);
+
+// ---------------------------------------------------------------------------
+// Topics, resources, helpful links
+// ---------------------------------------------------------------------------
+
+export const queryTopic = defineQuery(`
+  *[_type == "topic" && slug.current == $slug][0]{
+    _id,
+    _updatedAt,
+    title,
+    "slug": slug.current,
+    description,
+    icon,
+    "resources": *[_type == "resource" && references(^._id)] | order(title asc){ ${resourceCardFields} },
+    "links": *[_type == "helpfulLink" && references(^._id)] | order(publishedAt desc)[0...12]{ ${linkCardFields} },
+    "linkCount": count(*[_type == "helpfulLink" && references(^._id)]),
+    "articles": *[_type == "article" && references(^._id)] | order(publishedAt desc)[0...6]{ ${articleCardFields} }
+  }
+`);
+
+/** Resources with optional topic / service-area / text filters. */
+const resourceFilter = /* groq */ `
+  _type == "resource"
+  && ($topic == "" || $topic in topics[]->slug.current)
+  && ($area == "" || serviceArea == $area)
+  && ($q == "" || title match $q + "*" || summary match $q + "*" || pt::text(description) match $q + "*")
+`;
+
+export const queryResourcesCount = defineQuery(`count(*[${resourceFilter}])`);
+
+/** Slice bounds must be literals; callers pass validated integers. */
+export function queryResourcesSlice(start: number, end: number) {
+  return defineQuery(`
+    *[${resourceFilter}] | order(title asc)[${start}...${end}]{ ${resourceCardFields} }
+  `);
+}
+
+/** Everything in a topic (or all), for the printable list. */
+export const queryResourcesForPrint = defineQuery(`
+  *[${resourceFilter}] | order(title asc){
+    ${resourceCardFields},
+    hours[]{ day, opens, closes },
+    hoursNote
+  }
+`);
+
+export const queryResource = defineQuery(`
+  *[_type == "resource" && slug.current == $slug][0]{
+    ${resourceCardFields},
+    email,
+    isGovernment,
+    hours[]{ _key, day, opens, closes },
+    hoursNote,
+    description[]{ ${richTextFields} },
+    eligibility,
+    cost,
+    attachments[]{ _key, title, "file": asset->{ url, size, extension } },
+    lastVerified,
+    ${seoFields},
+    _updatedAt
+  }
+`);
+
+export const queryResourcePaths = defineQuery(`
+  *[_type == "resource" && defined(slug.current)].slug.current
+`);
+
+const linkFilter = /* groq */ `
+  _type == "helpfulLink" && ($topic == "" || $topic in topics[]->slug.current)
+`;
+
+export const queryLinksCount = defineQuery(`count(*[${linkFilter}])`);
+
+export function queryLinksSlice(start: number, end: number) {
+  return defineQuery(`
+    *[${linkFilter}] | order(publishedAt desc, title asc)[${start}...${end}]{
+      ${linkCardFields},
+      "topics": topics[]->{ title, "slug": slug.current }
+    }
+  `);
+}
+
+export const queryLinksByTopic = defineQuery(`
+  *[_type == "helpfulLink" && references($topicId)] | order(publishedAt desc)[0...30]{ ${linkCardFields} }
+`);
+
+export const queryResourcesByTopicSlug = defineQuery(`
+  *[_type == "resource" && $topic in topics[]->slug.current] | order(title asc)[0...30]{ ${resourceCardFields} }
+`);
+
+// ---------------------------------------------------------------------------
+// Articles and writers
+// ---------------------------------------------------------------------------
+
+const articleFilter = /* groq */ `
+  _type == "article"
+  && ($series == "" || series == $series)
+  && ($topicId == "" || references($topicId))
+`;
+
+export const queryArticlesCount = defineQuery(`count(*[${articleFilter}])`);
+
+export function queryArticlesSlice(start: number, end: number) {
+  return defineQuery(`
+    *[${articleFilter}] | order(publishedAt desc)[${start}...${end}]{ ${articleCardFields} }
+  `);
+}
+
+export const queryArticle = defineQuery(`
+  *[_type == "article" && slug.current == $slug][0]{
+    ${articleCardFields},
+    "author": author->{ name, "slug": slug.current, bio, role, credentials, profiles, image { ${imageFields} } },
+    "topics": topics[]->{ title, "slug": slug.current },
+    reviewedAt,
+    ${seoFields},
+    body[]{ ${richTextFields} },
+    _updatedAt
+  }
+`);
+
+export const queryArticlePaths = defineQuery(`
+  *[_type == "article" && defined(slug.current)] | order(publishedAt desc)[0...200].slug.current
+`);
+
+export const queryWriter = defineQuery(`
+  *[_type == "author" && slug.current == $slug][0]{
+    name,
+    "slug": slug.current,
+    bio,
+    role,
+    credentials,
+    profiles,
+    tribute,
+    image { ${imageFields} },
+    "articles": *[_type == "article" && references(^._id)] | order(publishedAt desc){ ${articleCardFields} }
+  }
+`);
+
+// ---------------------------------------------------------------------------
+// Events (repeats are expanded in code; see apps/web/lib/events.ts)
+// ---------------------------------------------------------------------------
+
+/** Events that may have a date between $from and $to (ISO strings). */
+export const queryEventsInRange = defineQuery(`
+  *[
+    _type == "event"
+    && dateTime(start) <= dateTime($to)
+    && (
+      dateTime(coalesce(end, start)) >= dateTime($from)
+      || (repeat.frequency in ["weekly", "monthlyWeekday", "monthlyDate"] && repeat.until >= string::split($from, "T")[0])
+    )
+    && ($topicId == "" || references($topicId))
+    && ($mslOnly == false || hostedByMsl == true)
+  ] | order(start asc){ ${eventCardFields} }
+`);
+
+export const queryEvent = defineQuery(`
+  *[_type == "event" && slug.current == $slug][0]{
+    ${eventCardFields},
+    address{ ${addressFields} },
+    onlineUrl,
+    isFree,
+    cost,
+    ${seoFields},
+    registration { required, link{ ${linkFields} } },
+    flyer { ${imageFields} },
+    details[]{ ${richTextFields} },
+    "topics": topics[]->{ title, "slug": slug.current }
+  }
+`);
+
+export const queryEventPaths = defineQuery(`
+  *[_type == "event" && defined(slug.current)] | order(start desc)[0...200].slug.current
+`);
+
+// ---------------------------------------------------------------------------
+// What's New (monthly) and the newsletter
+// ---------------------------------------------------------------------------
+
+export const queryMonthlyUpdate = defineQuery(`
+  *[_type == "monthlyUpdate" && string::startsWith(publishMonth, $month)][0]{
+    _id, "month": ${monthKey}, title, intro, body[]{ ${richTextFields} }, _updatedAt
+  }
+`);
+
+/** The newest month that isn't in the future. */
+export const queryCurrentMonthlyUpdate = defineQuery(`
+  *[_type == "monthlyUpdate" && publishMonth <= $month + "-31"] | order(publishMonth desc)[0]{
+    _id, "month": ${monthKey}, title, intro
+  }
+`);
+
+export const queryMonthlyUpdateList = defineQuery(`
+  *[_type == "monthlyUpdate" && publishMonth <= $month + "-31"] | order(publishMonth desc){ "month": ${monthKey}, title, intro }
+`);
+
+const newsletterSectionFields = /* groq */ `
+  _key,
+  _type,
+  heading,
+  _type == "comingUpSection" => {
+    includeEvents,
+    "hiddenEventIds": hiddenEvents[]._ref,
+    extraRows[]{ _key, when, what, where }
+  },
+  _type == "storySection" => {
+    byline,
+    image { ${imageFields} },
+    body[]{ ${richTextFields} },
+    "article": article->{ title, "slug": slug.current, "author": author->name, body[]{ ${richTextFields} } }
+  },
+  _type == "flyerSection" => { pages[]{ _key, ${imageFields} } },
+  _type == "funSection" => { body[]{ ${richTextFields} } }
+`;
+
+export const queryNewsletter = defineQuery(`
+  *[_type == "newsletterEdition" && string::startsWith(publishMonth, $month)][0]{
+    _id,
+    "month": ${monthKey},
+    coverImage { ${imageFields} },
+    coverMessage,
+    sections[]{ ${newsletterSectionFields} },
+    "uploadedPdf": uploadedPdf.asset->{ url, size },
+    _updatedAt
+  }
+`);
+
+export const queryNewsletterList = defineQuery(`
+  *[_type == "newsletterEdition" && publishMonth <= $month + "-31"] | order(publishMonth desc){
+    "month": ${monthKey},
+    coverImage { ${imageFields} },
+    "hasSections": count(sections) > 0,
+    "uploadedPdf": uploadedPdf.asset->{ url, size }
+  }
+`);
+
+// ---------------------------------------------------------------------------
+// Search, sitemap
+// ---------------------------------------------------------------------------
+
+/** Callers must skip empty terms — an empty term matches everything. */
+export const querySearch = defineQuery(`
+  *[
+    _type in ["resource", "helpfulLink", "article", "event", "page"]
+    && (
+      title match $q + "*"
+      || summary match $q + "*"
+      || pt::text(description) match $q + "*"
+      || pt::text(body) match $q + "*"
+      || topics[]->title match $q + "*"
+    )
+  ]
+  | score(
+      boost(title match $q + "*", 5),
+      boost(_type == "resource", 2),
+      summary match $q + "*"
+    )
+  | order(_score desc)[0...40]{
+    _type,
+    _id,
+    title,
+    "slug": slug.current,
+    summary,
+    url,
+    source,
+    start,
+    phones[]{ ${phoneFields} }
+  }
+`);
+
+export const querySitemap = defineQuery(`
+  {
+    "pages": *[_type == "page" && defined(slug.current) && seo.noIndex != true]{ "slug": slug.current, _updatedAt },
+    "resources": *[_type == "resource" && defined(slug.current) && seo.noIndex != true]{ "slug": slug.current, _updatedAt },
+    "articles": *[_type == "article" && defined(slug.current) && seo.noIndex != true]{ "slug": slug.current, _updatedAt },
+    "events": *[_type == "event" && defined(slug.current) && seo.noIndex != true]{ "slug": slug.current, _updatedAt },
+    "topics": *[_type == "topic" && defined(slug.current)]{ "slug": slug.current, _updatedAt },
+    "months": *[_type == "monthlyUpdate" && defined(publishMonth)]{ "month": ${monthKey}, _updatedAt },
+    "newsletters": *[_type == "newsletterEdition" && defined(publishMonth)]{ "month": ${monthKey}, _updatedAt },
+    "writers": *[_type == "author" && defined(slug.current)]{ "slug": slug.current, _updatedAt }
   }
 `);

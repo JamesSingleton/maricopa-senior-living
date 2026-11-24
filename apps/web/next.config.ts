@@ -1,10 +1,14 @@
 import type { NextConfig } from "next";
 import { sanity } from "next-sanity/live/cache-life";
 
+/** The standalone Studio (apps/studio), e.g. https://studio.maricopaseniorliving.org */
+const STUDIO_URL =
+  process.env.NEXT_PUBLIC_SANITY_STUDIO_URL ??
+  "https://studio.maricopaseniorliving.org";
+
 /**
- * Origins allowed to frame the site. The embedded Studio at /admin is
- * same-origin; a standalone Studio (NEXT_PUBLIC_SANITY_STUDIO_URL) needs to
- * frame the site for the Presentation tool.
+ * Origins allowed to frame the site: the Studio's Presentation tool shows
+ * the site in an iframe for live preview.
  */
 function frameAncestors() {
   const origins = ["'self'"];
@@ -14,22 +18,26 @@ function frameAncestors() {
       origins.push(new URL(studio).origin);
     }
   } catch {
-    // Ignore a malformed value; 'self' still covers the embedded Studio.
+    // Ignore a malformed value.
   }
   return origins.join(" ");
 }
 
 // https://nextjs.org/docs/advanced-features/security-headers
-// 'unsafe-eval' stays while the Studio is embedded at /admin.
+// The Studio is no longer embedded, so 'unsafe-eval' is only needed by the
+// Next dev server. YouTube (privacy mode) is the only embed the site allows.
+const evalInDev =
+  process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : "";
 const ContentSecurityPolicy = `
     default-src 'self' vercel.live https://cdn.userway.org/;
-    script-src 'self' 'unsafe-eval' 'unsafe-inline' plausible.io;
+    script-src 'self'${evalInDev} 'unsafe-inline' plausible.io;
+    frame-src 'self' vercel.live https://www.youtube-nocookie.com;
     style-src 'self' 'unsafe-inline';
     img-src * blob: data:;
     media-src 'self' https://cdn.sanity.io;
     connect-src *;
     font-src 'self' https://cdn.userway.org/ https://fonts.gstatic.com/ https://fonts.googleapis.com/;
-    script-src-elem 'self' 'unsafe-eval' 'unsafe-inline' plausible.io https://cdn.userway.org/ https://core.sanity-cdn.com/ https://vercel.live;
+    script-src-elem 'self'${evalInDev} 'unsafe-inline' plausible.io https://cdn.userway.org/ https://core.sanity-cdn.com/ https://vercel.live;
     style-src-elem 'self' 'unsafe-inline' https://cdn.userway.org/;
     frame-ancestors ${frameAncestors()};
 `;
@@ -82,23 +90,19 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "cdn.sanity.io",
       },
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-      },
-      {
-        protocol: "https",
-        hostname: "bestwpware.com",
-      },
-      {
-        protocol: "https",
-        hostname: "maricopaseniorliving.org",
-      },
-      {
-        protocol: "https",
-        hostname: "secure.gravatar.com",
-      },
     ],
+  },
+  // Fixed redirects. The ones Ron manages in the Studio are in proxy.ts.
+  async redirects() {
+    return [
+      // Ron's old bookmark: the Studio moved out of the website.
+      { source: "/admin", destination: STUDIO_URL, permanent: false },
+      { source: "/admin/:path*", destination: STUDIO_URL, permanent: false },
+      { source: "/find-help", destination: "/resources", permanent: true },
+      // Nonprofit pages used to live under /about/; they're top-level now.
+      { source: "/about/who-we-are", destination: "/about", permanent: true },
+      { source: "/about/:slug", destination: "/:slug", permanent: true },
+    ];
   },
   async headers() {
     return [
