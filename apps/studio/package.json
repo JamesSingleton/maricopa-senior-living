@@ -15,8 +15,8 @@
   },
   "dependencies": {
     "@sanity/client": "catalog:",
-    "@sanity/icons": "^5.2.3",
-    "@sanity/ui": "^4.4.10",
+    "@sanity/icons": "^5.4.0",
+    "@sanity/ui": "^4.4.12",
     "@sanity/vision": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",

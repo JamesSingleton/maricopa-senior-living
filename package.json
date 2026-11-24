@@ -18,9 +18,9 @@
     "check:types": "turbo run check:types"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.6.4",
+    "@biomejs/biome": "^2.6.8",
     "@maricopa-senior-living/typescript-config": "workspace:*",
-    "turbo": "^2.11.10",
+    "turbo": "^2.11.13",
     "typescript": "catalog:"
   }
 }
